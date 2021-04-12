@@ -1,0 +1,72 @@
+﻿@using Entidades;
+@section Styles {
+    @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+}
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Búsqueda de Clientes</h4>
+                </div>
+                <div class="modal-body">
+                    <table id="dglista" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Codigo</th>
+                                <th>RUC</th>
+                                <th>Razón Social</th>
+                                <th style="width: 15%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (ENClientes Clientes in (List<ENClientes>)ViewBag.Clientes)
+                            {
+                                <tr>
+                                    <td>@Clientes.CodigoCliente </td>
+                                    <td>@Clientes.RucDni </td>
+                                    <td>@Clientes.RazonSocial </td>
+                                    <td class="project-actions text-center">
+                                        <button name="BotonSeleccionar" id="Seleccionar" value="Seleccionar" class="btn btn-primary">Cotizar</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnEliminar" data-eliminar="">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@section Scripts {
+    @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+
+    <script>
+        $(function () {
+
+            $('#dglista').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+        });
+    </script>
+}

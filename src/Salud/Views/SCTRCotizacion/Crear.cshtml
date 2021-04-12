@@ -1,0 +1,1154 @@
+﻿@model Entidades.ENSCTRCotizaciones
+
+@{ ViewBag.Title = "Crear Cotizaciones SCTR";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+@section Styles {
+
+
+}
+
+
+@using (Html.BeginForm("Crear", "SCTRCotizacion", FormMethod.Post, new { onsubmit = "return SubmitForm(this)", id = "frmCotizacion" }))
+
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="card-footer">
+        <button name="BotonCotizar" id="Cotizar" value="Cotizar" class="btn btn-primary">Cotizar</button>
+        <button type="submit" id="btnGrabar" name="BotonGrabar" value="Grabar" class="btn btn-primary">Grabar</button>
+        <a href='@Url.Action("Upload", "SCTRCotizacion",new { empresaruc = Model.EmpresaRUC, empresanombre= Model.EmpresaNombre,codigocotizacion=Model.CodigoCotizacion,Model.CodigoCliente,Model.DetMontoPlanillaAdm,Model.DetMontoPlanillaOpe })' id="Upload" class="btn btn-primary">Cargar XLS</a>
+        @*<a href='@Url.Action("Emitir", "SCTRCotizacion",new { empresaruc = Model.EmpresaRUC, empresanombre= Model.EmpresaNombre,codigocotizacion=Model.CodigoCotizacion,Model.CodigoCliente,Model.DetMontoPlanillaAdm,Model.DetMontoPlanillaOpe })' id="Emitir" class="btn btn-primary">Emitir XLS</a>
+        <button name="btnEmitir" id="btnEmitir" value="Emitir" class="btn btn-primary">Emitir Contrato</button>*@
+     
+        
+        @*<a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Emitir</a>*@
+        @*<a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Constancia</a>
+        <a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Contrato</a>
+        <a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Imprimir</a>
+        <a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Aprobar</a>
+        <a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Liquidar</a>
+        <a href='@Url.Action("Index", "SCTRCotizacion")' class="btn btn-default float-right">Cancelar</a>*@
+    </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Datos de la Cotización</h5>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtCodigoCotizacion">Código Cotizacion</label>
+                                    @Html.TextBoxFor(model => model.CodigoCotizacion, new { id = "txtCodigoCotizacion", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="txtDescripcionCorredor">Corredor</label>
+                                @Html.TextBoxFor(model => model.DescripcionCorredor, new { id = "txtDescripcionCorredor", @class = "form-control form-control-sm", @placeholder = "" })
+
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label for="txtDescripcionEstado">Estado</label>
+                                    @Html.TextBoxFor(model => model.DescripcionEstado, new { id = "txtDescripcionEstado", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtNroFacturacion">Nro.Facturacion</label>
+                                    @Html.TextBoxFor(model => model.NroFacturacion, new { id = "txtNroFacturacion", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtCodigoContrato">Código Contrato</label>
+                                    @Html.TextBoxFor(model => model.CodigoContrato, new { id = "txtCodigoContrato", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtEstadoFacturacion">Estado Facturacion</label>
+                                    @Html.TextBoxFor(model => model.EstadoFacturacion, new { id = "txtEstadoFacturacion", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label for="txtPSPoliza">Póliza Seguros</label>
+                                    @Html.TextBoxFor(model => model.PSPoliza, new { id = "txtPSPoliza", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- ./card-body -->
+                    <div class="card-footer">
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Datos del Cliente</h5>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label for="txtEmpresaRUC">RUC</label>
+                                    @Html.TextBoxFor(model => model.EmpresaRUC, new { id = "txtEmpresaRUC", name = "txtEmpresaRUC", @class = "form-control form-control-sm", @placeholder = "Ingrese RUC" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtEmpresaNombre">Razon Social</label>
+                                    @Html.TextBoxFor(model => model.EmpresaNombre, new { id = "txtEmpresaNombre", @class = "form-control form-control-sm", @placeholder = "Ingrese Razon Social" })
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="txtDireccion">Direccion</label>
+                                    @Html.TextBoxFor(model => model.Direccion, new { id = "txtDireccion", @class = "form-control form-control-sm", @placeholder = "Ingrese Direccion" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CodigoDpto, "Departamento", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("CodigoDpto", null, new { id = "drpDepartamento", @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.CodigoDpto)
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CodigoProv, "Provincia", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("CodigoProv", null, new { id = "drpProvincia", @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.CodigoProv)
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CodigoDist, "Distrito", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("CodigoDist", null, new { id = "drpDistrito", @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.CodigoDist)
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- ./card-body -->
+                    <div class="card-footer">
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Datos del Riesgo</h5>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label>Fecha Inicio</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="far fa-calendar-alt"></i>
+                                        </span>
+                                    </div>
+                                    @Html.TextBoxFor(m => m.dtm_FechaInicio, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaInicio", @class = "form-control float-right startdate" })
+                                </div>
+
+                            </div>
+                            <div class="col-sm-3">
+                                <label>Fecha Fin</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="far fa-calendar-alt"></i>
+                                        </span>
+                                    </div>
+                                    @Html.TextBoxFor(m => m.dtm_FechaFin, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaFin", @class = "form-control float-right enddate" })
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CodigoDptoR, "DepartamentoR", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("CodigoDptoR", null, new { id = "drpDepartamentoR", @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.CodigoDptoR)
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CodigoProvR, "ProvinciaR", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("CodigoProvR", null, new { id = "drpProvinciaR", @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.CodigoProvR)
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CodigoDistR, "DistritoR", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("CodigoDistR", null, new { id = "drpDistritoR", @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.CodigoDistR)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.GrupoCIIU, "Actividad Principal", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("GrupoCIIU", null, new { id = "drpActividadP", @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.GrupoCIIU)
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CodigoCIIU, "Actividad Específica", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("CodigoCIIU", null, new { id = "drpActividadE", @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.CodigoCIIU)
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CodigoMoneda, "Moneda", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("CodigoMoneda", null, new { id = "drpMoneda", @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.CodigoMoneda)
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- ./card-body -->
+                    <div class="card-footer">
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.Cotizacion -->
+        <div class="row">
+            <div class="col-md-4 col-sm-12  ">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Datos para Cotizar - Montos </h5>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtDetNumeroTrabajadoresAdm">Nro.Administrativos</label>
+                                    @Html.TextBoxFor(model => model.DetNumeroTrabajadoresAdm, new { id = "txtDetNumeroTrabajadoresAdm", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtDetMontoPlanillaAdm">Plan Administrativos</label>
+                                    @Html.TextBoxFor(model => model.DetMontoPlanillaAdm, new { id = "txtDetMontoPlanillaAdm", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtDetNumeroTrabajadoresOpe">Nro.Operativos</label>
+                                    @Html.TextBoxFor(model => model.DetNumeroTrabajadoresOpe, new { id = "txtDetNumeroTrabajadoresOpe", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtDetMontoPlanillaOpe">Planilla Operativos</label>
+                                    @Html.TextBoxFor(model => model.DetMontoPlanillaOpe, new { id = "txtDetMontoPlanillaOpe", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label>&nbsp;</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                            </div>
+                            <div class="col-sm-4">
+
+                                @*<a class="btn btn-primary" type="submit" href='@Url.Action("Cotizar", "SCTRCotizacion")'>
+                                        <i style="font-size: 14px;"></i> Cotizar
+                                    </a>*@
+                                @*Validar*@
+                                @*<button type="submit" name="BotonCotizar" value="Cotizar" class="btn btn-primary">Cotizar</button>*@
+                            </div>
+                            <div class="col-sm-4">
+
+                            </div>
+                        </div>
+
+                        <!-- ./card-body -->
+                        <div class="card-footer">
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.card-footer -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-12  ">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Datos para Cotizar - Tasas </h5>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtPorcentajeTasa">Salud  - % Tasa</label>
+                                    @Html.TextBoxFor(model => model.PorcentajeTasa, new { id = "txtPorcentajeTasa", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtPorcentajeCorredor">Salud -  % Corredor</label>
+                                    @Html.TextBoxFor(model => model.PorcentajeCorredor, new { id = "txtPorcentajeCorredor", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtPorcentajeTasaPension">Pension-% Tasa - Adm</label>
+                                    @Html.TextBoxFor(model => model.PorcentajeTasaPension, new { id = "txtPorcentajeTasaPension", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtPorcentajeCorredorPension">Pension-% Corredor - Adm</label>
+                                    @Html.TextBoxFor(model => model.PorcentajeCorredorPension, new { id = "txtPorcentajeCorredorPension", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+
+
+
+
+                            <!-- /.row -->
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtPorcentajeTasaPensionOpe">Pension- %Tasa - Ope</label>
+                                    @Html.TextBoxFor(model => model.PorcentajeTasaPensionOpe, new { id = "txtPorcentajeTasaPensionOpe", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtPorcentajeCorredorPensionOpe">Pension-% Corredor - Ope</label>
+                                    @Html.TextBoxFor(model => model.PorcentajeCorredorPensionOpe, new { id = "txtPorcentajeCorredorPensionOpe", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+
+
+
+
+                            <!-- /.row -->
+                        </div>
+                        @*<div class="row">
+                                <label>&nbsp;</label>
+                            </div>*@
+                        <div class="row">
+                            <div class="col-sm-4">
+                            </div>
+                            <div class="col-sm-4">
+                                @*Validar*@
+                                @*<button type="submit" name="BotonCotizar" value="Cotizar" class="btn btn-primary">Cotizar</button>*@
+                            </div>
+                            <div class="col-sm-4">
+
+                            </div>
+                        </div>
+
+                        <!-- ./card-body -->
+                        <div class="card-footer">
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.card-footer -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-12  ">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Resultados de la Cotización</h5>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtImportePrimaNeta">Prima Neta Salud</label>
+                                    @Html.TextBoxFor(model => model.ImportePrimaNeta, "{0:n2}", new { id = "txtImportePrimaNeta", @class = "form-control form-control-sm", @placeholder = "" })
+                                    @*<p>@Model.ImportePrimaNeta</p>*@
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtImportePrimaNetaPension">Prima Neta Pensión</label>
+                                    @Html.TextBoxFor(model => model.ImportePrimaNetaPension, "{0:n2}", new { id = "txtImportePrimaNetaPension", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtImporteIGV">Importe IGV Salud</label>
+                                    @Html.TextBoxFor(model => model.ImporteIGV, "{0:n2}", new { id = "txtImporteIGV", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtImporteIGVPension">Importe IGV Pension</label>
+                                    @Html.TextBoxFor(model => model.ImporteIGVPension, "{0:n2}", new { id = "txtImporteIGVPension", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtImportePrimaTotal">Importe Prima Total Salud</label>
+                                    @Html.TextBoxFor(model => model.ImportePrimaTotal, "{0:n2}", new { id = "txtImportePrimaTotal", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="txtImportePrimaTotalPension">Importe Prima Total Pension</label>
+                                    @Html.TextBoxFor(model => model.ImportePrimaTotalPension, "{0:n2}", new { id = "txtImportePrimaTotalPension", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        @*<div class="row">
+                                <div title="GetPortion">
+                                    <input type="text" id="EmployeeName" placeholder="Name" />
+                                    <input type="text" id="EmployeeDesignation" placeholder="Designation" />
+                                    <input type="text" id="EmployeeLocation" placeholder="Location" />
+                                    <input type="text" id="ImportePrima" placeholder="Prima" />
+                                </div>
+                            </div>*@
+                        <!-- ./card-body -->
+                        <div class="card-footer">
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.card-footer -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            @*<div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CodigoPerfil, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CodigoPerfil, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CodigoPerfil, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CodigoCotizacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CodigoCotizacion, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CodigoCotizacion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CodigoCliente, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CodigoCliente, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CodigoCliente, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CodigoCorredor, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CodigoCorredor, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CodigoCorredor, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TiempoCobertura, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.TiempoCobertura, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.TiempoCobertura, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FechaCotizacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.FechaCotizacion, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.FechaCotizacion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CodigoUsuarioRegistro, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CodigoUsuarioRegistro, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CodigoUsuarioRegistro, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CodigoEstado, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CodigoEstado, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CodigoEstado, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FechaHoraModificacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.FechaHoraModificacion, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.FechaHoraModificacion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IdCotizacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.IdCotizacion, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.IdCotizacion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ImporteDerechoEmision, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ImporteDerechoEmision, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ImporteDerechoEmision, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PorcentajeDerechoEmision, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.PorcentajeDerechoEmision, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PorcentajeDerechoEmision, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PorcentajeIGV, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.PorcentajeIGV, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PorcentajeIGV, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PorcentajeTasaPension, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.PorcentajeTasaPension, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PorcentajeTasaPension, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PorcentajeCorredorPension, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.PorcentajeCorredorPension, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PorcentajeCorredorPension, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ImporteDerechoEmisionPension, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ImporteDerechoEmisionPension, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ImporteDerechoEmisionPension, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Origen, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Origen, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Origen, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PSPoliza, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.PSPoliza, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PSPoliza, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <div class="col-sm-4">
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UbigeoRiesgo, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.UbigeoRiesgo, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.UbigeoRiesgo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PrimaManual, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.PrimaManual, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PrimaManual, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CodigoEjecutivo, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CodigoEjecutivo, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CodigoEjecutivo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CodigoBrokerAsociado, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CodigoBrokerAsociado, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CodigoBrokerAsociado, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NroFacturacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.NroFacturacion, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.NroFacturacion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EstadoFacturacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.EstadoFacturacion, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.EstadoFacturacion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CodigoRenovacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CodigoRenovacion, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CodigoRenovacion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EstadoRegistaroTXT, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.EstadoRegistaroTXT, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.EstadoRegistaroTXT, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CodigoSede, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CodigoSede, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CodigoSede, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DescripcionCIIU, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DescripcionCIIU, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.DescripcionCIIU, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DescripcionCorredor, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DescripcionCorredor, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.DescripcionCorredor, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CodigoContrato, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CodigoContrato, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CodigoContrato, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DescripcionEstado, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DescripcionEstado, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.DescripcionEstado, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>*@
+            @*<div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                </div>*@
+            <div class="card-footer">
+                @*<button name="BotonCotizar" id="Cotizar" value="Cotizar" class="btn btn-primary">Cotizar</button>*@
+                @*<button type="submit" id="btnGrabar" name="BotonGrabar" value="Grabar" class="btn btn-primary">Grabar</button>*@
+                <a href='@Url.Action("Index", "SCTRCotizacion")' class="btn btn-default float-right">Cancelar</a>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+
+@section Scripts {
+
+    @Scripts.Render("~/Content/plugins/jquery-validation/jquery.validate.min.js")
+    @Scripts.Render("~/Content/plugins/jquery-validation/additional-methods.min.js")
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnGrabar").click(function () {
+                var firstDate = $("#txtFechaInicio").val();
+                var secondDate = $("#txtFechaFin").val();
+                var facturado = $("#txtEstadoFacturacion").val();
+                if (facturado == 'P') {
+                    alert("La cotización ya fue facturada ,no se puede modificar");
+                }
+
+                if (firstDate > secondDate) {
+                    alert("La fecha de Inicio debe ser menor a la fecha Fin de Vigencia ");
+                }
+
+            });
+
+            $.validator.addMethod("enddate", function (value, element) {
+                var startdatevalue = $('.startdate').val();
+                return Date.parse(startdatevalue) < Date.parse(value);
+            });
+            $('#frmCotizacion').validate({
+                rules: {
+                    EmpresaRUC: {
+                        required: true, minlength: 11
+                    },
+                    EmpresaNombre: {
+                        required: true
+                    },
+                    Direccion: {
+                        required: true
+                    },
+                    CodigoDpto: {
+                        required: true
+                    },
+                    CodigoProv: {
+                        required: true
+                    },
+                    CodigoDist: {
+                        required: true
+                    },
+                    CodigoDptoR: {
+                        required: true
+                    },
+                    CodigoProvR: {
+                        required: true
+                    },
+                    CodigoDistR: {
+                        required: true
+                    },
+                    dtm_FechaInicio: {
+                        required: true
+                    },
+                    dtm_FechaFin: {
+                        required: true,
+                        enddate: "dtm_FechaInicio"
+                    },
+                    EstadoFacturacion: {
+                        equalTo: 'P'
+                    },
+                },
+                messages: {
+                    EmpresaRUC: "Ingrese un  RUC",
+                    EmpresaNombre: "Ingrese una Razón Social",
+                    Direccion: "Ingrese una Dirección",
+                    CodigoDpto: "Seleccione un Departamento",
+                    CodigoProv: "Seleccione una Provincia",
+                    CodigoDist: "Seleccione un Distrito",
+                    CodigoDptoR: "Seleccione un Departamento para el riesgo",
+                    CodigoProvR: "Seleccione una Provincia para el riesgo",
+                    CodigoDistR: "Seleccione un Distrito para el riesgo",
+                    //EstadoFacturacion : "Cotización ya está facturada",
+                    //dtm_FechaInicio: "Ingrese fecha de Inicio",
+                    //dtm_FechaFin: { required :"Ingrese fecha de Fin",enddate :"Fecha Fin deber ser mayor a Fecha de Inicio"},
+
+                    dtm_FechaInicio: {
+                        required: "Ingrese una fecha de Inicio"
+                    },
+                    dtm_FechaFin: {
+                        required: "Ingrese una fecha de Inicio",
+                        enddate: "Fecha Fin debe ser mayor a Fecha de Inicio !"
+                    },
+                    EstadoFacturacion: {
+                        equalTo: "Cotización ya está facturada"
+                    },
+
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#drpDepartamento').change(function () {
+                $.ajax({
+                    type: "post",
+                    url: "/SCTRCotizacion/GetProvincia",
+                    data: { dptoid: $('#drpDepartamento').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        var provincia = "<select id='CodigoProv'>";
+                        provincia = provincia + '<option value="">--Seleccionar--</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            provincia = provincia + '<option value=' + data[i].CodigoProv + '>' + data[i].DescripcionProv + '</option>';
+                        }
+                        provincia = provincia + '</select>';
+                        $('#drpProvincia').html(provincia);
+                    }
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#drpProvincia').change(function () {
+                $.ajax({
+                    type: "post",
+                    url: "/SCTRCotizacion/GetDistrito",
+                    data: { dptoid: $('#drpDepartamento').val(), provid: $('#drpProvincia').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        var district = "<select id='CodigoDist'>";
+                        district = district + '<option value="">--Seleccionar--</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            district = district + '<option value=' + data[i].CodigoDist + '>' + data[i].DescripcionDist + '</option>';
+                        }
+                        district = district + '</select>';
+                        $('#drpDistrito').html(district);
+                    }
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //alert("Handler for .click() drpDepartamentoR");
+            $('#drpDepartamentoR').change(function () {
+                $.ajax({
+                    type: "post",
+                    url: "/SCTRCotizacion/GetProvincia",
+                    data: { dptoid: $('#drpDepartamentoR').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        var provinciar = "<select id='CodigoProv'>";
+                        provinciar = provinciar + '<option value="">--Seleccionar--</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            provinciar = provinciar + '<option value=' + data[i].CodigoProv + '>' + data[i].DescripcionProv + '</option>';
+                        }
+                        provinciar = provinciar + '</select>';
+                        $('#drpProvinciaR').html(provinciar);
+                    }
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#drpProvinciaR').change(function () {
+                $.ajax({
+                    type: "post",
+                    url: "/SCTRCotizacion/GetDistrito",
+                    data: { dptoid: $('#drpDepartamentoR').val(), provid: $('#drpProvinciaR').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        var districtr = "<select id='CodigoDist'>";
+                        districtr = districtr + '<option value="">--Seleccionar--</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            districtr = districtr + '<option value=' + data[i].CodigoDist + '>' + data[i].DescripcionDist + '</option>';
+                        }
+                        districtr = districtr + '</select>';
+                        $('#drpDistritoR').html(districtr);
+                    }
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#drpActividadP').change(function () {
+                $.ajax({
+                    type: "post",
+                    url: "/SCTRCotizacion/GetCIIUEspecifica",
+                    data: { grupoid: $('#drpActividadP').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        var especifica = "<select id='CodigoCIIU'>";
+                        especifica = especifica + '<option value="">--Seleccionar--</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            especifica = especifica + '<option value=' + data[i].CodigoCIIU + '>' + data[i].DescripcionCIIU + '</option>';
+                        }
+                        especifica = especifica + '</select>';
+                        $('#drpActividadE').html(especifica);
+                    }
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#Cotizar').click(function (e) {
+                //alert("Handler for .click() Cotizar called.");
+                var empresaruc = $('#txtEmpresaRUC').val();
+                var empresanombre = $('#txtEmpresaNombre').val();
+                var codigocorredor = '';
+                var codigociiu = $('#drpActividadE').val();
+                var montooperativos = $('#txtDetMontoPlanillaOpe').val();
+                var numerooperativos = $('#txtDetNumeroTrabajadoresOpe').val();
+                var montoadministrativos = $('#txtDetMontoPlanillaAdm').val();
+                var numeroadministrativos = $('#txtDetNumeroTrabajadoresAdm').val();
+                var codigomoneda = $('#drpMoneda').val();
+                var fechainicio = $('#txtFechaInicio').val();
+                var fechafin = $('#txtFechaFin').val();
+                var tiempocobertura = 0;
+                var porcentajetasa = $('#txtPorcentajeTasa').val();
+                var porcentajecorredor = $('#txtPorcentajeCorredor').val();
+                var numerocotizacion = '0';
+                var usuario = '';
+                var ubigeoriesgo = $('#drpDepartamentoR').val() + $('#drpProvinciaR').val() + $('#drpDistritoR').val();
+                var codigodpto = $('#drpDepartamento').val();
+                var codigoprov = $('#drpProvincia').val();
+                var codigodist = $('#drpDistrito').val();
+                var codigodptor = $('#drpDepartamentoR').val();
+                var codigoprovr = $('#drpProvinciaR').val();
+                var codigodistr = $('#drpDistritoR').val();
+                var grupociiu = $('#drpActividadP').val();
+                e.preventDefault();
+                //alert("Handler for .click() Cotizar called.");
+                $.ajax({
+                    type: "post",
+                    url: "/SCTRCotizacion/Cotizar1",
+                    data: { empresaruc, empresanombre, codigocorredor, codigociiu, montooperativos, numerooperativos, montoadministrativos, numeroadministrativos, codigomoneda, fechainicio, fechafin, tiempocobertura, porcentajetasa, porcentajecorredor, numerocotizacion, usuario, ubigeoriesgo, codigodpto, codigoprov, codigodist, codigodptor, codigoprovr, codigodistr, grupociiu },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (response) {
+                        if (response != null) {
+                            //alert("dentro de Ajax");
+                            //alert(response.ImportePrimaNeta);
+                            $('#txtImportePrimaNeta').val(response.ImportePrimaNeta);
+                            $('#txtImporteIGV').val(response.ImporteIGV);
+                            $('#txtImportePrimaTotal').val(response.ImportePrimaTotal);
+                            $('#txtImporteDerechoEmision').val(response.ImporteDerechoEmision);
+                            $('#txtPorcentajeCorredor').val(response.PorcentajeCorredor);
+                            $('#txtPorcentajeTasa').val(response.PorcentajeTasa);
+                        } else {
+                            alert("Something went wrong");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#txtEmpresaRUC').change(function (e) {
+                //alert("Handler for .click() Cotizar called.");
+                var empresaruc = $('#txtEmpresaRUC').val();
+                e.preventDefault();
+                //alert("Handler for .click() Cotizar called.");
+                $.ajax({
+                    type: "post",
+                    url: "/SCTRCotizacion/ValidaRuc",
+                    data: { empresaruc },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (response) {
+                        if (response != null) {
+
+                            var coddpto = '<option value=' + response.CodigoDpto + '>' + response.DescripcionDpto + '</option>';
+                            var codprov = '<option value=' + response.CodigoProv + '>' + response.DescripcionProv + '</option>';
+                            var coddist = '<option value=' + response.CodigoDist + '>' + response.DescripcionDist + '</option>';
+                            $('#txtEmpresaNombre').val(response.RazonSocial);
+                            $('#txtDireccion').val(response.Direccion);
+                            if (response.CodigoDpto != null) {
+                                $('#drpDepartamento').html(coddpto);
+                                $('#drpProvincia').html(codprov);
+                                $('#drpDistrito').html(coddist);
+                            }
+                        } else {
+                            alert("Something went wrong");
+                        }
+                    }
+                });
+
+            });
+
+        });
+    </script>
+
+
+    @*<script type="text/javascript">
+            $(document).ready(function () {
+                $('#Upload').click(function (e) {
+                var empresaruc = $('#txtEmpresaRUC').val();
+                var empresanombre = $('#txtEmpresaNombre').val();
+                var codigocotizacion = $('#txtCodigoCotizacion').val();
+                    alert("Handler for .click() Upload called.");
+                    alert(empresaruc);
+                    alert(empresanombre);
+                    alert(codigocotizacion);
+                    e.preventDefault();
+                 $.ajax('@Url.Action("/SCTRCotizacion/Upload")', {
+                data: { id: empresaruc, empresanombre ,codigocotizacion},
+                method: 'GET'
+                     }).done(function(data) {
+                $('#myModalContent').html(data);
+                 });
+                });
+            });
+        </script>*@
+
+    @*<script type="text/javascript">
+            $(document).ready(function () {
+                $('#btnEmitir').click(function (e) {
+                    var empresaruc = $('#txtEmpresaRUC').val();
+                    var empresanombre = $('#txtEmpresaNombre').val();
+                    var codigocotizacion = $('#txtCodigoCotizacion').val();
+                    var codigocliente = $('#txtCodigoCliente').val();
+                    var detmontoplanillaadm = $('#txtDetMontoPlanillaAdm').val();
+                    var detmontoplanillaope = $('#txtDetMontoPlanillaOpe').val();
+                    var codigocentrocosto = $('#drpCentroCosto').val();
+                    var result = "";
+                    e.preventDefault();
+                    alert("Handler for .click() Emitir called.");
+                    $.ajax({
+                        type: "post",
+                        url: "/SCTRCotizacion/Emitir",
+                        data: { empresaruc, empresanombre, codigocotizacion, codigocliente, detmontoplanillaadm, detmontoplanillaope, detmontoplanillaope, codigocentrocosto},
+                        datatype: "json",
+                        traditional: true,
+                        success: function (response) {
+                            if (response != null) {
+                                alert("Dentro de response")
+                                result = "1";
+                            } else {
+                                alert("Something went wrong");
+                            }
+                        }
+                    });
+                });
+            });
+        </script>*@
+
+
+    @*<script type="text/javascript">
+            $(document).ready(function () {
+                $('#Cotizar').click(function () {
+                    alert("Handler for .click() Cotizar called.");
+                    $('#txtImportePrimaNeta').val(35);
+                });
+            });
+        </script>*@
+
+    @*<script>
+            $(document).ready(function () {
+                $("#btnGrabar").click(function () {
+                    var firstDate = $("#txtFechaInicio").val();
+                    var secondDate = $("#txtFechaFin").val();
+
+                    if (firstDate > secondDate) {
+                        alert("La fecha de Inicio debe ser menor a la fecha Fin de Vigencia ");
+                    }
+
+                });
+
+            });
+        </script>*@
+
+}
+
+
+

@@ -1,0 +1,27 @@
+﻿@*@using Utilitarios
+@model HandleErrorInfo
+    @{
+        ViewBag.Title = "Error";
+    }
+@if (Model.Exception is MyExcepcion)
+{
+    <h2>@Model.Exception.Message</h2>
+    }
+else
+{
+    <h2>Error no controlado</h2>
+    }*@
+    <!DOCTYPE html>
+        <html>
+        <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+            <meta name="viewport" content="width=device-width" />
+            <title>Error</title>
+        </head>
+        <body>
+            <hgroup>
+                <h1>Error.</h1>
+                <h2>Error al procesar la solicitud.</h2>
+            </hgroup>
+        </body>
+        </html>

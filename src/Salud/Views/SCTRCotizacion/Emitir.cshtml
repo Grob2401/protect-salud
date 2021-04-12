@@ -1,0 +1,146 @@
+﻿
+@using System.Data;
+@model Entidades.ENSCTRCotizaciones
+
+@{
+    ViewBag.Title = "Emitir";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="row no-gutters">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Datos del Cliente</h5>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label for="txtCodigoCotizacion">Cotización</label>
+                                    @Html.TextBox("txtCodigoCotizacion", ViewData["txtCodigoCotizacion"], new { @class = "form-control form-control-sm" })
+                                    @*<input type="text" id="txtCodigoCotizacion" name="txtCodigoCotizacion" placeholder="" />*@
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtEmpresaRUC">RUC</label>
+                                    @Html.TextBox("txtEmpresaRUC", ViewData["txtEmpresaRUC"], new { @class = "form-control form-control-sm" })
+                                    @*<input type="text" id="txtEmpresaRUC" name="txtEmpresaRUC" placeholder=""/>*@
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtEmpresaNombre">Razon Social</label>
+                                    @*@Html.TextBoxFor(model => model.EmpresaNombre, new { id = "txtEmpresaNombre", @class = "form-control form-control-sm", @placeholder = "Ingrese Razon Social" })*@
+                                    @Html.TextBox("txtEmpresaNombre", ViewData["txtEmpresaNombre"], new { @class = "form-control form-control-sm" })
+                                    @*<input type="text" id="txtEmpresaNombre" name="txtEmpresaNombre" placeholder="" />*@
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label for="txtCodigoCliente">Codigo Cliente</label>
+                                    @Html.TextBox("txtCodigoCliente", ViewData["txtCodigoCliente"], new { @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label for="txtPlanillaMensual">Planilla</label>
+                                    @Html.TextBox("txtPlanillaMensual", ViewData["txtPlanillaMensual"], new { @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="txtCentroCosto">Centro Costo</label>
+                                    @Html.DropDownList("drpCentroCosto", (SelectList)ViewData["CodigoCentroCosto"], new { id = "drpCCosto", @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <input type="submit" value="Crear" class="btn btn-primary" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- ./card-body -->
+                    <div class="card-footer">
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    @Html.Partial("EmitirExcel")
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+
+    @Scripts.Render("~/Content/plugins/jquery-validation/jquery.validate.min.js")
+    @Scripts.Render("~/Content/plugins/jquery-validation/additional-methods.min.js")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#drpCentroCosto').change(function (e) {
+                var centrocosto = $('#drpCentroCosto').val();
+                e.preventDefault();
+                alert("Handler for .click() drpCCosto called.");
+                $.ajax({
+                    type: "post",
+                    url: "/SCTRCotizacion/ValidaRuc",
+                    data: { empresaruc },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (response) {
+                        if (response != null) {
+
+                            var coddpto = '<option value=' + response.CodigoDpto + '>' + response.DescripcionDpto + '</option>';
+                            var codprov = '<option value=' + response.CodigoProv + '>' + response.DescripcionProv + '</option>';
+                            var coddist = '<option value=' + response.CodigoDist + '>' + response.DescripcionDist + '</option>';
+                            $('#txtEmpresaNombre').val(response.RazonSocial);
+                            $('#txtDireccion').val(response.Direccion);
+                            if (response.CodigoDpto != null) {
+                                $('#drpDepartamento').html(coddpto);
+                                $('#drpProvincia').html(codprov);
+                                $('#drpDistrito').html(coddist);
+                            }
+                        } else {
+                            alert("Something went wrong");
+                        }
+                    }
+                });
+
+            });
+
+        });
+    </script>
+
+
+}
+

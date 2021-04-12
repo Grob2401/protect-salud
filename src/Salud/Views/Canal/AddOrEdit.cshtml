@@ -1,0 +1,39 @@
+﻿@model Entidades.ENCanales
+@{
+    Layout = null;
+}
+@section Styles {
+
+}
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.js"></script>*@
+@using (Html.BeginForm("AddOrEdit", "Canal", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.IDCanal)
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="row">
+        <div class="col-sm-6">
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DescripcionCanal, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.DescripcionCanal, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DescripcionCanal, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IdSociedad, "Sociedad", htmlAttributes: new { @class = "control-label" })
+                @Html.DropDownList("IdSociedad", null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IdSociedad)
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Grabar" id="btnSubmit" class="btn btn-primary" />
+        <input type="reset" value="Limpiar" class="btn" />
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+}

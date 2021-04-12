@@ -1,0 +1,336 @@
+﻿@model System.Data.DataTable
+@using System.Data;
+@{
+    ViewBag.Title = "Cargar Excel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+}
+
+@using (Html.BeginForm("Upload", "SCTRCotizacion", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <div class="form-horizontal">
+        <div class="row no-gutters">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Datos del Cliente</h5>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label for="txtCodigoCotizacion">Cotización</label>
+                                    @Html.TextBox("txtCodigoCotizacion", ViewData["txtCodigoCotizacion"], new { @class = "form-control form-control-sm" })
+                                    @*<input type="text" id="txtCodigoCotizacion" name="txtCodigoCotizacion" placeholder="" />*@
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtEmpresaRUC">RUC</label>
+                                    @Html.TextBox("txtEmpresaRUC", ViewData["txtEmpresaRUC"], new { @class = "form-control form-control-sm" })
+                                    @*<input type="text" id="txtEmpresaRUC" name="txtEmpresaRUC" placeholder=""/>*@
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtEmpresaNombre">Razon Social</label>
+                                    @*@Html.TextBoxFor(model => model.EmpresaNombre, new { id = "txtEmpresaNombre", @class = "form-control form-control-sm", @placeholder = "Ingrese Razon Social" })*@
+                                    @Html.TextBox("txtEmpresaNombre", ViewData["txtEmpresaNombre"], new { @class = "form-control form-control-sm" })
+                                    @*<input type="text" id="txtEmpresaNombre" name="txtEmpresaNombre" placeholder="" />*@
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label for="txtCodigoCliente">Codigo Cliente</label>
+                                    @Html.TextBox("txtCodigoCliente", ViewData["txtCodigoCliente"], new { @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label for="txtPlanillaMensual">Planilla</label>
+                                    @Html.TextBox("txtPlanillaMensual", ViewData["txtPlanillaMensual"], new { @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="txtCentroCosto">Centro Costo</label>
+                                    @Html.DropDownList("drpCentroCosto", (SelectList)ViewData["CodigoCentroCosto"], new { id = "drpCentroCosto", @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label for="txtCentroCosto">Nuevo C.Costo</label>
+                                    <button name="CreaCosto" id="CreaCosto" align="center" value="CreaCosto" class="btn btn-primary">Nuevo</button>
+                                </div>
+                                @*<div class="modal" tabindex="-1" role="dialog" id="myModal"></div>*@
+                            </div>
+
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- ./card-body -->
+                    <div class="card-footer">
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Archivo a Procesar</h5>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <input type="file" id="dataFile" name="upload" class="btn btn-file" />
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <input type="submit" id="Cargar" value="Cargar y Verificar" class="btn btn-primary" />
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    @*<input type="submit" id="Procesar" value="Procesar" class="btn btn-primary" />*@
+                                    <a href='@Url.Action("ProcesaEmision", "SCTRCotizacion")' id="Procesar" class="btn btn-primary">Procesar</a>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div style="width: 100%; height: 25px; background-color: greenyellow;">
+                                    @ViewBag.Mensaje
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- ./card-body -->
+                    <div class="card-footer">
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+    </div>
+    if (Model != null)
+    {
+        <table id="example2" class="table-bordered display compact nowrap" style="width:100%">
+            <thead>
+                <tr>
+                    @foreach (DataColumn col in Model.Columns)
+                    {
+                        <th>@col.ColumnName</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DataRow row in Model.Rows)
+                {
+                    <tr>
+                        @foreach (DataColumn col in Model.Columns)
+                        {
+                            <td>@row[col.ColumnName]</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+@section Scripts {
+    @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+
+    <script>
+        $(function () {
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "aLengthMenu": [[5, -1], [5, "All"]],
+                "iDisplayLength": 5,
+                //"scrollY": '300px',
+                //"scrollX": true,
+                //"scrollCollapse": true,
+                "columnDefs": [
+                    { width: "5%", targets: [0, 14] },
+                ],
+                //"fixedColumns": true,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }, "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    if (aData[2] == "5") {
+                        $('td', nRow).css('background-color', 'Red');
+                    }
+                    else if (aData[2] == "4") {
+                        $('td', nRow).css('background-color', 'Orange');
+                    }
+                }
+            });
+
+
+        });
+
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#txtCodigoCliente').change(function (e) {
+                var codigocliente = $('#txtCodigoCliente').val();
+                //var codigocotizacion = $('#txtCodigoCotizacion').val();
+                $.ajax({
+                    type: "post",
+                    url: "/SCTRCotizacion/GetCentroCosto",
+                    //data: { codigocliente,codigocotizacion },
+                    data: { codigocliente },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        var especifica = "<select id='CodigoCentroCosto'>";
+                        especifica = especifica + '<option value="">--Seleccionar--</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            especifica = especifica + '<option value=' + data[i].CodigoCentroCosto + '>' + data[i].DescripcionCentroCosto + '</option>';
+                        }
+                        especifica = especifica + '</select>';
+                        $('#drpCCosto').html(especifica);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if (ViewBag.Message != "") {
+                alert('ViewBag.Message');
+            }
+        });
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#Cargar').click(function (e) {
+                var codigocentrocosto = $('#drpCentroCosto').val();
+                var descripcioncentrocosto = $('#drpCentroCosto option:selected').text();
+                //e.preventDefault();
+                //alert("Handler for .click() drpCCosto called.");
+                //alert(codigocentrocosto);
+                $.ajax({
+                    type: "post",
+                    url: "/SCTRCotizacion/SetSession",
+                    data: { codigocentrocosto, descripcioncentrocosto },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (response) {
+                        if (response != null) {
+                            alert("OK");
+                        } else {
+                            alert("Something went wrong");
+                        }
+                    }
+                });
+
+            });
+
+        });
+    </script>
+
+
+
+
+    <script type="text/javascript">
+
+        $('#CreaCosto').click(function (e) {
+            //alert("Handler for .click() Crear Centro Costo called.");
+            idcliente = $('#txtCodigoCliente').val();
+            e.preventDefault();
+              $.ajax({
+                url: '@Url.Action("CrearC", "CentroCostos")',
+                type: 'POST',
+                data: {idcliente},
+                  success: function (data) {
+                  $('#myModal').html(data);
+                  $('#myModal').modal('show');
+                },
+                error: function(xmlResponse){
+                  alert("Error en la solicitud del modal")
+                }
+              });
+            })
+
+
+
+
+
+            //$(document).ready(function () {
+            //    alert("Handler for .click() CreaCosto called.");
+
+            //    $('#CreaCosto').click(function (e) {
+            //        var codigocliente = $('#txtCodigoCliente').val();
+            //        var codigocentrocosto = "";
+            //        e.preventDefault();
+            //        alert("Handler for .click() CreaCosto called1.");
+            //        $.ajax({
+            //            type: "POST",
+            //            url: "/CentroCostos/Crear",
+            //            //data: '{customerId: "' + customerId + '" }',
+            //            data: { codigocentrocosto, codigocliente },
+            //            contentType: "application/json; charset=utf-8",
+            //            dataType: "html",
+            //            success: function (response) {
+            //                alert("Handler for .click() CreaCosto called2.");
+            //                $('#dialog').html(response);
+            //                $('#dialog').dialog('open');
+            //            },
+            //            failure: function (response) {
+            //                alert(response.responseText);
+            //            },
+            //            error: function (response) {
+            //                alert(response.responseText);
+            //            }
+            //        });
+            //    });
+            //});
+    </script>
+
+}
+

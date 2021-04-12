@@ -1,0 +1,168 @@
+﻿@model Entidades.ENUsuario
+@{
+    ViewBag.Title = "Crear Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+
+
+}
+<div class="container-fluid">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- jquery validation -->
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Completar <small>Todos los campos</small></h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form role="form" id="frmUsuario" method="post" action='@Url.Action("Crear", "Usuario")'>
+                    @Html.HiddenFor(m => m.int_IdUsuario)
+                    @Html.AntiForgeryToken()
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="txtNombre">Nombre</label>
+                            @*<input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">*@
+                            @Html.TextBoxFor(m => m.var_Nombre, new { id = "txtNombre", @class = "form-control", @placeholder = "Ingrese nombre" })
+                        </div>
+                        <div class="form-group">
+                            <label for="txtApellidos">Apellidos</label>
+                            @*<input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">*@
+                            @Html.TextBoxFor(m => m.var_Apellidos, new { id = "txtApellidos", @class = "form-control", @placeholder = "Ingrese Apellido" })
+                        </div>
+                        <div class="form-group">
+                            <label for="txtDNI">DNI</label>
+                            @*<input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">*@
+                            @Html.TextBoxFor(m => m.var_DNI, new { type = "number", id = "txtDNI", @class = "form-control", @placeholder = "Ingrese DNI" })
+                        </div>
+                        <div class="form-group">
+                            <label>Sexo</label>
+                            <select class="form-control" name="bit_Sexo">
+                                <option value="default" >Seleccione</option>
+                                <option value="true"  @((Model.bit_Sexo == true) ? "selected='selected'" : "")>Masculino</option>
+                                <option value="false" @((Model.bit_Sexo == false) ? "selected='selected'" : "")>Femenino</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de Nacimiento:</label>
+
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </div>
+                                @*<input type="date" class="form-control float-right" id="txtFechaNacimiento" name="dtm_FechaNacimiento">*@
+                                @Html.TextBoxFor(m => m.dtm_FechaNacimiento, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaNacimiento", @class = "form-control float-right" })
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtMail">Correo Electrónico</label>
+                            @*<input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">*@
+                            @Html.TextBoxFor(m => m.var_Mail, new { Id = "txtMail", @class = "form-control", @placeholder = "Ingrese correo electronico" })
+                        </div>
+                        <div class="form-group">
+                            <label for="txtPassword">Password</label>
+                            @*<input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">*@
+                            @Html.PasswordFor(m => m.var_Password, new { Id = "txtPassword", @class = "form-control", @placeholder = "Ingrese correo electronico" })
+                        </div>
+                        <div class="form-group mb-0">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="int_Estado" class="custom-control-input" id="exampleCheck1" value="1" @((Model.int_Estado == 1) ? "checked='checked'" : "") >
+                                <label class="custom-control-label" for="exampleCheck1">Activo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Grabar</button>
+                        <a href='@Url.Action("Index", "Usuario")' class="btn btn-default float-right">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+            <!-- /.card -->
+        </div>
+        <!--/.col (left) -->
+        <!-- right column -->
+        <div class="col-md-6">
+
+        </div>
+        <!--/.col (right) -->
+    </div>
+    <!-- /.row -->
+
+</div><!-- /.container-fluid -->
+@section Scripts {
+
+    @Scripts.Render("~/Content/plugins/jquery-validation/jquery.validate.min.js")
+    @Scripts.Render("~/Content/plugins/jquery-validation/additional-methods.min.js")
+
+    <script type="text/javascript">
+@*import { compareByFieldSpec } from "@fullcalendar/core";*@
+
+        $(document).ready(function () {
+            $.validator.addMethod("valueNotEquals", function (value, element, arg) {
+                return arg !== value;
+            }, "Value must not equal arg.");
+
+            $('#frmUsuario').validate({
+                rules: {
+                    var_Nombre: {
+                        required: true
+                    },
+                    var_Apellidos: {
+                        required: true
+                    },
+                    var_DNI: {
+                        required: true
+                    },
+                    bit_Sexo: {
+                        valueNotEquals: "default"
+                    },
+                    dtm_FechaNacimiento: {
+                        required: true
+                    },
+                    var_Mail: {
+                        required: true,
+                        email: true,
+                    },
+                    var_Password: {
+                        required: true,
+                        minlength: 5
+                    },
+
+                },
+                messages: {
+                    var_Nombre: "Por favor debe ingresar nombre",
+                    var_Apellidos: "Por favor debe ingresar apellidos",
+                    var_DNI: "Por favor debe ingresar DNI",
+                    bit_Sexo: { valueNotEquals: "Por favor seleccione sexo" },
+                    dtm_FechaNacimiento: "Ingrese fecha de nacimiento",
+                    var_Mail: {
+                        required: "Por favor ingrese correo electronico",
+                        email: "Por favor ingrese un correo valido"
+                    },
+                    var_Password: {
+                        required: "Por favor ingrese la contraseña",
+                        minlength: "La contraseña debe tener al menos 5 caracteres"
+                    },
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        });
+    </script>
+}

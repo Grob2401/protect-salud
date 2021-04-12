@@ -1,0 +1,109 @@
+﻿@using Entidades;
+@{
+    ViewBag.Title = "Centros de Costo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-table"></i>
+                    Mantenimiento de Centro de Costos
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <a class="btn btn-app" href='@Url.Action("Crear", "CentroCostos")'>
+                    <i class="fas fa-file"></i> Agregar
+                </a>
+
+                <table id="dglista" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>CodigoCliente</th>
+                            <th>RUC</th>
+                            <th>Descripcion Centro Costo</th>
+                            <th>RazonSocial</th>
+                            <th style="width: 15%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (ENSaludCentroCostos centrocostos in (List<ENSaludCentroCostos>)ViewBag.CentroCostos)
+                        {
+                        <tr>
+                            <td>@centrocostos.CodigoCliente</td>
+                            <td>@centrocostos.RUC</td>
+                            <td>@centrocostos.DescripcionCentroCosto </td>
+                            <td>@centrocostos.RazonSocial</td>
+                            <td class="project-actions text-center">
+                                <form action='@Url.Action("Eliminar", "CentroCostos", new {id = centrocostos.CodigoCentroCosto,idcliente=centrocostos.CodigoCliente})' method="POST"
+                                      onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
+                                    @Html.AntiForgeryToken()
+                                    <div class="btn-group" role="group">
+                                        <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "CentroCostos", new {id = centrocostos.CodigoCentroCosto,idcliente=centrocostos.CodigoCliente})'>
+                                            <i class="fas fa-pencil-alt">
+                                            </i>
+                                            Editar
+                                        </a>
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                            <i class="fas fa-trash">
+                                            </i>
+                                            Eliminar
+                                        </button>
+                                    </div>
+                                </form>
+
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </div>
+    <!-- /.col -->
+</div>
+@section Scripts {
+    @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+
+    <script>
+        $(function () {
+
+            $('#dglista').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+

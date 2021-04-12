@@ -1,0 +1,115 @@
+﻿@using Entidades;
+@{
+    ViewBag.Title = "Clientes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-table"></i>
+                    Lista de Clientes
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body ">
+                <a class="btn btn-app btn-xs" href='@Url.Action("Crear", "Clientes")'>
+                    <i class="fas fa-file xs" style="font-size: 14px;"></i> Agregar
+                </a>
+                <table id="dglista" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>RUC</th>
+                            <th>Razón Social</th>
+                            <th>Paterno</th>
+                            <th>Materno</th>
+                            <th>Nombres</th>
+                            <th>Dirección</th>
+                            <th>Teléfono</th>
+                            @*<th>Contacto</th>
+                            <th>Email</th>*@
+                            <th>TipoCliente</th>
+                            @*<th>Corredor</th>
+                            <th>Ejecutivo</th>*@
+                            <th style="width: 15%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (ENClientes Clientes in (List<ENClientes>)ViewBag.Clientes)
+                        {
+                        <tr>
+                            <td>@Clientes.CodigoCliente </td>
+                            <td>@Clientes.RucDni </td>
+                            <td>@Clientes.RazonSocial </td>
+                            <td>@Clientes.Paterno </td>
+                            <td>@Clientes.Materno </td>
+                            <td>@Clientes.Nombres </td>
+                            <td>@Clientes.Direccion </td>
+                            <td>@Clientes.Telefono1 </td>
+                            @*<td>@Clientes.PersonaContacto </td>
+                            <td>@Clientes.Email </td>*@
+                            <td>@Clientes.CodigoTipoCliente </td>
+                            @*<td>@Clientes.CorredorAgenciado </td>
+                            <td>@Clientes.CodigoEjecutivo </td>*@
+
+                            <td class="project-actions text-center">
+                                <form action='@Url.Action("Eliminar", "Clientes", new {id = Clientes.CodigoCliente})' method="POST"
+                                      onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
+                                    @Html.AntiForgeryToken()
+                                    <div class="btn-group" role="group">
+                                        <a class="btn btn-info btn-sm" style="font-size: 9px;" href='@Url.Action("Crear", "Clientes", new {id = Clientes.CodigoCliente})'>
+                                            <i class="fas fa-pencil-alt" style="font-size: 9px;">
+                                            </i>
+                                            Editar
+                                        </a>
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Eliminar" style="font-size: 9px;">
+                                            <i class="fas fa-trash" style="font-size: 9px;">
+                                            </i>
+                                            Eliminar
+                                        </button>
+                                    </div>
+                                </form>
+
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </div>
+    <!-- /.col -->
+</div>
+@section Scripts {
+    @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+
+    <script>
+        $(function () {
+
+            $('#dglista').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+        });
+    </script>
+}
