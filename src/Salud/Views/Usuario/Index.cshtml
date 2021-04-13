@@ -98,7 +98,7 @@
     <!-- /.col -->
 </div>
 <!-- Modal -->
-@Html.Partial("_UsuarioCrear")
+@Html.Partial("_UsuarioCrear", new ENUsuario() { int_Estado = 1 })
 
 @section Scripts {
     @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
