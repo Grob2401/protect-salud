@@ -18,7 +18,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <a class="btn btn-app" href='@Url.Action("Crear", "Usuario")'>
+                <a class="btn btn-app" data-toggle="modal" data-target="#exampleModal">
                     <i class="fas fa-file"></i> Agregar
                 </a>
 
@@ -36,59 +36,59 @@
                     <tbody>
                         @foreach (ENUsuario usuario in (List<ENUsuario>)ViewBag.Usuarios)
                         {
-                        <tr>
-                            <td>@usuario.var_Nombre @usuario.var_Apellidos</td>
-                            <td>
-                                @usuario.var_DNI
-                            </td>
-                            <td>
-                                @usuario.var_Mail
-                            </td>
-                            <td>
-                                @if (usuario.bit_Sexo==true)
-                                {
-                                    <span class="badge bg-primary">Masculino</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-warning">Femenino</span>
-                                }
+                            <tr>
+                                <td>@usuario.var_Nombre @usuario.var_Apellidos</td>
+                                <td>
+                                    @usuario.var_DNI
+                                </td>
+                                <td>
+                                    @usuario.var_Mail
+                                </td>
+                                <td>
+                                    @if (usuario.bit_Sexo == true)
+                                    {
+                                        <span class="badge bg-primary">Masculino</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">Femenino</span>
+                                    }
 
-                            </td>
-                         
-                            <td>
-                                @if (usuario.int_Estado==1)
-                                {
-                                    <span class="badge bg-success">Activo</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-danger">Inactivo</span>
-                                }
-                            </td>
-                            <td class="project-actions text-center">
-                                <form action='@Url.Action("Eliminar", "Usuario", new {id = usuario.int_IdUsuario})' method="POST"
-                                      onsubmit="return confirm('¿Está seguro de eliminar el usuario?');">
-                                    @Html.AntiForgeryToken()
-                                    <div class="btn-group" role="group">
-                                        <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "Usuario", new {id = usuario.int_IdUsuario})'>
-                                            <i class="fas fa-pencil-alt">
-                                            </i>
-                                            Editar
-                                        </a>
-                                        <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
-                                            <i class="fas fa-trash">
-                                            </i>
-                                            Eliminar
-                                        </button>
-                                    </div>
-                                </form>
-                           
-                            </td>
-                        </tr>
+                                </td>
+
+                                <td>
+                                    @if (usuario.int_Estado == 1)
+                                    {
+                                        <span class="badge bg-success">Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Inactivo</span>
+                                    }
+                                </td>
+                                <td class="project-actions text-center">
+                                    <form action='@Url.Action("Eliminar", "Usuario", new {id = usuario.int_IdUsuario})' method="POST"
+                                          onsubmit="return confirm('¿Está seguro de eliminar el usuario?');">
+                                        @Html.AntiForgeryToken()
+                                        <div class="btn-group" role="group">
+                                            <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "Usuario", new {id = usuario.int_IdUsuario})'>
+                                                <i class="fas fa-pencil-alt">
+                                                </i>
+                                                Editar
+                                            </a>
+                                            <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                                <i class="fas fa-trash">
+                                                </i>
+                                                Eliminar
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                </td>
+                            </tr>
                         }
                     </tbody>
-            
+
                 </table>
             </div>
             <!-- /.card-body -->
@@ -97,6 +97,9 @@
     </div>
     <!-- /.col -->
 </div>
+<!-- Modal -->
+@Html.Partial("_UsuarioCrear")
+
 @section Scripts {
     @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
     @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
