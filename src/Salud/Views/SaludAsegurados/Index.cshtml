@@ -93,7 +93,7 @@
     <script src="~/Scripts/Comandos.js"></script>
     <script>
         /// Carga un elemento <select> genérico a partir de una llamada Ajax
-        function cargarDropDownList(data, selectId, optionDataField, optionDisplayField, defaultText = "-- Seleccione --") {
+        function cargarDropDownList(result, selectId, optionDataField, optionDisplayField, defaultText = "-- Seleccione --") {
             /// Combo selector
             const select = document.querySelector(`#${selectId}`);
 
@@ -105,7 +105,7 @@
             select.appendChild(defaultOption)
 
             /// Other elements
-            for (var elem of data) {
+            for (var elem of result) {
                 /// Creating...
                 const option = document.createElement("option"); // CodigoCategoria, CodigoParentesco
                 option.id = elem[optionDataField];
@@ -116,14 +116,15 @@
             }
         }
 
-        const fillByAjax = (url, type = "GET", selectId, optionDataField, optionDisplayField, defaultText = "-- Seleccione --") => {
+        const fillByAjax = (selectId, optionDataField, optionDisplayField, url, type = "GET", data = {}, defaultText = "-- Seleccione --") => {
             $.ajax({
-                url,
                 type,
+                url,
+                data,
                 datatype: "json",
                 traditional: true,
-                success(data) {
-                    cargarDropDownList(data, selectId, optionDataField, optionDisplayField);
+                success(result) {
+                    cargarDropDownList(result, selectId, optionDataField, optionDisplayField);
                 },
                 error(xhr, textStatus, errorThrown) {
                     console.error(xhr);
@@ -131,8 +132,10 @@
             });
         }
 
-        fillByAjax("/SCTRCotizacion/GetParentesco", "POST", "drpParentesco", "CodigoCategoria", "DescripcionParentesco"); // Parentesco
-        fillByAjax("/SCTRCotizacion/GetVendedor", "POST", "drpVendedor", "CodigoVendedor", "DescripcionVendedor"); // Vendedor
+        /// Dropdownlist loadings...
+        fillByAjax("drpParentesco", "CodigoCategoria", "DescripcionParentesco", "/SCTRCotizacion/GetParentesco", "POST"); // Parentesco
+        fillByAjax("drpVendedor", "CodigoVendedor", "DescripcionVendedor", "/SCTRCotizacion/GetVendedor", "POST"); // Vendedor
+        fillByAjax("drpCentroCosto", "CodigoCentroCosto", "DescripcionCentroCosto", "/SCTRCotizacion/GetCentroCosto", "POST", { codigocliente: "000494" } ); // Centro de Costo
 
         $(function () {
 
