@@ -251,8 +251,42 @@ namespace Salud.Controllers
             return (oENSCTRCotizaciones);
         }
 
+        //LNSaludParentesco.ObtenerTodos()
+        [SessionExpire]
+        [HttpPost]
+        public ActionResult GetParentesco()
+        {
+            var listaParentescos = LNSaludParentesco.ObtenerTodos().ToList();
+            if (ModelState.IsValid)
+            {
+                return Json(listaParentescos, JsonRequestBehavior.AllowGet);
+            }
+            return Json(listaParentescos, JsonRequestBehavior.AllowGet);
+        }
 
+        [SessionExpire]
+        [HttpPost]
+        public ActionResult GetVendedor()
+        {
+            var listaVendedores = LNVendedores.ObtenerTodos().ToList();
+            if (ModelState.IsValid)
+            {
+                return Json(listaVendedores, JsonRequestBehavior.AllowGet);
+            }
+            return Json(listaVendedores, JsonRequestBehavior.AllowGet);
+        }
 
+        [SessionExpire]
+        [HttpPost]
+        public ActionResult GetDepartamento()
+        {
+            var listaDepartamentos = LNUbigeoDpto.ObtenerDpto().ToList();
+            if (ModelState.IsValid)
+            {
+                return Json(listaDepartamentos, JsonRequestBehavior.AllowGet);
+            }
+            return Json(listaDepartamentos, JsonRequestBehavior.AllowGet);
+        }
 
         [SessionExpire]
         [HttpPost]

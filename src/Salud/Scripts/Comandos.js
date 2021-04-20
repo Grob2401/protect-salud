@@ -1,4 +1,5 @@
-﻿function datosprovincia() {
+﻿
+function datosprovincia () {
     $.ajax({
         type: "post",
         url: "/SCTRCotizacion/GetProvincia",
@@ -17,8 +18,7 @@
     });
 }
 
-function datosdistrito()
-{
+function datosdistrito () {
     $.ajax({
         type: "post",
         url: "/SCTRCotizacion/GetDistrito",
@@ -37,5 +37,3 @@ function datosdistrito()
     });
 
 }
-
-
