@@ -278,6 +278,18 @@ namespace Salud.Controllers
 
         [SessionExpire]
         [HttpPost]
+        public ActionResult GetDocumentoIdentidad()
+        {
+            var listaDocumentosIdentidad = LNTipoDocumentoIdentidad.ObtenerTodos().ToList();
+            if (ModelState.IsValid)
+            {
+                return Json(listaDocumentosIdentidad, JsonRequestBehavior.AllowGet);
+            }
+            return Json(listaDocumentosIdentidad, JsonRequestBehavior.AllowGet);
+        }
+
+        [SessionExpire]
+        [HttpPost]
         public ActionResult GetDepartamento()
         {
             var listaDepartamentos = LNUbigeoDpto.ObtenerDpto().ToList();

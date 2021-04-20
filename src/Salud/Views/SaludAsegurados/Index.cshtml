@@ -135,7 +135,8 @@
         /// Dropdownlist loadings...
         fillByAjax("drpParentesco", "CodigoCategoria", "DescripcionParentesco", "/SCTRCotizacion/GetParentesco", "POST"); // Parentesco
         fillByAjax("drpVendedor", "CodigoVendedor", "DescripcionVendedor", "/SCTRCotizacion/GetVendedor", "POST"); // Vendedor
-        fillByAjax("drpCentroCosto", "CodigoCentroCosto", "DescripcionCentroCosto", "/SCTRCotizacion/GetCentroCosto", "POST", { codigocliente: "000494" } ); // Centro de Costo
+        fillByAjax("drpCentroCosto", "CodigoCentroCosto", "DescripcionCentroCosto", "/SCTRCotizacion/GetCentroCosto", "POST", { codigocliente: "000494" }); // Centro de Costo
+        fillByAjax("drpDocumentoIdentidad", "CodigoDocumentoIdentidad", "DescripcionDocumentoIdentidad", "/SCTRCotizacion/GetDocumentoIdentidad", "POST"); // Documento de Identidad
 
         $(function () {
 
