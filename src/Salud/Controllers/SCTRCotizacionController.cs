@@ -288,6 +288,18 @@ namespace Salud.Controllers
 
         [SessionExpire]
         [HttpPost]
+        public ActionResult GetSexo()
+        {
+            var listaSexos = LNTipoDocumentoIdentidad.ObtenerTodos().ToList();
+            if (ModelState.IsValid)
+            {
+                return Json(listaSexos, JsonRequestBehavior.AllowGet);
+            }
+            return Json(listaSexos, JsonRequestBehavior.AllowGet);
+        }
+
+        [SessionExpire]
+        [HttpPost]
         public ActionResult GetDepartamento()
         {
             var listaDepartamentos = LNUbigeoDpto.ObtenerDpto().ToList();
