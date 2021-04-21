@@ -135,7 +135,6 @@ namespace Salud.Controllers
             return View();
         }
 
-
         [SessionExpire]
         public ActionResult Cotizar(ENSCTRCotizaciones cotizacion)
         {
@@ -192,7 +191,6 @@ namespace Salud.Controllers
             }
             return Json(oENSCTRCotizaciones, JsonRequestBehavior.AllowGet);
         }
-
 
         public ENSCTRCotizaciones Cotizar2(ENSCTRCotizaciones cotizacion)
         {
@@ -251,7 +249,7 @@ namespace Salud.Controllers
             return (oENSCTRCotizaciones);
         }
 
-        //LNSaludParentesco.ObtenerTodos()
+        #region AjaxMethods
         [SessionExpire]
         [HttpPost]
         public ActionResult GetParentesco()
@@ -302,7 +300,6 @@ namespace Salud.Controllers
 
         [SessionExpire]
         [HttpPost]
-        //[ValidateAntiForgeryToken] Se quitó porque da error
         public ActionResult GetProvincia(string dptoid)
         {
             var listaProvincias = LNUbigeoProv.ObtenerProv(dptoid).ToList();
@@ -315,7 +312,6 @@ namespace Salud.Controllers
 
         [SessionExpire]
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public ActionResult GetDistrito(string dptoid, string provid)
         {
             var listaDistritos = LNUbigeoDist.ObtenerDist(dptoid, provid).ToList();
@@ -325,7 +321,6 @@ namespace Salud.Controllers
             }
             return View();
         }
-
 
         [SessionExpire]
         [HttpPost]
@@ -365,7 +360,7 @@ namespace Salud.Controllers
             }
             return Json(lista, JsonRequestBehavior.AllowGet);
         }
-
+        #endregion
 
         [SessionExpire]
         public JsonResult Cotizar1(string empresaruc, string empresanombre, string codigocorredor, string codigociiu, double montooperativos, int numerooperativos, double montoadministrativos, int numeroadministrativos, string codigomoneda, DateTime fechainicio, DateTime fechafin, int tiempocobertura, double porcentajetasa, double porcentajecorredor, string numerocotizacion, string usuario, string ubigeoriesgo, string codigodpto, string codigoprov, string codigodist, string codigodptor, string codigoprovr, string codigodistr, string grupociiu)
@@ -421,12 +416,6 @@ namespace Salud.Controllers
             }
             return Json(lista, JsonRequestBehavior.AllowGet);
         }
-
-
-
-        //[HttpGet]
-
-
 
         [SessionExpire]
         [HttpPost]
@@ -588,7 +577,6 @@ namespace Salud.Controllers
             return View();
         }
 
-
         [HttpPost]
         public JsonResult SetSession(string codigocentrocosto, string descripcioncentrocosto)
         {
@@ -596,7 +584,6 @@ namespace Salud.Controllers
             System.Web.HttpContext.Current.Session["descripcioncentrocosto"] = descripcioncentrocosto;
             return Json(codigocentrocosto);
         }
-
 
         [HttpGet]
         [SessionExpire]
@@ -703,9 +690,7 @@ namespace Salud.Controllers
             return PartialView("Upload");
         }
 
-
-
-        #region
+        #region Emitir
         public ActionResult ValoresIniciales(ENSCTRCotizaciones cotizacion)
 
         {
@@ -891,12 +876,7 @@ namespace Salud.Controllers
             }
             return PartialView();
         }
-
         #endregion
-
-
-
-
     }
 }
 
