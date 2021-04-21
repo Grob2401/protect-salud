@@ -290,7 +290,7 @@ namespace Salud.Controllers
         [HttpPost]
         public ActionResult GetSexo()
         {
-            var listaSexos = LNTipoDocumentoIdentidad.ObtenerTodos().ToList();
+            var listaSexos = LNSaludSexo.ObtenerTodos().ToList();
             if (ModelState.IsValid)
             {
                 return Json(listaSexos, JsonRequestBehavior.AllowGet);
