@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using LogicaNegocio;
 using Utilitarios;
 using Salud.App_Start;
+using System.Runtime.Caching;
+
 namespace Salud.Controllers
 {
     public class SaludAseguradosController : Controller
@@ -92,5 +94,16 @@ namespace Salud.Controllers
             }
             return View();
         }
+
+        #region AjaxMethods
+        ObjectCache cache = MemoryCache.Default;
+        [SessionExpire]
+        [HttpGet]
+        public ActionResult GetAsegurados()
+        {
+            var listaAsegurados = LNSaludAsegurados.ObtenerTodos().ToList();
+            return Json(listaAsegurados, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
     }
 }

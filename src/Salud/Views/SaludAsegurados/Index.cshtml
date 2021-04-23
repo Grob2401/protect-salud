@@ -13,6 +13,7 @@
     }
 </style>
 <div class="row">
+    @Html.AntiForgeryToken()
     <div class="col-12">
         <div class="card card-primary card-outline">
             <div class="card-header">
@@ -26,7 +27,7 @@
                 <a class="btn btn-app" data-toggle="modal" data-target="#exampleModal">
                     <i class="fas fa-file xs" style="font-size: 14px;"></i> Agregar
                 </a>
-                <table id="dglista" class="table table-bordered table-hover">
+                <table id="dglista" class="table table-bordered table-hover" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th>Cliente</th>
@@ -42,44 +43,8 @@
                             <th style="width: 15%"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach (ENSaludAsegurados saludAsegurados in (List<ENSaludAsegurados>)ViewBag.SaludAsegurados)
-                        {
-                            <tr>
-                                <td>@saludAsegurados.CodigoCliente </td>
-                                <td>@saludAsegurados.CodigoTitular </td>
-                                <td>@saludAsegurados.Categoria </td>
-                                <td>@saludAsegurados.ApellidoPaterno </td>
-                                <td>@saludAsegurados.ApellidoMaterno </td>
-                                <td>@saludAsegurados.Nombres </td>
-                                <td>@saludAsegurados.FechaNacimiento </td>
-                                <td>@saludAsegurados.CodigoDocumentoIdentidad </td>
-                                <td>@saludAsegurados.NumeroDocumentoIdentidad </td>
-                                <td>@saludAsegurados.CodigoSexo </td>
-
-                                <td class="project-actions text-center">
-                                    <form action='@Url.Action("Eliminar", "SaludAsegurados", new {idcliente = saludAsegurados.CodigoCliente,idtitular=saludAsegurados.CodigoTitular,idcategoria=saludAsegurados.Categoria})' method="POST"
-                                          onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
-                                        @Html.AntiForgeryToken()
-                                        <div class="btn-group" role="group">
-                                            <a class="btn btn-info btn-sm" style="font-size: 9px;" href='@Url.Action("Crear", "SaludAsegurados", new {idcliente = saludAsegurados.CodigoCliente,idtitular=saludAsegurados.CodigoTitular,idcategoria=saludAsegurados.Categoria})'>
-                                                <i class="fas fa-pencil-alt" style="font-size: 9px;">
-                                                </i>
-                                                Editar
-                                            </a>
-                                            <button type="submit" class="btn btn-danger btn-sm" title="Eliminar" style="font-size: 9px;">
-                                                <i class="fas fa-trash" style="font-size: 9px;">
-                                                </i>
-                                                Eliminar
-                                            </button>
-                                        </div>
-                                    </form>
-
-                                </td>
-                            </tr>
-                        }
+                    <tbody id="bodyAsegurados">
                     </tbody>
-
                 </table>
             </div>
             <!-- /.card-body -->
@@ -98,21 +63,21 @@
     <script src="~/Scripts/Comandos.js"></script>
     <script>
         /// Carga un elemento <select> genérico a partir de una llamada Ajax
-        const cargarDropDownList = (result, selectId, optionDataField, optionDisplayField, defaultText = "-- Seleccione --") => {
+        const loadDropDownList = (result, selectId, optionDataField, optionDisplayField, defaultText = '-- Seleccione --') => {
             /// Combo selector
             const select = document.querySelector(`#${selectId}`);
 
             /// Default element
-            const defaultOption = document.createElement("option");
+            const defaultOption = document.createElement('option');
             defaultOption.text = defaultText;
-            defaultOption.disabled = "disabled";
+            defaultOption.disabled = 'disabled';
             defaultOption.selected = true;
             select.appendChild(defaultOption)
 
             /// Other elements
-            for (var elem of result) {
+            for (const elem of result) {
                 /// Creating...
-                const option = document.createElement("option"); // CodigoCategoria, CodigoParentesco
+                const option = document.createElement('option'); // CodigoCategoria, CodigoParentesco
                 option.id = elem[optionDataField];
                 option.text = elem[optionDisplayField];
 
@@ -121,15 +86,73 @@
             }
         }
 
-        const fillByAjax = (selectId, optionDataField, optionDisplayField, url, type = "GET", data = {}, defaultText = "-- Seleccione --") => {
+        const fillDropDownListByAjax = (selectId, optionDataField, optionDisplayField, url, type = 'GET', data = {}, defaultText = '-- Seleccione --') => {
             $.ajax({
                 type,
                 url,
                 data,
-                datatype: "json",
+                datatype: 'json',
                 traditional: true,
                 success(result) {
-                    cargarDropDownList(result, selectId, optionDataField, optionDisplayField);
+                    loadDropDownList(result, selectId, optionDataField, optionDisplayField, defaultText);
+                },
+                error(xhr, textStatus, errorThrown) {
+                    console.error(xhr);
+                }
+            });
+        }
+
+        const toIntDate = (strDate) => {
+            try {
+                return parseInt(strDate.split('(')[1].split(')')[0]);
+            } catch (e) {
+                return undefined;
+            }
+        }
+
+        const loadTableBody = (result, tableBodyId, fieldNameArray = []) => {
+            /// Table Body selector
+            const tableBody = document.querySelector(`#${tableBodyId}`);
+
+            /// Default element
+            for (const elem of result) {
+                /// Creating row...
+                const row = document.createElement('tr');
+
+                for (const field of fieldNameArray) {
+                    if (field.type === 'Date') {
+                        elem[field.name] = moment(new Date(toIntDate(elem[field.name]))).format('DD/MM/YYYY');
+                    }
+                    const col = document.createElement('td');
+                    col.innerText = elem[field.name];
+                    row.appendChild(col); /// Inserta columna en la fila
+                }
+
+                /// Inserting...
+                tableBody.appendChild(row);
+            }
+        }
+
+        const fillDataTableByAjax = (tableBodyId, url, type = 'GET', data = {}) => {
+            $.ajax({
+                type,
+                url,
+                data,
+                datatype: 'json',
+                traditional: true,
+                success(result) {
+                    loadTableBody(result, tableBodyId, [
+                        { name: 'CodigoCliente', type: 'String' },
+                        { name: 'CodigoTitular', type: 'String' },
+                        { name: 'Categoria', type: 'String' },
+                        { name: 'ApellidoPaterno', type: 'String' },
+                        { name: 'ApellidoMaterno', type: 'String' },
+                        { name: 'Nombres', type: 'String' },
+                        { name: 'FechaNacimiento', type: 'Date' },
+                        { name: 'CodigoDocumentoIdentidad', type: 'String' },
+                        { name: 'NumeroDocumentoIdentidad', type: 'String' },
+                        { name: 'CodigoSexo', type: 'String' },
+                    ]);
                 },
                 error(xhr, textStatus, errorThrown) {
                     console.error(xhr);
@@ -138,27 +161,13 @@
         }
 
         /// Dropdownlist loadings...
-        fillByAjax("drpParentesco", "CodigoCategoria", "DescripcionParentesco", "/SCTRCotizacion/GetParentesco", "POST"); // Parentesco
-        fillByAjax("drpVendedor", "CodigoVendedor", "DescripcionVendedor", "/SCTRCotizacion/GetVendedor", "POST"); // Vendedor
-        fillByAjax("drpCentroCosto", "CodigoCentroCosto", "DescripcionCentroCosto", "/SCTRCotizacion/GetCentroCosto", "POST", { codigocliente: "000494" }); // Centro de Costo
-        fillByAjax("drpDocumentoIdentidad", "CodigoDocumentoIdentidad", "DescripcionDocumentoIdentidad", "/SCTRCotizacion/GetDocumentoIdentidad", "POST"); // Documento de Identidad
-        fillByAjax("drpSexo", "CodigoSexo", "DescripcionSexo", "/SCTRCotizacion/GetSexo", "POST"); // Sexo
+        fillDropDownListByAjax('drpParentesco', 'CodigoCategoria', 'DescripcionParentesco', '/SCTRCotizacion/GetParentesco', 'POST'); // Parentesco
+        fillDropDownListByAjax('drpVendedor', 'CodigoVendedor', 'DescripcionVendedor', '/SCTRCotizacion/GetVendedor', 'POST'); // Vendedor
+        fillDropDownListByAjax('drpCentroCosto', 'CodigoCentroCosto', 'DescripcionCentroCosto', '/SCTRCotizacion/GetCentroCosto', 'POST', { codigocliente: '000494' }); // Centro de Costo
+        fillDropDownListByAjax('drpDocumentoIdentidad', 'CodigoDocumentoIdentidad', 'DescripcionDocumentoIdentidad', '/SCTRCotizacion/GetDocumentoIdentidad', 'POST'); // Documento de Identidad
+        fillDropDownListByAjax('drpSexo', 'CodigoSexo', 'DescripcionSexo', '/SCTRCotizacion/GetSexo', 'POST'); // Sexo
 
-        $(function () {
-
-            $('#dglista').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
-                "language": {
-                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
-                }
-            });
-
-        });
+        /// DataTable loading...
+        fillDataTableByAjax('bodyAsegurados', '/SaludAsegurados/GetAsegurados'); // Asegurados
     </script>
 }

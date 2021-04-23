@@ -27,7 +27,7 @@
                                 </div>
                                 <form role="form" id="frmUsuario" method="post">
                                     @Html.AntiForgeryToken()
-                                    <div class="card-body row">
+                                    <div class="card-body row pt-3">
                                         <!-- Código Cliente -->
                                         <div class="form-group col-xl-4">
                                             <Label for="txtCodigoCliente">Código Cliente</Label>
@@ -44,7 +44,7 @@
                                             <input id="txtCategoria" type="text" class="form-control" placeholder="Ingrese la categoría" autocomplete="off" />
                                         </div>
                                     </div>
-                                    <div class="card-body row">
+                                    <div class="card-body row pt-0">
                                         <!-- Código Parentesco -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Código Parentesco</label>
@@ -61,7 +61,7 @@
                                             <select id="drpCentroCosto" class="form-control"></select>
                                         </div>
                                     </div>
-                                    <div class="card-body row">
+                                    <div class="card-body row pt-0">
                                         <!-- Documento de Identidad -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Documento de Identidad</label>
@@ -76,7 +76,7 @@
                                         <div class="offset-xl-4">
                                         </div>
                                     </div>
-                                    <div class="card-body row">
+                                    <div class="card-body row pt-0">
                                         <!-- Apellido Paterno -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Apellido Paterno</label>
@@ -93,7 +93,7 @@
                                             <input id="txtNombres" type="text" class="form-control text-uppercase" autocomplete="off" />
                                         </div>
                                     </div>
-                                    <div class="card-body row">
+                                    <div class="card-body row pt-0">
                                         <!-- Sexo -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Sexo</label>
@@ -107,8 +107,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Grabar</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-outline-primary">Grabar</button>
             </div>
         </div>
     </div>
