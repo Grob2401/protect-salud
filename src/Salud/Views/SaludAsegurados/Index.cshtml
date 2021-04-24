@@ -23,11 +23,11 @@
                 </h3>
             </div>
             <!-- /.card-header -->
-            <div class="card-body ">
-                <a class="btn btn-app" data-toggle="modal" data-target="#exampleModal">
-                    <i class="fas fa-file xs" style="font-size: 14px;"></i> Agregar
-                </a>
-                <table id="dglista" class="table table-bordered table-hover" cellspacing="0" width="100%">
+            <div class="card-body pt-1">
+                <div class="mb-2 mt-1">
+                    <button type="button" class="btn btn-outline-primary btn-sm px-4" data-dismiss="modal" data-toggle="modal" data-target="#exampleModal">Nuevo</button>
+                </div>
+                <table id="dglista" class="table table-bordered table-hover table-sm" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th>Cliente</th>
@@ -46,6 +46,15 @@
                     <tbody id="bodyAsegurados">
                     </tbody>
                 </table>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
             </div>
             <!-- /.card-body -->
         </div>
@@ -122,6 +131,8 @@
                 for (const field of fieldNameArray) {
                     if (field.type === 'Date') {
                         elem[field.name] = moment(new Date(toIntDate(elem[field.name]))).format('DD/MM/YYYY');
+                    } else if (field.type === 'Int') {
+                        elem[field.name] = parseInt(elem[field.name]);
                     }
                     const col = document.createElement('td');
                     col.innerText = elem[field.name];
