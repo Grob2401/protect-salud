@@ -27,7 +27,7 @@
                 <div class="mb-2 mt-1">
                     <button type="button" class="btn btn-outline-primary btn-sm px-4" data-dismiss="modal" data-toggle="modal" data-target="#exampleModal">Nuevo</button>
                 </div>
-                <table id="dglista" class="table table-bordered table-hover table-sm" cellspacing="0" width="100%">
+                <table id="dglista" class="table table-bordered table-hover table-sm">
                     <thead>
                         <tr>
                             <th>Cliente</th>
@@ -137,6 +137,25 @@
                     const col = document.createElement('td');
                     col.innerText = elem[field.name];
                     row.appendChild(col); /// Inserta columna en la fila
+                }
+
+                /// Adding edit or delete buttons...
+                if (true) {
+
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'Editar';
+                    editButton.classList.add('btn', 'btn-outline-info', 'btn-sm', 'mr-3');
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Eliminar';
+                    deleteButton.classList.add('btn', 'btn-outline-danger', 'btn-sm');
+
+                    const col = document.createElement('td');
+                    col.classList.add('project-actions', 'text-center');
+
+                    col.appendChild(editButton);
+                    col.appendChild(deleteButton);
+                    row.appendChild(col);
                 }
 
                 /// Inserting...
