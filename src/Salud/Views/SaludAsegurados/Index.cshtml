@@ -75,7 +75,7 @@
         const loadDropDownList = (result, selectId, optionDataField, optionDisplayField, defaultText = '-- Seleccione --') => {
             /// Combo selector
             const select = document.querySelector(`#${selectId}`);
-
+            
             /// Default element
             const defaultOption = document.createElement('option');
             defaultOption.text = defaultText;
@@ -119,10 +119,10 @@
             }
         }
 
-        const loadTableBody = (result, tableBodyId, fieldNameArray = []) => {
+        const loadTableBody = (result, tableBodyId, fieldNameArray = [], modifyPermmisions = { hasEdit: false, hasDelete: false }) => {
             /// Table Body selector
             const tableBody = document.querySelector(`#${tableBodyId}`);
-
+            
             /// Default element
             for (const elem of result) {
                 /// Creating row...
@@ -140,21 +140,28 @@
                 }
 
                 /// Adding edit or delete buttons...
-                if (true) {
-
-                    const editButton = document.createElement('button');
-                    editButton.textContent = 'Editar';
-                    editButton.classList.add('btn', 'btn-outline-info', 'btn-sm', 'mr-3');
-
-                    const deleteButton = document.createElement('button');
-                    deleteButton.textContent = 'Eliminar';
-                    deleteButton.classList.add('btn', 'btn-outline-danger', 'btn-sm');
-
+                if (modifyPermmisions.hasEdit || modifyPermmisions.hasDelete) {
+                    /// New column...
                     const col = document.createElement('td');
                     col.classList.add('project-actions', 'text-center');
 
-                    col.appendChild(editButton);
-                    col.appendChild(deleteButton);
+                    /// Edit
+                    if (modifyPermmisions.hasEdit) {
+                        const editButton = document.createElement('button');
+                        editButton.textContent = 'Editar';
+                        editButton.classList.add('btn', 'btn-outline-info', 'btn-sm', 'mr-3');
+                        col.appendChild(editButton);
+                    }
+
+                    /// Delete
+                    if (modifyPermmisions.hasDelete) {
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'Eliminar';
+                        deleteButton.classList.add('btn', 'btn-outline-danger', 'btn-sm');
+                        col.appendChild(deleteButton);
+                    }
+
+                    /// Appending to row...
                     row.appendChild(col);
                 }
 
@@ -172,17 +179,21 @@
                 traditional: true,
                 success(result) {
                     loadTableBody(result, tableBodyId, [
-                        { name: 'CodigoCliente', type: 'String' },
-                        { name: 'CodigoTitular', type: 'String' },
-                        { name: 'Categoria', type: 'String' },
-                        { name: 'ApellidoPaterno', type: 'String' },
-                        { name: 'ApellidoMaterno', type: 'String' },
-                        { name: 'Nombres', type: 'String' },
-                        { name: 'FechaNacimiento', type: 'Date' },
-                        { name: 'CodigoDocumentoIdentidad', type: 'String' },
-                        { name: 'NumeroDocumentoIdentidad', type: 'String' },
-                        { name: 'CodigoSexo', type: 'String' },
-                    ]);
+                            { name: 'CodigoCliente', type: 'String' },
+                            { name: 'CodigoTitular', type: 'String' },
+                            { name: 'Categoria', type: 'String' },
+                            { name: 'ApellidoPaterno', type: 'String' },
+                            { name: 'ApellidoMaterno', type: 'String' },
+                            { name: 'Nombres', type: 'String' },
+                            { name: 'FechaNacimiento', type: 'Date' },
+                            { name: 'CodigoDocumentoIdentidad', type: 'String' },
+                            { name: 'NumeroDocumentoIdentidad', type: 'String' },
+                            { name: 'CodigoSexo', type: 'String' },
+                        ],
+                        {
+                            hasEdit: true,
+                            hasDelete: true
+                        });
                 },
                 error(xhr, textStatus, errorThrown) {
                     console.error(xhr);
