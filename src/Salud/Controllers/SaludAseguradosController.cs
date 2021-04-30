@@ -8,6 +8,7 @@ using LogicaNegocio;
 using Utilitarios;
 using Salud.App_Start;
 using System.Runtime.Caching;
+using System.Configuration;
 
 namespace Salud.Controllers
 {
@@ -98,7 +99,7 @@ namespace Salud.Controllers
             #region Asegurados
             public int Page { get; set; }
             public string Keywords { get; set; }
-            public bool IsValidForList { get { return ((Page > 0) && (Keywords != null)); } }
+            public bool IsValidForList { get { return (Page > 0); } }
             #endregion
 
             #region Asegurado
@@ -118,7 +119,8 @@ namespace Salud.Controllers
         {
             if (aseguradoRequest != null || aseguradoRequest.IsValidForList)
             {
-                var listaAsegurados = LNSaludAsegurados.ObtenerTodos(aseguradoRequest.Page, aseguradoRequest.Keywords).ToList();
+                if (!int.TryParse(ConfigurationManager.AppSettings["RowsPerPage"], out int rowsPerPage)) rowsPerPage = 0;
+                var listaAsegurados = LNSaludAsegurados.ObtenerTodos(aseguradoRequest.Page, rowsPerPage, aseguradoRequest.Keywords).ToList();
                 return Json(listaAsegurados, JsonRequestBehavior.AllowGet);
             }
             return Json(null, JsonRequestBehavior.AllowGet);
@@ -138,9 +140,15 @@ namespace Salud.Controllers
 
         [SessionExpire]
         [HttpGet]
-        public ActionResult GetCantidad()
+        public ActionResult GetCantidad(AseguradoRequest aseguradoRequest = null)
         {
-            return Json(LNSaludAsegurados.Cantidad(), JsonRequestBehavior.AllowGet);
+            if (aseguradoRequest != null && aseguradoRequest.IsValidForList)
+            {
+                if (!int.TryParse(ConfigurationManager.AppSettings["RowsPerPage"], out int rowsPerPage)) rowsPerPage = 0;
+                int totalRows = LNSaludAsegurados.Cantidad(aseguradoRequest.Keywords);
+                return Json(new { totalRows, rowsPerPage }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(null, JsonRequestBehavior.AllowGet);
         }
         #endregion
     }

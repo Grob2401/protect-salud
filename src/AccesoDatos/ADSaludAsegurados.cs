@@ -163,12 +163,13 @@ namespace AccesoDatos
             }
         }
 
-        public int Cantidad()
+        public int Cantidad(string keywords)
         {
             DbCommand oCommand = null;
             try
             {
                 oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenSaludAsegurados_count");
+                if (keywords != null) GenericDataAccess.AgregarParametro(oCommand, "@keywords", keywords, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
                 DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
                 int cantidadAsegurados = -1;

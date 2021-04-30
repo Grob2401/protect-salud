@@ -10,15 +10,14 @@ namespace LogicaNegocio
 
     public class LNSaludAsegurados
     {
-        public static List<ENSaludAsegurados> ObtenerTodos(int page = 1, string keywords = "")
+        public static List<ENSaludAsegurados> ObtenerTodos(int page = 1, int rowsPerPage = 100, string keywords = "")
         {
-            if (!int.TryParse(ConfigurationManager.AppSettings["RowsPerPage"], out int rowsPerPage)) rowsPerPage = 0;
             return new ADSaludAsegurados().ObtenerTodos(page, rowsPerPage, keywords);
         }
 
-        public static int Cantidad()
+        public static int Cantidad(string keywords)
         {
-            return (new ADSaludAsegurados()).Cantidad();
+            return (new ADSaludAsegurados()).Cantidad(keywords ?? string.Empty);
         }
 
         public static bool Insertar(ENSaludAsegurados oENSaludAsegurados)
