@@ -24,8 +24,11 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body pt-1">
-                <div class="mb-2 mt-1">
-                    <button type="button" class="btn btn-outline-primary btn-sm px-4" data-dismiss="modal" data-toggle="modal" data-target="#exampleModal">Nuevo</button>
+                <div class="row">
+                    <div class="mb-2 mt-1">
+                        <button type="button" class="btn btn-outline-primary btn-sm px-4" data-dismiss="modal" data-toggle="modal" data-target="#exampleModal">Nuevo</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm px-4" data-dismiss="modal" data-toggle="modal" data-target="#buscarModal">Buscar</button>
+                    </div>
                 </div>
                 <table id="dglista" class="table table-bordered table-hover table-sm">
                     <thead>
@@ -63,6 +66,7 @@
     <!-- /.col -->
 </div>
 @Html.Partial("_AfiliacionCrear", new ENSaludAsegurados())
+@Html.Partial("SaludAsegurados/_AfiliacionBuscar")
 @section Scripts {
     @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
     @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")

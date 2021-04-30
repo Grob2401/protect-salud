@@ -1976,6 +1976,7 @@
     <Content Include="Views\SaludContratos\_CrearVM.cshtml" />
     <Content Include="Views\Shared\_AfiliacionCrear.cshtml" />
     <Content Include="Views\Shared\_UsuarioCrear.cshtml" />
+    <Content Include="Views\Shared\SaludAsegurados\_AfiliacionBuscar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
