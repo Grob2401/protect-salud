@@ -14,6 +14,11 @@ namespace LogicaNegocio
             return new ADSaludAsegurados().ObtenerTodos();
         }
 
+        public static int Cantidad()
+        {
+            return (new ADSaludAsegurados()).Cantidad();
+        }
+
         public static bool Insertar(ENSaludAsegurados oENSaludAsegurados)
         {
             return (new ADSaludAsegurados()).Insertar(oENSaludAsegurados);

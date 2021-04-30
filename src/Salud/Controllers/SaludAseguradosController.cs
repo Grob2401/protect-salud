@@ -118,6 +118,13 @@ namespace Salud.Controllers
                 return Json(asegurados, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [SessionExpire]
+        [HttpGet]
+        public ActionResult GetCantidad()
+        {
+            return Json(LNSaludAsegurados.Cantidad(), JsonRequestBehavior.AllowGet);
+        }
         #endregion
     }
 }

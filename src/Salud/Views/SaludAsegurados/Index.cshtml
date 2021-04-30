@@ -119,7 +119,7 @@
             }
         }
 
-        const loadTableBody = (result, tableBodyId, fieldNameArray = [], modifyPermmisions = { hasEdit: false, hasDelete: false }) => {
+        const loadTableBody = (result, tableBodyId, fieldNameArray = [], settings = { hasEdit: false, hasDelete: false }) => {
             /// Table Body selector
             const tableBody = document.querySelector(`#${tableBodyId}`);
             
@@ -140,13 +140,13 @@
                 }
 
                 /// Adding edit or delete buttons...
-                if (modifyPermmisions.hasEdit || modifyPermmisions.hasDelete) {
+                if (settings.hasEdit || settings.hasDelete) {
                     /// New column...
                     const col = document.createElement('td');
                     col.classList.add('project-actions', 'text-center');
 
                     /// Edit
-                    if (modifyPermmisions.hasEdit) {
+                    if (settings.hasEdit) {
                         const editButton = document.createElement('button');
                         editButton.textContent = 'Editar';
                         editButton.classList.add('btn', 'btn-outline-info', 'btn-sm', 'mr-3');
@@ -154,7 +154,7 @@
                     }
 
                     /// Delete
-                    if (modifyPermmisions.hasDelete) {
+                    if (settings.hasDelete) {
                         const deleteButton = document.createElement('button');
                         deleteButton.textContent = 'Eliminar';
                         deleteButton.classList.add('btn', 'btn-outline-danger', 'btn-sm');
@@ -170,15 +170,24 @@
             }
         }
 
-        const fillDataTableByAjax = (tableBodyId, url, type = 'GET', data = {}) => {
+        const fillDataTableByAjax = (settings = { type: 'GET', data: {} }) => {
+
+            /// Cantidad de registros
+            /*
             $.ajax({
-                type,
-                url,
-                data,
+                type: ''
+            });
+            */
+
+            /// Llamada con paginación
+            $.ajax({
+                type: settings.type,
+                url: settings.url,
+                data: settings.data,
                 datatype: 'json',
                 traditional: true,
                 success(result) {
-                    loadTableBody(result, tableBodyId, [
+                    loadTableBody(result, settings.tableBodyId, [
                             { name: 'CodigoCliente', type: 'String' },
                             { name: 'CodigoTitular', type: 'String' },
                             { name: 'Categoria', type: 'String' },
@@ -208,7 +217,12 @@
         fillDropDownListByAjax('drpDocumentoIdentidad', 'CodigoDocumentoIdentidad', 'DescripcionDocumentoIdentidad', '/SCTRCotizacion/GetDocumentoIdentidad', 'POST'); // Documento de Identidad
         fillDropDownListByAjax('drpSexo', 'CodigoSexo', 'DescripcionSexo', '/SCTRCotizacion/GetSexo', 'POST'); // Sexo
 
+
         /// DataTable loading...
-        fillDataTableByAjax('bodyAsegurados', '/SaludAsegurados/GetAsegurados'); // Asegurados
+        fillDataTableByAjax(
+            {
+                tableBodyId: 'bodyAsegurados',
+                url: '/SaludAsegurados/GetAsegurados'
+            }); // Asegurados
     </script>
 }
