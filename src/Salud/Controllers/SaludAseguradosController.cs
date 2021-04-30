@@ -13,7 +13,6 @@ namespace Salud.Controllers
 {
     public class SaludAseguradosController : Controller
     {
-
         [SessionExpire]
         public ActionResult Index()
         {
@@ -93,30 +92,48 @@ namespace Salud.Controllers
             return View();
         }
 
-        #region AjaxMethods
+        #region RequestsStructures
         public class AseguradoRequest
         {
-            public string IdCliente { get; set; }
-            public string idTitular { get; set; }
-            public string IdCategoria { get; set; }
-            public bool IsValid { get { return ((IdCliente != null) && (idTitular != null) && (IdCategoria != null)); } }
-        }
+            #region Asegurados
+            public int Page { get; set; }
+            public string Keywords { get; set; }
+            public bool IsValidForList { get { return ((Page > 0) && (Keywords != null)); } }
+            #endregion
 
+            #region Asegurado
+            public string IdCliente { get; set; }
+            public string IdTitular { get; set; }
+            public string IdCategoria { get; set; }
+            public bool IsValidForOne { get { return ((IdCliente != null) && (IdTitular != null) && (IdCategoria != null)); } }
+            #endregion
+        }
+        #endregion
+
+        #region AjaxMethods
         ObjectCache cache = MemoryCache.Default;
         [SessionExpire]
         [HttpGet]
         public ActionResult GetAsegurados(AseguradoRequest aseguradoRequest = null)
         {
-            if (aseguradoRequest == null || !aseguradoRequest.IsValid)
+            if (aseguradoRequest != null || aseguradoRequest.IsValidForList)
             {
-                var listaAsegurados = LNSaludAsegurados.ObtenerTodos().ToList();
+                var listaAsegurados = LNSaludAsegurados.ObtenerTodos(aseguradoRequest.Page, aseguradoRequest.Keywords).ToList();
                 return Json(listaAsegurados, JsonRequestBehavior.AllowGet);
             }
-            else
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [SessionExpire]
+        [HttpGet]
+        public ActionResult GetAsegurado(AseguradoRequest aseguradoRequest = null)
+        {
+            if (aseguradoRequest != null && aseguradoRequest.IsValidForOne)
             {
-                var asegurados = LNSaludAsegurados.ObtenerUno(aseguradoRequest.IdCliente, aseguradoRequest.idTitular, aseguradoRequest.IdCategoria);
+                var asegurados = LNSaludAsegurados.ObtenerUno(aseguradoRequest.IdCliente, aseguradoRequest.IdTitular, aseguradoRequest.IdCategoria);
                 return Json(asegurados, JsonRequestBehavior.AllowGet);
             }
+            return Json(null, JsonRequestBehavior.AllowGet);
         }
 
         [SessionExpire]

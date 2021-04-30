@@ -50,7 +50,7 @@
                     </tbody>
                 </table>
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination">
+                    <ul class="pagination justify-content-end">
                         <li class="page-item"><a class="page-link" href="#">Previous</a></li>
                         <li class="page-item"><a class="page-link" href="#">1</a></li>
                         <li class="page-item"><a class="page-link" href="#">2</a></li>
@@ -174,44 +174,63 @@
             }
         }
 
-        const fillDataTableByAjax = (settings = { type: 'GET', data: {} }) => {
+        const fillDataTableByAjax = (settings) => {
+            let { tableBodyId, counting, pagination } = settings;
 
             /// Cantidad de registros
-            /*
+            let totalRows;
             $.ajax({
-                type: ''
-            });
-            */
-
-            /// Llamada con paginación
-            $.ajax({
-                type: settings.type,
-                url: settings.url,
-                data: settings.data,
-                datatype: 'json',
+                type: counting.type,
+                url: counting.url,
+                data: counting.data,
+                dataType: 'json',
                 traditional: true,
                 success(result) {
-                    loadTableBody(result, settings.tableBodyId, [
-                            { name: 'CodigoCliente', type: 'String' },
-                            { name: 'CodigoTitular', type: 'String' },
-                            { name: 'Categoria', type: 'String' },
-                            { name: 'ApellidoPaterno', type: 'String' },
-                            { name: 'ApellidoMaterno', type: 'String' },
-                            { name: 'Nombres', type: 'String' },
-                            { name: 'FechaNacimiento', type: 'Date' },
-                            { name: 'CodigoDocumentoIdentidad', type: 'String' },
-                            { name: 'NumeroDocumentoIdentidad', type: 'String' },
-                            { name: 'CodigoSexo', type: 'String' },
-                        ],
-                        {
-                            hasEdit: true,
-                            hasDelete: true
-                        });
+
+                    totalRows = parseInt(result);
+                    console.log('totalRows', totalRows);
+                    if (totalRows === -1) throw error('Hubo un error de conexión');
+
+                    /// Llamada con paginación
+                    $.ajax({
+                        type: pagination.type,
+                        url: pagination.url,
+                        data: pagination.data,
+                        datatype: 'json',
+                        traditional: true,
+                        success(result) {
+                            loadTableBody(
+                                result,
+                                tableBodyId,
+                                [
+                                    { name: 'CodigoCliente', type: 'String' },
+                                    { name: 'CodigoTitular', type: 'String' },
+                                    { name: 'Categoria', type: 'String' },
+                                    { name: 'ApellidoPaterno', type: 'String' },
+                                    { name: 'ApellidoMaterno', type: 'String' },
+                                    { name: 'Nombres', type: 'String' },
+                                    { name: 'FechaNacimiento', type: 'Date' },
+                                    { name: 'CodigoDocumentoIdentidad', type: 'String' },
+                                    { name: 'NumeroDocumentoIdentidad', type: 'String' },
+                                    { name: 'CodigoSexo', type: 'String' },
+                                ],
+                                {
+                                    hasEdit: true,
+                                    hasDelete: true
+                                });
+                        },
+                        error(xhr, textStatus, errorThrown) {
+                            console.error(xhr);
+                        }
+                    });
+
                 },
                 error(xhr, textStatus, errorThrown) {
+                    totalRows = -1;
                     console.error(xhr);
                 }
             });
+
         }
 
         /// Dropdownlist loadings...
@@ -226,7 +245,18 @@
         fillDataTableByAjax(
             {
                 tableBodyId: 'bodyAsegurados',
-                url: '/SaludAsegurados/GetAsegurados'
+                counting: {
+                    url: '/SaludAsegurados/GetCantidad',
+                    type: 'GET'
+                },
+                pagination: {
+                    url: '/SaludAsegurados/GetAsegurados',
+                    type: 'GET',
+                    data: {
+                        page: 1,
+                        keywords: ''
+                    }
+                }
             }); // Asegurados
     </script>
 }

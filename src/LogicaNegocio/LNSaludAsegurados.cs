@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Common;
 using AccesoDatos;
 using Entidades;
@@ -9,9 +10,10 @@ namespace LogicaNegocio
 
     public class LNSaludAsegurados
     {
-        public static List<ENSaludAsegurados> ObtenerTodos()
+        public static List<ENSaludAsegurados> ObtenerTodos(int page = 1, string keywords = "")
         {
-            return new ADSaludAsegurados().ObtenerTodos();
+            if (!int.TryParse(ConfigurationManager.AppSettings["RowsPerPage"], out int rowsPerPage)) rowsPerPage = 0;
+            return new ADSaludAsegurados().ObtenerTodos(page, rowsPerPage, keywords);
         }
 
         public static int Cantidad()

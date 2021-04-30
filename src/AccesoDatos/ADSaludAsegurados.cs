@@ -12,13 +12,16 @@ namespace AccesoDatos
         public String dataProviderName = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ProviderName;
         public String connectionString = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ConnectionString;
 
-        public List<ENSaludAsegurados> ObtenerTodos()
+        public List<ENSaludAsegurados> ObtenerTodos(int page, int rowsPerPage, string keywords)
         {
             DbCommand oCommand = null;
             List<ENSaludAsegurados> oListaSaludAsegurados = new List<ENSaludAsegurados>();
             try
             {
                 oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenSaludAsegurados_sel");
+                if (page > 0) GenericDataAccess.AgregarParametro(oCommand, "@page", page, TipoParametro.INT, Direccion.INPUT);
+                if (rowsPerPage > 0) GenericDataAccess.AgregarParametro(oCommand, "@rowsPerPage", rowsPerPage, TipoParametro.INT, Direccion.INPUT);
+                if (keywords != null) GenericDataAccess.AgregarParametro(oCommand, "@keywords", keywords, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
                 DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
                 while (oDataReader.Read())
@@ -107,7 +110,11 @@ namespace AccesoDatos
                     
                     oEnListaSaludAsegurados.RegAddDate = DateTime.Parse(oDataReader["RegAddDate"].ToString());
                     oEnListaSaludAsegurados.RegAddUser = oDataReader["RegAddUser"].ToString();
-                    oEnListaSaludAsegurados.RegEdtDate = DateTime.Parse(oDataReader["RegEdtDate"].ToString());
+
+                    //oEnListaSaludAsegurados.RegEdtDate = DateTime.Parse(oDataReader["RegEdtDate"].ToString());
+                    if (!DateTime.TryParse(oDataReader["RegEdtDate"].ToString(), out DateTime regEdtDate)) regEdtDate = DateTime.Now;
+                    oEnListaSaludAsegurados.RegEdtDate = regEdtDate;
+
                     oEnListaSaludAsegurados.RegEdtUser = oDataReader["RegEdtUser"].ToString();
                     
                     //oEnListaSaludAsegurados.SCTREstadoCivil = oDataReader["SCTREstadoCivil"].ToString();
