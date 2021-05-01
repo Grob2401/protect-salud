@@ -51,6 +51,7 @@
     <Compile Include="LNClientes.cs" />
     <Compile Include="LNComun.cs" />
     <Compile Include="LNMonedas.cs" />
+    <Compile Include="LNPreFacturaciones.cs" />
     <Compile Include="LNSaludAsegurados.cs" />
     <Compile Include="LNSaludCentroCostos.cs" />
     <Compile Include="LNSaludContratoPlan.cs" />

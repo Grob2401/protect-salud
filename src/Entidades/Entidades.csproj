@@ -53,6 +53,8 @@
     <Compile Include="ENClientes.cs" />
     <Compile Include="ENComunes.cs" />
     <Compile Include="ENMonedas.cs" />
+    <Compile Include="ENPreFacturacion.cs" />
+    <Compile Include="ENPrefacturacionDetalleContratos.cs" />
     <Compile Include="ENQuerys.cs" />
     <Compile Include="ENSaludContratoPlan.cs" />
     <Compile Include="ENSaludContratos.cs" />
