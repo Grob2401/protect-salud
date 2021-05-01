@@ -23,11 +23,11 @@
                 </h3>
             </div>
             <!-- /.card-header -->
-            <div class="card-body ">
-                <a class="btn btn-app" data-toggle="modal" data-target="#exampleModal">
-                    <i class="fas fa-file xs" style="font-size: 14px;"></i> Agregar
-                </a>
-                <table id="dglista" class="table table-bordered table-hover" cellspacing="0" width="100%">
+            <div class="card-body pt-1">
+                <div class="mb-2 mt-1">
+                    <button type="button" class="btn btn-outline-primary btn-sm px-4" data-dismiss="modal" data-toggle="modal" data-target="#exampleModal">Nuevo</button>
+                </div>
+                <table id="dglista" class="table table-bordered table-hover table-sm">
                     <thead>
                         <tr>
                             <th>Cliente</th>
@@ -46,6 +46,15 @@
                     <tbody id="bodyAsegurados">
                     </tbody>
                 </table>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
             </div>
             <!-- /.card-body -->
         </div>
@@ -66,7 +75,7 @@
         const loadDropDownList = (result, selectId, optionDataField, optionDisplayField, defaultText = '-- Seleccione --') => {
             /// Combo selector
             const select = document.querySelector(`#${selectId}`);
-
+            
             /// Default element
             const defaultOption = document.createElement('option');
             defaultOption.text = defaultText;
@@ -110,10 +119,10 @@
             }
         }
 
-        const loadTableBody = (result, tableBodyId, fieldNameArray = []) => {
+        const loadTableBody = (result, tableBodyId, fieldNameArray = [], settings = { hasEdit: false, hasDelete: false }) => {
             /// Table Body selector
             const tableBody = document.querySelector(`#${tableBodyId}`);
-
+            
             /// Default element
             for (const elem of result) {
                 /// Creating row...
@@ -122,10 +131,38 @@
                 for (const field of fieldNameArray) {
                     if (field.type === 'Date') {
                         elem[field.name] = moment(new Date(toIntDate(elem[field.name]))).format('DD/MM/YYYY');
+                    } else if (field.type === 'Int') {
+                        elem[field.name] = parseInt(elem[field.name]);
                     }
                     const col = document.createElement('td');
                     col.innerText = elem[field.name];
                     row.appendChild(col); /// Inserta columna en la fila
+                }
+
+                /// Adding edit or delete buttons...
+                if (settings.hasEdit || settings.hasDelete) {
+                    /// New column...
+                    const col = document.createElement('td');
+                    col.classList.add('project-actions', 'text-center');
+
+                    /// Edit
+                    if (settings.hasEdit) {
+                        const editButton = document.createElement('button');
+                        editButton.textContent = 'Editar';
+                        editButton.classList.add('btn', 'btn-outline-info', 'btn-sm', 'mr-3');
+                        col.appendChild(editButton);
+                    }
+
+                    /// Delete
+                    if (settings.hasDelete) {
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'Eliminar';
+                        deleteButton.classList.add('btn', 'btn-outline-danger', 'btn-sm');
+                        col.appendChild(deleteButton);
+                    }
+
+                    /// Appending to row...
+                    row.appendChild(col);
                 }
 
                 /// Inserting...
@@ -133,26 +170,39 @@
             }
         }
 
-        const fillDataTableByAjax = (tableBodyId, url, type = 'GET', data = {}) => {
+        const fillDataTableByAjax = (settings = { type: 'GET', data: {} }) => {
+
+            /// Cantidad de registros
+            /*
             $.ajax({
-                type,
-                url,
-                data,
+                type: ''
+            });
+            */
+
+            /// Llamada con paginación
+            $.ajax({
+                type: settings.type,
+                url: settings.url,
+                data: settings.data,
                 datatype: 'json',
                 traditional: true,
                 success(result) {
-                    loadTableBody(result, tableBodyId, [
-                        { name: 'CodigoCliente', type: 'String' },
-                        { name: 'CodigoTitular', type: 'String' },
-                        { name: 'Categoria', type: 'String' },
-                        { name: 'ApellidoPaterno', type: 'String' },
-                        { name: 'ApellidoMaterno', type: 'String' },
-                        { name: 'Nombres', type: 'String' },
-                        { name: 'FechaNacimiento', type: 'Date' },
-                        { name: 'CodigoDocumentoIdentidad', type: 'String' },
-                        { name: 'NumeroDocumentoIdentidad', type: 'String' },
-                        { name: 'CodigoSexo', type: 'String' },
-                    ]);
+                    loadTableBody(result, settings.tableBodyId, [
+                            { name: 'CodigoCliente', type: 'String' },
+                            { name: 'CodigoTitular', type: 'String' },
+                            { name: 'Categoria', type: 'String' },
+                            { name: 'ApellidoPaterno', type: 'String' },
+                            { name: 'ApellidoMaterno', type: 'String' },
+                            { name: 'Nombres', type: 'String' },
+                            { name: 'FechaNacimiento', type: 'Date' },
+                            { name: 'CodigoDocumentoIdentidad', type: 'String' },
+                            { name: 'NumeroDocumentoIdentidad', type: 'String' },
+                            { name: 'CodigoSexo', type: 'String' },
+                        ],
+                        {
+                            hasEdit: true,
+                            hasDelete: true
+                        });
                 },
                 error(xhr, textStatus, errorThrown) {
                     console.error(xhr);
@@ -167,7 +217,12 @@
         fillDropDownListByAjax('drpDocumentoIdentidad', 'CodigoDocumentoIdentidad', 'DescripcionDocumentoIdentidad', '/SCTRCotizacion/GetDocumentoIdentidad', 'POST'); // Documento de Identidad
         fillDropDownListByAjax('drpSexo', 'CodigoSexo', 'DescripcionSexo', '/SCTRCotizacion/GetSexo', 'POST'); // Sexo
 
+
         /// DataTable loading...
-        fillDataTableByAjax('bodyAsegurados', '/SaludAsegurados/GetAsegurados'); // Asegurados
+        fillDataTableByAjax(
+            {
+                tableBodyId: 'bodyAsegurados',
+                url: '/SaludAsegurados/GetAsegurados'
+            }); // Asegurados
     </script>
 }

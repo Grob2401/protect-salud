@@ -23,9 +23,7 @@ namespace Salud.Controllers
 
         [HttpGet]
         public ActionResult Crear(string idcliente = "", string idtitular = "", string idcategoria = "")
-
         {
-           
             ENSaludAsegurados oENSaludAsegurados = null;
             ViewBag.CodigoCliente = new SelectList(LNClientes.ObtenerTodos().ToList(), "CodigoCliente", "RazonSocial");
             if (idtitular != "" || idcategoria != "" || idcliente != "")
@@ -96,13 +94,36 @@ namespace Salud.Controllers
         }
 
         #region AjaxMethods
+        public class AseguradoRequest
+        {
+            public string IdCliente { get; set; }
+            public string idTitular { get; set; }
+            public string IdCategoria { get; set; }
+            public bool IsValid { get { return ((IdCliente != null) && (idTitular != null) && (IdCategoria != null)); } }
+        }
+
         ObjectCache cache = MemoryCache.Default;
         [SessionExpire]
         [HttpGet]
-        public ActionResult GetAsegurados()
+        public ActionResult GetAsegurados(AseguradoRequest aseguradoRequest = null)
         {
-            var listaAsegurados = LNSaludAsegurados.ObtenerTodos().ToList();
-            return Json(listaAsegurados, JsonRequestBehavior.AllowGet);
+            if (aseguradoRequest == null || !aseguradoRequest.IsValid)
+            {
+                var listaAsegurados = LNSaludAsegurados.ObtenerTodos().ToList();
+                return Json(listaAsegurados, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var asegurados = LNSaludAsegurados.ObtenerUno(aseguradoRequest.IdCliente, aseguradoRequest.idTitular, aseguradoRequest.IdCategoria);
+                return Json(asegurados, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [SessionExpire]
+        [HttpGet]
+        public ActionResult GetCantidad()
+        {
+            return Json(LNSaludAsegurados.Cantidad(), JsonRequestBehavior.AllowGet);
         }
         #endregion
     }

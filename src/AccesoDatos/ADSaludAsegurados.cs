@@ -155,6 +155,29 @@ namespace AccesoDatos
                 GenericDataAccess.CerrarConexion(oCommand, null);
             }
         }
+
+        public int Cantidad()
+        {
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenSaludAsegurados_count");
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
+                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
+                int cantidadAsegurados = -1;
+                if (oDataReader.Read() && !int.TryParse(oDataReader["Cantidad"].ToString(), out cantidadAsegurados)) cantidadAsegurados = -1;
+                return cantidadAsegurados;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
         public ENSaludAsegurados ObtenerUno(string CodigoCliente, string CodigoTitular, string Categoria)
         {
             DbCommand oCommand = null;
