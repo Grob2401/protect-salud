@@ -53,6 +53,7 @@
     <Compile Include="ADCommon.cs" />
     <Compile Include="ADComun.cs" />
     <Compile Include="ADMonedas.cs" />
+    <Compile Include="ADPrefacturaciones.cs" />
     <Compile Include="ADQuerys.cs" />
     <Compile Include="ADSaludAsegurados.cs" />
     <Compile Include="ADSaludCentroCostos.cs" />

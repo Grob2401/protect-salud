@@ -112,7 +112,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-                        with font-awesome or any other icon font library -->
+    with font-awesome or any other icon font library -->
 
                         <li class="nav-item">
                             <a href='@Url.Action("Index", "Home")' class="nav-link ">
@@ -163,18 +163,18 @@
                                         <p>Clientes</p>
                                     </a>
                                 </li>
-                                  @*<li class="nav-item">
-                                    <a href='@Url.Action("Index", "Canal")' class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Canal Prueba</p>
-                                    </a>
-                                </li>*@
-                                                        @*<li class="nav-item">
-                                    <a href='@Url.Action("_Prueba", "Clientes")' class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Prueba</p>
-                                    </a>
-                                </li>*@
+                                @*<li class="nav-item">
+                    <a href='@Url.Action("Index", "Canal")' class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Canal Prueba</p>
+                    </a>
+                </li>*@
+                                @*<li class="nav-item">
+                    <a href='@Url.Action("_Prueba", "Clientes")' class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Prueba</p>
+                    </a>
+                </li>*@
 
                                 <li class="nav-item">
                                     <a href='@Url.Action("Index", "SaludContratos")' class="nav-link">
@@ -194,6 +194,10 @@
 
 
                             </ul>
+                        </li>
+
+                        <li class="nav-item has-treeview">
+
                             <a href='#' class="nav-link">
                                 <i class="nav-icon fas fa-book-medical"></i>
                                 <p>
@@ -209,6 +213,29 @@
                                     </a>
                                 </li>
                             </ul>
+                        </li>
+
+                        <li class="nav-item has-treeview">
+
+                            <a href='#' class="nav-link">
+                                <i class="nav-icon fas fa-coins"></i>
+                                <p>
+                                    Facturacion y Cobranzas
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href='@Url.Action("Index", "PreFacturacion")' class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Pre-Facturacion</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                    </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
             </div>
