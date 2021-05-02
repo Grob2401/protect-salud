@@ -7,7 +7,6 @@ using Entidades;
 
 namespace LogicaNegocio
 {
-
     public class LNSaludAsegurados
     {
         public static List<ENSaludAsegurados> ObtenerTodos(int page = 1, int rowsPerPage = 100, string keywords = "")

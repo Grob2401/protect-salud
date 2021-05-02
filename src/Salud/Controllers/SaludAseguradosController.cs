@@ -17,7 +17,7 @@ namespace Salud.Controllers
         [SessionExpire]
         public ActionResult Index()
         {
-            ViewBag.SaludAsegurados = LNSaludAsegurados.ObtenerTodos();
+            //ViewBag.SaludAsegurados = LNSaludAsegurados.ObtenerTodos();
             return View();
         }
 

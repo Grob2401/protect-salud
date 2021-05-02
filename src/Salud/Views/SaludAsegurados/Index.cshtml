@@ -31,20 +31,7 @@
                     </div>
                 </div>
                 <table id="dglista" class="table table-bordered table-hover table-sm">
-                    <thead>
-                        <tr>
-                            <th>Cliente</th>
-                            <th>Cod.Titular</th>
-                            <th>Categoria</th>
-                            <th>Paterno</th>
-                            <th>Materno</th>
-                            <th>Nombres</th>
-                            <th>Fecha Nac.</th>
-                            <th>TipoDoc</th>
-                            <th>NroDoc</th>
-                            <th>Sexo</th>
-                            <th style="width: 15%"></th>
-                        </tr>
+                    <thead id="headerAsegurados">
                     </thead>
                     <tbody id="bodyAsegurados">
                     </tbody>
@@ -123,6 +110,30 @@
             }
         }
 
+        const loadTableHeader = (tableHeaderId, fieldNameArray = [], settings = { hasEdit: false, hasDelete: false }) => {
+
+            /// Table Header selector and row
+            const tableHeader = document.querySelector(`#${tableHeaderId}`);
+            const row = document.createElement('tr');
+            
+            /// Fill
+            for (const field of fieldNameArray) {
+                const col = document.createElement('td');
+                col.innerText = field.key;
+                row.appendChild(col);
+            }
+
+            /// Fill if it has edit or delete button
+            if (settings.hasEdit || settings.hasDelete) {
+                const col = document.createElement('td');
+                col.innerText = '';
+                col.style = "width: 15%";
+                row.appendChild(col);
+            }
+            tableHeader.appendChild(row);
+
+        }
+
         const loadTableBody = (result, tableBodyId, fieldNameArray = [], settings = { hasEdit: false, hasDelete: false }) => {
             /// Table Body selector
             const tableBody = document.querySelector(`#${tableBodyId}`);
@@ -176,10 +187,13 @@
 
         const fillDataTableByAjax = (settings) => {
 
-            let { tableBodyId, counting, pagination } = settings;
+            let { tableHeaderId, tableBodyId, counting, pagination } = settings;
             
             /// Cantidad de registros
             let totalRows;
+
+            let catchPrevious, catchNext;
+
             $.ajax({
                 type: counting.type,
                 url: counting.url,
@@ -188,12 +202,9 @@
                 traditional: true,
                 success(result) {
 
-                    let { totalRows, rowsPerPage } = result;
-                    console.log('totalRows', totalRows);
-                    console.log('rowsPerPage', rowsPerPage);
-                    
+                    let { totalRows } = result;
                     if (totalRows === -1) throw error('Hubo un error de conexión');
-
+                    catchPrevious = moment();
                     /// Llamada con paginación
                     $.ajax({
                         type: pagination.type,
@@ -202,21 +213,33 @@
                         datatype: 'json',
                         traditional: true,
                         success(result) {
+                            catchNext = moment();
+                            console.log(`Duration: ${ parseInt( catchNext.diff(catchPrevious, 'milliseconds') ) } ms`);
+                            let rowStruct = [
+                                { key: 'Cliente', name: 'CodigoCliente', type: 'String' },
+                                { key: 'Cod.Titular', name: 'CodigoTitular', type: 'String' },
+                                { key: 'Categoría', name: 'Categoria', type: 'String' },
+                                { key: 'Paterno', name: 'ApellidoPaterno', type: 'String' },
+                                { key: 'Materno', name: 'ApellidoMaterno', type: 'String' },
+                                { key: 'Nombres', name: 'Nombres', type: 'String' },
+                                { key: 'Fecha Nac.', name: 'FechaNacimiento', type: 'Date' },
+                                { key: 'TipoDoc', name: 'CodigoDocumentoIdentidad', type: 'String' },
+                                { key: 'NroDoc', name: 'NumeroDocumentoIdentidad', type: 'String' },
+                                { key: 'Sexo', name: 'CodigoSexo', type: 'String' },
+                            ];
+
+                            loadTableHeader(
+                                tableHeaderId,
+                                rowStruct,
+                                {
+                                    hasEdit: true,
+                                    hasDelete: true
+                                });
+
                             loadTableBody(
                                 result,
                                 tableBodyId,
-                                [
-                                    { name: 'CodigoCliente', type: 'String' },
-                                    { name: 'CodigoTitular', type: 'String' },
-                                    { name: 'Categoria', type: 'String' },
-                                    { name: 'ApellidoPaterno', type: 'String' },
-                                    { name: 'ApellidoMaterno', type: 'String' },
-                                    { name: 'Nombres', type: 'String' },
-                                    { name: 'FechaNacimiento', type: 'Date' },
-                                    { name: 'CodigoDocumentoIdentidad', type: 'String' },
-                                    { name: 'NumeroDocumentoIdentidad', type: 'String' },
-                                    { name: 'CodigoSexo', type: 'String' },
-                                ],
+                                rowStruct,
                                 {
                                     hasEdit: true,
                                     hasDelete: true
@@ -243,10 +266,10 @@
         fillDropDownListByAjax('drpDocumentoIdentidad', 'CodigoDocumentoIdentidad', 'DescripcionDocumentoIdentidad', '/SCTRCotizacion/GetDocumentoIdentidad', 'POST'); // Documento de Identidad
         fillDropDownListByAjax('drpSexo', 'CodigoSexo', 'DescripcionSexo', '/SCTRCotizacion/GetSexo', 'POST'); // Sexo
 
-
         /// DataTable loading...
         fillDataTableByAjax(
             {
+                tableHeaderId: 'headerAsegurados',
                 tableBodyId: 'bodyAsegurados',
                 counting: {
                     url: '/SaludAsegurados/GetCantidad',
