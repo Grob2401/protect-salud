@@ -27,7 +27,7 @@
                 <div class="row">
                     <div class="mb-2 mt-2">
                         <button type="button" id="btnNuevo" class="btn btn-outline-secondary btn-sm px-4" data-dismiss="modal" data-toggle="modal" data-target="#modalEnviarAfiliado" disabled="disabled">Nuevo</button>
-                        <button type="button" id="btnBuscar" class="btn btn-outline-secondary btn-sm px-4" data-dismiss="modal" data-toggle="modal" data-target="#modalBuscarAfiliado" disabled="disabled">Buscar</button>
+                        <button type="button" id="btnBuscar" class="btn btn-outline-secondary btn-sm px-4 mx-2" data-dismiss="modal" data-toggle="modal" data-target="#modalBuscarAfiliado" disabled="disabled">Buscar</button>
                     </div>
                 </div>
                 <!-- Table -->
@@ -36,7 +36,7 @@
                     </thead>
                     <tbody id="bodyAsegurados">
                         <!-- Loading -->
-                        <div id="tableLoading" class="text-center">
+                        <div id="tableLoading" class="text-center mt-3">
                             <div class="spinner-grow text-primary ui-spinner" role="status">
                                 <span class="sr-only"></span>
                             </div>
@@ -143,6 +143,7 @@
             /// Fill
             for (const field of fieldNameArray) {
                 const col = document.createElement('td');
+                col.classList.add('text-bold', 'bg-secondary');
                 col.innerText = field.key;
                 row.appendChild(col);
             }
@@ -150,6 +151,7 @@
             /// Fill if it has edit or delete button
             if (settings.hasEdit || settings.hasDelete) {
                 const col = document.createElement('td');
+                col.classList.add('text-bold', 'bg-secondary');
                 col.innerText = '';
                 col.style = "width: 15%";
                 row.appendChild(col);
@@ -241,7 +243,7 @@
                 traditional: true,
                 success(result) {
 
-                    let { totalRows } = result;
+                    let { totalRows } = result; console.log(`Total: ${ totalRows } rows`);
                     if (totalRows === -1) throw error('Hubo un error de conexión');
                     catchPrevious = moment();
 
