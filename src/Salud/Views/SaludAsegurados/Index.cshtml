@@ -11,6 +11,9 @@
     .card-body {
         padding-bottom: 0.25rem !important;
     }
+    .pagination-disabled {
+        cursor: not-allowed;
+    }
 </style>
 <div class="row">
     @Html.AntiForgeryToken()
@@ -36,23 +39,13 @@
                     </thead>
                     <tbody id="bodyAsegurados">
                         <!-- Loading -->
-                        <div id="tableLoading" class="text-center mt-3">
-                            <div class="spinner-grow text-primary ui-spinner" role="status">
-                                <span class="sr-only"></span>
-                            </div>
-                            <div class="spinner-grow text-primary ui-spinner" role="status">
-                                <span class="sr-only"></span>
-                            </div>
-                            <div class="spinner-grow text-primary ui-spinner" role="status">
-                                <span class="sr-only"></span>
-                            </div>
-                        </div>
+                        @Html.Partial("_Loading")
                     </tbody>
                 </table>
                 <!-- Pagination -->
                 <nav aria-label="Page navigation example" class="pt-3">
                     <ul class="pagination justify-content-end">
-                        <li class="page-item"><button class="page-link">Previous</button></li>
+                        <li class="page-item disabled pagination-disabled"><button class="page-link">Previous</button></li>
                         <li class="page-item"><button class="page-link">1</button></li>
                         <li class="page-item"><button class="page-link">2</button></li>
                         <li class="page-item"><button class="page-link">3</button></li>
@@ -135,11 +128,13 @@
         }
 
         const loadTableHeader = (tableHeaderId, fieldNameArray = [], settings = { hasEdit: false, hasDelete: false }) => {
-
             /// Table Header selector and row
             const tableHeader = document.querySelector(`#${tableHeaderId}`);
             const row = document.createElement('tr');
-            
+
+            /// Clear
+            tableHeader.innerHTML = '';
+
             /// Fill
             for (const field of fieldNameArray) {
                 const col = document.createElement('td');
@@ -157,13 +152,15 @@
                 row.appendChild(col);
             }
             tableHeader.appendChild(row);
-
         }
 
         const loadTableBody = (result, tableBodyId, fieldNameArray = [], settings = { hasEdit: false, hasDelete: false }) => {
             /// Table Body selector
             const tableBody = document.querySelector(`#${tableBodyId}`);
-            
+
+            /// Clear
+            tableBody.innerHTML = '';
+
             /// Default element
             for (const elem of result) {
                 /// Creating row...
@@ -177,6 +174,7 @@
                     }
                     const col = document.createElement('td');
                     col.innerText = elem[field.name];
+                    col.classList.add('text-uppercase');
                     row.appendChild(col); /// Inserta columna en la fila
                 }
 
@@ -214,15 +212,19 @@
         const loadButtons = () => {
             /// Button Nuevo
             const btnNuevo = document.querySelector('#btnNuevo');
-            btnNuevo.classList.remove('btn-outline-secondary');
-            btnNuevo.classList.add('btn-outline-primary');
-            btnNuevo.attributes.removeNamedItem('disabled');
+            if (btnNuevo !== null) {
+                btnNuevo.classList.remove('btn-outline-secondary');
+                btnNuevo.classList.add('btn-outline-primary');
+                btnNuevo.removeAttribute('disabled');
+            }
 
             /// Button Buscar
             const btnBuscar = document.querySelector('#btnBuscar');
-            btnBuscar.classList.remove('btn-outline-secondary');
-            btnBuscar.classList.add('btn-outline-primary');
-            btnBuscar.attributes.removeNamedItem('disabled');
+            if (btnBuscar !== null) {
+                btnBuscar.classList.remove('btn-outline-secondary');
+                btnBuscar.classList.add('btn-outline-primary');
+                btnBuscar.removeAttribute('disabled');
+            }
 
             /// Table loading
             document.querySelector('#tableLoading').classList.add('d-none');
@@ -233,7 +235,7 @@
             let { tableHeaderId, tableBodyId, counting, pagination } = settings;
             
             /// Cantidad de registros
-            let catchPrevious, catchNext;
+            let catchMoment;
 
             $.ajax({
                 type: counting.type,
@@ -245,7 +247,7 @@
 
                     let { totalRows } = result; console.log(`Total: ${ totalRows } rows`);
                     if (totalRows === -1) throw error('Hubo un error de conexión');
-                    catchPrevious = moment();
+                    catchMoment = moment();
 
                     /// Row Structure
                     let rowStruct = [
@@ -269,8 +271,7 @@
                         datatype: 'json',
                         traditional: true,
                         success(result) {
-                            catchNext = moment();
-                            console.log(`Duration: ${parseInt(catchNext.diff(catchPrevious, 'milliseconds'))} ms`);
+                            console.log(`Duration: ${parseInt(moment().diff(catchMoment, 'milliseconds'))} ms`);
 
                             /// Table Header Loading
                             loadTableHeader(
@@ -307,6 +308,32 @@
 
         }
 
+        const fillMatrixByAjax = (page = 1, keywords = '') => {
+            console.log(`page: ${page}`);
+            console.log(`keywords: ${keywords}`);
+            fillDataTableByAjax(
+                {
+                    tableHeaderId: 'headerAsegurados',
+                    tableBodyId: 'bodyAsegurados',
+                    counting: {
+                        url: '/SaludAsegurados/GetCantidad',
+                        type: 'GET',
+                        data: {
+                            page,
+                            keywords
+                        }
+                    },
+                    pagination: {
+                        url: '/SaludAsegurados/GetAsegurados',
+                        type: 'GET',
+                        data: {
+                            page,
+                            keywords
+                        }
+                    }
+                });
+        }
+
         /// Dropdownlist loadings...
         fillDropDownListByAjax('drpParentesco', 'CodigoCategoria', 'DescripcionParentesco', '/SCTRCotizacion/GetParentesco', 'POST'); // Parentesco
         fillDropDownListByAjax('drpVendedor', 'CodigoVendedor', 'DescripcionVendedor', '/SCTRCotizacion/GetVendedor', 'POST'); // Vendedor
@@ -315,26 +342,6 @@
         fillDropDownListByAjax('drpSexo', 'CodigoSexo', 'DescripcionSexo', '/SCTRCotizacion/GetSexo', 'POST'); // Sexo
 
         /// DataTable loading...
-        fillDataTableByAjax(
-            {
-                tableHeaderId: 'headerAsegurados',
-                tableBodyId: 'bodyAsegurados',
-                counting: {
-                    url: '/SaludAsegurados/GetCantidad',
-                    type: 'GET',
-                    data: {
-                        page: 1,
-                        keywords: ''
-                    }
-                },
-                pagination: {
-                    url: '/SaludAsegurados/GetAsegurados',
-                    type: 'GET',
-                    data: {
-                        page: 1,
-                        keywords: ''
-                    }
-                }
-            }); // Asegurados
+        fillMatrixByAjax(); // Asegurados
     </script>
 }
