@@ -114,6 +114,8 @@
             }
         }
 
+        const getTotalPages = (totalRows, rowsPerPage) => ((totalRows - 1) - (totalRows - 1) % rowsPerPage) / rowsPerPage + 1;
+
         const enableButton = (buttonId, enabled) => {
             const button = document.querySelector(`#${buttonId}`);
             if (enabled) {
@@ -282,6 +284,9 @@
                                     hasDelete: true
                                 });
 
+                            /// Enable buttons
+                            loadButtons();
+
                             /// Table Body Loading
                             loadTableBody(
                                 result,
@@ -292,7 +297,6 @@
                                     hasDelete: true
                                 });
 
-                            loadButtons();
                         },
                         error(xhr, textStatus, errorThrown) {
                             console.error(xhr);
