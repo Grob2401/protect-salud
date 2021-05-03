@@ -47,9 +47,9 @@
                     <ul class="pagination justify-content-end">
                         <li class="page-item disabled pagination-disabled"><button class="page-link">Previous</button></li>
                         <li class="page-item"><button class="page-link">1</button></li>
-                        <li class="page-item"><button class="page-link">2</button></li>
-                        <li class="page-item"><button class="page-link">3</button></li>
-                        <li class="page-item"><button class="page-link">Next</button></li>
+                        <li class="page-item"><button class="page-link" onclick="fillMatrixByAjax(2)">2</button></li>
+                        <li class="page-item"><button class="page-link" onclick="fillMatrixByAjax(3)">3</button></li>
+                        <li class="page-item"><button class="page-link" onclick="fillMatrixByAjax(4)">Next</button></li>
                     </ul>
                 </nav>
             </div>
@@ -211,21 +211,15 @@
             }
         }
 
-        const loadButtons = () => {
-            /// Button Nuevo
-            const btnNuevo = document.querySelector('#btnNuevo');
-            if (btnNuevo !== null) {
-                btnNuevo.classList.remove('btn-outline-secondary');
-                btnNuevo.classList.add('btn-outline-primary');
-                btnNuevo.removeAttribute('disabled');
-            }
+        const loadButtons = (settings) => {
 
-            /// Button Buscar
-            const btnBuscar = document.querySelector('#btnBuscar');
-            if (btnBuscar !== null) {
-                btnBuscar.classList.remove('btn-outline-secondary');
-                btnBuscar.classList.add('btn-outline-primary');
-                btnBuscar.removeAttribute('disabled');
+            for (var buttonId of settings.buttonIdList) {
+                const button = document.querySelector(`#${buttonId}`);
+                if (button !== null) {
+                    button.classList.remove('btn-outline-secondary');
+                    button.classList.add('btn-outline-primary');
+                    button.removeAttribute('disabled');
+                }
             }
 
             /// Table loading
@@ -285,7 +279,7 @@
                                 });
 
                             /// Enable buttons
-                            loadButtons();
+                            loadButtons({ buttonIdList: ['btnNuevo', 'btnBuscar']});
 
                             /// Table Body Loading
                             loadTableBody(
