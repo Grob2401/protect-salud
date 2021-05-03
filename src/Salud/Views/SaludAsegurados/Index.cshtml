@@ -22,20 +22,34 @@
                     Lista de Asegurados
                 </h3>
             </div>
-            <!-- /.card-header -->
             <div class="card-body pt-1">
+                <!-- Header -->
                 <div class="row">
                     <div class="mb-2 mt-1">
-                        <button type="button" class="btn btn-outline-primary btn-sm px-4" data-dismiss="modal" data-toggle="modal" data-target="#modalEnviarAfiliado">Nuevo</button>
-                        <button type="button" class="btn btn-outline-primary btn-sm px-4" data-dismiss="modal" data-toggle="modal" data-target="#modalBuscarAfiliado">Buscar</button>
+                        <button type="button" id="btnNuevo" class="btn btn-outline-secondary btn-sm px-4" data-dismiss="modal" data-toggle="modal" data-target="#modalEnviarAfiliado" disabled="disabled">Nuevo</button>
+                        <button type="button" id="btnBuscar" class="btn btn-outline-secondary btn-sm px-4" data-dismiss="modal" data-toggle="modal" data-target="#modalBuscarAfiliado" disabled="disabled">Buscar</button>
                     </div>
                 </div>
+                <!-- Table -->
                 <table id="dglista" class="table table-bordered table-hover table-sm">
                     <thead id="headerAsegurados">
                     </thead>
                     <tbody id="bodyAsegurados">
+                        <!-- Loading -->
+                        <div id="tableLoading" class="text-center">
+                            <div class="spinner-grow text-primary ui-spinner" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <div class="spinner-grow text-primary ui-spinner" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <div class="spinner-grow text-primary ui-spinner" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
                     </tbody>
                 </table>
+                <!-- Pagination -->
                 <nav aria-label="Page navigation example" class="pt-3">
                     <ul class="pagination justify-content-end">
                         <li class="page-item"><button class="page-link">Previous</button></li>
@@ -46,11 +60,8 @@
                     </ul>
                 </nav>
             </div>
-            <!-- /.card-body -->
         </div>
-
     </div>
-    <!-- /.col -->
 </div>
 @Html.Partial("SaludAsegurados/_AfiliacionCrear", new ENSaludAsegurados())
 @Html.Partial("SaludAsegurados/_AfiliacionBuscar")
@@ -107,6 +118,19 @@
                 return parseInt(strDate.split('(')[1].split(')')[0]);
             } catch (e) {
                 return undefined;
+            }
+        }
+
+        const enableButton = (buttonId, enabled) => {
+            const button = document.querySelector(`#${buttonId}`);
+            if (enabled) {
+                button.classList.remove('btn-outline-primary');
+                button.classList.add('btn-outline-secondary');
+                button.attributes.setNamedItem('disabled');
+            } else {
+                button.classList.remove('btn-outline-secondary');
+                button.classList.add('btn-outline-primary');
+                button.attributes.removeNamedItem('disabled');
             }
         }
 
@@ -190,8 +214,6 @@
             let { tableHeaderId, tableBodyId, counting, pagination } = settings;
             
             /// Cantidad de registros
-            let totalRows;
-
             let catchPrevious, catchNext;
 
             $.ajax({
@@ -205,6 +227,21 @@
                     let { totalRows } = result;
                     if (totalRows === -1) throw error('Hubo un error de conexión');
                     catchPrevious = moment();
+
+                    /// Row Structure
+                    let rowStruct = [
+                        { key: 'Cliente', name: 'CodigoCliente', type: 'String' },
+                        { key: 'Cod.Titular', name: 'CodigoTitular', type: 'String' },
+                        { key: 'Categoría', name: 'Categoria', type: 'String' },
+                        { key: 'Paterno', name: 'ApellidoPaterno', type: 'String' },
+                        { key: 'Materno', name: 'ApellidoMaterno', type: 'String' },
+                        { key: 'Nombres', name: 'Nombres', type: 'String' },
+                        { key: 'Fecha Nac.', name: 'FechaNacimiento', type: 'Date' },
+                        { key: 'TipoDoc', name: 'CodigoDocumentoIdentidad', type: 'String' },
+                        { key: 'NroDoc', name: 'NumeroDocumentoIdentidad', type: 'String' },
+                        { key: 'Sexo', name: 'CodigoSexo', type: 'String' },
+                    ];
+
                     /// Llamada con paginación
                     $.ajax({
                         type: pagination.type,
@@ -214,20 +251,9 @@
                         traditional: true,
                         success(result) {
                             catchNext = moment();
-                            console.log(`Duration: ${ parseInt( catchNext.diff(catchPrevious, 'milliseconds') ) } ms`);
-                            let rowStruct = [
-                                { key: 'Cliente', name: 'CodigoCliente', type: 'String' },
-                                { key: 'Cod.Titular', name: 'CodigoTitular', type: 'String' },
-                                { key: 'Categoría', name: 'Categoria', type: 'String' },
-                                { key: 'Paterno', name: 'ApellidoPaterno', type: 'String' },
-                                { key: 'Materno', name: 'ApellidoMaterno', type: 'String' },
-                                { key: 'Nombres', name: 'Nombres', type: 'String' },
-                                { key: 'Fecha Nac.', name: 'FechaNacimiento', type: 'Date' },
-                                { key: 'TipoDoc', name: 'CodigoDocumentoIdentidad', type: 'String' },
-                                { key: 'NroDoc', name: 'NumeroDocumentoIdentidad', type: 'String' },
-                                { key: 'Sexo', name: 'CodigoSexo', type: 'String' },
-                            ];
+                            console.log(`Duration: ${parseInt(catchNext.diff(catchPrevious, 'milliseconds'))} ms`);
 
+                            /// Table Header Loading
                             loadTableHeader(
                                 tableHeaderId,
                                 rowStruct,
@@ -236,6 +262,7 @@
                                     hasDelete: true
                                 });
 
+                            /// Table Body Loading
                             loadTableBody(
                                 result,
                                 tableBodyId,
@@ -244,6 +271,20 @@
                                     hasEdit: true,
                                     hasDelete: true
                                 });
+
+                            /// Button Nuevo
+                            const btnNuevo = document.querySelector('#btnNuevo');
+                            btnNuevo.classList.remove('btn-outline-secondary');
+                            btnNuevo.classList.add('btn-outline-primary');
+                            btnNuevo.attributes.removeNamedItem('disabled');
+
+                            /// Button Buscar
+                            const btnBuscar = document.querySelector('#btnBuscar');
+                            btnBuscar.classList.remove('btn-outline-secondary');
+                            btnBuscar.classList.add('btn-outline-primary');
+                            btnBuscar.attributes.removeNamedItem('disabled');
+
+                            document.querySelector('#tableLoading').classList.add('d-none');
                         },
                         error(xhr, textStatus, errorThrown) {
                             console.error(xhr);
