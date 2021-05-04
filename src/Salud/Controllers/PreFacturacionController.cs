@@ -51,26 +51,28 @@ namespace Salud.Controllers
                 ViewBag.Contratos = TempData["CONTRATOS"];
             }
 
-            return View();
+            ENDatosPreFacBusqueda enf1 = new ENDatosPreFacBusqueda();
+            if (TempData["MODEL"] != null)
+            {
+                enf1 = (ENDatosPreFacBusqueda)TempData["MODEL"];
+            }
+
+            return View(enf1);
         }
 
         [HttpGet]
-        public ActionResult Buscar(string anios = " ", string meses = " ", string fechadesde = " ", string fechahasta = " ", string option = " ")
+        public ActionResult Buscar(ENDatosPreFacBusqueda enf)
         {
-            var f1 = "";
-            var f2 = "";
-            var op = "0";
 
-            if (fechadesde != "" && fechahasta != "")
+            if (enf.txtdesde != "" && enf.txthasta != "")
             {
-                f1 = fechadesde.Replace("-", "");
-                f2 = fechahasta.Replace("-", "");
-                op = "0";
+                enf.txtdesde = enf.txtdesde.Replace("-", "");
+                enf.txthasta = enf.txthasta.Replace("-", "");
+                enf.option = 0;
             }
 
-            TempData["Y"] = anios;
-            TempData["M"] = meses;
-            TempData["PREFAC"] = LNPreFacturaciones.ObtenerTodos(anios, meses, f1, f2, op);
+            TempData["MODEL"] = enf;
+            TempData["PREFAC"] = LNPreFacturaciones.ObtenerTodos(enf);
             return RedirectToAction("Index");
         }
 

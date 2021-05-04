@@ -11,7 +11,7 @@ namespace AccesoDatos
         public String dataProviderName = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ProviderName;
         public String connectionString = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ConnectionString;
 
-        public List<ENPreFacturacion> ObtenerTodos(string anio,string mes,string desde,string hasta,string option)
+        public List<ENPreFacturacion> ObtenerTodos(ENDatosPreFacBusqueda enpf)
         {
             DbCommand oCommand = null;
             List<ENPreFacturacion> oListaPreFacturaciones = new List<ENPreFacturacion>();
@@ -19,11 +19,11 @@ namespace AccesoDatos
             {
                 oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_Facturacion_Calcula");
                 //'2010', '06','20100601', '20100630','0'
-                GenericDataAccess.AgregarParametro(oCommand, "@anoProceso", anio, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@mesProceso", mes, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@fchDesde", desde, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@fchHasta", hasta, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@pcsEspecial", option, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@anoProceso", enpf.anio, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@mesProceso", enpf.mes, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@fchDesde", enpf.txtdesde, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@fchHasta", enpf.txthasta, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@pcsEspecial", enpf.option, TipoParametro.STR, Direccion.INPUT);
 
                 DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
                 while (oDataReader.Read())
@@ -56,7 +56,7 @@ namespace AccesoDatos
             List<ENPrefacturacionDetalleContratos> oENPreFacturacionDetalleContratos = new List<ENPrefacturacionDetalleContratos>();
             try
             {
-                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_Facturacion_Detalle_Contratos");
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_Facturacion_PreFacturacion_Detalle_Contratos");
                 //'2010', '06','20100601', '20100630','0'
                 GenericDataAccess.AgregarParametro(oCommand, "@anoProceso", anio, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@mesProceso", mes, TipoParametro.STR, Direccion.INPUT);
@@ -95,6 +95,8 @@ namespace AccesoDatos
                 GenericDataAccess.CerrarConexion(oCommand, null);
             }
         }
+
+
 
     }
 }
