@@ -7,6 +7,7 @@
 @section Styles {
     @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
     @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
 }
 <style>
 
@@ -31,11 +32,6 @@
                     Generar Pre-Facturacion
                 </h3>
             </div>
-            @if (ViewBag.y != null && ViewBag.m != null)
-            {
-                <input type="hidden" name="name" id="y" value="@ViewBag.y " />
-                <input type="hidden" name="name" id="m" value="@ViewBag.m" />
-            }
             <!-- /.card-header -->
             <div class="card-body ">
                 @using (Html.BeginForm("Buscar", "PreFacturacion", FormMethod.Get))
@@ -86,12 +82,12 @@
                             <div>
                                 <label for="txtdesde">Fecha Desde</label>
                                 @Html.TextBoxFor(m => m.txtdesde,
-                               new { @class = "form-control form-control-sm" , @type = "date" })
+                               new { @class = "form-control form-control-sm", @type = "date" })
                             </div>
                             <div>
                                 <label for="txthasta">Fecha Hasta</label>
                                 @Html.TextBoxFor(m => m.txthasta,
-                               new { @type = "date" , @class = "form-control form-control-sm" })
+                               new { @type = "date", @class = "form-control form-control-sm" })
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -100,10 +96,10 @@
                                     <i class="fa fa-calculator"></i>&nbsp;&nbsp;Calcular
                                 </button>
                             </div>
-                            <div>
-                                <a class="btn btn-outline-primary btn-sm mt-2" onclick="GetSelected()">
+                            <div class="pt-4">
+                                <button type="button" id="btngenera" class="btn btn-primary btn-sm">
                                     <i class="fa fa-check-square"></i>&nbsp;&nbsp;Generar Pre-Facturacion
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -159,6 +155,7 @@
     @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
     @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
     @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
 
     <script>
         $(function () {
@@ -258,6 +255,9 @@
             $('#btnbusca').click(function () {
                 $('#loading').css('display', 'block');
             });
+            $('#btngenera').click(function () {
+                $('#loading').css('display', 'block');
+            });
         });
     </script>
 
@@ -337,7 +337,9 @@
 
 
     <script>
-        function GetSelected() {
+
+        $('#btngenera').click(function () {
+
             //Reference the Table.
             var grid = document.getElementById("dglista");
 
@@ -345,21 +347,92 @@
             var checkBoxes = grid.getElementsByTagName("INPUT");
             var message = "Id Name                  Country\n";
 
+            var year = $('#anio').val()
+            var month = $('#mes').val()
+            var pcsespecial = "0";
+            var pcsstatus = "0";
+            var des = $('#txtdesde').val();
+            var has = $('#txthasta').val();
+
             //Loop through the CheckBoxes.
             for (var i = 0; i < checkBoxes.length; i++) {
                 if (checkBoxes[i].checked) {
+
                     var row = checkBoxes[i].parentNode.parentNode;
-                    message += row.cells[1].innerHTML;
-                    message += "   " + row.cells[2].innerHTML;
-                    message += "   " + row.cells[3].innerHTML;
-                    message += "\n";
+
+                    var codigo = row.cells[1].innerHTML;
+                    var tipoasegurado = row.cells[4].innerHTML;
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/PreFacturacion/Generar",
+                        data: {
+                            'anoProceso': year,
+                            'mesProceso': month,
+                            'txtdesde': des,
+                            'txthasta': has,
+                            'pcsEspecial': pcsespecial,
+                            'pcsStatus': pcsstatus,
+                            'CodigoCliente': codigo,
+                            'DescripcionTipoAsegurado': tipoasegurado
+                        },
+                        dataType: "text",
+                        success: function (r) {
+
+                        }
+                    });
+
+
                 }
             }
 
-            //Display selected Row data in Alert Box.
-            alert(message);
-        }
+            @*@Model.anio = year;
+            @Model.mes = month;
+            @Model.txtdesde = des;
+            @Model.txthasta = has;
+            @Model.option = pcsespecial;*@
+
+            window.location = ('@Url.Action("Buscar", "PreFacturacion", @Model)').replaceAll('amp;','');
+
+            //$.ajax({
+            //    type: "GET",
+            //    url: "/PreFacturacion/Buscar",
+            //    data: model,
+            //    dataType: "text",
+            //    success: function (r) {
+            //        window.location.reload();
+
+            //    }
+            //});
+
+        });
+
     </script>
+
+
+
+    @*@if (TempData["GENERAR"] != null)
+    {
+
+        <script>
+        $(window).load(function() {
+
+            var flag = TempData["GENERAR"];
+
+            if (flag)
+            {
+                Swal.fire(
+                'Generado Correctamente',
+                'Los registros marcados, se generaron satisfactoriamente',
+                'success'
+                );
+            }
+        });
+
+        </script>
+
+    }*@
+
 
 }
 

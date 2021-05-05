@@ -42,8 +42,11 @@ namespace Salud.Controllers
             if (TempData["PREFAC"] != null)
             {
                 ViewBag.PreFacturaciones = TempData["PREFAC"];
-                ViewBag.y = TempData["Y"];
-                ViewBag.m = TempData["M"];
+            }
+
+            if (TempData["GENERAR"] != null)
+            {
+                ViewBag.generar = TempData["GENERAR"];
             }
 
             if (TempData["CONTRATOS"] != null)
@@ -64,11 +67,11 @@ namespace Salud.Controllers
         public ActionResult Buscar(ENDatosPreFacBusqueda enf)
         {
 
-            if (enf.txtdesde != "" && enf.txthasta != "")
+            enf.option = 0;
+
+            if (TempData["GENERAR"] != null)
             {
-                enf.txtdesde = enf.txtdesde.Replace("-", "");
-                enf.txthasta = enf.txthasta.Replace("-", "");
-                enf.option = 0;
+                ViewBag.generar = TempData["GENERAR"];
             }
 
             TempData["MODEL"] = enf;
@@ -87,6 +90,30 @@ namespace Salud.Controllers
 
             TempData["CONTRATOS"] = LNPreFacturaciones.Contratos(anoProceso, mesProceso, pcsEspecial, pcsStatus, CodigoCliente, DescripcionTipoAsegurado);
             return Json(TempData["CONTRATOS"], JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult Generar(string anoProceso = " ",
+                            string mesProceso = " ",
+                            string txtdesde = " ",
+                            string txthasta = " ",
+                            string pcsEspecial = " ",
+                            string pcsStatus = " ",
+                            string CodigoCliente = " ",
+                            string DescripcionTipoAsegurado = " ")
+        {
+
+            ENDatosPreFacBusqueda enf = new ENDatosPreFacBusqueda() { 
+                
+                anio = anoProceso,
+                mes = mesProceso,
+                txtdesde = txtdesde,
+                txthasta = txthasta
+
+            };
+
+            TempData["GENERAR"] = LNPreFacturaciones.Actualizar (anoProceso, mesProceso, pcsEspecial, pcsStatus, CodigoCliente, DescripcionTipoAsegurado);
+            return Json(TempData["GENERAR"], JsonRequestBehavior.AllowGet);
         }
 
 

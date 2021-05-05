@@ -96,7 +96,34 @@ namespace AccesoDatos
             }
         }
 
+        public bool Actualizar(string anio, string mes, string psespecial, string status, string cliente, string tipoAseg)
+        {
 
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_Facturacion_PreFacturacion_Generar");
+                GenericDataAccess.AgregarParametro(oCommand, "@anoProceso", anio, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@mesProceso", mes, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@pcsEspecial", psespecial, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@pcsStatus", status, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCliente", cliente, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@DescripcionTipoAsegurado", tipoAseg, TipoParametro.STR, Direccion.INPUT);
+
+                if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Excepciones.ManejoExcepciones(ex);
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
 
     }
 }
