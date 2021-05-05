@@ -42,7 +42,11 @@
                         @Html.Partial("_Loading")
                     </tbody>
                 </table>
-                <!-- Pagination -->
+                <!-- Pagination status -->
+                <div id="statusPagination" class="mr-2 mt-2 text-right text-secondary">
+                    1 al 15 de 322400 filas
+                </div>
+                <!-- Pagination control -->
                 <nav aria-label="Page navigation example" class="pt-3">
                     <ul class="pagination justify-content-end">
                         <li class="page-item disabled pagination-disabled"><button class="page-link">Previous</button></li>
@@ -226,6 +230,15 @@
             document.querySelector('#tableLoading').classList.add('d-none');
         }
 
+        const getCatalogInterval = (page, rowsPerPage) => { return { first: rowsPerPage * (page - 1) + 1, last: rowsPerPage * page }; }
+
+        const loadStatusPagination = (settings) => {
+            let { statusPaginationId, totalRows, page, rowsPerPage } = settings;
+            const statusPagination = document.querySelector(`#${statusPaginationId}`);
+            let { first, last } = getCatalogInterval(page, rowsPerPage);
+            statusPagination.textContent = `${first} al ${last} de ${totalRows} filas`;
+        }
+
         const fillDataTableByAjax = (settings) => {
 
             let { tableHeaderId, tableBodyId, counting, pagination } = settings;
@@ -241,7 +254,10 @@
                 traditional: true,
                 success(result) {
 
-                    let { totalRows } = result; console.log(`Total: ${ totalRows } rows`);
+                    let { totalRows, rowsPerPage, pagesPerCatalog } = result;
+                    console.log(`Rows: ${totalRows}`);
+                    console.log(`Rows per page: ${rowsPerPage}`);
+                    console.log(`Pages per catalog: ${pagesPerCatalog} `);
                     if (totalRows === -1) throw error('Hubo un error de conexión');
                     catchMoment = moment();
 
@@ -267,7 +283,8 @@
                         datatype: 'json',
                         traditional: true,
                         success(result) {
-                            console.log(`Duration: ${parseInt(moment().diff(catchMoment, 'milliseconds'))} ms`);
+                            console.log(`Duration (ms): ${parseInt(moment().diff(catchMoment, 'milliseconds'))}`);
+                            let { page } = pagination.data;
 
                             /// Table Header Loading
                             loadTableHeader(
@@ -291,6 +308,13 @@
                                     hasDelete: true
                                 });
 
+                            /// Status pagination
+                            loadStatusPagination({
+                                statusPaginationId: 'statusPagination',
+                                totalRows,
+                                page,
+                                rowsPerPage
+                            });
                         },
                         error(xhr, textStatus, errorThrown) {
                             console.error(xhr);

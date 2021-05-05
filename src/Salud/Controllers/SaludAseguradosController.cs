@@ -145,8 +145,9 @@ namespace Salud.Controllers
             if (aseguradoRequest != null && aseguradoRequest.IsValidForList)
             {
                 if (!int.TryParse(ConfigurationManager.AppSettings["RowsPerPage"], out int rowsPerPage)) rowsPerPage = 0;
+                if (!int.TryParse(ConfigurationManager.AppSettings["PagesPerCatalog"], out int pagesPerCatalog)) pagesPerCatalog = 0;
                 int totalRows = LNSaludAsegurados.Cantidad(aseguradoRequest.Keywords);
-                return Json(new { totalRows, rowsPerPage }, JsonRequestBehavior.AllowGet);
+                return Json(new { totalRows, rowsPerPage, pagesPerCatalog }, JsonRequestBehavior.AllowGet);
             }
             return Json(null, JsonRequestBehavior.AllowGet);
         }
