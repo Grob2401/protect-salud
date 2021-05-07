@@ -1,5 +1,5 @@
 ﻿@using Entidades;
-@model IEnumerable<ENPrefacturacionDetalleContratos>
+@model ENDatosPreFacBusqueda
 @{
     ViewBag.Title = "Pre-Facturaciones";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,6 +7,7 @@
 @section Styles {
     @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
     @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
 }
 <style>
 
@@ -31,11 +32,6 @@
                     Generar Pre-Facturacion
                 </h3>
             </div>
-            @if (ViewBag.y != null && ViewBag.m != null)
-            {
-                <input type="hidden" name="name" id="y" value="@ViewBag.y " />
-                <input type="hidden" name="name" id="m" value="@ViewBag.m" />
-            }
             <!-- /.card-header -->
             <div class="card-body ">
                 @using (Html.BeginForm("Buscar", "PreFacturacion", FormMethod.Get))
@@ -45,49 +41,53 @@
                         <div class="col-md-4">
                             <div>
                                 <label for="anio">Año :</label>
-                                <select id="anio" name="anios" class="form-control form-control-sm">
-                                    <option value="0">--</option>
-                                    <option value="2021">2021</option>
-                                    <option value="2020">2020</option>
-                                    <option value="2019">2019</option>
-                                    <option value="2018">2018</option>
-                                    <option value="2017">2017</option>
-                                    <option value="2016">2016</option>
-                                    <option value="2015">2015</option>
-                                    <option value="2014">2014</option>
-                                    <option value="2013">2013</option>
-                                    <option value="2012">2012</option>
-                                    <option value="2011">2011</option>
-                                    <option value="2010">2010</option>
-                                </select>
+                                @Html.DropDownListFor(m => m.anio, new List<SelectListItem>()
+                                {
+                                    new SelectListItem(){ Text= DateTime.Now.Year.ToString(), Value = DateTime.Now.Year.ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 1).ToString(), Value = (DateTime.Now.Year - 1).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 2).ToString(), Value = (DateTime.Now.Year - 2).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 3).ToString(), Value = (DateTime.Now.Year - 3).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 4).ToString(), Value = (DateTime.Now.Year - 4).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 5).ToString(), Value = (DateTime.Now.Year - 5).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 6).ToString(), Value = (DateTime.Now.Year - 6).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 7).ToString(), Value = (DateTime.Now.Year - 7).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 8).ToString(), Value = (DateTime.Now.Year - 8).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 9).ToString(), Value = (DateTime.Now.Year - 9).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 10).ToString(), Value = (DateTime.Now.Year - 10).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 11).ToString(), Value = (DateTime.Now.Year - 11).ToString()}
+                                },
+                                 new { @class = "form-control form-control-sm" })
                             </div>
                             <div>
                                 <label for="mes">Mes :</label>
-                                <select id="mes" name="meses" class="form-control form-control-sm">
-                                    <option value="0">--</option>
-                                    <option value="01">Enero</option>
-                                    <option value="02">Febrero</option>
-                                    <option value="03">Marzo</option>
-                                    <option value="04">Abril</option>
-                                    <option value="05">Mayo</option>
-                                    <option value="06">Junio</option>
-                                    <option value="07">Julio</option>
-                                    <option value="08">Agosto</option>
-                                    <option value="09">Septiembre</option>
-                                    <option value="10">Octubre</option>
-                                    <option value="11">Noviembre</option>
-                                    <option value="12">Diciembre</option>
-                                </select>
+                                @Html.DropDownListFor(m => m.mes, new List<SelectListItem>()
+                                {
+                                    new SelectListItem(){ Text= "Enero", Value = "01"},
+                                    new SelectListItem(){ Text= "Febrero", Value = "02"},
+                                    new SelectListItem(){ Text= "Marzo", Value = "03"},
+                                    new SelectListItem(){ Text= "Abril", Value = "04"},
+                                    new SelectListItem(){ Text= "Mayo", Value = "05"},
+                                    new SelectListItem(){ Text= "Junio", Value = "06"},
+                                    new SelectListItem(){ Text= "Julio", Value = "07"},
+                                    new SelectListItem(){ Text= "Agosto", Value = "08"},
+                                    new SelectListItem(){ Text= "Setiembre", Value = "09"},
+                                    new SelectListItem(){ Text= "Octubre", Value = "10"},
+                                    new SelectListItem(){ Text= "Noviembre", Value = "11"},
+                                    new SelectListItem(){ Text= "Diciembre", Value = "12"}
+                                },
+                                 new { @class = "form-control form-control-sm" })
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div>
                                 <label for="txtdesde">Fecha Desde</label>
-                                <input type="date" name="fechadesde" id="txtdesde" value="" class="form-control form-control-sm" />
+                                @Html.TextBoxFor(m => m.txtdesde,
+                               new { @class = "form-control form-control-sm", @type = "date" })
                             </div>
                             <div>
                                 <label for="txthasta">Fecha Hasta</label>
-                                <input type="date" name="fechahasta" id="txthasta" value="" class="form-control form-control-sm" />
+                                @Html.TextBoxFor(m => m.txthasta,
+                               new { @type = "date", @class = "form-control form-control-sm" })
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -96,10 +96,10 @@
                                     <i class="fa fa-calculator"></i>&nbsp;&nbsp;Calcular
                                 </button>
                             </div>
-                            <div>
-                                <a class="btn btn-outline-primary btn-sm mt-2">
+                            <div class="pt-4">
+                                <button type="button" id="btngenera" class="btn btn-primary btn-sm">
                                     <i class="fa fa-check-square"></i>&nbsp;&nbsp;Generar Pre-Facturacion
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -114,7 +114,7 @@
                             <th>TIPO ASEGURADO</th>
                             <th>AFILIADOS</th>
                             <th>APORTES</th>
-                            <th></th>
+                            <th><input type="checkbox" id="allchk" /></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -137,7 +137,7 @@
                                     <td class="cellDescripcionTipoAsegurado">@PreFacturacion.DescripcionTipoAsegurado </td>
                                     <td>@PreFacturacion.RegCounts </td>
                                     <td>@PreFacturacion.AporteAfiliados </td>
-                                    <td>&nbsp;&nbsp;</td>
+                                    <td><input style="border:none;" name="@PreFacturacion.RucDni" type="checkbox" /></td>
                                 </tr>
                             }
                         }
@@ -155,6 +155,7 @@
     @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
     @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
     @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
 
     <script>
         $(function () {
@@ -213,8 +214,8 @@
             $(this).attr("src", "/images/plus.jpg");
             $(this).closest("tr").after("<tr id='ad'><td></td><td id='tab' colspan = '999'>" + $(this).next().html() + "</td></tr>");
             var row = $(this).closest("tr");
-            var year = $("#y").val();
-            var month = $("#m").val();
+            var year = $('#anio').val()
+            var month = $('#mes').val()
             var pcsespecial = "0";
             var pcsstatus = "0";
             var codigo = row.find(".cellCodigoCliente").html();
@@ -252,6 +253,9 @@
     <script>
         $(document).ready(function () {
             $('#btnbusca').click(function () {
+                $('#loading').css('display', 'block');
+            });
+            $('#btngenera').click(function () {
                 $('#loading').css('display', 'block');
             });
         });
@@ -316,6 +320,119 @@
                 '</tbody></table>';
         }
     </script>
+
+    <script>
+        $('#allchk').change(function () {
+            if ($(this).prop('checked')) {
+                $('tbody tr td input[type="checkbox"]').each(function () {
+                    $(this).prop('checked', true);
+                });
+            } else {
+                $('tbody tr td input[type="checkbox"]').each(function () {
+                    $(this).prop('checked', false);
+                });
+            }
+        });
+    </script>
+
+
+    <script>
+
+        $('#btngenera').click(function () {
+
+            //Reference the Table.
+            var grid = document.getElementById("dglista");
+
+            //Reference the CheckBoxes in Table.
+            var checkBoxes = grid.getElementsByTagName("INPUT");
+            var message = "Id Name                  Country\n";
+
+            var year = $('#anio').val()
+            var month = $('#mes').val()
+            var pcsespecial = "0";
+            var pcsstatus = "0";
+            var des = $('#txtdesde').val();
+            var has = $('#txthasta').val();
+
+            //Loop through the CheckBoxes.
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked) {
+
+                    var row = checkBoxes[i].parentNode.parentNode;
+
+                    var codigo = row.cells[1].innerHTML;
+                    var tipoasegurado = row.cells[4].innerHTML;
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/PreFacturacion/Generar",
+                        data: {
+                            'anoProceso': year,
+                            'mesProceso': month,
+                            'txtdesde': des,
+                            'txthasta': has,
+                            'pcsEspecial': pcsespecial,
+                            'pcsStatus': pcsstatus,
+                            'CodigoCliente': codigo,
+                            'DescripcionTipoAsegurado': tipoasegurado
+                        },
+                        dataType: "text",
+                        success: function (r) {
+
+                        }
+                    });
+
+
+                }
+            }
+
+            @*@Model.anio = year;
+            @Model.mes = month;
+            @Model.txtdesde = des;
+            @Model.txthasta = has;
+            @Model.option = pcsespecial;*@
+
+            window.location = ('@Url.Action("Buscar", "PreFacturacion", @Model)').replaceAll('amp;','');
+
+            //$.ajax({
+            //    type: "GET",
+            //    url: "/PreFacturacion/Buscar",
+            //    data: model,
+            //    dataType: "text",
+            //    success: function (r) {
+            //        window.location.reload();
+
+            //    }
+            //});
+
+        });
+
+    </script>
+
+
+
+    @*@if (TempData["GENERAR"] != null)
+    {
+
+        <script>
+        $(window).load(function() {
+
+            var flag = TempData["GENERAR"];
+
+            if (flag)
+            {
+                Swal.fire(
+                'Generado Correctamente',
+                'Los registros marcados, se generaron satisfactoriamente',
+                'success'
+                );
+            }
+        });
+
+        </script>
+
+    }*@
+
 
 }
 

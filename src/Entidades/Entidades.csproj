@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ENDatosPreFacBusqueda.cs" />
     <Compile Include="ENCanales.cs" />
     <Compile Include="ENCIUU.cs" />
     <Compile Include="ENClientes.cs" />

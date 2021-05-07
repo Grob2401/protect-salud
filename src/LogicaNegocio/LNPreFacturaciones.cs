@@ -10,14 +10,19 @@ namespace LogicaNegocio
 {
     public class LNPreFacturaciones
     {
-        public static List<ENPreFacturacion> ObtenerTodos(string anio, string mes, string desde, string hasta, string option)
+        public static List<ENPreFacturacion> ObtenerTodos(ENDatosPreFacBusqueda enf)
         {
-            return new ADPrefacturaciones().ObtenerTodos(anio,mes,desde,hasta,option);
+            return new ADPrefacturaciones().ObtenerTodos(enf);
         }
 
         public static List<ENPrefacturacionDetalleContratos> Contratos(string anio, string mes, string psespecial, string status, string cliente, string tipoAseg)
         {
             return (new ADPrefacturaciones()).Contratos( anio,  mes,  psespecial,  status,  cliente,  tipoAseg);
+        }
+
+        public static bool Actualizar(string anio, string mes, string psespecial, string status, string cliente, string tipoAseg)
+        {
+            return (new ADPrefacturaciones()).Actualizar(anio, mes, psespecial, status, cliente, tipoAseg);
         }
 
     }

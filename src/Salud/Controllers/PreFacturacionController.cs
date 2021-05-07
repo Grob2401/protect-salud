@@ -42,8 +42,11 @@ namespace Salud.Controllers
             if (TempData["PREFAC"] != null)
             {
                 ViewBag.PreFacturaciones = TempData["PREFAC"];
-                ViewBag.y = TempData["Y"];
-                ViewBag.m = TempData["M"];
+            }
+
+            if (TempData["GENERAR"] != null)
+            {
+                ViewBag.generar = TempData["GENERAR"];
             }
 
             if (TempData["CONTRATOS"] != null)
@@ -51,26 +54,28 @@ namespace Salud.Controllers
                 ViewBag.Contratos = TempData["CONTRATOS"];
             }
 
-            return View();
+            ENDatosPreFacBusqueda enf1 = new ENDatosPreFacBusqueda();
+            if (TempData["MODEL"] != null)
+            {
+                enf1 = (ENDatosPreFacBusqueda)TempData["MODEL"];
+            }
+
+            return View(enf1);
         }
 
         [HttpGet]
-        public ActionResult Buscar(string anios = " ", string meses = " ", string fechadesde = " ", string fechahasta = " ", string option = " ")
+        public ActionResult Buscar(ENDatosPreFacBusqueda enf)
         {
-            var f1 = "";
-            var f2 = "";
-            var op = "0";
 
-            if (fechadesde != "" && fechahasta != "")
+            enf.option = 0;
+
+            if (TempData["GENERAR"] != null)
             {
-                f1 = fechadesde.Replace("-", "");
-                f2 = fechahasta.Replace("-", "");
-                op = "0";
+                ViewBag.generar = TempData["GENERAR"];
             }
 
-            TempData["Y"] = anios;
-            TempData["M"] = meses;
-            TempData["PREFAC"] = LNPreFacturaciones.ObtenerTodos(anios, meses, f1, f2, op);
+            TempData["MODEL"] = enf;
+            TempData["PREFAC"] = LNPreFacturaciones.ObtenerTodos(enf);
             return RedirectToAction("Index");
         }
 
@@ -85,6 +90,30 @@ namespace Salud.Controllers
 
             TempData["CONTRATOS"] = LNPreFacturaciones.Contratos(anoProceso, mesProceso, pcsEspecial, pcsStatus, CodigoCliente, DescripcionTipoAsegurado);
             return Json(TempData["CONTRATOS"], JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult Generar(string anoProceso = " ",
+                            string mesProceso = " ",
+                            string txtdesde = " ",
+                            string txthasta = " ",
+                            string pcsEspecial = " ",
+                            string pcsStatus = " ",
+                            string CodigoCliente = " ",
+                            string DescripcionTipoAsegurado = " ")
+        {
+
+            ENDatosPreFacBusqueda enf = new ENDatosPreFacBusqueda() { 
+                
+                anio = anoProceso,
+                mes = mesProceso,
+                txtdesde = txtdesde,
+                txthasta = txthasta
+
+            };
+
+            TempData["GENERAR"] = LNPreFacturaciones.Actualizar (anoProceso, mesProceso, pcsEspecial, pcsStatus, CodigoCliente, DescripcionTipoAsegurado);
+            return Json(TempData["GENERAR"], JsonRequestBehavior.AllowGet);
         }
 
 
