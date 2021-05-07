@@ -44,7 +44,6 @@
                 </table>
                 <!-- Pagination status -->
                 <div id="statusPagination" class="mr-2 mt-2 text-right text-secondary">
-                    1 al 15 de 322400 filas
                 </div>
                 <!-- Pagination control -->
                 <nav aria-label="Page navigation example" class="pt-3">
@@ -117,8 +116,6 @@
                 return undefined;
             }
         }
-
-        const getTotalPages = (totalRows, rowsPerPage) => ((totalRows - 1) - (totalRows - 1) % rowsPerPage) / rowsPerPage + 1;
 
         const enableButton = (buttonId, enabled) => {
             const button = document.querySelector(`#${buttonId}`);
@@ -239,6 +236,8 @@
             statusPagination.textContent = `${first} al ${last} de ${totalRows} filas`;
         }
 
+        const excessDivision = (dividend, divider) => ((dividend - 1) - (dividend - 1) % divider) / divider + 1;
+
         const fillDataTableByAjax = (settings) => {
 
             let { tableHeaderId, tableBodyId, counting, pagination } = settings;
@@ -255,9 +254,28 @@
                 success(result) {
 
                     let { totalRows, rowsPerPage, pagesPerCatalog } = result;
-                    console.log(`Rows: ${totalRows}`);
-                    console.log(`Rows per page: ${rowsPerPage}`);
-                    console.log(`Pages per catalog: ${pagesPerCatalog} `);
+                    let manageRows = {
+                        totalRows,
+                        rowsPerPage,
+                        pagesPerCatalog,
+                        getTotalPages() {
+                            return excessDivision(totalRows, rowsPerPage);
+                        },
+                        getTotalCatalogs() {
+                            return excessDivision(this.getTotalPages(), pagesPerCatalog);
+                        },
+                        getStatus(page) {
+                            let catalog = excessDivision(page, this.pagesPerCatalog);
+                            let first = (catalog - 1) * this.pagesPerCatalog + 1;
+                            let last = catalog * this.pagesPerCatalog;
+                            return {
+                                page,
+                                catalog,
+                                first,
+                                last
+                            };
+                        }
+                    };
                     if (totalRows === -1) throw error('Hubo un error de conexión');
                     catchMoment = moment();
 
