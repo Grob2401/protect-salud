@@ -249,7 +249,11 @@
             previousButton.classList.add('page-link');
             previousButton.textContent = 'Previous';
             previous.appendChild(previousButton);
-            if (catalog === 1) previous.classList.add('disabled', 'pagination-disabled');
+            if (catalog === 1) {
+                previous.classList.add('disabled', 'pagination-disabled');
+            } else {
+                previous.setAttribute('onclick', `fillMatrixByAjax(${first - 1})`);
+            }
             ulElement.appendChild(previous);
 
             /// Middle
@@ -275,7 +279,11 @@
             nextButton.classList.add('page-link');
             nextButton.textContent = 'Next';
             next.appendChild(nextButton);
-            if (catalog === getTotalCatalogs) next.classList.add('disabled', 'pagination-disabled');
+            if (catalog === getTotalCatalogs) {
+                next.classList.add('disabled', 'pagination-disabled');
+            } else {
+                next.setAttribute('onclick', `fillMatrixByAjax(${last + 1})`);
+            }
             ulElement.appendChild(next);
 
             /// Inserting...
