@@ -469,10 +469,16 @@
 
         }
 
-        /// Dropdownlist loadings...
+        /// Cleaning DropDownLists
+        emptyDropDownList('drpParentesco'); // Parentesco
+        emptyDropDownList('drpVendedor'); // Vendedor
+        emptyDropDownList('drpCentroCosto'); // Centro de Costo
+        emptyDropDownList('drpDocumentoIdentidad'); // Documento de Identidad
         emptyDropDownList('drpDepartamento'); // Departamento
         emptyDropDownList('drpProvincia'); // Provincia
         emptyDropDownList('drpDistrito'); // Distrito
+
+        /// Dropdownlist loadings...
         fillDropDownListByAjax('drpParentesco', 'CodigoCategoria', 'DescripcionParentesco', '/SCTRCotizacion/GetParentesco', 'POST'); // Parentesco
         fillDropDownListByAjax('drpVendedor', 'CodigoVendedor', 'DescripcionVendedor', '/SCTRCotizacion/GetVendedor', 'POST'); // Vendedor
         fillDropDownListByAjax('drpCentroCosto', 'CodigoCentroCosto', 'DescripcionCentroCosto', '/SCTRCotizacion/GetCentroCosto', 'POST', { codigocliente: '000494' }); // Centro de Costo
