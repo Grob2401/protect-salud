@@ -253,12 +253,17 @@
             ulElement.appendChild(previous);
 
             /// Middle
-            for (var i = first; i <= last; i++) {
+            for (let i = first; i <= last; i++) {
                 const middle = document.createElement('li');
                 middle.classList.add('page-item');
                 const middleButton = document.createElement('button');
                 middleButton.classList.add('page-link');
                 middleButton.textContent = i;
+                if (i !== page) {
+                    middleButton.setAttribute('onclick', `fillMatrixByAjax(${i})`);
+                } else {
+                    middle.classList.add('disabled', 'pagination-disabled');
+                }
                 middle.appendChild(middleButton);
                 ulElement.appendChild(middle);
             }
@@ -353,7 +358,7 @@
                         datatype: 'json',
                         traditional: true,
                         success(result) {
-                            console.log(`Duration (ms): ${parseInt(moment().diff(catchMoment, 'milliseconds'))}`);
+                            //console.log(`Duration (ms): ${parseInt(moment().diff(catchMoment, 'milliseconds'))}`);
                             let { page } = pagination.data;
 
                             /// Table Header Loading
@@ -391,6 +396,7 @@
                             /// Status links (Previous - 1 - 2 - ... - 10 - Next)
                             loadNavPagination({
                                 navPaginationId: 'navPagination',
+                                page,
                                 totalRows: manageRows.totalRows,
                                 rowsPerPage: manageRows.rowsPerPage,
                                 catalog: manageRows.getStatus().catalog,
