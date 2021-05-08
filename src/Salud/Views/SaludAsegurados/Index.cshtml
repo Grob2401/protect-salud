@@ -66,6 +66,7 @@
         const loadDropDownList = (result, selectId, optionDataField, optionDisplayField, defaultText = '-- Seleccione --') => {
             /// Combo selector
             const select = document.querySelector(`#${selectId}`);
+            select.innerHTML = '';
             
             /// Default element
             const defaultOption = document.createElement('option');
@@ -453,6 +454,14 @@
         fillDropDownListByAjax('drpCentroCosto', 'CodigoCentroCosto', 'DescripcionCentroCosto', '/SCTRCotizacion/GetCentroCosto', 'POST', { codigocliente: '000494' }); // Centro de Costo
         fillDropDownListByAjax('drpDocumentoIdentidad', 'CodigoDocumentoIdentidad', 'DescripcionDocumentoIdentidad', '/SCTRCotizacion/GetDocumentoIdentidad', 'POST'); // Documento de Identidad
         fillDropDownListByAjax('drpSexo', 'CodigoSexo', 'DescripcionSexo', '/SCTRCotizacion/GetSexo', 'POST'); // Sexo
+        fillDropDownListByAjax('drpDepartamento', 'CodigoDpto', 'DescripcionDpto', '/SaludAsegurados/GetDepartamentos'); // Departamento
+
+        /// Depending Dropdownlist...
+        const drpDepartamento = document.querySelector('#drpDepartamento');
+        drpDepartamento.addEventListener('change', () => {
+            const id = drpDepartamento[drpDepartamento.selectedIndex].id;
+            fillDropDownListByAjax('drpProvincia', 'CodigoProv', 'DescripcionProv', '/SaludAsegurados/GetProvincias', 'GET', { dptoid: id }); // Provincia
+        });
 
         /// DataTable loading...
         fillMatrixByAjax(); // Asegurados

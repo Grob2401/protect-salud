@@ -191,22 +191,10 @@
                                     @Html.ValidationMessageFor(model => model.CodigoDist)
                                 </div>
                             </div>
-
-
-                            @*Prueba de Vista Parcial*@
-                            @*@{
-            Html.RenderPartial("_Ubigeo");
-        }*@
-                            @*Fin Prueba*@
-
                         </div>
-                        <!-- /.row -->
                     </div>
-                    <!-- ./card-body -->
                     <div class="card-footer">
-                        <!-- /.row -->
                     </div>
-                    <!-- /.card-footer -->
                 </div>
             </div>
         </div>
@@ -230,23 +218,6 @@
         @Scripts.Render("~/Content/plugins/jquery-validation/jquery.validate.min.js")
         @Scripts.Render("~/Content/plugins/jquery-validation/additional-methods.min.js")
         <script src="~/Scripts/Comandos.js"></script>
-
-        <script type="text/javascript">
-        $(document).ready(function () {
-            $('#drpDepartamento').change(function () {
-                debugger;
-                datosprovincia();
-            });
-        });
-        </script>
-
-        <script type="text/javascript">
-            $(document).ready(function () {
-            $('#drpProvincia').change(function () {
-                datosdistrito();
-            });
-        });
-        </script>
     }
 
 

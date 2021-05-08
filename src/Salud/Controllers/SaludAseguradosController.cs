@@ -154,6 +154,30 @@ namespace Salud.Controllers
 
         [SessionExpire]
         [HttpGet]
+        public JsonResult GetDepartamentos()
+        {
+            var listaDepartamentos = LNUbigeoDpto.ObtenerDpto().ToList();
+            return Json(listaDepartamentos, JsonRequestBehavior.AllowGet);
+        }
+
+        [SessionExpire]
+        [HttpGet]
+        public JsonResult GetProvincias(string dptoid)
+        {
+            var listaProvincias = LNUbigeoProv.ObtenerProv(dptoid).ToList();
+            return Json(listaProvincias, JsonRequestBehavior.AllowGet);
+        }
+
+        [SessionExpire]
+        [HttpGet]
+        public JsonResult GetDistritos(string dptoid, string provid)
+        {
+            var listaDistritos = LNUbigeoDist.ObtenerDist(dptoid, provid).ToList();
+            return Json(listaDistritos, JsonRequestBehavior.AllowGet);
+        }
+
+        [SessionExpire]
+        [HttpGet]
         public ActionResult CreateAsegurado(AseguradoRequest aseguradoRequest = null, ENSaludAsegurados asegurado = null)
         {
             if (aseguradoRequest.IdTitular != null || aseguradoRequest.IdCategoria != null || aseguradoRequest.IdCliente != null)
