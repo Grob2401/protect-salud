@@ -46,14 +46,14 @@
                 <div id="statusPagination" class="mr-2 mt-2 text-right text-secondary">
                 </div>
                 <!-- Pagination control -->
-                <nav aria-label="Page navigation example" class="pt-3">
-                    <ul class="pagination justify-content-end">
+                <nav id="navPagination" aria-label="Page navigation example" class="pt-3">
+                    @*<ul class="pagination justify-content-end">
                         <li class="page-item disabled pagination-disabled"><button class="page-link">Previous</button></li>
                         <li class="page-item"><button class="page-link">1</button></li>
                         <li class="page-item"><button class="page-link" onclick="fillMatrixByAjax(2)">2</button></li>
                         <li class="page-item"><button class="page-link" onclick="fillMatrixByAjax(3)">3</button></li>
                         <li class="page-item"><button class="page-link" onclick="fillMatrixByAjax(4)">Next</button></li>
-                    </ul>
+                    </ul>*@
                 </nav>
             </div>
         </div>
@@ -227,13 +227,56 @@
             document.querySelector('#tableLoading').classList.add('d-none');
         }
 
-        const getCatalogInterval = (page, rowsPerPage) => { return { first: rowsPerPage * (page - 1) + 1, last: rowsPerPage * page }; }
-
         const loadStatusPagination = (settings) => {
-            let { statusPaginationId, totalRows, page, rowsPerPage } = settings;
+            let { statusPaginationId, totalRows, first, last } = settings;
             const statusPagination = document.querySelector(`#${statusPaginationId}`);
-            let { first, last } = getCatalogInterval(page, rowsPerPage);
             statusPagination.textContent = `${first} al ${last} de ${totalRows} filas`;
+        }
+
+        const loadNavPagination = (settings) => {
+
+            let { navPaginationId, totalRows, page, rowsPerPage, getTotalCatalogs, catalog, first, last } = settings;
+
+            /// Main Element
+            const navPagination = document.querySelector(`#${navPaginationId}`);
+            const ulElement = document.createElement('ul');
+            ulElement.classList.add('pagination', 'justify-content-end');
+
+            /// Previous
+            const previous = document.createElement('li');
+            previous.classList.add('page-item');
+            const previousButton = document.createElement('button');
+            previousButton.classList.add('page-link');
+            previousButton.textContent = 'Previous';
+            previous.appendChild(previousButton);
+            if (catalog === 1) previous.classList.add('disabled', 'pagination-disabled');
+            ulElement.appendChild(previous);
+
+            /// Middle
+            for (var i = first; i <= last; i++) {
+                const middle = document.createElement('li');
+                middle.classList.add('page-item');
+                const middleButton = document.createElement('button');
+                middleButton.classList.add('page-link');
+                middleButton.textContent = i;
+                middle.appendChild(middleButton);
+                ulElement.appendChild(middle);
+            }
+
+            /// Next
+            const next = document.createElement('li');
+            next.classList.add('page-item');
+            const nextButton = document.createElement('button');
+            nextButton.classList.add('page-link');
+            nextButton.textContent = 'Next';
+            next.appendChild(nextButton);
+            if (catalog === getTotalCatalogs) next.classList.add('disabled', 'pagination-disabled');
+            ulElement.appendChild(next);
+
+            /// Inserting...
+            navPagination.textContent = '';
+            navPagination.appendChild(ulElement);
+
         }
 
         const excessDivision = (dividend, divider) => ((dividend - 1) - (dividend - 1) % divider) / divider + 1;
@@ -244,7 +287,6 @@
             
             /// Cantidad de registros
             let catchMoment;
-
             $.ajax({
                 type: counting.type,
                 url: counting.url,
@@ -252,31 +294,41 @@
                 dataType: 'json',
                 traditional: true,
                 success(result) {
-
-                    let { totalRows, rowsPerPage, pagesPerCatalog } = result;
+                    let { page } = counting.data;
                     let manageRows = {
-                        totalRows,
-                        rowsPerPage,
-                        pagesPerCatalog,
+                        page,
+                        counting,
+                        totalRows: result.totalRows ?? -1,
+                        rowsPerPage: result.rowsPerPage,
+                        pagesPerCatalog: result.pagesPerCatalog,
                         getTotalPages() {
-                            return excessDivision(totalRows, rowsPerPage);
+                            return excessDivision(this.totalRows, this.rowsPerPage);
                         },
                         getTotalCatalogs() {
-                            return excessDivision(this.getTotalPages(), pagesPerCatalog);
+                            return excessDivision(this.getTotalPages(), this.pagesPerCatalog);
                         },
-                        getStatus(page) {
+                        getStatus(page = this.page) {
                             let catalog = excessDivision(page, this.pagesPerCatalog);
-                            let first = (catalog - 1) * this.pagesPerCatalog + 1;
-                            let last = catalog * this.pagesPerCatalog;
+                            let firstRow = (page - 1) * this.rowsPerPage + 1;
+                            let lastRow = page * this.rowsPerPage;
+                            let firstPage = (catalog - 1) * this.pagesPerCatalog + 1;
+                            let lastPage = catalog * this.pagesPerCatalog;
                             return {
                                 page,
                                 catalog,
-                                first,
-                                last
+                                rows: {
+                                    first: firstRow,
+                                    last: lastRow
+                                },
+                                pages: {
+                                    first: firstPage,
+                                    last: lastPage
+                                }
                             };
                         }
                     };
-                    if (totalRows === -1) throw error('Hubo un error de conexión');
+                    
+                    if (manageRows.totalRows === -1) throw error('Hubo un error de conexión');
                     catchMoment = moment();
 
                     /// Row Structure
@@ -326,12 +378,25 @@
                                     hasDelete: true
                                 });
 
-                            /// Status pagination
+                            /// Status pagination (1 al 15 de 1500 filas)
                             loadStatusPagination({
                                 statusPaginationId: 'statusPagination',
-                                totalRows,
-                                page,
-                                rowsPerPage
+                                totalRows: manageRows.totalRows,
+                                rowsPerPage: manageRows.rowsPerPage,
+                                catalog: manageRows.getStatus().catalog,
+                                first: manageRows.getStatus().rows.first,
+                                last: manageRows.getStatus().rows.last,
+                            });
+
+                            /// Status links (Previous - 1 - 2 - ... - 10 - Next)
+                            loadNavPagination({
+                                navPaginationId: 'navPagination',
+                                totalRows: manageRows.totalRows,
+                                rowsPerPage: manageRows.rowsPerPage,
+                                catalog: manageRows.getStatus().catalog,
+                                getTotalCatalogs: manageRows.getTotalCatalogs(),
+                                first: manageRows.getStatus().pages.first,
+                                last: manageRows.getStatus().pages.last,
                             });
                         },
                         error(xhr, textStatus, errorThrown) {
@@ -349,8 +414,8 @@
         }
 
         const fillMatrixByAjax = (page = 1, keywords = '') => {
-            console.log(`page: ${page}`);
-            console.log(`keywords: ${keywords}`);
+
+            /// console.log(`page: ${page}`); console.log(`keywords: ${keywords}`);
             fillDataTableByAjax(
                 {
                     tableHeaderId: 'headerAsegurados',
@@ -372,6 +437,7 @@
                         }
                     }
                 });
+
         }
 
         /// Dropdownlist loadings...

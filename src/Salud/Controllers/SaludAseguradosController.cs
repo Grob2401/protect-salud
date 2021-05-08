@@ -151,6 +151,21 @@ namespace Salud.Controllers
             }
             return Json(null, JsonRequestBehavior.AllowGet);
         }
+
+        [SessionExpire]
+        [HttpGet]
+        public ActionResult CreateAsegurado(AseguradoRequest aseguradoRequest = null, ENSaludAsegurados asegurado = null)
+        {
+            if (aseguradoRequest.IdTitular != null || aseguradoRequest.IdCategoria != null || aseguradoRequest.IdCliente != null)
+            {
+                LNSaludAsegurados.Actualizar(asegurado);
+            }
+            else
+            {
+                LNSaludAsegurados.Insertar(asegurado);
+            }
+            return null;
+        }
         #endregion
     }
 }
