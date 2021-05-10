@@ -491,6 +491,8 @@
         drpDepartamento.addEventListener('change', () => {
             const id = drpDepartamento[drpDepartamento.selectedIndex].id;
             fillDropDownListByAjax('drpProvincia', 'CodigoProv', 'DescripcionProv', '/SaludAsegurados/GetProvincias', 'GET', { dptoid: id }); // Provincia
+            emptyDropDownList('drpDistrito'); // Distrito
+
         });
         const drpProvincia = document.querySelector('#drpProvincia');
         drpProvincia.addEventListener('change', () => {
