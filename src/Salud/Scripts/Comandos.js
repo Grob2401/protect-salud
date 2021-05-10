@@ -119,6 +119,7 @@ const loadTableBody = (result, tableBodyId, fieldNameArray = [], settings = { ha
     for (const elem of result) {
         /// Creating row...
         const row = document.createElement('tr');
+        let primaryFields = [];
         for (const field of fieldNameArray) {
             if (field.type === 'Date') {
                 elem[field.name] = moment(new Date(toIntDate(elem[field.name]))).format('DD/MM/YYYY');
@@ -128,6 +129,7 @@ const loadTableBody = (result, tableBodyId, fieldNameArray = [], settings = { ha
             const col = document.createElement('td');
             col.innerText = elem[field.name];
             col.classList.add('text-uppercase');
+            if (field.isPrimary) primaryFields.push(elem[field.name]);
             row.appendChild(col); /// Inserta columna en la fila
         }
 
@@ -142,6 +144,8 @@ const loadTableBody = (result, tableBodyId, fieldNameArray = [], settings = { ha
                 const editButton = document.createElement('button');
                 editButton.textContent = 'Editar';
                 editButton.classList.add('btn', 'btn-outline-info', 'btn-sm', 'mr-3');
+                let onclickMethod = primaryFields.map(x => `'${x}'`).reduce((a, b) => a + `,${b}`);
+                editButton.setAttribute('onclick', `console.log(${onclickMethod})`);
                 col.appendChild(editButton);
             }
 
