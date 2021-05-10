@@ -11,7 +11,7 @@ namespace LogicaNegocio
     {
         public static List<ENSaludAsegurados> ObtenerTodos(int page = 1, int rowsPerPage = 100, string keywords = "")
         {
-            return new ADSaludAsegurados().ObtenerTodos(page, rowsPerPage, keywords);
+            return (new ADSaludAsegurados()).ObtenerTodos(page, rowsPerPage, keywords);
         }
 
         public static int Cantidad(string keywords)
