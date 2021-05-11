@@ -138,14 +138,14 @@ const loadTableBody = (result, tableBodyId, fieldNameArray = [], settings = { ha
             /// New column...
             const col = document.createElement('td');
             col.classList.add('project-actions', 'text-center');
+            let manageArgs = primaryFields.map(x => `'${x}'`).reduce((a, b) => a + `,${b}`);
 
             /// Edit
             if (settings.hasEdit) {
                 const editButton = document.createElement('button');
                 editButton.textContent = 'Editar';
                 editButton.classList.add('btn', 'btn-outline-info', 'btn-sm', 'mr-3');
-                let onclickMethod = primaryFields.map(x => `'${x}'`).reduce((a, b) => a + `,${b}`);
-                editButton.setAttribute('onclick', `console.log(${onclickMethod})`);
+                editButton.setAttribute('onclick', `console.log(${manageArgs})`);
                 col.appendChild(editButton);
             }
 
@@ -154,6 +154,7 @@ const loadTableBody = (result, tableBodyId, fieldNameArray = [], settings = { ha
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = 'Eliminar';
                 deleteButton.classList.add('btn', 'btn-outline-danger', 'btn-sm');
+                deleteButton.setAttribute('onclick', `console.log(${manageArgs})`);
                 col.appendChild(deleteButton);
             }
 
