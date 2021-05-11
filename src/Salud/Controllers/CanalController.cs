@@ -16,69 +16,28 @@ namespace Salud.Controllers
         private LNSociedades LNSociedades = new LNSociedades();
         public ActionResult Index()
         {
+            var lstSociedades = LNSociedades.ObtenerTodos();
+            var lstSociedades_ = new SelectList(lstSociedades.ToList(), "IdSociedad", "RazonSocial");
+            ViewData["ListaSociedades"] = lstSociedades_;
+
+            if (TempData["Canales"] != null)
+            {
+                ViewData["Canales"] = TempData["Canales"];
+            }
+
             return View();
         }
 
-        public ActionResult GetLista()
-        {
-            var lstCanales = LNCanales.ObtenerTodos();
-            return Json(new { data = lstCanales.ToList() }, JsonRequestBehavior.AllowGet);
-        }
 
         [HttpGet]
-        public ActionResult AddOrEdit(int id = 0)
+        public ActionResult GetLista(String slcSociedad = "")
         {
-            if (id == 0)
-            {
-                ViewBag.IdSociedad = new SelectList(LNSociedades.ObtenerTodos().ToList(), "IdSociedad", "RazonSocial");
-                var ENCanales = new ENCanales();
-                return View(ENCanales);
-            }
-            else
-            {
-                ENCanales mCanalEditar = LNCanales.ObtenerTodos().Find(smodel => smodel.IDCanal == id);
-                ViewBag.IdSociedad = new SelectList(LNSociedades.ObtenerTodos().ToList(), "IdSociedad", "RazonSocial", mCanalEditar.IdSociedad);
-                return View(mCanalEditar);
-            }
-        }
+            //var lstCanales = LNCanal.ObtenerTodos();
+            //return Json(new { data = lstCanales.ToList() }, JsonRequestBehavior.AllowGet);
 
-        public ActionResult AddOrEdit(ENCanales pla)
-        {
-            if (pla.IDCanal == 0)
-            {
-                if (LNCanales.Insertar(pla))
-                {
-                    ViewBag.Message = "Registro Grabado Correctamente";
-                    ModelState.Clear();
-                }
-                return Json(new { success = true, message = "Grabado Correctamente" }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                if (LNCanales.Actualizar(pla))
-                {
-                    ViewBag.Message = "Registro Grabado Correctamente";
-                    ModelState.Clear();
-                }
-                return Json(new { success = true, message = "Actualizado Correctamente" }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        [HttpPost]
-        public ActionResult Delete(int id)
-        {
-            try
-            {
-                if (LNCanales.Eliminar(id))
-                {
-                    return Json(new { success = true, message = "Eliminado Correctamente" }, JsonRequestBehavior.AllowGet);
-                }
-                return Json(new { success = true, message = "Eliminado Correctamente" }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                return View();
-            }
-        }
+            var lstCanales = LNCanal.ObtenerTodos();
+            TempData["Canales"] = lstCanales;
+            return RedirectToAction("Index");
+        }     
     }
 }

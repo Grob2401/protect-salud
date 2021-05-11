@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ADCanal.cs" />
     <Compile Include="ADCanales.cs" />
     <Compile Include="ADCIUU.cs" />
     <Compile Include="ADClientes.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="ADTipoPreexistencia.cs" />
     <Compile Include="ADUbigeo.cs" />
     <Compile Include="ADUsuario.cs" />
+    <Compile Include="ADVendedor.cs" />
     <Compile Include="ADVendedores.cs" />
     <Compile Include="ADVtaBDVendedores.cs" />
     <Compile Include="GenericDataAccess.cs" />
