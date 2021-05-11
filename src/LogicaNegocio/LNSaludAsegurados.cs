@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Common;
 using AccesoDatos;
 using Entidades;
 
 namespace LogicaNegocio
 {
-
     public class LNSaludAsegurados
     {
-        public static List<ENSaludAsegurados> ObtenerTodos()
+        public static List<ENSaludAsegurados> ObtenerTodos(int page = 1, int rowsPerPage = 100, string keywords = "")
         {
-            return new ADSaludAsegurados().ObtenerTodos();
+            return (new ADSaludAsegurados()).ObtenerTodos(page, rowsPerPage, keywords);
         }
 
-        public static int Cantidad()
+        public static int Cantidad(string keywords)
         {
-            return (new ADSaludAsegurados()).Cantidad();
+            return (new ADSaludAsegurados()).Cantidad(keywords ?? string.Empty);
         }
 
         public static bool Insertar(ENSaludAsegurados oENSaludAsegurados)

@@ -1,5 +1,4 @@
 ﻿@model Entidades.ENClientes
-@*@model Salud.ViewModels.VMClientes*@
 @{
     ViewBag.Title = "Crear";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -26,7 +25,6 @@
                         </div>
                     </div>
 
-                    <!-- /.card-header -->
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-2">
@@ -58,23 +56,22 @@
                                 </div>
                             </div>
 
-                            <div Class="col-sm-2">
-                                <div Class="form-group">
+                            <div class="col-sm-2">
+                                <div class="form-group">
                                     <Label for="txtApellidoPaterno">Paterno</Label>
                                     @Html.TextBoxFor(model => model.Paterno, new { id = "txtApellidoPaterno", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
-                            <div Class="col-sm-2">
-                                <div Class="form-group">
+
+                            <div class="col-sm-2">
+                                <div class="form-group">
                                     <Label for="txtApellidoMaterno">Materno</Label>
                                     @Html.TextBoxFor(model => model.Materno, new { id = "txtApellidoMaterno", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
 
-
-
-                            <div Class="col-sm-2">
-                                <div Class="form-group">
+                            <div class="col-sm-2">
+                                <div class="form-group">
                                     <Label for="txtApellidosNombres">Nombres</Label>
                                     @Html.TextBoxFor(model => model.Nombres, new { id = "txtApellidosNombres", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
@@ -135,19 +132,13 @@
                                 </div>
                             </div>
 
-
                             <div class="col-sm-2">
                                 <div class="form-group">
                                     <label for="txtCodigoCotizacion">Dirección</label>
                                     @Html.TextBoxFor(model => model.Direccion, new { id = "txtDireccion", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
-                            @*Prueba de Vista Parcial*@
-                            @*@{
-            Html.RenderPartial("_Ubigeo");
-        }*@
-                            @*Fin Prueba*@
-
+                            
                             <div class="col-sm-2">
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.CodigoDpto, "Departamento", htmlAttributes: new { @class = "control-label" })
@@ -169,17 +160,10 @@
                                     @Html.ValidationMessageFor(model => model.CodigoDist)
                                 </div>
                             </div>
-
-
-
                         </div>
-                        <!-- /.row -->
                     </div>
-                    <!-- ./card-body -->
                     <div class="card-footer">
-                        <!-- /.row -->
                     </div>
-                    <!-- /.card-footer -->
                 </div>
 
 
@@ -194,95 +178,6 @@
                 </div>
             </div>
         </div>
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.FechaMovimiento, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.FechaMovimiento, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.FechaMovimiento, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Materno, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Materno, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Materno, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Nombres, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Nombres, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Nombres, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.Paterno, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Paterno, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Paterno, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-
-
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.PersonaContactoCobranza, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.PersonaContactoCobranza, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PersonaContactoCobranza, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-
-
-
-
-
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Ubicubi, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Ubicubi, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Ubicubi, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.DescripcionDpto, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.DescripcionDpto, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.DescripcionDpto, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.DescripcionProv, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.DescripcionProv, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.DescripcionProv, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.DescripcionDist, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.DescripcionDist, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.DescripcionDist, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
-                </div>
-            </div>*@
     </div>
 }
 
@@ -291,20 +186,4 @@
     @Scripts.Render("~/Content/plugins/jquery-validation/jquery.validate.min.js")
     @Scripts.Render("~/Content/plugins/jquery-validation/additional-methods.min.js")
     <script src="~/Scripts/Comandos.js"></script>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#drpDepartamento').change(function () {
-                datosprovincia();
-            });
-        });
-    </script>
-
-    <script type="text/javascript">
-            $(document).ready(function () {
-            $('#drpProvincia').change(function () {
-                datosdistrito();
-            });
-        });
-    </script>
 }

@@ -27,24 +27,23 @@
                         </div>
                     </div>
 
-                    <!-- /.card-header -->
                     <div class="card-body">
                         <div class="row">
-                            <div Class="col-sm-1">
-                                <div Class="form-group">
-                                    <Label for="txtCodigoCliente">CodigoCliente</Label>
-                                    @Html.TextBoxFor(model => model.CodigoCliente, new { id = "txtCodigoCliente", @class = "form-control form-control-sm", @placeholder = "" })
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label for="txtCodigoCliente">CodigoCliente</label>
+                                    <input type="text" id="txtCodigoCliente" class="form-control form-control-sm" />
                                 </div>
                             </div>
-                            <div Class="col-sm-1">
-                                <div Class="form-group">
-                                    <Label for="txtCodigoTitular">CodigoTitular</Label>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label for="txtCodigoTitular">CodigoTitular</label>
                                     @Html.TextBoxFor(model => model.CodigoTitular, new { id = "txtCodigoTitular", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
-                            <div Class="col-sm-1">
-                                <div Class="form-group">
-                                    <Label for="txtCategoria">Categoria</Label>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label for="txtCategoria">Categoria</label>
                                     @Html.TextBoxFor(model => model.Categoria, new { id = "txtCategoria", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
@@ -65,80 +64,69 @@
                                 </div>
                             </div>
 
-                            <div Class="col-sm-2">
-                                <div Class="form-group">
+                            <div class="col-sm-2">
+                                <div class="form-group">
                                     @Html.LabelFor(model => model.CodigoCentroCosto, "CodigoCentroCosto", htmlAttributes: new { @class = "control-label" })
                                     @Html.DropDownList("CodigoCentroCosto", null, new { id = "drpCodigoCentroCosto", @class = "form-control form-control-sm" })
                                     @Html.ValidationMessageFor(model => model.CodigoCentroCosto)
                                 </div>
                             </div>
 
-                            @*<div Class="col-sm-2">
-            <div Class="form-group">
-                <Label for="txtCodigoTrabajador">CodigoTrabajador</Label>
-                @Html.TextBoxFor(model => model.CodigoTrabajador, new { id = "txtCodigoTrabajador", @class = "form-control form-control-sm", @placeholder = "" })
-            </div>
-        </div>*@
-                            <div Class="col-sm-1">
-                                <div Class="form-group">
-                                    @Html.LabelFor(model => model.CodigoDocumentoIdentidad, "TipoDocumento", htmlAttributes: new { @class = "control-label " })
-                                    @Html.DropDownList("CodigoDocumentoIdentidad", null, new { id = "drpCodigoDocumentoIdentidad", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.CodigoDocumentoIdentidad)
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label class="control-label">Documento de Identidad</label>
+                                    <select id="drpCodigoDocumentoIdentidad" class="form-control form-control-sm">
+                                        <option disabled="">-- Seleccione --</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div Class="col-sm-2">
-                                <div Class="form-group">
-                                    <Label for="txtNumeroDocumentoIdentidad">NumeroDocumento</Label>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtNumeroDocumentoIdentidad">NumeroDocumento</label>
                                     @Html.TextBoxFor(model => model.NumeroDocumentoIdentidad, new { id = "txtNumeroDocumentoIdentidad", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
 
-                            <div Class="col-sm-2">
-                                <div Class="form-group">
-                                    <Label for="txtApellidoPaterno">ApellidoPaterno</Label>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtApellidoPaterno">ApellidoPaterno</label>
                                     @Html.TextBoxFor(model => model.ApellidoPaterno, new { id = "txtApellidoPaterno", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
 
-                            <div Class="col-sm-2">
-                                <div Class="form-group">
-                                    <Label for="txtApellidoMaterno">ApellidoMaterno</Label>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtApellidoMaterno">ApellidoMaterno</label>
                                     @Html.TextBoxFor(model => model.ApellidoMaterno, new { id = "txtApellidoMaterno", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
 
-
-
-                            <div Class="col-sm-2">
-                                <div Class="form-group">
-                                    <Label for="txtApellidosNombres">Nombres</Label>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtApellidosNombres">Nombres</label>
                                     @Html.TextBoxFor(model => model.Nombres, new { id = "txtNombres", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
 
-                            <div Class="col-sm-1">
-                                <div Class="form-group">
-                                    @Html.LabelFor(model => model.CodigoSexo, "Sexo", htmlAttributes: new { @class = "control-label " })
-                                    @Html.DropDownList("CodigoSexo", null, new { id = "drpCodigoSexo", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.CodigoSexo)
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label class="control-label">Sexo</label>
+                                    <select id="drpCodigoSexo" class="form-control form-control-sm">
+                                        <option disabled="">-- Seleccione --</option>
+                                    </select>
                                 </div>
                             </div>
 
-                            <div Class="col-sm-2">
-                                <div Class="form-group">
-                                    <Label for="txtFechaNacimiento">FechaNacimiento</Label>
-                                    @*@Html.TextBoxFor(model => model.FechaNacimiento, new { id = "txtFechaNacimiento", @class = "form-control form-control-sm", @placeholder = "" })*@
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtFechaNacimiento">FechaNacimiento</label>
                                     @Html.TextBoxFor(model => model.FechaNacimiento, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaNacimiento", @class = "form-control form-control-sm float-right" })
-
                                 </div>
                             </div>
 
-
-
-                            <div Class="col-sm-2">
-                                <div Class="form-group">
-                                    <Label for="txtFechaAlta">FechaAlta</Label>
-                                    @*@Html.TextBoxFor(model => model.FechaAlta, new { id = "txtFechaAlta", @class = "form-control form-control-sm", @placeholder = "" })*@
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="txtFechaAlta">FechaAlta</label>
                                     @Html.TextBoxFor(model => model.FechaAlta, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaAlta", @class = "form-control form-control-sm float-right" })
 
                                 </div>
@@ -146,67 +134,56 @@
 
                             <div Class="col-sm-1">
                                 <div Class="form-group">
-                                    <Label for="txtTelefono">Telefono</Label>
+                                    <label for="txtTelefono">Telefono</label>
                                     @Html.TextBoxFor(model => model.Telefono, new { id = "txtTelefono", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
                             <div Class="col-sm-1">
                                 <div Class="form-group">
-                                    <Label for="txtCelular">Celular</Label>
+                                    <label for="txtCelular">Celular</label>
                                     @Html.TextBoxFor(model => model.Celular, new { id = "txtCelular", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
 
                             <div Class="col-sm-2">
                                 <div Class="form-group">
-                                    <Label for="txtEmail">Email</Label>
+                                    <label for="txtEmail">Email</label>
                                     @Html.TextBoxFor(model => model.Email, new { id = "txtEmail", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
                             <div Class="col-sm-3">
                                 <div Class="form-group">
-                                    <Label for="txtDireccion">Direccion</Label>
+                                    <label for="txtDireccion">Direccion</label>
                                     @Html.TextBoxFor(model => model.Direccion, new { id = "txtDireccion", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
 
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.CodigoDpto, "Departamento", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoDpto", null, new { id = "drpDepartamento", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.CodigoDpto)
+                                    <label class="control-label">Departamento</label>
+                                    <select id="drpDepartamento" class="form-control form-control-sm">
+                                        <option disabled="">-- Seleccione --</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.CodigoProv, "Provincia", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoProv", null, new { id = "drpProvincia", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.CodigoProv)
+                                    <label class="control-label">Provincia</label>
+                                    <select id="drpProvincia" class="form-control form-control-sm">
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.CodigoDist, "Distrito", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoDist", null, new { id = "drpDistrito", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.CodigoDist)
+                                    <label class="control-label">Distrito</label>
+                                    <select id="drpDistrito" class="form-control form-control-sm">
+                                    </select>
                                 </div>
                             </div>
-
-
-                            @*Prueba de Vista Parcial*@
-                            @*@{
-            Html.RenderPartial("_Ubigeo");
-        }*@
-                            @*Fin Prueba*@
-
                         </div>
-                        <!-- /.row -->
                     </div>
-                    <!-- ./card-body -->
                     <div class="card-footer">
-                        <!-- /.row -->
                     </div>
-                    <!-- /.card-footer -->
                 </div>
             </div>
         </div>
@@ -230,23 +207,6 @@
         @Scripts.Render("~/Content/plugins/jquery-validation/jquery.validate.min.js")
         @Scripts.Render("~/Content/plugins/jquery-validation/additional-methods.min.js")
         <script src="~/Scripts/Comandos.js"></script>
-
-        <script type="text/javascript">
-        $(document).ready(function () {
-            $('#drpDepartamento').change(function () {
-                debugger;
-                datosprovincia();
-            });
-        });
-        </script>
-
-        <script type="text/javascript">
-            $(document).ready(function () {
-            $('#drpProvincia').change(function () {
-                datosdistrito();
-            });
-        });
-        </script>
     }
 
 
