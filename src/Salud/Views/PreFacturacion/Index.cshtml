@@ -1,0 +1,439 @@
+﻿@using Entidades;
+@model ENDatosPreFacBusqueda
+@{
+    ViewBag.Title = "Pre-Facturaciones";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
+}
+<style>
+
+    #loading {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        background: url('../../Images/loading.gif') 50% 50% no-repeat rgba(249, 249, 249, 0.7);
+    }
+</style>
+<div id="loading" style="display:none;">
+</div>
+<div id="content" class="row">
+    <div class="col-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-table"></i>
+                    Generar Pre-Facturacion
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body ">
+                @using (Html.BeginForm("Buscar", "PreFacturacion", FormMethod.Get))
+                {
+                    <!-- form here -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div>
+                                <label for="anio">Año :</label>
+                                @Html.DropDownListFor(m => m.anio, new List<SelectListItem>()
+                                {
+                                    new SelectListItem(){ Text= DateTime.Now.Year.ToString(), Value = DateTime.Now.Year.ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 1).ToString(), Value = (DateTime.Now.Year - 1).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 2).ToString(), Value = (DateTime.Now.Year - 2).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 3).ToString(), Value = (DateTime.Now.Year - 3).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 4).ToString(), Value = (DateTime.Now.Year - 4).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 5).ToString(), Value = (DateTime.Now.Year - 5).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 6).ToString(), Value = (DateTime.Now.Year - 6).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 7).ToString(), Value = (DateTime.Now.Year - 7).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 8).ToString(), Value = (DateTime.Now.Year - 8).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 9).ToString(), Value = (DateTime.Now.Year - 9).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 10).ToString(), Value = (DateTime.Now.Year - 10).ToString()},
+                                    new SelectListItem(){ Text= (DateTime.Now.Year - 11).ToString(), Value = (DateTime.Now.Year - 11).ToString()}
+                                },
+                                 new { @class = "form-control form-control-sm" })
+                            </div>
+                            <div>
+                                <label for="mes">Mes :</label>
+                                @Html.DropDownListFor(m => m.mes, new List<SelectListItem>()
+                                {
+                                    new SelectListItem(){ Text= "Enero", Value = "01"},
+                                    new SelectListItem(){ Text= "Febrero", Value = "02"},
+                                    new SelectListItem(){ Text= "Marzo", Value = "03"},
+                                    new SelectListItem(){ Text= "Abril", Value = "04"},
+                                    new SelectListItem(){ Text= "Mayo", Value = "05"},
+                                    new SelectListItem(){ Text= "Junio", Value = "06"},
+                                    new SelectListItem(){ Text= "Julio", Value = "07"},
+                                    new SelectListItem(){ Text= "Agosto", Value = "08"},
+                                    new SelectListItem(){ Text= "Setiembre", Value = "09"},
+                                    new SelectListItem(){ Text= "Octubre", Value = "10"},
+                                    new SelectListItem(){ Text= "Noviembre", Value = "11"},
+                                    new SelectListItem(){ Text= "Diciembre", Value = "12"}
+                                },
+                                 new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div>
+                                <label for="txtdesde">Fecha Desde</label>
+                                @Html.TextBoxFor(m => m.txtdesde,
+                               new { @class = "form-control form-control-sm", @type = "date" })
+                            </div>
+                            <div>
+                                <label for="txthasta">Fecha Hasta</label>
+                                @Html.TextBoxFor(m => m.txthasta,
+                               new { @type = "date", @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div>
+                                <button type="submit" id="btnbusca" class="btn btn-dark btn-sm">
+                                    <i class="fa fa-calculator"></i>&nbsp;&nbsp;Calcular
+                                </button>
+                            </div>
+                            <div class="pt-4">
+                                <button type="button" id="btngenera" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-check-square"></i>&nbsp;&nbsp;Generar Pre-Facturacion
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <table id="dglista" class="table table-bordered table-hover table-sm">
+                    <thead class="thead-light">
+                        <tr>
+                            <th></th>
+                            <th>CODIGO</th>
+                            <th>RUC</th>
+                            <th>RAZON SOCIAL</th>
+                            <th>TIPO ASEGURADO</th>
+                            <th>AFILIADOS</th>
+                            <th>APORTES</th>
+                            <th><input type="checkbox" id="allchk" /></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.PreFacturaciones != null)
+                        {
+                            foreach (ENPreFacturacion PreFacturacion in (List<ENPreFacturacion>)ViewBag.PreFacturaciones)
+                            {
+                                <tr>
+                                    <td>
+                                        <img src="~/Images/plus.jpg" />
+                                        <div style="display:none">
+                                            @*<div id="tableGoesHere">
+
+                                                </div>*@
+                                        </div>
+                                    </td>
+                                    <td class="cellCodigoCliente">@PreFacturacion.CodigoCliente </td>
+                                    <td>@PreFacturacion.RucDni </td>
+                                    <td>@PreFacturacion.RazonSocial </td>
+                                    <td class="cellDescripcionTipoAsegurado">@PreFacturacion.DescripcionTipoAsegurado </td>
+                                    <td>@PreFacturacion.RegCounts </td>
+                                    <td>@PreFacturacion.AporteAfiliados </td>
+                                    <td><input style="border:none;" name="@PreFacturacion.RucDni" type="checkbox" /></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </div>
+    <!-- /.col -->
+</div>
+@section Scripts {
+    @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+
+    <script>
+        $(function () {
+
+            $('#dglista').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                "pageLength": 50,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+        });
+    </script>
+
+    <script>
+
+        $('#anio').change(function () {
+            $("#mes").prop('selectedIndex', 1);
+            var anioi = $("#anio :selected").val();
+            var mese = $("#mes :selected").val();
+
+            var LastDay = new Date(anioi, mese, 0);
+            var ultimo = LastDay.toISOString().slice(0, 10);
+            console.log(ultimo)
+
+            $('#txtdesde').attr('value', anioi + '-' + mese + '-' + '01');
+            $('#txthasta').attr('value', ultimo);
+
+
+
+        });
+
+        $('#mes').change(function () {
+            var anioi = $("#anio :selected").val();
+            var mese = $("#mes :selected").val();
+
+            var LastDay = new Date(anioi, mese, 0);
+            var ultimo = LastDay.toISOString().slice(0, 10);
+
+            $('#txtdesde').attr('value', anioi + '-' + mese + '-' + '01');
+            $('#txthasta').attr('value', ultimo);
+
+        });
+    </script>
+
+    <script>
+        $("body").on("click", "img[src*='plus.jpg']", function () {
+            $("img[src*='minus.jpg']").click();
+            //$('table#dglista tr#ad').remove();
+            $(this).attr("src", "/images/plus.jpg");
+            $(this).closest("tr").after("<tr id='ad'><td></td><td id='tab' colspan = '999'>" + $(this).next().html() + "</td></tr>");
+            var row = $(this).closest("tr");
+            var year = $('#anio').val()
+            var month = $('#mes').val()
+            var pcsespecial = "0";
+            var pcsstatus = "0";
+            var codigo = row.find(".cellCodigoCliente").html();
+            var tipoasegurado = row.find(".cellDescripcionTipoAsegurado").html();
+
+            $(this).attr("src", "/images/minus.jpg");
+            $.ajax({
+                type: "GET",
+                url: "/PreFacturacion/Detalle",
+                data: {
+                    'anoProceso': year,
+                    'mesProceso': month,
+                    'pcsEspecial': pcsespecial,
+                    'pcsStatus': pcsstatus,
+                    'CodigoCliente': codigo,
+                    'DescripcionTipoAsegurado': tipoasegurado
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    document.getElementById('tab').innerHTML = json2table(dataparseada, 'table');
+                    //document.getElementById('tableGoesHere').append(json2table(dataparseada, 'table'));
+                }
+            });
+
+        });
+        //Assign Click event to Minus Image.
+        $("body").on("click", "img[src*='minus.jpg']", function () {
+            $(this).attr("src", "/images/plus.jpg");
+            $(this).closest("tr").next().remove();
+        });
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#btnbusca').click(function () {
+                $('#loading').css('display', 'block');
+            });
+            $('#btngenera').click(function () {
+                $('#loading').css('display', 'block');
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        dateTimeReviver = function (key, value) {
+            var a;
+            if (typeof value === 'string') {
+                a = /\/Date\((\d*)\)\//.exec(value);
+                if (a) {
+
+                    var dt = new Date(+a[1]);
+
+                    var dateString = moment(dt).format('YYYY-MM-DD');
+
+                    return dateString;
+                }
+                //console.log(a);
+            }
+            return value;
+        }
+
+        function json2table(json, classes) {
+
+            json = JSON.parse(JSON.stringify(json), dateTimeReviver);
+            //json = JSON.parse(JSON.stringify(json))
+            console.log(json);
+
+            var cols = Object.keys(json[0]);
+
+            var headerRow = '';
+            var bodyRows = '';
+
+            classes = classes || '';
+
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+
+            cols.map(function (col) {
+                headerRow += '<th>' + capitalizeFirstLetter(col) + '</th>';
+            });
+
+            json.map(function (row) {
+                bodyRows += '<tr>';
+
+                cols.map(function (colName) {
+                    bodyRows += '<td>' + row[colName] + '</td>';
+                })
+
+                bodyRows += '</tr>';
+            });
+
+            return '<table class="table ' +
+                classes +
+                '"><thead class="bg-info"><tr>' +
+                headerRow +
+                '</tr></thead><tbody>' +
+                bodyRows +
+                '</tbody></table>';
+        }
+    </script>
+
+    <script>
+        $('#allchk').change(function () {
+            if ($(this).prop('checked')) {
+                $('tbody tr td input[type="checkbox"]').each(function () {
+                    $(this).prop('checked', true);
+                });
+            } else {
+                $('tbody tr td input[type="checkbox"]').each(function () {
+                    $(this).prop('checked', false);
+                });
+            }
+        });
+    </script>
+
+
+    <script>
+
+        $('#btngenera').click(function () {
+
+            //Reference the Table.
+            var grid = document.getElementById("dglista");
+
+            //Reference the CheckBoxes in Table.
+            var checkBoxes = grid.getElementsByTagName("INPUT");
+            var message = "Id Name                  Country\n";
+
+            var year = $('#anio').val()
+            var month = $('#mes').val()
+            var pcsespecial = "0";
+            var pcsstatus = "0";
+            var des = $('#txtdesde').val();
+            var has = $('#txthasta').val();
+
+            //Loop through the CheckBoxes.
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked) {
+
+                    var row = checkBoxes[i].parentNode.parentNode;
+
+                    var codigo = row.cells[1].innerHTML;
+                    var tipoasegurado = row.cells[4].innerHTML;
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/PreFacturacion/Generar",
+                        data: {
+                            'anoProceso': year,
+                            'mesProceso': month,
+                            'txtdesde': des,
+                            'txthasta': has,
+                            'pcsEspecial': pcsespecial,
+                            'pcsStatus': pcsstatus,
+                            'CodigoCliente': codigo,
+                            'DescripcionTipoAsegurado': tipoasegurado
+                        },
+                        dataType: "text",
+                        success: function (r) {
+
+                        }
+                    });
+
+
+                }
+            }
+
+            @*@Model.anio = year;
+            @Model.mes = month;
+            @Model.txtdesde = des;
+            @Model.txthasta = has;
+            @Model.option = pcsespecial;*@
+
+            window.location = ('@Url.Action("Buscar", "PreFacturacion", @Model)').replaceAll('amp;','');
+
+            //$.ajax({
+            //    type: "GET",
+            //    url: "/PreFacturacion/Buscar",
+            //    data: model,
+            //    dataType: "text",
+            //    success: function (r) {
+            //        window.location.reload();
+
+            //    }
+            //});
+
+        });
+
+    </script>
+
+
+
+    @*@if (TempData["GENERAR"] != null)
+    {
+
+        <script>
+        $(window).load(function() {
+
+            var flag = TempData["GENERAR"];
+
+            if (flag)
+            {
+                Swal.fire(
+                'Generado Correctamente',
+                'Los registros marcados, se generaron satisfactoriamente',
+                'success'
+                );
+            }
+        });
+
+        </script>
+
+    }*@
+
+
+}
+
+
