@@ -1,22 +1,15 @@
-﻿@model Entidades.ENSaludAsegurados
-@{
+﻿@{
     Layout = null;
 }
 @section Styles {
     @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
     @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
 }
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalEnviarAfiliado" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false" data-backdrop="static">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Grupos Familiares</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
+            <div class="modal-body p-2">
+                <div class="container-fluid mt-3">
                     <div class="row">
                         <!-- left column -->
                         <div class="col-md-12">
@@ -31,46 +24,46 @@
                                         <!-- Código Cliente -->
                                         <div class="form-group col-xl-4">
                                             <Label for="txtCodigoCliente">Código Cliente</Label>
-                                            <input id="txtNombre" type="text" name="name" class="form-control" placeholder="Ingrese el código del cliente" autocomplete="off" />
+                                            <input id="txtNombreCliente" type="text" name="name" class="form-control form-control-sm" placeholder="Ingrese el código del cliente" autocomplete="off" />
                                         </div>
                                         <!-- Código Titular -->
                                         <div class="form-group col-xl-4">
                                             <Label for="txtCodigoTitular">Código Titular</Label>
-                                            <input id="txtCodigoTitular" type="text" class="form-control" placeholder="Ingresae el código del titular" autocomplete="off" />
+                                            <input id="txtCodigoTitular" type="text" class="form-control form-control-sm" placeholder="Ingresae el código del titular" autocomplete="off" />
                                         </div>
                                         <!-- Categoría -->
                                         <div class="form-group col-xl-4">
                                             <Label for="txtCategoria">Categoría</Label>
-                                            <input id="txtCategoria" type="text" class="form-control" placeholder="Ingrese la categoría" autocomplete="off" />
+                                            <input id="txtCategoria" type="text" class="form-control form-control-sm" placeholder="Ingrese la categoría" autocomplete="off" />
                                         </div>
                                     </div>
                                     <div class="card-body row pt-0">
                                         <!-- Código Parentesco -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Código Parentesco</label>
-                                            <select id="drpParentesco" class="form-control"></select>
+                                            <select id="drpParentesco" class="form-control form-control-sm"></select>
                                         </div>
                                         <!-- Código Vendedor -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Código Vendedor</label>
-                                            <select id="drpVendedor" class="form-control"></select>
+                                            <select id="drpVendedor" class="form-control form-control-sm"></select>
                                         </div>
                                         <!-- Código Centro de Costo -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Código Centro de Costo</label>
-                                            <select id="drpCentroCosto" class="form-control"></select>
+                                            <select id="drpCentroCosto" class="form-control form-control-sm"></select>
                                         </div>
                                     </div>
                                     <div class="card-body row pt-0">
                                         <!-- Documento de Identidad -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Documento de Identidad</label>
-                                            <select id="drpDocumentoIdentidad" class="form-control"></select>
+                                            <select id="drpDocumentoIdentidad" class="form-control form-control-sm"></select>
                                         </div>
                                         <!-- Número Documento -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Número de Documento</label>
-                                            <input id="txtNumDocumento" type="text" class="form-control" />
+                                            <input id="txtNumDocumento" type="text" class="form-control form-control-sm" autocomplete="off" />
                                         </div>
                                         <!-- Offset -->
                                         <div class="offset-xl-4">
@@ -80,75 +73,75 @@
                                         <!-- Apellido Paterno -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Apellido Paterno</label>
-                                            <input id="txtApellidoPaterno" type="text" class="form-control text-uppercase" autocomplete="off" />
+                                            <input id="txtApellidoPaterno" type="text" class="form-control form-control-sm text-uppercase" autocomplete="off" />
                                         </div>
                                         <!-- Apellido Materno -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Apellido Materno</label>
-                                            <input id="txtApellidoMaterno" type="text" class="form-control text-uppercase" autocomplete="off" />
+                                            <input id="txtApellidoMaterno" type="text" class="form-control form-control-sm text-uppercase" autocomplete="off" />
                                         </div>
                                         <!-- Nombres -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Nombres</label>
-                                            <input id="txtNombres" type="text" class="form-control text-uppercase" autocomplete="off" />
+                                            <input id="txtNombres" type="text" class="form-control form-control-sm text-uppercase" autocomplete="off" />
                                         </div>
                                     </div>
                                     <div class="card-body row pt-0">
                                         <!-- Sexo -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Sexo</label>
-                                            <select id="drpSexo" class="form-control"></select>
+                                            <select id="drpSexo" class="form-control form-control-sm"></select>
                                         </div>
                                         <!-- Fecha de Nacimiento -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Fecha de Nacimiento</label>
-                                            <input type="date" id="txtFechaNacimiento" name="name" class="form-control" />
+                                            <input type="date" id="txtFechaNacimiento" name="name" class="form-control form-control-sm" />
                                         </div>
                                         <!-- Fecha de Alta -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Fecha de Alta</label>
-                                            <input type="date" id="txtFechaAlta" class="form-control" />
+                                            <input type="date" id="txtFechaAlta" class="form-control form-control-sm" />
                                         </div>
                                     </div>
                                     <div class="card-body row pt-0">
                                         <!-- Teléfono -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Teléfono</label>
-                                            <input type="tel" id="txtTelefono" class="form-control" />
+                                            <input type="tel" id="txtTelefono" class="form-control form-control-sm" autocomplete="off" />
                                         </div>
                                         <!-- Celular -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Celular</label>
-                                            <input type="tel" id="txtCelular" class="form-control" />
+                                            <input type="tel" id="txtCelular" class="form-control form-control-sm" autocomplete="off" />
                                         </div>
                                         <!-- Email -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Email</label>
-                                            <input type="email" id="txtEmail" class="form-control" />
+                                            <input type="email" id="txtEmail" class="form-control form-control-sm" autocomplete="off" />
                                         </div>
                                     </div>
                                     <div class="card-body row pt-0">
                                         <!-- Dirección -->
                                         <div class="form-group col-xl-12">
                                             <label class="control-label">Dirección</label>
-                                            <input type="tel" id="txtDireccion" class="form-control text-uppercase" />
+                                            <input type="tel" id="txtDireccion" class="form-control form-control-sm text-uppercase" autocomplete="off" />
                                         </div>
                                     </div>
                                     <div class="card-body row pt-0">
                                         <!-- Departamento -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Departamento</label>
-                                            <select id="drpDepartamento" class="form-control"></select>
+                                            <select id="drpDepartamento" class="form-control form-control-sm"></select>
                                         </div>
                                         <!-- Provincia -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Provincia</label>
-                                            <select id="drpProvincia" class="form-control"></select>
+                                            <select id="drpProvincia" class="form-control form-control-sm"></select>
                                         </div>
                                         <!-- Distrito -->
                                         <div class="form-group col-xl-4">
                                             <label class="control-label">Distrito</label>
-                                            <select id="drpDistrito" class="form-control"></select>
+                                            <select id="drpDistrito" class="form-control form-control-sm"></select>
                                         </div>
                                     </div>
                                 </form>

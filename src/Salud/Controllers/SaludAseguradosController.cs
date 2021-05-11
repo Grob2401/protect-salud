@@ -8,16 +8,15 @@ using LogicaNegocio;
 using Utilitarios;
 using Salud.App_Start;
 using System.Runtime.Caching;
+using System.Configuration;
 
 namespace Salud.Controllers
 {
     public class SaludAseguradosController : Controller
     {
-
         [SessionExpire]
         public ActionResult Index()
         {
-            ViewBag.SaludAsegurados = LNSaludAsegurados.ObtenerTodos();
             return View();
         }
 
@@ -93,37 +92,102 @@ namespace Salud.Controllers
             return View();
         }
 
-        #region AjaxMethods
+        #region RequestsStructures
         public class AseguradoRequest
         {
-            public string IdCliente { get; set; }
-            public string idTitular { get; set; }
-            public string IdCategoria { get; set; }
-            public bool IsValid { get { return ((IdCliente != null) && (idTitular != null) && (IdCategoria != null)); } }
-        }
+            #region Asegurados
+            public int Page { get; set; }
+            public string Keywords { get; set; }
+            public bool IsValidForList { get { return (Page > 0); } }
+            #endregion
 
+            #region Asegurado
+            public string IdCliente { get; set; }
+            public string IdTitular { get; set; }
+            public string IdCategoria { get; set; }
+            public bool IsValidForOne { get { return ((IdCliente != null) && (IdTitular != null) && (IdCategoria != null)); } }
+            #endregion
+        }
+        #endregion
+
+        #region AjaxMethods
         ObjectCache cache = MemoryCache.Default;
         [SessionExpire]
         [HttpGet]
         public ActionResult GetAsegurados(AseguradoRequest aseguradoRequest = null)
         {
-            if (aseguradoRequest == null || !aseguradoRequest.IsValid)
+            if (aseguradoRequest != null || aseguradoRequest.IsValidForList)
             {
-                var listaAsegurados = LNSaludAsegurados.ObtenerTodos().ToList();
+                if (!int.TryParse(ConfigurationManager.AppSettings["RowsPerPage"], out int rowsPerPage)) rowsPerPage = 0;
+                var listaAsegurados = LNSaludAsegurados.ObtenerTodos(aseguradoRequest.Page, rowsPerPage, aseguradoRequest.Keywords).ToList();
                 return Json(listaAsegurados, JsonRequestBehavior.AllowGet);
             }
-            else
-            {
-                var asegurados = LNSaludAsegurados.ObtenerUno(aseguradoRequest.IdCliente, aseguradoRequest.idTitular, aseguradoRequest.IdCategoria);
-                return Json(asegurados, JsonRequestBehavior.AllowGet);
-            }
+            return Json(null, JsonRequestBehavior.AllowGet);
         }
 
         [SessionExpire]
         [HttpGet]
-        public ActionResult GetCantidad()
+        public ActionResult GetAsegurado(AseguradoRequest aseguradoRequest = null)
         {
-            return Json(LNSaludAsegurados.Cantidad(), JsonRequestBehavior.AllowGet);
+            if (aseguradoRequest != null && aseguradoRequest.IsValidForOne)
+            {
+                var asegurados = LNSaludAsegurados.ObtenerUno(aseguradoRequest.IdCliente, aseguradoRequest.IdTitular, aseguradoRequest.IdCategoria);
+                return Json(asegurados, JsonRequestBehavior.AllowGet);
+            }
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [SessionExpire]
+        [HttpGet]
+        public ActionResult GetCantidad(AseguradoRequest aseguradoRequest = null)
+        {
+            if (aseguradoRequest != null && aseguradoRequest.IsValidForList)
+            {
+                if (!int.TryParse(ConfigurationManager.AppSettings["RowsPerPage"], out int rowsPerPage)) rowsPerPage = 0;
+                if (!int.TryParse(ConfigurationManager.AppSettings["PagesPerCatalog"], out int pagesPerCatalog)) pagesPerCatalog = 0;
+                int totalRows = LNSaludAsegurados.Cantidad(aseguradoRequest.Keywords);
+                return Json(new { totalRows, rowsPerPage, pagesPerCatalog }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [SessionExpire]
+        [HttpGet]
+        public JsonResult GetDepartamentos()
+        {
+            var listaDepartamentos = LNUbigeoDpto.ObtenerDpto().ToList();
+            return Json(listaDepartamentos, JsonRequestBehavior.AllowGet);
+        }
+
+        [SessionExpire]
+        [HttpGet]
+        public JsonResult GetProvincias(string dptoid)
+        {
+            var listaProvincias = LNUbigeoProv.ObtenerProv(dptoid).ToList();
+            return Json(listaProvincias, JsonRequestBehavior.AllowGet);
+        }
+
+        [SessionExpire]
+        [HttpGet]
+        public JsonResult GetDistritos(string dptoid, string provid)
+        {
+            var listaDistritos = LNUbigeoDist.ObtenerDist(dptoid, provid).ToList();
+            return Json(listaDistritos, JsonRequestBehavior.AllowGet);
+        }
+
+        [SessionExpire]
+        [HttpGet]
+        public ActionResult CreateAsegurado(AseguradoRequest aseguradoRequest = null, ENSaludAsegurados asegurado = null)
+        {
+            if (aseguradoRequest.IdTitular != null || aseguradoRequest.IdCategoria != null || aseguradoRequest.IdCliente != null)
+            {
+                LNSaludAsegurados.Actualizar(asegurado);
+            }
+            else
+            {
+                LNSaludAsegurados.Insertar(asegurado);
+            }
+            return null;
         }
         #endregion
     }
