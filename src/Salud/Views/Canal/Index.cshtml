@@ -1,4 +1,5 @@
 ﻿@using Entidades;
+@model ENCanales
 @{
     ViewBag.Title = "Canales";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,151 +7,226 @@
 @section Styles {
     @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
     @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
+    @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
 }
-<h2>Lista Canales</h2>
+
+<style>
+
+    #loading {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        background: url('../../Images/loading.gif') 50% 50% no-repeat rgba(249, 249, 249, 0.7);
+    }
+
+    .modal-backdrop.fade {
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+
+    .modal-backdrop.in {
+        opacity: 0.5;
+        filter: alpha(opacity=50);
+    }
+</style>
+<div id="loading" style="display:none;">
+</div>
+<div id="content" class="row">
+    <div class="col-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-users"></i>
+                    Administracion de Vendedores
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body ">
+                @using (Html.BeginForm("GetLista", "Canal", FormMethod.Get, new { id = "Form1", name = "Form1" }))
+                {
+                    <div class="row">
+                        <div class="btn-group-justified">
+                            <button type="button" id="btnCanal" class="btn btn-danger btn-sm">
+                                <i class="fa fa-plus text-warning"></i>&nbsp;&nbsp;Agregar Canal
+                            </button>
+                        </div>
+                    </div>
+                    <hr />
+                    <!-- form here -->
+                    <div class="row pt-2 pb-2">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="text-uppercase" for="txtdesde">SOCIEDAD &nbsp;&nbsp;</label>
+                                @Html.DropDownList("slcSociedad", ViewData["ListaSociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
+                            </div>
+                            <button type="submit" class="btn btn-dark btn-sm">
+                                <i class="fa fa-search text-warning"></i>&nbsp;&nbsp;Buscar
+                            </button>
+                        </div>
+                    </div>
+                }
+                <table id="dglista" class="table table-bordered table-hover table-sm">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>CODIGO</th>
+                            <th>DESCRIPCION</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewData["Canales"] != null)
+                        {
+                            foreach (ENCanales can in (List<ENCanales>)ViewData["Canales"])
+                            {
+                                <tr>
+                                    <td>@can.IDCanal </td>
+                                    <td>@can.DescripcionCanal </td>
+                                    <td>
+                                        <button type="button" class="botonedit btn btn-info btn-sm">
+                                            <i class="fa fa-edit text-white"></i>
+                                        </button>
+                                        <button type="button" class="botondel btn btn-danger btn-sm">
+                                            <i class="fa fa-times text-white"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </div>
+    <!-- /.col -->
+</div>
+
+<div class="modal" id="modalNuevoCanal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-7x fa-plus  text-warning"></i>&nbsp;&nbsp;Agregar Canal</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Mantenimiento", "Vendedor", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <h6>Sociedad</h6>
+                                @Html.DropDownListFor(model => model.IdSociedad, ViewData["ListaSociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6>Canal</h6>
+                                @Html.TextBoxFor(model => model.DescripcionCanal, new { @class = "form-control form-control-sm" })
+                                @Html.ValidationMessageFor(model => model.DescripcionCanal, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-dark btn-sm">
+                            <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Guardar Datos
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 
 
-<a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddOrEdit","Canal")')"><i class="fa fa-plus"></i> Agregar</a>
-<table id="TablaLista" class="display table-bordered">
-    <thead>
-        <tr style="background-color:#3d566e; color:#ecf0f1">
-            <th>Descripcion</th>
-            <th>Sociedad</th>
-            <th></th>
-        </tr>
-    </thead>
-</table>
-
-<!-- Normal -->
-<link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
-
-@section scripts{
-    @Scripts.Render("~/bundles/jqueryval")
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-    <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/scroller/2.0.2/css/scroller.dataTables.min.css"></script>
+@section Scripts {
+    @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
 
     <script>
-    var Popup, dataTable;
-    $(document).ready(function () {
+        $(document).ready(function () {
+            $('.js-example-basic-single').select2();
+        });
+    </script>
 
-        dataTable = $("#TablaLista").DataTable
-            ({
-                "ajax": {
-                    "url": "/Canal/GetLista",
-                    "type": "GET",
-                    "datatype": "json"
-                },
-                "columns": [
-                    { "data": "DescripcionCanal" },
-                    { "data": "RazonSocial" },
-                    { "data": "IDCanal" , "render" : function (data) {
-                        return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddOrEdit","Canal")/" + data + "')><i class='fa fa-pencil'></i> </a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> </a>";
-                    },
-                        "orderable": false,
-                        "searchable":false,
-                        "width":"150px"
-                    }
-                ],
-                "language":
-                {
-                    "emptyTable": "Sin datos  en la tabla.",
-                    "info": "Del _START_ al _END_ de _TOTAL_ ",
-                    "infoEmpty": "Mostrando 0 registros de un total de 0.",
-                    "infoFiltered": "(filtrados de un total de _MAX_ registros)",
-                    "infoPostFix": "",
-                    "lengthMenu": "Mostrar _MENU_ registros",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "searchPlaceholder": "",
-                    "zeroRecords": "No se han encontrado coincidencias.",
-                    "paginate": {
-                        "first": "<<",
-                        "last": ">>",
-                        "next": ">",
-                        "previous": "<"
-                    },
-                    "aria": {
-                        "sortAscending": "Ordenación ascendente",
-                        "sortDescending": "Ordenación descendente"
-                    }
-                },
-                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]]
-            }
-        );
+    <script>
+        $(function () {
+
+            $('#dglista').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                "pageLength": 50,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+        });
+    </script>
+    <script>
+        //function SelectedIndexChanged() {
+        //    //Form post
+        //    document.Form1.submit();
+        //}
+
+        $('#btnCanal').click(function () {
+            $('#modalNuevoCanal').modal('show');
+        });
+
+        $(".botonedit").click(function () {
+
+            txt2 = $(this).parents('tr').find("td:eq(1)").text();
+            document.getElementById("DescripcionCanal").value = txt2;
+
+            $('#modalNuevoCanal').modal('show');
 
         });
 
-        function PopupForm(url) {
-            var formDiv = $('<div/>');
-            $.get(url)
-            .done(function (response) {
-                formDiv.html(response);
+        $(".botondel").click(function () {
+            txt = $(this).parents('tr').find("td:eq(0)").text();
+            console.log(txt);
 
-                Popup = formDiv.dialog({
-                    autoOpen: true,
-                    resizable: false,
-                    title: 'Datos del Canal',
-                    height: 500,
-                    width: 700,
-                    close: function () {
-                        Popup.dialog('destroy').remove();
-                    }
+        });
 
-                });
-            });
-        }
+                //function PopupForm(url) {
+                //    var formDiv = $('<div/>');
+                //    $.get(url)
+                //        .done(function (response) {
+                //            formDiv.html(response);
 
-        function SubmitForm(form) {
-            $.validator.unobtrusive.parse(form);
-            if($(form).valid()){
-                $.ajax({
-                    type : "POST",
-                    url : form.action,
-                    data : $(form).serialize(),
-                    success : function (data) {
-                        if(data.success)
-                        {
-                            Popup.dialog('close');
-                            dataTable.ajax.reload();
+                //            Popup = formDiv.dialog({
+                //                autoOpen: true,
+                //                resizable: true,
+                //                title: 'Datos del Vendedor',
+                //                height: 500,
+                //                width: 700,
+                //                close: function () {
+                //                    Popup.dialog('destroy').remove();
+                //                }
 
-                            $.notify(data.message,{
-                                globalPosition :"top center",
-                                className : "success"
-                            })
-
-                        }
-                    }
-                });
-            }
-            return false;
-        }
-
-        function Delete(id) {
-            if(confirm('Desea Eliminar el Canal ?'))
-            {
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("Delete","Canal")/' + id,
-                    success: function (data) {
-                        if (data.success)
-                        {
-                            dataTable.ajax.reload();
-                            $.notify(data.message, {
-                                globalPosition: "top center",
-                                className: "success"
-                            })
-
-                        }
-                    }
-
-                });
-            }
-        }
+                //            });
+                //        });
+                //}
 
     </script>
-}
 
+
+
+}
 

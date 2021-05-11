@@ -235,6 +235,41 @@
                             </ul>
                         </li>
 
+                        <li class="nav-item has-treeview">
+
+                            <a href='#' class="nav-link">
+                                <i class="nav-icon fas fa-store"></i>
+                                <p>
+                                    Ventas
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href='@Url.Action("Index", "Vendedor")' class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Vendedores</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href='@Url.Action("Index", "Canal")' class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Canales</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href='@Url.Action("Asignacion", "Vendedor")' class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Asignación</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
 
                     </ul>
                 </nav>

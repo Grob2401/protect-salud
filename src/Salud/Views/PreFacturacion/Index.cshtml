@@ -258,6 +258,17 @@
             $('#btngenera').click(function () {
                 $('#loading').css('display', 'block');
             });
+
+            $("#mes").prop('selectedIndex', 1);
+            var anioi = $("#anio :selected").val();
+            var mese = $("#mes :selected").val();
+
+            var LastDay = new Date(anioi, mese, 0);
+            var ultimo = LastDay.toISOString().slice(0, 10);
+            console.log(ultimo)
+
+            $('#txtdesde').attr('value', anioi + '-' + mese + '-' + '01');
+            $('#txthasta').attr('value', ultimo);
         });
     </script>
 

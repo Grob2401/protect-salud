@@ -139,6 +139,7 @@
     <Compile Include="Controllers\SaludContratosController.cs" />
     <Compile Include="Controllers\SCTRCotizacionController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Controllers\VendedorController.cs" />
     <Compile Include="Controllers\VendedoresController.cs" />
     <Compile Include="Controllers\VMClientesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -1966,7 +1967,6 @@
     <Content Include="Views\SCTRCotizacion\EmitirExcel.cshtml" />
     <Content Include="Views\CentroCostos\Index.cshtml" />
     <Content Include="Views\CentroCostos\Crear.cshtml" />
-    <Content Include="Views\Canal\AddOrEdit.cshtml" />
     <Content Include="Views\Canal\Index.cshtml" />
     <Content Include="Views\Clientes\Index.cshtml" />
     <Content Include="Views\Clientes\Crear.cshtml" />
@@ -1983,6 +1983,8 @@
     <Content Include="Views\Shared\_UsuarioCrear.cshtml" />
     <Content Include="Views\Shared\SaludAsegurados\_AfiliacionBuscar.cshtml" />
     <Content Include="Views\PreFacturacion\Index.cshtml" />
+    <Content Include="Views\Vendedor\Index.cshtml" />
+    <Content Include="Views\Vendedor\Asignacion.cshtml" />
     <Content Include="Views\Shared\_Loading.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LNCanal.cs" />
     <Compile Include="LNCanales.cs" />
     <Compile Include="LNCIIU.cs" />
     <Compile Include="LNClientes.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="LNTipoPreexistencia.cs" />
     <Compile Include="LNUbigeo.cs" />
     <Compile Include="LNUsuario.cs" />
+    <Compile Include="LNVendedor.cs" />
     <Compile Include="LNVendedores.cs" />
     <Compile Include="LNVtaBDVendedores.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
