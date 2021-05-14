@@ -170,6 +170,9 @@
                             //console.log(`Duration (ms): ${parseInt(moment().diff(catchMoment, 'milliseconds'))}`);
                             let { page } = pagination.data;
 
+                            /// Session Storage
+                            sessionStorage.setItem('afiliados', JSON.stringify(result));
+
                             /// Table Header Loading
                             loadTableHeader(
                                 tableHeaderId,
@@ -231,6 +234,7 @@
         const fillMatrixByAjax = (page = 1, keywords = '') => {
 
             /// console.log(`page: ${page}`); console.log(`keywords: ${keywords}`);
+            sessionStorage.setItem('page', page.toString());
             fillDataTableByAjax(
                 {
                     tableHeaderId: 'headerAsegurados',
@@ -256,6 +260,7 @@
         }
 
         /// DataTable loading...
-        fillMatrixByAjax(); // Asegurados
+        let selectedPage = sessionStorage.getItem('page') ? parseInt(sessionStorage.getItem('page')) : 1;
+        fillMatrixByAjax(selectedPage || 1); // Asegurados
     </script>
 }

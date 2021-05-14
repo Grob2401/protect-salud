@@ -197,6 +197,17 @@ const loadNavPagination = (settings) => {
     const ulElement = document.createElement('ul');
     ulElement.classList.add('pagination', 'justify-content-end');
 
+    /// First Page (ever)
+    const firstAll = document.createElement('li');
+    firstAll.classList.add('page-item');
+    const firstAllButton = document.createElement('button');
+    firstAllButton.classList.add('page-link');
+    firstAllButton.textContent = '«';
+    firstAll.appendChild(firstAllButton);
+    firstAll.setAttribute('onclick', `fillMatrixByAjax(1)`);
+    firstAll.title = 'Ir a la página inicial';
+    ulElement.appendChild(firstAll);
+
     /// Previous
     const previous = document.createElement('li');
     previous.classList.add('page-item');
@@ -208,6 +219,7 @@ const loadNavPagination = (settings) => {
         previous.classList.add('disabled', 'pagination-disabled');
     } else {
         previous.setAttribute('onclick', `fillMatrixByAjax(${first - 1})`);
+        previous.title = `Ir a las ${last - first + 1} páginas anteriores`;
     }
     ulElement.appendChild(previous);
 
@@ -240,6 +252,17 @@ const loadNavPagination = (settings) => {
         next.setAttribute('onclick', `fillMatrixByAjax(${last + 1})`);
     }
     ulElement.appendChild(next);
+
+    /// Last Page (ever)
+    const lastAll = document.createElement('li');
+    lastAll.classList.add('page-item');
+    const lastAllButton = document.createElement('button');
+    lastAllButton.classList.add('page-link');
+    lastAllButton.textContent = '»';
+    lastAll.appendChild(lastAllButton);
+    lastAll.setAttribute('onclick', `fillMatrixByAjax(${getTotalCatalogs})`);
+    lastAll.title = 'Ir a la página final';
+    ulElement.appendChild(lastAll);
 
     /// Inserting...
     navPagination.textContent = '';
