@@ -157,3 +157,10 @@
         </div>
     </div>
 </div>
+<script>
+    const getRowFromSessionStorage = (codigoCliente, codigoTitular, categoria) => {
+        let arrAsegurados = JSON.parse(sessionStorage.getItem('afiliados'));
+        let asegurado = arrAsegurados.filter(x => x.CodigoCliente === codigoCliente && x.CodigoTitular === codigoTitular && x.Categoria === categoria);
+        return asegurado[0];
+    }
+

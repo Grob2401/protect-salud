@@ -145,7 +145,7 @@ const loadTableBody = (result, tableBodyId, fieldNameArray = [], settings = { ha
                 const editButton = document.createElement('button');
                 editButton.textContent = 'Editar';
                 editButton.classList.add('btn', 'btn-outline-info', 'btn-sm', 'mr-3');
-                editButton.setAttribute('onclick', `console.log(${manageArgs})`);
+                editButton.setAttribute('onclick', `console.log(getRowFromSessionStorage(${manageArgs}))`);
                 col.appendChild(editButton);
             }
 
@@ -154,7 +154,7 @@ const loadTableBody = (result, tableBodyId, fieldNameArray = [], settings = { ha
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = 'Eliminar';
                 deleteButton.classList.add('btn', 'btn-outline-danger', 'btn-sm');
-                deleteButton.setAttribute('onclick', `console.log(${manageArgs})`);
+                deleteButton.setAttribute('onclick', `console.log(getRowFromSessionStorage(${manageArgs}))`);
                 col.appendChild(deleteButton);
             }
 
