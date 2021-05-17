@@ -164,3 +164,11 @@
         return asegurado[0];
     }
 
+    const fillModal = (asegurado = {}) => {
+        /// Controls
+        const txtNombreCliente = document.querySelector('#txtNombreCliente');
+
+        /// Fill
+        txtNombreCliente.value = asegurado.CodigoCliente;
+    }
+</script>

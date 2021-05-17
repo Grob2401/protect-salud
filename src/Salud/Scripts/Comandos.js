@@ -145,7 +145,9 @@ const loadTableBody = (result, tableBodyId, fieldNameArray = [], settings = { ha
                 const editButton = document.createElement('button');
                 editButton.textContent = 'Editar';
                 editButton.classList.add('btn', 'btn-outline-info', 'btn-sm', 'mr-3');
-                editButton.setAttribute('onclick', `console.log(getRowFromSessionStorage(${manageArgs}))`);
+                editButton.setAttribute('onclick', `fillModal(getRowFromSessionStorage(${manageArgs}))`);
+                editButton.setAttribute('data-toggle', 'modal');
+                editButton.setAttribute('data-target', '#modalEnviarAfiliado');
                 col.appendChild(editButton);
             }
 
@@ -154,7 +156,9 @@ const loadTableBody = (result, tableBodyId, fieldNameArray = [], settings = { ha
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = 'Eliminar';
                 deleteButton.classList.add('btn', 'btn-outline-danger', 'btn-sm');
-                deleteButton.setAttribute('onclick', `console.log(getRowFromSessionStorage(${manageArgs}))`);
+                deleteButton.setAttribute('onclick', `fillModal(getRowFromSessionStorage(${manageArgs}))`);
+                deleteButton.setAttribute('data-toggle', 'modal');
+                deleteButton.setAttribute('data-target', '#modalEnviarAfiliado');
                 col.appendChild(deleteButton);
             }
 
