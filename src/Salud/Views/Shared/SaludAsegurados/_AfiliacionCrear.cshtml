@@ -165,10 +165,26 @@
     }
 
     const fillModal = (asegurado = {}) => {
+
+
+
+        const lockControl = (control = null) => {
+            if (control) {
+                control.setAttribute('disabled', 'disabled');
+                control.classList.add('pagination-disabled');
+            }
+        }
+
         /// Controls
-        const txtNombreCliente = document.querySelector('#txtNombreCliente');
+        const txtNombreCliente = document.querySelector('#txtNombreCliente'); lockControl(txtNombreCliente);
+        const txtCodigoTitular = document.querySelector('#txtCodigoTitular'); lockControl(txtCodigoTitular);
+        const txtCategoria = document.querySelector('#txtCategoria'); lockControl(txtCategoria);
+        const drpParentesco = document.querySelector('#drpParentesco');
 
         /// Fill
         txtNombreCliente.value = asegurado.CodigoCliente;
+        txtCodigoTitular.value = asegurado.CodigoTitular;
+        txtCategoria.value = asegurado.Categoria;
+        drpParentesco.selectedIndex = drpParentesco.querySelector(`#${asegurado.CodigoParentesco}`).index;
     }
 </script>
