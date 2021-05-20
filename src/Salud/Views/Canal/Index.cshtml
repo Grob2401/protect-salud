@@ -32,94 +32,139 @@
         opacity: 0.5;
         filter: alpha(opacity=50);
     }
+
+    .fade-scale {
+        transform: scale(0);
+        opacity: 0;
+        -webkit-transition: all .30s linear;
+        -o-transition: all .30s linear;
+        transition: all .30s linear;
+    }
+
+        .fade-scale.in {
+            opacity: 1;
+            transform: scale(1);
+        }
 </style>
 <div id="loading" style="display:none;">
 </div>
-<div id="content" class="row">
-    <div class="col-12">
-        <div class="card card-primary card-outline">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-users"></i>
-                    Administracion de Vendedores
-                </h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body ">
-                @using (Html.BeginForm("GetLista", "Canal", FormMethod.Get, new { id = "Form1", name = "Form1" }))
-                {
-                    <div class="row">
-                        <div class="btn-group-justified">
-                            <button type="button" id="btnCanal" class="btn btn-danger btn-sm">
-                                <i class="fa fa-plus text-warning"></i>&nbsp;&nbsp;Agregar Canal
-                            </button>
-                        </div>
+<section id="content">
+
+    @using (Html.BeginForm("GetLista", "Canal", FormMethod.Get, new { id = "Form1", name = "Form1" }))
+    {
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-users"></i>
+                            Opciones
+                        </h3>
                     </div>
-                    <hr />
-                    <!-- form here -->
-                    <div class="row pt-2 pb-2">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="text-uppercase" for="txtdesde">SOCIEDAD &nbsp;&nbsp;</label>
-                                @Html.DropDownList("slcSociedad", ViewData["ListaSociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
+                    <div class="card-body">
+                        <div class="row  text-center">
+                            <div class="col-md-12">
+                                <div class="btn-group-justified">
+                                    <button type="button" id="btnCanal" class="btn btn-info btn-sm">
+                                        <i class="fa fa-plus text-warning"></i>&nbsp;&nbsp;Agregar Canal
+                                    </button>
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-dark btn-sm">
-                                <i class="fa fa-search text-warning"></i>&nbsp;&nbsp;Buscar
-                            </button>
                         </div>
                     </div>
-                }
-                <table id="dglista" class="table table-bordered table-hover table-sm">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>CODIGO</th>
-                            <th>DESCRIPCION</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (ViewData["Canales"] != null)
-                        {
-                            foreach (ENCanales can in (List<ENCanales>)ViewData["Canales"])
-                            {
-                                <tr>
-                                    <td>@can.IDCanal </td>
-                                    <td>@can.DescripcionCanal </td>
-                                    <td>
-                                        <button type="button" class="botonedit btn btn-info btn-sm">
-                                            <i class="fa fa-edit text-white"></i>
-                                        </button>
-                                        <button type="button" class="botondel btn btn-danger btn-sm">
-                                            <i class="fa fa-times text-white"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
+                </div>
             </div>
-            <!-- /.card-body -->
+            <div class="col-md-6">
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-users"></i>
+                            Sociedad
+                        </h3>
+                    </div>
+                    <div class="card-body ">
+                        <div class="row text-center pt-2 pb-2">
+                            <div class="col-md-12">
+                                <div class="form">
+                                    <label class="text-uppercase" for="txtdesde" hidden>SOCIEDAD &nbsp;&nbsp;</label>
+                                    @Html.DropDownList("slcSociedad", ViewData["ListaSociedades"] as SelectList, new { @class = "form-control-sm js-example-basic-single" })
+                                    <button id="btnbuscar" type="submit" class="btn btn-dark btn-sm">
+                                        <i class="fa fa-search text-warning"></i>&nbsp;&nbsp;Buscar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    }
 
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-light card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-users"></i>
+                        Lista de Canales
+                    </h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body ">
+                    <table id="dglista" class="table table-bordered table-hover table-sm">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>CODIGO</th>
+                                <th>DESCRIPCION</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewData["Canales"] != null)
+                            {
+                                foreach (ENCanales can in (List<ENCanales>)ViewData["Canales"])
+                                {
+                                    <tr>
+                                        <td>@can.IDCanal </td>
+                                        <td>@can.DescripcionCanal </td>
+                                        <td class="text-center">
+                                            <button type="button" class="botonedit btn btn-outline-info btn-sm mr-2">
+                                                Editar
+                                            </button>
+                                            <button type="button" class="botondel btn btn-outline-danger btn-sm">
+                                                Eliminar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+
+        </div>
+        <!-- /.col -->
     </div>
-    <!-- /.col -->
-</div>
+</section>
 
-<div class="modal" id="modalNuevoCanal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+
+<div class="modal fade-scale" id="modalNuevoCanal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content ">
-            <div class="modal-header bg-info text-white">
+            <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-7x fa-plus  text-warning"></i>&nbsp;&nbsp;Agregar Canal</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm("Mantenimiento", "Vendedor", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+                @using (Html.BeginForm("Mantenimiento", "Canal", FormMethod.Post, new { id = "Form2", onsubmit = "return validateForm()" }))
                 {
+                    @Html.AntiForgeryToken()
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col">
                             <div class="form-group">
                                 <h6>Sociedad</h6>
                                 @Html.DropDownListFor(model => model.IdSociedad, ViewData["ListaSociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
@@ -127,7 +172,12 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col">
+                            <div class="form-group" hidden>
+                                <h6>Código</h6>
+                                @Html.TextBoxFor(model => model.IDCanal, new { @class = "form-control form-control-sm" })
+                                @Html.ValidationMessageFor(model => model.IDCanal, "", new { @class = "text-danger" })
+                            </div>
                             <div class="form-group">
                                 <h6>Canal</h6>
                                 @Html.TextBoxFor(model => model.DescripcionCanal, new { @class = "form-control form-control-sm" })
@@ -135,11 +185,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-dark btn-sm">
-                            <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Guardar Datos
-                        </button>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-dark btn-sm">
+                                    <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Guardar Datos
+                                </button>
+                            </div>
+                        </div>
                     </div>
+
                 }
             </div>
         </div>
@@ -159,6 +214,19 @@
         $(document).ready(function () {
             $('.js-example-basic-single').select2();
         });
+
+
+        var mensaje = "@TempData["mensaje"]";
+
+        if (mensaje != "") {
+            Swal.fire({
+                icon: 'success',
+                title: 'Excelente',
+                text: mensaje,
+                showCloseButton: true
+            });
+        }
+
     </script>
 
     <script>
@@ -180,49 +248,102 @@
         });
     </script>
     <script>
-        //function SelectedIndexChanged() {
-        //    //Form post
+
+        $(document).ready(function () {
+            $('#btnbuscar').click(function () {
+                $('#loading').css('display', 'block');
+            });
+        });
+
+        //function isPostBack() {
+
+        //    return document.referrer.indexOf(document.location.href) > -1;
+        //}
+
+        //if (!isPostBack()) {
         //    document.Form1.submit();
         //}
 
         $('#btnCanal').click(function () {
             $('#modalNuevoCanal').modal('show');
+            document.getElementById("DescripcionCanal").value = "";
         });
 
         $(".botonedit").click(function () {
+            txt1 = $(this).parents('tr').find("td:eq(0)").text().trim();
+            txt2 = $(this).parents('tr').find("td:eq(1)").text().trim();
 
-            txt2 = $(this).parents('tr').find("td:eq(1)").text();
+            document.getElementById("IDCanal").value = txt1;
             document.getElementById("DescripcionCanal").value = txt2;
 
             $('#modalNuevoCanal').modal('show');
 
         });
 
-        $(".botondel").click(function () {
+        $(".botondel").click(function (e) {
             txt = $(this).parents('tr').find("td:eq(0)").text();
             console.log(txt);
 
+            e.preventDefault();
+            Swal.fire({
+                title: '¿Esta seguro(a) que desea eliminar el canal seleccionado?',
+                text: "El canal será removido",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'No'
+            }).then(function (result) {
+                if (result.value) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Eliminar", "Canal")',
+                        data: {
+                            'id': txt
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                var idso = document.getElementById("slcSociedad").value;
+                                window.location = '@Url.Action("GetLista", "Canal")' + '?slcSociedad=' + idso +'&mensaje=Canal removido';
+                            }
+                        }
+
+                    });
+                } else {
+                    //swal("Cancelado", "Acción Cancelada", "info");
+                }
+            })
+
         });
 
-                //function PopupForm(url) {
-                //    var formDiv = $('<div/>');
-                //    $.get(url)
-                //        .done(function (response) {
-                //            formDiv.html(response);
 
-                //            Popup = formDiv.dialog({
-                //                autoOpen: true,
-                //                resizable: true,
-                //                title: 'Datos del Vendedor',
-                //                height: 500,
-                //                width: 700,
-                //                close: function () {
-                //                    Popup.dialog('destroy').remove();
-                //                }
 
-                //            });
-                //        });
-                //}
+        function validateForm() {
+            var idcan = document.forms["Form2"]["IDCanal"].value.trim();
+            var des = document.forms["Form2"]["DescripcionCanal"].value.trim();
+            //---
+            if (des == "" && idcan == "") {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Advertencia',
+                    text: 'No ha ingresado información del canal',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            //--
+            if (des == "") {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Advertencia',
+                    text: 'Debe ingresar un nombre de Canal',
+                    showCloseButton: true
+                })
+                return false;
+            }
+        }
+
 
     </script>
 

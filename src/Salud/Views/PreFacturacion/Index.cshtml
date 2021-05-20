@@ -36,6 +36,7 @@
             <div class="card-body ">
                 @using (Html.BeginForm("Buscar", "PreFacturacion", FormMethod.Get))
                 {
+                    @Html.AntiForgeryToken()
                     <!-- form here -->
                     <div class="row">
                         <div class="col-md-4">
@@ -128,7 +129,7 @@
                                         <div style="display:none">
                                             @*<div id="tableGoesHere">
 
-                                                </div>*@
+                                    </div>*@
                                         </div>
                                     </td>
                                     <td class="cellCodigoCliente">@PreFacturacion.CodigoCliente </td>
@@ -189,9 +190,6 @@
 
             $('#txtdesde').attr('value', anioi + '-' + mese + '-' + '01');
             $('#txthasta').attr('value', ultimo);
-
-
-
         });
 
         $('#mes').change(function () {
@@ -237,7 +235,6 @@
                 success: function (r) {
                     var dataparseada = JSON.parse(r);
                     document.getElementById('tab').innerHTML = json2table(dataparseada, 'table');
-                    //document.getElementById('tableGoesHere').append(json2table(dataparseada, 'table'));
                 }
             });
 
@@ -370,7 +367,6 @@
                 if (checkBoxes[i].checked) {
 
                     var row = checkBoxes[i].parentNode.parentNode;
-
                     var codigo = row.cells[1].innerHTML;
                     var tipoasegurado = row.cells[4].innerHTML;
 
@@ -392,59 +388,14 @@
 
                         }
                     });
-
-
                 }
             }
 
-            @*@Model.anio = year;
-            @Model.mes = month;
-            @Model.txtdesde = des;
-            @Model.txthasta = has;
-            @Model.option = pcsespecial;*@
-
             window.location = ('@Url.Action("Buscar", "PreFacturacion", @Model)').replaceAll('amp;','');
-
-            //$.ajax({
-            //    type: "GET",
-            //    url: "/PreFacturacion/Buscar",
-            //    data: model,
-            //    dataType: "text",
-            //    success: function (r) {
-            //        window.location.reload();
-
-            //    }
-            //});
 
         });
 
     </script>
-
-
-
-    @*@if (TempData["GENERAR"] != null)
-    {
-
-        <script>
-        $(window).load(function() {
-
-            var flag = TempData["GENERAR"];
-
-            if (flag)
-            {
-                Swal.fire(
-                'Generado Correctamente',
-                'Los registros marcados, se generaron satisfactoriamente',
-                'success'
-                );
-            }
-        });
-
-        </script>
-
-    }*@
-
-
-}
+    }
 
 

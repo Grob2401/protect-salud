@@ -10,11 +10,6 @@ namespace LogicaNegocio
 {
     public class LNVendedor
     {
-        public static List<ENVendedores> ObtenerTodos()
-        {
-            return new ADVendedor().ObtenerTodos();
-        }
-
         public static List<ENVendedores> ObtenerTodos(string sociedad)
         {
             return new ADVendedor().ObtenerTodos(sociedad);
@@ -27,12 +22,22 @@ namespace LogicaNegocio
 
         public static bool Actualizar(ENVendedores oENVendedores)
         {
-            return (new ADVendedores()).Actualizar(oENVendedores);
+            return (new ADVendedor()).Actualizar(oENVendedores);
         }
 
         public static bool Eliminar(string CodigoVendedor)
         {
-            return (new ADVendedores()).Eliminar(CodigoVendedor);
+            return (new ADVendedor()).Eliminar(CodigoVendedor);
         }
+        public static bool Asignar(ENCanalesVendedores oENCV)
+        {
+            return (new ADVendedor()).Asignar(oENCV);
+        }
+
+        public static List<ENCanalesVendedores> ObtenerAsignados(string sociedad)
+        {
+            return new ADVendedor().ObtenerAsignados(sociedad);
+        } 
+
     }
 }
