@@ -1,0 +1,16 @@
+USE [BDIAFAS]
+GO
+
+SET ANSI_PADDING ON
+GO
+
+/****** Object:  Index [IX_ApePat_ApeMat_Nombres]    Script Date: 3/5/2021 00:04:05 ******/
+CREATE NONCLUSTERED INDEX [IX_ApePat_ApeMat_Nombres] ON [dbo].[SaludAsegurados]
+(
+	[ApellidoPaterno] ASC,
+	[ApellidoMaterno] ASC,
+	[Nombres] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+
