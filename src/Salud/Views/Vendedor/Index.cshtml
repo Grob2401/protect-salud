@@ -69,11 +69,11 @@
                                         <i class="fa fa-plus text-warning"></i>&nbsp;&nbsp;Agregar Vendedor
                                     </button>
                                     @*<button type="button" class="btn btn-danger btn-sm">
-                                        <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Listar Sociedad
-                                    </button>
-                                    <button type="button" class="btn btn-primary btn-sm">
-                                        <i class="fa fa-place-of-worship text-warning"></i>&nbsp;&nbsp;Canales Disponibles
-                                    </button>*@
+                                            <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Listar Sociedad
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-place-of-worship text-warning"></i>&nbsp;&nbsp;Canales Disponibles
+                                        </button>*@
                                 </div>
                             </div>
                         </div>
@@ -130,6 +130,10 @@
                                         <th>DIRECCION</th>
                                         <th>TELEFONO</th>
                                         <th>EMAIL</th>
+                                        <th>TIPO COMISIÓN</th>
+                                        <th>COMISIÓN</th>
+                                        @*<th>FECHA INICIO</th>
+                                            <th>FECHA FIN</th>*@
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -147,11 +151,18 @@
                                                 <td>@ven.Direccion </td>
                                                 <td>@ven.Telefono </td>
                                                 <td>@ven.Email </td>
+                                                <td>@((@ven.Comision_Tipo_Descripcion == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Comision_Tipo_Descripcion + "</span>"))</td>
+                                                <td>@((@ven.Comision_Cantidad == 0) ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>" + @ven.Comision_Cantidad + "</span>"))</td>
+                                                @*<td>@((@ven.Comision_fechaInicio.ToString() == "1/01/0001 00:00:00") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='badge badge-pill badge-warning'>Sin Asignar</span>")) : @Html.Raw(@ven.Comision_Idtipo))</td>
+                                                    <td>@((@ven.Comision_FechaFin.ToString() == "1/01/0001 00:00:00") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='badge badge-pill badge-warning'>Sin Asignar</span>")) : @Html.Raw(@ven.Comision_Idtipo))</td>*@
                                                 <td class="text-center">
                                                     <button type="button" class="botonedit btn btn-outline-info btn-sm mr-3">
                                                         Editar
                                                     </button>
-                                                    <button type="button" class="botondel btn btn-outline-danger btn-sm">
+                                                    <button type="button" class="botoncomi btn btn-outline-primary btn-sm mr-3">
+                                                        Comisión
+                                                    </button>
+                                                    <button type="button" class="botondel btn btn-outline-secondary btn-sm">
                                                         Eliminar
                                                     </button>
                                                 </td>
@@ -181,65 +192,68 @@
                 </button>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm("Mantenimiento", "Vendedor", FormMethod.Post, new { id = "Form2", onsubmit = "return validateForm()" }))
+                @using (Html.BeginForm("Mantenimiento", "Vendedor", FormMethod.Post, new { id = "Form2", onsubmit = "return validateForm2()" }))
                 {
                     @Html.AntiForgeryToken()
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <h6>Sociedad</h6>
-                                @Html.DropDownListFor(model => model.IdSociedad, ViewData["ListaSociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
+                    <div class="pl-4 pr-4 pt-1 pb-1">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <h6>Sociedad :</h6>
+                                    @Html.DropDownListFor(m => m.IdSociedad, ViewData["ListaSociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" hidden>
+                                    <h6>DNI :</h6>
+                                    @Html.TextBoxFor(model => model.CodigoVendedor, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.CodigoVendedor, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <h6>Documento :</h6>
+                                    @Html.TextBoxFor(model => model.DNI, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.DNI, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <h6>Nombres :</h6>
+                                    @Html.TextBoxFor(model => model.Nombres, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.Nombres, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <h6>Apellido Paterno :</h6>
+                                    @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.ApellidoPaterno, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <h6>Apellido Materno :</h6>
+                                    @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.ApellidoMaterno, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <h6>Teléfono :</h6>
+                                    @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <h6>Email :</h6>
+                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <h6>Dirección :</h6>
+                                    @Html.TextBoxFor(model => model.Direccion, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group" hidden>
-                                <h6>DNI</h6>
-                                @Html.TextBoxFor(model => model.CodigoVendedor, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.CodigoVendedor, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
-                                <h6>Documento</h6>
-                                @Html.TextBoxFor(model => model.DNI, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.DNI, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
-                                <h6>Nombres</h6>
-                                @Html.TextBoxFor(model => model.Nombres, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.Nombres, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
-                                <h6>Apellido Paterno</h6>
-                                @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.ApellidoPaterno, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <h6>Apellido Materno</h6>
-                                @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.ApellidoMaterno, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
-                                <h6>Teléfono</h6>
-                                @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
-                                <h6>Email</h6>
-                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <h6>Dirección</h6>
-                                @Html.TextBoxFor(model => model.Direccion, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                    </div>
+                    <hr />
                     <div class="form-group">
                         <button type="submit" class="btn btn-dark btn-sm">
                             <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Guardar Datos
@@ -247,13 +261,72 @@
                     </div>
                 }
             </div>
-            @*<div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Send message</button>
-                </div>*@
         </div>
     </div>
 </div>
+
+<div class="modal fade-scale" id="modalComision" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-7x fa-plus  text-warning"></i>&nbsp;&nbsp;Comisión</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("MantenimientoComision", "Vendedor", FormMethod.Post, new { id = "Form3", onsubmit = "return validateForm3()" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="pl-4 pr-4 pt-1 pb-1">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" hidden>
+                                    <h6>DNI :</h6>
+                                    @Html.TextBoxFor(model => model.Comision_CodigoVendedor, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.Comision_CodigoVendedor, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <h6>Fecha Inicio :</h6>
+                                    @Html.TextBoxFor(model => model.Comision_fechaInicio, new { @class = "form-control form-control-sm", @type = "date", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
+                                    @Html.ValidationMessageFor(model => model.Comision_fechaInicio, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <h6>Fecha Fin :</h6>
+                                    @Html.TextBoxFor(model => model.Comision_FechaFin, new { @class = "form-control form-control-sm", @type = "date", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
+                                    @Html.ValidationMessageFor(model => model.Comision_FechaFin, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h6>Tipo Comisión :</h6>
+                                    @Html.DropDownListFor(model => model.Comision_Idtipo, ViewData["ListaTipoComision"] as SelectList, new { @class = "form-control form-control-sm", name = "slcTipoComision" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h6>Cantidad :</h6>
+                                    @Html.TextBoxFor(model => model.Comision_Cantidad, new { @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-dark btn-sm">
+                            <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Guardar Datos
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 @section Scripts {
@@ -319,6 +392,7 @@
             document.getElementById("Direccion").value = "";
             document.getElementById("Telefono").value = "";
             document.getElementById("Email").value = "";
+            document.getElementById("CantidadComision").value = "";
         });
 
         $(".botonedit").click(function () {
@@ -343,6 +417,16 @@
             $('#modalNuevoVendedor').modal('show');
 
         });
+
+        $(".botoncomi").click(function () {
+            txt1 = $(this).parents('tr').find("td:eq(0)").text().trim();
+            document.getElementById("Comision_CodigoVendedor").value = txt1;
+            document.getElementById("Comision_Cantidad").value = "";
+
+            $('#modalComision').modal('show');
+
+        });
+
 
         $(".botondel").click(function (e) {
             txt = $(this).parents('tr').find("td:eq(0)").text();
@@ -393,7 +477,7 @@
             }
         }
 
-        function validateForm() {
+        function validateForm2() {
             var dni = document.forms["Form2"]["CodigoVendedor"].value.trim();
             var nom = document.forms["Form2"]["Nombres"].value.trim();
             var apepat = document.forms["Form2"]["ApellidoPaterno"].value.trim();
@@ -402,6 +486,7 @@
             var telef = document.forms["Form2"]["Telefono"].value.trim();
             var email = document.forms["Form2"]["Email"].value.trim();
             //---
+
             if (nom == "" && apepat == "" && apemat == "" && dir == "" && telef == "" && email == "") {
                 Swal.fire({
                     icon: 'info',
@@ -454,6 +539,21 @@
                     icon: 'warning',
                     title: 'Advertencia',
                     text: 'Ingrese teléfono',
+                    showCloseButton: true
+                })
+                return false;
+            }
+        }
+
+        function validateForm3() {
+            //--
+            var cantidadComi = document.forms["Form3"]["Comision_Cantidad"].value.trim();
+            //---
+            if (cantidadComi == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'Ingrese comisión de Vendedor',
                     showCloseButton: true
                 })
                 return false;

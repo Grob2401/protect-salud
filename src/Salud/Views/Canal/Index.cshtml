@@ -57,7 +57,7 @@
                 <div class="card card-info card-outline">
                     <div class="card-header">
                         <h3 class="card-title">
-                            <i class="fas fa-users"></i>
+                            <i class="fas fa-mouse-pointer"></i>
                             Opciones
                         </h3>
                     </div>
@@ -78,7 +78,7 @@
                 <div class="card card-info card-outline">
                     <div class="card-header">
                         <h3 class="card-title">
-                            <i class="fas fa-users"></i>
+                            <i class="fas fa-building"></i>
                             Sociedad
                         </h3>
                     </div>
@@ -105,17 +105,19 @@
             <div class="card card-light card-outline">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-shopping-basket"></i>
                         Lista de Canales
                     </h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body ">
-                    <table id="dglista" class="table table-bordered table-hover table-sm">
+                    <table id="dglista" class="table table-bordered table-hover table-sm text-uppercase">
                         <thead class="thead-light">
                             <tr>
                                 <th>CODIGO</th>
                                 <th>DESCRIPCION</th>
+                                <th>TIPO COMISIÓN</th>
+                                <th>COMISIÓN</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -127,11 +129,16 @@
                                     <tr>
                                         <td>@can.IDCanal </td>
                                         <td>@can.DescripcionCanal </td>
+                                        <td>@((can.Comision_Tipo_Descripcion == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @can.Comision_Tipo_Descripcion + "</span>"))</td>
+                                        <td>@((can.Comision_Cantidad == 0) ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>" + @can.Comision_Cantidad + "</span>"))</td>
                                         <td class="text-center">
                                             <button type="button" class="botonedit btn btn-outline-info btn-sm mr-2">
                                                 Editar
                                             </button>
-                                            <button type="button" class="botondel btn btn-outline-danger btn-sm">
+                                            <button type="button" class="botoncomi btn btn-outline-primary btn-sm mr-3">
+                                                Comisión
+                                            </button>
+                                            <button type="button" class="botondel btn btn-outline-secondary btn-sm">
                                                 Eliminar
                                             </button>
                                         </td>
@@ -153,46 +160,45 @@
 <div class="modal fade-scale" id="modalNuevoCanal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content ">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-7x fa-plus  text-warning"></i>&nbsp;&nbsp;Agregar Canal</h5>
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-7x fa-plus  text-warning"></i>&nbsp;&nbsp; Canal</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm("Mantenimiento", "Canal", FormMethod.Post, new { id = "Form2", onsubmit = "return validateForm()" }))
+                @using (Html.BeginForm("Mantenimiento", "Canal", FormMethod.Post, new { id = "Form2", onsubmit = "return validateForm2()" }))
                 {
                     @Html.AntiForgeryToken()
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <h6>Sociedad</h6>
-                                @Html.DropDownListFor(model => model.IdSociedad, ViewData["ListaSociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
+                    <div class="pl-4 pr-4 pt-1 pb-1">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <h6>Sociedad :</h6>
+                                    @Html.DropDownListFor(model => model.IdSociedad, ViewData["ListaSociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group" hidden>
+                                    <h6>Código :</h6>
+                                    @Html.TextBoxFor(model => model.IDCanal, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.IDCanal, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <h6>Nombre Canal :</h6>
+                                    @Html.TextBoxFor(model => model.DescripcionCanal, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.DescripcionCanal, "", new { @class = "text-danger" })
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group" hidden>
-                                <h6>Código</h6>
-                                @Html.TextBoxFor(model => model.IDCanal, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.IDCanal, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
-                                <h6>Canal</h6>
-                                @Html.TextBoxFor(model => model.DescripcionCanal, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.DescripcionCanal, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-dark btn-sm">
-                                    <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Guardar Datos
-                                </button>
-                            </div>
-                        </div>
+                    <hr />
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-dark btn-sm">
+                            <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Guardar Datos
+                        </button>
                     </div>
 
                 }
@@ -201,6 +207,69 @@
     </div>
 </div>
 
+
+<div class="modal fade-scale" id="modalComision" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content ">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-7x fa-plus  text-warning"></i>&nbsp;&nbsp;Agregar Comisión</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("MantenimientoComision", "Canal", FormMethod.Post, new { id = "Form3", onsubmit = "return validateForm3()" }))
+                {
+                    @Html.AntiForgeryToken()
+                <div class="pl-4 pr-4 pt-1 pb-1">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group" hidden>
+                                <h6>DNI :</h6>
+                                @Html.TextBoxFor(model => model.Comision_IDCanal, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-sm" })
+                                @Html.ValidationMessageFor(model => model.Comision_IDCanal, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                <h6>Fecha Inicio :</h6>
+                                @Html.TextBoxFor(model => model.Comision_fechaInicio, new { @class = "form-control form-control-sm", @type = "date", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
+                                @Html.ValidationMessageFor(model => model.Comision_fechaInicio, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <h6>Fecha Fin :</h6>
+                                @Html.TextBoxFor(model => model.Comision_FechaFin, new { @class = "form-control form-control-sm", @type = "date", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
+                                @Html.ValidationMessageFor(model => model.Comision_FechaFin, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6>Tipo Comisión :</h6>
+                                @Html.DropDownListFor(model => model.Comision_Idtipo, ViewData["ListaTipoComision"] as SelectList, new { @class = "form-control form-control-sm", name = "slcTipoComision" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h6>Cantidad :</h6>
+                                @Html.TextBoxFor(model => model.Comision_Cantidad, new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <hr />
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-dark btn-sm">
+                            <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Guardar Datos
+                        </button>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
@@ -280,6 +349,15 @@
 
         });
 
+        $(".botoncomi").click(function () {
+            txt1 = $(this).parents('tr').find("td:eq(0)").text().trim();
+            document.getElementById("Comision_IDCanal").value = txt1;
+            document.getElementById("Comision_Cantidad").value = "";
+
+            $('#modalComision').modal('show');
+
+        });
+
         $(".botondel").click(function (e) {
             txt = $(this).parents('tr').find("td:eq(0)").text();
             console.log(txt);
@@ -319,9 +397,10 @@
 
 
 
-        function validateForm() {
+        function validateForm2() {
             var idcan = document.forms["Form2"]["IDCanal"].value.trim();
             var des = document.forms["Form2"]["DescripcionCanal"].value.trim();
+            
             //---
             if (des == "" && idcan == "") {
                 Swal.fire({
@@ -338,6 +417,22 @@
                     icon: 'info',
                     title: 'Advertencia',
                     text: 'Debe ingresar un nombre de Canal',
+                    showCloseButton: true
+                })
+                return false;
+            }
+
+        }
+
+        function validateForm3() {
+            //--
+            var cantidadComi = document.forms["Form3"]["Comision_Cantidad"].value.trim();
+            //---
+            if (cantidadComi == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'Ingrese comisión de Canal',
                     showCloseButton: true
                 })
                 return false;

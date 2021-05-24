@@ -40,7 +40,10 @@ namespace AccesoDatos
                     oEnListaVendedores.CodigoPerfil = oDataReader["CodigoPerfil"].ToString();
                     oEnListaVendedores.IdPersona = Convert.ToInt32(oDataReader["IdPersona"]);
                     oEnListaVendedores.IdSociedad = Convert.ToInt32(oDataReader["IdSociedad"]);
-                    oEnListaVendedores.RazonSocial = oDataReader["RazonSocial"].ToString();                    
+                    oEnListaVendedores.RazonSocial = oDataReader["RazonSocial"].ToString(); 
+                    oEnListaVendedores.Comision_Tipo_Descripcion = oDataReader["Comision_Tipo"].ToString();
+                    oEnListaVendedores.Comision_Cantidad = Convert.ToInt32(oDataReader["Comision_Cantidad"]);
+
                     oEnListaVendedores.DescripcionVendedor = oEnListaVendedores.ApellidoPaterno + " " + oEnListaVendedores.ApellidoMaterno + " " + oEnListaVendedores.Nombres;
 
                     oListaVendedores.Add(oEnListaVendedores);
@@ -197,6 +200,14 @@ namespace AccesoDatos
                     oENListaCanalesVendedores.CV_Vendedor = oDataReader["Vendedor"].ToString();
                     oENListaCanalesVendedores.CV_Telefono = oDataReader["Telefono"].ToString();
                     oENListaCanalesVendedores.CV_Email = oDataReader["Email"].ToString();
+                    oENListaCanalesVendedores.Vendedor_TipoComi = oDataReader["Vendedor_TipoComi"].ToString();
+                    oENListaCanalesVendedores.Vendedor_CantComi = oDataReader["Vendedor_CantComi"].ToString();
+                    oENListaCanalesVendedores.Canal_TipoComi = oDataReader["Canal_TipoComi"].ToString();
+                    oENListaCanalesVendedores.Canal_CantComi = oDataReader["Canal_CantComi"].ToString();
+                    
+                        
+                        
+                        
 
                     oListaCanalesVendedores.Add(oENListaCanalesVendedores);
                 }
@@ -205,6 +216,33 @@ namespace AccesoDatos
             catch (Exception ex)
             {
                 throw new Exception();
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
+        public bool InsertarComision(ENVendedores oENVendedorComision)
+        {
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "VENTAS.USP_INS_MANTENIMIENTO_VENDEDOR_COMISION");
+                GenericDataAccess.AgregarParametro(oCommand, "@argValorComision", oENVendedorComision.Comision_Cantidad, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argFechaInicio", oENVendedorComision.Comision_fechaInicio, TipoParametro.DT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argFechaFin", oENVendedorComision.Comision_FechaFin, TipoParametro.DT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argCodigoVendedor", oENVendedorComision.Comision_CodigoVendedor, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argIdTipoComision", oENVendedorComision.Comision_Idtipo, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode", 1, TipoParametro.INT, Direccion.OUTPUT);
+                if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Excepciones.ManejoExcepciones(ex);
             }
             finally
             {

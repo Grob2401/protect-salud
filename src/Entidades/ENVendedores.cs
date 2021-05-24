@@ -30,8 +30,23 @@ namespace Entidades
         [Display(Name = "RazonSocial")]
         public String RazonSocial { get; set; }
 
-
         public string DescripcionVendedor { get; set; }
+
+        //VENDEDOR_COMISION
+
+        public DateTime Comision_fechaInicio { get; set; }
+
+        public DateTime Comision_FechaFin { get; set; }
+
+        public int Comision_Cantidad { get; set; }
+
+        public int Comision_Idtipo { get; set; }
+
+        public string Comision_Tipo_Descripcion { get; set; }
+
+        public string Comision_CodigoVendedor { get; set; }
+
+
 
     }
 }

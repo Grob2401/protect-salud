@@ -28,5 +28,11 @@ namespace LogicaNegocio
         {
             return (new ADCanal()).Eliminar(IdCanal);
         }
+
+        public static bool InsertarComision(ENCanales oENCanalComision)
+        { 
+            return (new ADCanal()).InsertarComision(oENCanalComision);
+        }
+
     }
 }

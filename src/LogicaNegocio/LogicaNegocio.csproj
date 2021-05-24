@@ -65,6 +65,7 @@
     <Compile Include="LNSCTRCotizacionesDetalle.cs" />
     <Compile Include="LNSCTREjecutivos.cs" />
     <Compile Include="LNSCTR_EmisionTemporal.cs" />
+    <Compile Include="LNTipoComision.cs" />
     <Compile Include="LNSociedades.cs" />
     <Compile Include="LNTipoAsegurado.cs" />
     <Compile Include="LNTipoCliente.cs" />

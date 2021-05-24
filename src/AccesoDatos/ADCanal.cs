@@ -29,8 +29,11 @@ namespace AccesoDatos
                     ENCanales oEnListaCanales = new ENCanales();
                     oEnListaCanales.IDCanal = Convert.ToInt32(oDataReader["IDCanal"]);
                     oEnListaCanales.DescripcionCanal = oDataReader["DescripcionCanal"].ToString();
+                    oEnListaCanales.Comision_Tipo_Descripcion = oDataReader["Comision_Tipo"].ToString(); 
+                    oEnListaCanales.Comision_Cantidad = Convert.ToInt32(oDataReader["Comision_Cantidad"]);
                     oListaCanales.Add(oEnListaCanales);
-                }
+
+    }
                 return oListaCanales;
             }
             catch (Exception ex)
@@ -67,8 +70,7 @@ namespace AccesoDatos
                 GenericDataAccess.CerrarConexion(oCommand, null/* TODO Change to default(_) if this is not a reference type */);
             }
         }
-
-
+        
         public bool Actualizar(ENCanales oENCanal)
         {
 
@@ -94,9 +96,7 @@ namespace AccesoDatos
                 GenericDataAccess.CerrarConexion(oCommand, null/* TODO Change to default(_) if this is not a reference type */);
             }
         }
-
-
-
+        
         public bool Eliminar(int IdCanal)
         {
             DbCommand oCommand = null/* TODO Change to default(_) if this is not a reference type */;
@@ -120,6 +120,32 @@ namespace AccesoDatos
             }
         }
 
+        public bool InsertarComision(ENCanales oENCanalComision)
+        {
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "VENTAS.USP_INS_MANTENIMIENTO_CANAL_COMISION");
+                GenericDataAccess.AgregarParametro(oCommand, "@argValorComision", oENCanalComision.Comision_Cantidad, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argFechaInicio", oENCanalComision.Comision_fechaInicio, TipoParametro.DT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argFechaFin", oENCanalComision.Comision_FechaFin, TipoParametro.DT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argCodigoCanal", oENCanalComision.Comision_IDCanal, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argIdTipoComision", oENCanalComision.Comision_Idtipo, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode", 1, TipoParametro.INT, Direccion.OUTPUT);
+                if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Excepciones.ManejoExcepciones(ex);
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
 
     }
 }

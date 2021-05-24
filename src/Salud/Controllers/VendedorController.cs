@@ -20,16 +20,21 @@ namespace Salud.Controllers
             if (TempData["Seleccion"] != null)
             {
                 ViewData["Seleccion"] = TempData["Seleccion"];
+                Session["Seleccion"] = TempData["Seleccion"];
             }
 
             if (TempData["mensaje"] != null)
             {
                 TempData["mensaje"] = TempData["mensaje"];
-            } 
+            }
 
             var lstSociedades = LNSociedades.ObtenerTodos();
             var lstSociedades_ = new SelectList(lstSociedades.ToList(), "IdSociedad", "RazonSocial", ViewData["Seleccion"]);
             ViewData["ListaSociedades"] = lstSociedades_;
+
+            var lstTiposComision = LNTipoComision.ObtenerTodos();
+            var lstTiposComision_ = new SelectList(lstTiposComision.ToList(), "IdTipoComision", "DescripcionTipoComision");
+            ViewData["ListaTipoComision"] = lstTiposComision_;
 
             if (TempData["Vendedores"] != null)
             {
@@ -40,7 +45,7 @@ namespace Salud.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetLista(string slcSociedad,string mensaje)
+        public ActionResult GetLista(string slcSociedad, string mensaje)
         {
             var lstVendedores = LNVendedor.ObtenerTodos(slcSociedad);
             TempData["Vendedores"] = lstVendedores;
@@ -76,6 +81,20 @@ namespace Salud.Controllers
                 return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Vendedor modificado" });
                 //return Json(new { success = true, message = "Actualizado Correctamente" }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        [SessionExpire]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MantenimientoComision(ENVendedores vcomision)
+        {
+            var valor = "";
+            if (LNVendedor.InsertarComision(vcomision))
+            {
+                valor = Session["Seleccion"].ToString();
+                ModelState.Clear();
+            }
+            return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Datos registrados" });
         }
 
         [SessionExpire]

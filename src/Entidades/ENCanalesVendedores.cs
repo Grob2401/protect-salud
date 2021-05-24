@@ -22,6 +22,15 @@ namespace Entidades
         public string CV_NombresVendedor { get; set; }
         public string CV_Telefono { get; set; }
         public string CV_Email { get; set; }
+        public string Vendedor_TipoComi { get; set; }
+        public string Vendedor_CantComi { get; set; }
+        public string Canal_TipoComi { get; set; }
+        public string Canal_CantComi { get; set; }
+
+        
+            
+            
+            
 
     }
 }

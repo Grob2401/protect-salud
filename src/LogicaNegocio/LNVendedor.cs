@@ -37,7 +37,12 @@ namespace LogicaNegocio
         public static List<ENCanalesVendedores> ObtenerAsignados(string sociedad)
         {
             return new ADVendedor().ObtenerAsignados(sociedad);
-        } 
+        }
+
+        public static bool InsertarComision(ENVendedores oENVendedorComision)
+        {
+            return new ADVendedor().InsertarComision(oENVendedorComision);
+        }
 
     }
 }

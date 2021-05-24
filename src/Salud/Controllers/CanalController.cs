@@ -31,6 +31,10 @@ namespace Salud.Controllers
             var lstSociedades_ = new SelectList(lstSociedades.ToList(), "IdSociedad", "RazonSocial", ViewData["Seleccion"]);
             ViewData["ListaSociedades"] = lstSociedades_;
 
+            var lstTiposComision = LNTipoComision.ObtenerTodos();
+            var lstTiposComision_ = new SelectList(lstTiposComision.ToList(), "IdTipoComision", "DescripcionTipoComision");
+            ViewData["ListaTipoComision"] = lstTiposComision_;
+
             if (TempData["Canales"] != null)
             {
                 ViewData["Canales"] = TempData["Canales"];
@@ -38,7 +42,6 @@ namespace Salud.Controllers
 
             return View();
         }
-
 
         [HttpGet]
         public ActionResult GetLista(string slcSociedad, string mensaje)
@@ -57,7 +60,6 @@ namespace Salud.Controllers
             TempData["CanalesJSON"] = new SelectList(lstCanales.ToList(), "IDCanal", "DescripcionCanal");          
             return Json(TempData["CanalesJSON"], JsonRequestBehavior.AllowGet);
         }
-
 
         [SessionExpire]
         [HttpPost]
@@ -88,7 +90,20 @@ namespace Salud.Controllers
 
         [SessionExpire]
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MantenimientoComision(ENCanales vcomision)
+        {
+            var valor = "";
+            if (LNCanal.InsertarComision(vcomision))
+            {
+                valor = Session["Seleccion"].ToString();
+                ModelState.Clear();
+            }
+            return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Datos registrados" });
+        }
 
+        [SessionExpire]
+        [HttpPost]
         public ActionResult Eliminar(int Id)
         {
             try
