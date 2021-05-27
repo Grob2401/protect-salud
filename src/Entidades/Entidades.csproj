@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ENCanalesVendedores.cs" />
     <Compile Include="ENDatosPreFacBusqueda.cs" />
     <Compile Include="ENCanales.cs" />
     <Compile Include="ENCIUU.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="ENSociedades.cs" />
     <Compile Include="ENTipoAsegurado.cs" />
     <Compile Include="ENTipoCliente.cs" />
+    <Compile Include="ENTipoComision.cs" />
     <Compile Include="ENTipoContrato.cs" />
     <Compile Include="ENTipoDocumentoIdentidad .cs" />
     <Compile Include="ENTipoPreexistencia.cs" />

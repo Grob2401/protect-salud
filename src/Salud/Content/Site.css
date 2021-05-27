@@ -22,6 +22,29 @@
     white-space: normal;
 }
 
+.modal-backdrop.fade {
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+.modal-backdrop.in {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+.fade-scale {
+    transform: scale(0);
+    opacity: 0;
+    -webkit-transition: all .30s linear;
+    -o-transition: all .30s linear;
+    transition: all .30s linear;
+}
+
+    .fade-scale.in {
+        opacity: 1;
+        transform: scale(1);
+    }
+
 /* Set width on the form input elements since they're 100% wide by default */
 /*input,
 select,

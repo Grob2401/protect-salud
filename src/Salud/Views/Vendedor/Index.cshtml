@@ -10,7 +10,6 @@
     @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
     @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
 }
-
 <style>
 
     #loading {
@@ -32,172 +31,229 @@
         opacity: 0.5;
         filter: alpha(opacity=50);
     }
+
+    .fade-scale {
+        transform: scale(0);
+        opacity: 0;
+        -webkit-transition: all .30s linear;
+        -o-transition: all .30s linear;
+        transition: all .30s linear;
+    }
+
+        .fade-scale.in {
+            opacity: 1;
+            transform: scale(1);
+        }
 </style>
 <div id="loading" style="display:none;">
 </div>
-<div id="content" class="row">
-    <div class="col-12">
-        <div class="card card-primary card-outline">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-users"></i>
-                    Administracion de Vendedores
-                </h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body ">
-                @using (Html.BeginForm("GetLista", "Vendedor", FormMethod.Get, new { id = "Form1", name = "Form1" }))
-                {
-                    <div class="row">
-                        <div class="btn-group-justified">
-                            <button type="button" id="btnVendedor" class="btn btn-info btn-sm">
-                                @*onclick=PopupForm('@Url.Action("Modal","Vendedor")')>*@
-                                <i class="fa fa-plus text-warning"></i>&nbsp;&nbsp;Agregar Vendedor
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm" hidden>
-                                <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Sociedad
-                            </button>
-                            <button type="button" class="btn btn-primary btn-sm" hidden>
-                                <i class="fa fa-place-of-worship text-warning"></i>&nbsp;&nbsp;Canales
-                            </button>
-                        </div>
+<section id="content">
+    @using (Html.BeginForm("GetLista", "Vendedor", FormMethod.Get, new { id = "Form1", name = "Form1", autocomplete = "off" }))
+    {
+        <div class="row">
+            @Html.AntiForgeryToken()
+            <div class="col-md-6">
+                <div class="card card-info  card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-mouse-pointer"></i>
+                            Opciones
+                        </h3>
                     </div>
-                    <hr />
-                    <!-- form here -->
-                    <div class="row pt-2 pb-2">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="text-uppercase" for="txtdesde">SOCIEDAD &nbsp;&nbsp;</label>
-                                @Html.DropDownList("slcSociedad", ViewData["ListaSociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
-                            </div>
-                            <button type="submit" class="btn btn-dark btn-sm">
-                                <i class="fa fa-search text-warning"></i>&nbsp;&nbsp;Buscar
-                            </button>
-                        </div>
-                        @*<div class="col-md-4" hidden>
-                            <div class="form-group">
-                                <label class="text-uppercase" for="txtdesde">Nombres / Apellidos / DNI &nbsp;&nbsp;</label>
-                                <div class="input-group mb-3">
-                                    @Html.TextBoxFor(m => m.Nombres,
-                                   new { @class = "form-control form-control-sm", @type = "text", placeholder = "Ingrese texto de búsqueda" })
-                                    <div class="input-group-append">
-                                        <button type="submit" id="btnbusca" class="btn btn-dark btn-sm">
-                                            <i class="fa fa-search"></i>&nbsp;&nbsp;Buscar
+                    <div class="card-body ">
+                        <div class="row text-center pt-2 pb-2">
+                            <div class="col-md-12">
+                                <div class="btn-group-justified">
+                                    <button type="button" id="btnVendedor" class="btn btn-info btn-sm" data-dismiss="modal" data-toggle="modal">
+                                        @*onclick=PopupForm('@Url.Action("Modal","Vendedor")')>*@
+                                        <i class="fa fa-plus text-warning"></i>&nbsp;&nbsp;Agregar Vendedor
+                                    </button>
+                                    @*<button type="button" class="btn btn-danger btn-sm">
+                                            <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Listar Sociedad
                                         </button>
-                                    </div>
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-place-of-worship text-warning"></i>&nbsp;&nbsp;Canales Disponibles
+                                        </button>*@
                                 </div>
                             </div>
-                        </div>*@
+                        </div>
                     </div>
-                }
-                <table id="dglista" class="table table-bordered table-hover table-sm">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>CODIGO</th>
-                            <th>APELLIDO PATERNO</th>
-                            <th>APELLIDO MATERNO</th>
-                            <th>NOMBRES</th>
-                            <th>DIRECCION</th>
-                            <th>TELEFONO</th>
-                            <th>EMAIL</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (ViewData["Vendedores"] != null)
-                        {
-                            foreach (ENVendedores ven in (List<ENVendedores>)ViewData["Vendedores"])
-                            {
-                        <tr>
-                            <td>@ven.CodigoVendedor </td>
-                            <td>@ven.ApellidoPaterno </td>
-                            <td>@ven.ApellidoMaterno </td>
-                            <td>@ven.Nombres </td>
-                            <td>@ven.Direccion </td>
-                            <td>@ven.Telefono </td>
-                            <td>@ven.Email </td>
-                            <td>
-                                <button type="button" class="botonedit btn btn-info btn-sm">
-                                    <i class="fa fa-edit text-white"></i>
-                                </button>
-                                <button type="button" class="botondel btn btn-danger btn-sm">
-                                    <i class="fa fa-times text-white"></i>
-                                </button>
-                            </td>
-                        </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
+                </div>
             </div>
-            <!-- /.card-body -->
+            <div class="col-md-6">
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-building"></i>
+                            Sociedad
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center pt-2 pb-2">
+                            <div class="col-md-12">
+                                <div class="form">
+                                    <label class="text-uppercase" for="txtdesde" hidden>SOCIEDAD &nbsp;&nbsp;</label>
+                                    @Html.DropDownList("slcSociedad", ViewData["ListaSociedades"] as SelectList, new { @class = "form-control-sm js-example-basic-single", name = "slcSociedad" })
+                                    &nbsp;&nbsp;
+                                    <button id="btnbuscar" type="submit" class="btn btn-dark btn-sm">
+                                        <i class="fa fa-search text-warning"></i>&nbsp;&nbsp;Buscar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    }
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-light card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-users"></i>
+                        Listado de Vendedores
+                    </h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table id="dglista" class="table table-bordered table-hover table-sm text-uppercase">
+                                <thead class="thead-light" style="width:100%">
+                                    <tr>
+                                        <th>CODIGO</th>
+                                        <th>DNI</th>
+                                        <th>APELLIDO PATERNO</th>
+                                        <th>APELLIDO MATERNO</th>
+                                        <th>NOMBRES</th>
+                                        <th>DIRECCION</th>
+                                        <th>TELEFONO</th>
+                                        <th>EMAIL</th>
+                                        <th>TIPO COMISIÓN</th>
+                                        <th>COMISIÓN</th>
+                                        @*<th>FECHA INICIO</th>
+                                            <th>FECHA FIN</th>*@
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewData["Vendedores"] != null)
+                                    {
+                                        foreach (ENVendedores ven in (List<ENVendedores>)ViewData["Vendedores"])
+                                        {
+                                            <tr>
+                                                <td>@ven.CodigoVendedor </td>
+                                                <td>@ven.DNI </td>
+                                                <td>@ven.ApellidoPaterno </td>
+                                                <td>@ven.ApellidoMaterno </td>
+                                                <td>@ven.Nombres </td>
+                                                <td>@ven.Direccion </td>
+                                                <td>@ven.Telefono </td>
+                                                <td>@ven.Email </td>
+                                                <td>@((@ven.Comision_Tipo_Descripcion == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Comision_Tipo_Descripcion + "</span>"))</td>
+                                                <td>@((@ven.Comision_Cantidad == 0) ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>" + @ven.Comision_Cantidad + "</span>"))</td>
+                                                @*<td>@((@ven.Comision_fechaInicio.ToString() == "1/01/0001 00:00:00") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='badge badge-pill badge-warning'>Sin Asignar</span>")) : @Html.Raw(@ven.Comision_Idtipo))</td>
+                                                    <td>@((@ven.Comision_FechaFin.ToString() == "1/01/0001 00:00:00") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='badge badge-pill badge-warning'>Sin Asignar</span>")) : @Html.Raw(@ven.Comision_Idtipo))</td>*@
+                                                <td class="text-center">
+                                                    <button type="button" class="botonedit btn btn-outline-info btn-sm mr-3">
+                                                        Editar
+                                                    </button>
+                                                    <button type="button" class="botoncomi btn btn-outline-primary btn-sm mr-3">
+                                                        Comisión
+                                                    </button>
+                                                    <button type="button" class="botondel btn btn-outline-secondary btn-sm">
+                                                        Eliminar
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <!-- /.col -->
     </div>
-    <!-- /.col -->
-</div>
+</section>
 
-<div class="modal" id="modalNuevoVendedor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+<div class="modal fade-scale" id="modalNuevoVendedor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info text-white">
-                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-7x fa-plus  text-warning"></i>&nbsp;&nbsp;Agregar Vendedor</h5>
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-7x fa-plus  text-warning"></i>&nbsp;&nbsp;Vendedor</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm("Mantenimiento", "Vendedor", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+                @using (Html.BeginForm("Mantenimiento", "Vendedor", FormMethod.Post, new { id = "Form2", onsubmit = "return validateForm2()" }))
                 {
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <h6>Sociedad</h6>
-                                @Html.DropDownListFor(model => model.IdSociedad, ViewData["ListaSociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
+                    @Html.AntiForgeryToken()
+                    <div class="pl-4 pr-4 pt-1 pb-1">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <h6>Sociedad :</h6>
+                                    @Html.DropDownListFor(m => m.IdSociedad, ViewData["ListaSociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" hidden>
+                                    <h6>DNI :</h6>
+                                    @Html.TextBoxFor(model => model.CodigoVendedor, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.CodigoVendedor, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <h6>Documento :</h6>
+                                    @Html.TextBoxFor(model => model.DNI, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.DNI, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <h6>Nombres :</h6>
+                                    @Html.TextBoxFor(model => model.Nombres, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.Nombres, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <h6>Apellido Paterno :</h6>
+                                    @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.ApellidoPaterno, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <h6>Apellido Materno :</h6>
+                                    @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.ApellidoMaterno, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <h6>Teléfono :</h6>
+                                    @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <h6>Email :</h6>
+                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <h6>Dirección :</h6>
+                                    @Html.TextBoxFor(model => model.Direccion, new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <h6>DNI</h6>
-                                @Html.TextBoxFor(model => model.DNI, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
-                                <h6>Nombres</h6>
-                                @Html.TextBoxFor(model => model.Nombres, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.Nombres, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
-                                <h6>Apellido Paterno</h6>
-                                @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.ApellidoPaterno, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
-                                <h6>Apellido Materno</h6>
-                                @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.ApellidoMaterno, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <h6>Dirección</h6>
-                                @Html.TextBoxFor(model => model.Direccion, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
-                                <h6>Teléfono</h6>
-                                @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
-                                <h6>Email</h6>
-                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                    </div>
+                    <hr />
                     <div class="form-group">
                         <button type="submit" class="btn btn-dark btn-sm">
                             <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Guardar Datos
@@ -205,13 +261,72 @@
                     </div>
                 }
             </div>
-            @*<div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Send message</button>
-                </div>*@
         </div>
     </div>
 </div>
+
+<div class="modal fade-scale" id="modalComision" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-7x fa-plus  text-warning"></i>&nbsp;&nbsp;Comisión</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("MantenimientoComision", "Vendedor", FormMethod.Post, new { id = "Form3", onsubmit = "return validateForm3()" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="pl-4 pr-4 pt-1 pb-1">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" hidden>
+                                    <h6>DNI :</h6>
+                                    @Html.TextBoxFor(model => model.Comision_CodigoVendedor, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-sm" })
+                                    @Html.ValidationMessageFor(model => model.Comision_CodigoVendedor, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <h6>Fecha Inicio :</h6>
+                                    @Html.TextBoxFor(model => model.Comision_fechaInicio, new { @class = "form-control form-control-sm", @type = "date", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
+                                    @Html.ValidationMessageFor(model => model.Comision_fechaInicio, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <h6>Fecha Fin :</h6>
+                                    @Html.TextBoxFor(model => model.Comision_FechaFin, new { @class = "form-control form-control-sm", @type = "date", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
+                                    @Html.ValidationMessageFor(model => model.Comision_FechaFin, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h6>Tipo Comisión :</h6>
+                                    @Html.DropDownListFor(model => model.Comision_Idtipo, ViewData["ListaTipoComision"] as SelectList, new { @class = "form-control form-control-sm", name = "slcTipoComision" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h6>Cantidad :</h6>
+                                    @Html.TextBoxFor(model => model.Comision_Cantidad, new { @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-dark btn-sm">
+                            <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Guardar Datos
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 @section Scripts {
@@ -226,18 +341,31 @@
         $(document).ready(function () {
             $('.js-example-basic-single').select2();
         });
+
+        var mensaje = "@TempData["mensaje"]";
+
+        if (mensaje != "") {
+            Swal.fire({
+                icon: 'success',
+                title: 'Excelente',
+                text: mensaje,
+                showCloseButton: true
+            });
+        }
+
+
     </script>
 
     <script>
         $(function () {
-
-            $('#dglista').DataTable({
+            var tablaLista
+            tablaLista = $('#dglista').DataTable({
                 "paging": true,
                 "lengthChange": false,
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
-                "responsive": true,
+                "responsive": false,
                 "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
                 "pageLength": 50,
                 "language": {
@@ -247,61 +375,190 @@
         });
     </script>
     <script>
-        //function SelectedIndexChanged() {
-        //    //Form post
-        //    document.Form1.submit();
-        //}
+        $(document).ready(function () {
+            $('#btnbuscar').click(function () {
+                $('#loading').css('display', 'block');
+            });
+        });
+
 
         $('#btnVendedor').click(function () {
             $('#modalNuevoVendedor').modal('show');
+            document.getElementById("CodigoVendedor").value = "";
+            document.getElementById("DNI").value = "";
+            document.getElementById("Nombres").value = "";
+            document.getElementById("ApellidoPaterno").value = "";
+            document.getElementById("ApellidoMaterno").value = "";
+            document.getElementById("Direccion").value = "";
+            document.getElementById("Telefono").value = "";
+            document.getElementById("Email").value = "";
+            document.getElementById("CantidadComision").value = "";
         });
 
         $(".botonedit").click(function () {
-            txt1 = $(this).parents('tr').find("td:eq(0)").text();
-            txt2 = $(this).parents('tr').find("td:eq(1)").text();
-            txt3 = $(this).parents('tr').find("td:eq(2)").text();
-            txt4 = $(this).parents('tr').find("td:eq(3)").text();
-            txt5 = $(this).parents('tr').find("td:eq(4)").text();
-            txt6 = $(this).parents('tr').find("td:eq(5)").text();
-            txt7 = $(this).parents('tr').find("td:eq(6)").text();
+            txt1 = $(this).parents('tr').find("td:eq(0)").text().trim();
+            txt2 = $(this).parents('tr').find("td:eq(1)").text().trim();
+            txt3 = $(this).parents('tr').find("td:eq(2)").text().trim();
+            txt4 = $(this).parents('tr').find("td:eq(3)").text().trim();
+            txt5 = $(this).parents('tr').find("td:eq(4)").text().trim();
+            txt6 = $(this).parents('tr').find("td:eq(5)").text().trim();
+            txt7 = $(this).parents('tr').find("td:eq(6)").text().trim();
+            txt8 = $(this).parents('tr').find("td:eq(7)").text().trim();
 
-            document.getElementById("DNI").value = txt1;
-            document.getElementById("Nombres").value = txt2;
+            document.getElementById("CodigoVendedor").value = txt1;
+            document.getElementById("DNI").value = txt2;
+            document.getElementById("Nombres").value = txt5;
             document.getElementById("ApellidoPaterno").value = txt3;
             document.getElementById("ApellidoMaterno").value = txt4;
-            document.getElementById("Direccion").value = txt5;
-            document.getElementById("Telefono").value = txt6;
-            document.getElementById("Email").value = txt7;
+            document.getElementById("Direccion").value = txt6;
+            document.getElementById("Telefono").value = txt7;
+            document.getElementById("Email").value = txt8;
 
             $('#modalNuevoVendedor').modal('show');
 
         });
 
-        $(".botondel").click(function () {
-            txt = $(this).parents('tr').find("td:eq(0)").text();
-            console.log(txt);
+        $(".botoncomi").click(function () {
+            txt1 = $(this).parents('tr').find("td:eq(0)").text().trim();
+            document.getElementById("Comision_CodigoVendedor").value = txt1;
+            document.getElementById("Comision_Cantidad").value = "";
+
+            $('#modalComision').modal('show');
 
         });
 
-            //function PopupForm(url) {
-            //    var formDiv = $('<div/>');
-            //    $.get(url)
-            //        .done(function (response) {
-            //            formDiv.html(response);
 
-            //            Popup = formDiv.dialog({
-            //                autoOpen: true,
-            //                resizable: true,
-            //                title: 'Datos del Vendedor',
-            //                height: 500,
-            //                width: 700,
-            //                close: function () {
-            //                    Popup.dialog('destroy').remove();
-            //                }
+        $(".botondel").click(function (e) {
+            txt = $(this).parents('tr').find("td:eq(0)").text();
+            console.log(txt);
 
-            //            });
-            //        });
-            //}
+            e.preventDefault();
+            Swal.fire({
+                title: '¿Esta seguro(a) que desea eliminar el vendedor seleccionado?',
+                text: "El vendedor será removido",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'No'
+            }).then(function (result) {
+                if (result.value) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Eliminar", "Vendedor")',
+                        data: {
+                            'id': txt
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                var idso = document.getElementById("slcSociedad").value;
+                                window.location = '@Url.Action("GetLista", "Vendedor")' + '?slcSociedad=' + idso +'&mensaje=Vendedor removido';
+                            }
+                        }
+
+                    });
+                } else {
+                    //swal("Cancelado", "Acción Cancelada", "info");
+                }
+            })
+
+        });
+
+        function checkEmail(emailAddress) {
+
+            var regex = /^[a-z0-9\.\_%+-]+@@[a-z0-9\.\-]+\.[a-z]{2,4}$/i;
+
+            if (emailAddress.search(regex)) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+
+        function validateForm2() {
+            var dni = document.forms["Form2"]["CodigoVendedor"].value.trim();
+            var nom = document.forms["Form2"]["Nombres"].value.trim();
+            var apepat = document.forms["Form2"]["ApellidoPaterno"].value.trim();
+            var apemat = document.forms["Form2"]["ApellidoMaterno"].value.trim();
+            var dir = document.forms["Form2"]["Direccion"].value.trim();
+            var telef = document.forms["Form2"]["Telefono"].value.trim();
+            var email = document.forms["Form2"]["Email"].value.trim();
+            //---
+
+            if (nom == "" && apepat == "" && apemat == "" && dir == "" && telef == "" && email == "") {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Advertencia',
+                    text: 'No ha ingresado información del vendedor',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            //--
+            if (email == "") {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Advertencia',
+                    text: 'El correo no puede estar vacío',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            else if (checkEmail(email) == false) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'Ingrese un correo válido',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (apepat == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'Ingrese apellido paterno',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (apemat == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'Ingrese apellido materno',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            //---
+            if (telef == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'Ingrese teléfono',
+                    showCloseButton: true
+                })
+                return false;
+            }
+        }
+
+        function validateForm3() {
+            //--
+            var cantidadComi = document.forms["Form3"]["Comision_Cantidad"].value.trim();
+            //---
+            if (cantidadComi == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'Ingrese comisión de Vendedor',
+                    showCloseButton: true
+                })
+                return false;
+            }
+        }
 
     </script>
 

@@ -22,5 +22,18 @@ namespace Entidades
         [Display(Name = "RazonSocial")]
         public string RazonSocial { get; set; }
 
+        //CANAL_COMISION
+        public DateTime Comision_fechaInicio { get; set; }
+
+        public DateTime Comision_FechaFin { get; set; }
+
+        public int Comision_Cantidad { get; set; }
+
+        public int Comision_Idtipo { get; set; }
+
+        public string Comision_Tipo_Descripcion { get; set; }
+
+        public string Comision_IDCanal { get; set; }
+
     }
 }
