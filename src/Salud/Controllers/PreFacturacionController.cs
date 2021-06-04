@@ -35,8 +35,6 @@ namespace Salud.Controllers
         public string v_codigocentrocosto = "";
         public string v_descripcioncentrocosto = "";
 
-        ObjectCache cache = MemoryCache.Default;
-        [SessionExpire]
         public ActionResult Index()
         {
             if (TempData["PREFAC"] != null)
@@ -60,22 +58,47 @@ namespace Salud.Controllers
                 enf1 = (ENDatosPreFacBusqueda)TempData["MODEL"];
             }
 
+            if (TempData["mensaje"] != null)
+            {
+                TempData["mensaje"] = TempData["mensaje"];
+            }
+
             return View(enf1);
         }
 
         [HttpGet]
-        public ActionResult Buscar(ENDatosPreFacBusqueda enf)
+        public ActionResult Buscar(string anio, string mes, string txtdesde, string txthasta,string mensaje,string status)
         {
-
-            enf.option = 0;
-
             if (TempData["GENERAR"] != null)
             {
                 ViewBag.generar = TempData["GENERAR"];
             }
 
+            if (status == null )
+            {
+                status = "";
+            }
+
+            ENDatosPreFacBusqueda enf = new ENDatosPreFacBusqueda()
+            {
+
+                anio = anio,
+                mes = mes,
+                txtdesde = txtdesde,
+                txthasta = txthasta,
+                option = 0,
+                mensajeEPF = mensaje,
+                PcsStatus = status
+            };
+
             TempData["MODEL"] = enf;
             TempData["PREFAC"] = LNPreFacturaciones.ObtenerTodos(enf);
+
+            if (enf.mensajeEPF != null)
+            {
+                TempData["mensaje"] = enf.mensajeEPF;
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -92,8 +115,8 @@ namespace Salud.Controllers
             return Json(TempData["CONTRATOS"], JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
-        public JsonResult Generar(string anoProceso = " ",
+        [HttpPost]
+        public ActionResult Generar(string anoProceso = " ",
                             string mesProceso = " ",
                             string txtdesde = " ",
                             string txthasta = " ",
@@ -103,17 +126,105 @@ namespace Salud.Controllers
                             string DescripcionTipoAsegurado = " ")
         {
 
-            ENDatosPreFacBusqueda enf = new ENDatosPreFacBusqueda() { 
+            ENDatosPreFacBusqueda enf1 = new ENDatosPreFacBusqueda() { 
                 
                 anio = anoProceso,
                 mes = mesProceso,
                 txtdesde = txtdesde,
-                txthasta = txthasta
+                txthasta = txthasta,
+                mensajeEPF = "Registros generados",
+                PcsStatus = "1"
 
             };
 
-            TempData["GENERAR"] = LNPreFacturaciones.Actualizar (anoProceso, mesProceso, pcsEspecial, pcsStatus, CodigoCliente, DescripcionTipoAsegurado);
-            return Json(TempData["GENERAR"], JsonRequestBehavior.AllowGet);
+            TempData["GENERAR"] = LNPreFacturaciones.Generar(anoProceso, mesProceso, pcsEspecial, pcsStatus, CodigoCliente, DescripcionTipoAsegurado);
+            return Json(enf1, JsonRequestBehavior.AllowGet);
+            //return RedirectToAction("Buscar", enf1);
+        }
+
+        [HttpPost]
+        public ActionResult Aprobar(string anoProceso = " ",
+                            string mesProceso = " ",
+                            string txtdesde = " ",
+                            string txthasta = " ",
+                            string pcsEspecial = " ",
+                            string pcsStatus = " ",
+                            string CodigoCliente = " ",
+                            string DescripcionTipoAsegurado = " ")
+        {
+
+            ENDatosPreFacBusqueda enf1 = new ENDatosPreFacBusqueda()
+            {
+
+                anio = anoProceso,
+                mes = mesProceso,
+                txtdesde = txtdesde,
+                txthasta = txthasta,
+                mensajeEPF = "Registros aprobados",
+                PcsStatus = "2"
+
+            };
+
+            TempData["GENERAR"] = LNPreFacturaciones.Aprobar(anoProceso, mesProceso, pcsEspecial, pcsStatus, CodigoCliente, DescripcionTipoAsegurado);
+            //return Json(TempData["GENERAR"], JsonRequestBehavior.AllowGet);
+            return Json(enf1, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ctaCorriente(string anoProceso = " ",
+                            string mesProceso = " ",
+                            string txtdesde = " ",
+                            string txthasta = " ",
+                            string pcsEspecial = " ",
+                            string pcsStatus = " ",
+                            string CodigoCliente = " ",
+                            string DescripcionTipoAsegurado = " ")
+        {
+
+            ENDatosPreFacBusqueda enf1 = new ENDatosPreFacBusqueda()
+            {
+
+                anio = anoProceso,
+                mes = mesProceso,
+                txtdesde = txtdesde,
+                txthasta = txthasta,
+                mensajeEPF = "Registros generados con Cuenta Corriente",
+                PcsStatus = "3"
+
+            };
+
+            TempData["GENERAR"] = LNPreFacturaciones.ctaCorriente(anoProceso, mesProceso, pcsEspecial, pcsStatus, CodigoCliente, DescripcionTipoAsegurado);
+            //return Json(TempData["GENERAR"], JsonRequestBehavior.AllowGet);
+            //return RedirectToAction("Buscar", new { enf = enf1, mensaje = "Registros generados con Cuenta Corriente" });
+            return Json(enf1, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult Facturar(string anoProceso = " ",
+                            string mesProceso = " ",
+                            string txtdesde = " ",
+                            string txthasta = " ",
+                            string pcsEspecial = " ",
+                            string pcsStatus = " ",
+                            string CodigoCliente = " ",
+                            string DescripcionTipoAsegurado = " ")
+        {
+
+            ENDatosPreFacBusqueda enf1 = new ENDatosPreFacBusqueda()
+            {
+
+                anio = anoProceso,
+                mes = mesProceso,
+                txtdesde = txtdesde,
+                txthasta = txthasta,
+                mensajeEPF = "Registros Facturados",
+                PcsStatus = "4"
+
+            };
+
+            TempData["GENERAR"] = LNPreFacturaciones.Facturar(anoProceso, mesProceso, pcsEspecial, pcsStatus, CodigoCliente, DescripcionTipoAsegurado);
+            //return Json(TempData["GENERAR"], JsonRequestBehavior.AllowGet);
+            return Json(enf1, JsonRequestBehavior.AllowGet);
         }
 
 

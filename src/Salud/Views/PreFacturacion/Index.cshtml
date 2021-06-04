@@ -23,88 +23,159 @@
 </style>
 <div id="loading" style="display:none;">
 </div>
-<div id="content" class="row">
+<section id="content">
+    <div class="row">
+        <div class="col col-md-6">
+            <div class="card card-info card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-clock"></i>
+                        Fechas
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("Buscar", "PreFacturacion", FormMethod.Get))
+                    {
+                        @Html.AntiForgeryToken()
+                        <!-- form here -->
+                        <div class="row">
+                            <div class="col col-sm-12 col-md-6">
+                                <div class="row">
+                                    <div class="col col-md-12 col-sm-12">
+                                        <label for="anio">Año :</label>
+                                        @Html.DropDownListFor(m => m.anio, new List<SelectListItem>()
+                                        {
+                                            new SelectListItem(){ Text= DateTime.Now.Year.ToString(), Value = DateTime.Now.Year.ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 1).ToString(), Value = (DateTime.Now.Year - 1).ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 2).ToString(), Value = (DateTime.Now.Year - 2).ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 3).ToString(), Value = (DateTime.Now.Year - 3).ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 4).ToString(), Value = (DateTime.Now.Year - 4).ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 5).ToString(), Value = (DateTime.Now.Year - 5).ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 6).ToString(), Value = (DateTime.Now.Year - 6).ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 7).ToString(), Value = (DateTime.Now.Year - 7).ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 8).ToString(), Value = (DateTime.Now.Year - 8).ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 9).ToString(), Value = (DateTime.Now.Year - 9).ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 10).ToString(), Value = (DateTime.Now.Year - 10).ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 11).ToString(), Value = (DateTime.Now.Year - 11).ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 12).ToString(), Value = (DateTime.Now.Year - 12).ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 13).ToString(), Value = (DateTime.Now.Year - 13).ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 14).ToString(), Value = (DateTime.Now.Year - 14).ToString()},
+                                            new SelectListItem(){ Text= (DateTime.Now.Year - 15).ToString(), Value = (DateTime.Now.Year - 15).ToString()}
+                                        },
+                                         new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="col col-md-12 col-sm-12">
+                                        <label for="mes">Mes :</label>
+                                        @Html.DropDownListFor(m => m.mes, new List<SelectListItem>()
+                                        {
+                                            new SelectListItem(){ Text= "Enero", Value = "01"},
+                                            new SelectListItem(){ Text= "Febrero", Value = "02"},
+                                            new SelectListItem(){ Text= "Marzo", Value = "03"},
+                                            new SelectListItem(){ Text= "Abril", Value = "04"},
+                                            new SelectListItem(){ Text= "Mayo", Value = "05"},
+                                            new SelectListItem(){ Text= "Junio", Value = "06"},
+                                            new SelectListItem(){ Text= "Julio", Value = "07"},
+                                            new SelectListItem(){ Text= "Agosto", Value = "08"},
+                                            new SelectListItem(){ Text= "Setiembre", Value = "09"},
+                                            new SelectListItem(){ Text= "Octubre", Value = "10"},
+                                            new SelectListItem(){ Text= "Noviembre", Value = "11"},
+                                            new SelectListItem(){ Text= "Diciembre", Value = "12"}
+                                        },
+                                         new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col col-sm-12 col-md-6">
+                                <div class="row">
+                                    <div class="col col-md-12 col-sm-12">
+                                        <label for="txtdesde">Fecha Desde</label>
+                                        @Html.TextBoxFor(m => m.txtdesde,
+                                       new { @class = "form-control form-control-sm", @type = "date" })
+                                    </div>
+                                    <div class="col col-md-12 col-sm-12">
+                                        <label for="txthasta">Fecha Hasta</label>
+                                        @Html.TextBoxFor(m => m.txthasta,
+                                       new { @type = "date", @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="pt-3">
+                                    <button type="submit" id="btnbusca" class="btn btn-dark btn-sm">
+                                        <i class="fa fa-calculator"></i>&nbsp;&nbsp;Calcular
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div class="card card-info  card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-mouse-pointer"></i>
+                        Opciones
+                    </h3>
+                </div>
+                <div class="card-body ">
+                    <div class="row text-center pb-1 pt-1">
+                        <div class="col-md-12">
+                            <div class="btn-group-justified">
+                                <button type="button" id="btngenera" class="btn btn-primary btn-sm" data-request-url="@Url.Action("Buscar", "PreFacturacion")">
+                                    <i class="fa fa-check-square"></i>&nbsp;&nbsp;Generar Pre-Facturacion
+                                </button>
+                                <button type="button" id="btnAprobar" class="btn btn-success btn-sm" data-request-url="@Url.Action("Buscar", "PreFacturacion")">
+                                    <i class="fa fa-check-circle"></i>&nbsp;&nbsp;Aprobar
+                                </button>
+                                <button type="button" id="btnGenerarCuentaCorriente" class="btn btn-info btn-sm" data-request-url="@Url.Action("Buscar", "PreFacturacion")">
+                                    <i class="fa fa-coins"></i>&nbsp;&nbsp;Generar Cuenta Corriente
+                                </button>
+                                <button type="button" id="btnFacturar" class="btn btn-warning btn-sm" data-request-url="@Url.Action("Buscar", "PreFacturacion")">
+                                    <i class="fa fa-money-bill-wave"></i>&nbsp;&nbsp;Facturar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row text-center pt-2">
+                        <div class="col-md-12">
+                            <div class="btn-group-justified">
+                                <button type="button" id="chkTodos" class="btn btn-link btn-sm" data-request-url="@Url.Action("Buscar", "PreFacturacion")" onclick="listas('chkTodos','')">
+                                    <i class="fa fa-check-square text-success"></i>&nbsp;&nbsp;Todos
+                                </button>
+                                <button type="button" id="chkGenerados" class="btn btn-link btn-sm" data-request-url="@Url.Action("Buscar", "PreFacturacion")" onclick="listas('chkGenerados','1')">
+                                    <i class="fa fa-check-square text-success"></i>&nbsp;&nbsp;Generados
+                                </button>
+                                <button type="button" id="chkAprobados" class="btn btn-link btn-sm" data-request-url="@Url.Action("Buscar", "PreFacturacion")" onclick="listas('chkAprobados','2')">
+                                    <i class="fa fa-check-square text-success"></i>&nbsp;&nbsp;Aprobados
+                                </button>
+                                <button type="button" id="chkGenerarCuentaCorriente" class="btn btn-link btn-sm" data-request-url="@Url.Action("Buscar", "PreFacturacion")" onclick="listas('chkGenerarCuentaCorriente','3')">
+                                    <i class="fa fa-check-square text-success"></i>&nbsp;&nbsp;Con Cuenta Corriente
+                                </button>
+                                <button type="button" id="chkFacturados" class="btn btn-link btn-sm" data-request-url="@Url.Action("Buscar", "PreFacturacion")" onclick="listas('chkFacturados','4')">
+                                    <i class="fa fa-check-square text-success"></i>&nbsp;&nbsp;Facturados
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="col-12">
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-table"></i>
-                    Generar Pre-Facturacion
+                    Listado
                 </h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body ">
-                @using (Html.BeginForm("Buscar", "PreFacturacion", FormMethod.Get))
-                {
-                    @Html.AntiForgeryToken()
-                    <!-- form here -->
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div>
-                                <label for="anio">Año :</label>
-                                @Html.DropDownListFor(m => m.anio, new List<SelectListItem>()
-                                {
-                                    new SelectListItem(){ Text= DateTime.Now.Year.ToString(), Value = DateTime.Now.Year.ToString()},
-                                    new SelectListItem(){ Text= (DateTime.Now.Year - 1).ToString(), Value = (DateTime.Now.Year - 1).ToString()},
-                                    new SelectListItem(){ Text= (DateTime.Now.Year - 2).ToString(), Value = (DateTime.Now.Year - 2).ToString()},
-                                    new SelectListItem(){ Text= (DateTime.Now.Year - 3).ToString(), Value = (DateTime.Now.Year - 3).ToString()},
-                                    new SelectListItem(){ Text= (DateTime.Now.Year - 4).ToString(), Value = (DateTime.Now.Year - 4).ToString()},
-                                    new SelectListItem(){ Text= (DateTime.Now.Year - 5).ToString(), Value = (DateTime.Now.Year - 5).ToString()},
-                                    new SelectListItem(){ Text= (DateTime.Now.Year - 6).ToString(), Value = (DateTime.Now.Year - 6).ToString()},
-                                    new SelectListItem(){ Text= (DateTime.Now.Year - 7).ToString(), Value = (DateTime.Now.Year - 7).ToString()},
-                                    new SelectListItem(){ Text= (DateTime.Now.Year - 8).ToString(), Value = (DateTime.Now.Year - 8).ToString()},
-                                    new SelectListItem(){ Text= (DateTime.Now.Year - 9).ToString(), Value = (DateTime.Now.Year - 9).ToString()},
-                                    new SelectListItem(){ Text= (DateTime.Now.Year - 10).ToString(), Value = (DateTime.Now.Year - 10).ToString()},
-                                    new SelectListItem(){ Text= (DateTime.Now.Year - 11).ToString(), Value = (DateTime.Now.Year - 11).ToString()}
-                                },
-                                 new { @class = "form-control form-control-sm" })
-                            </div>
-                            <div>
-                                <label for="mes">Mes :</label>
-                                @Html.DropDownListFor(m => m.mes, new List<SelectListItem>()
-                                {
-                                    new SelectListItem(){ Text= "Enero", Value = "01"},
-                                    new SelectListItem(){ Text= "Febrero", Value = "02"},
-                                    new SelectListItem(){ Text= "Marzo", Value = "03"},
-                                    new SelectListItem(){ Text= "Abril", Value = "04"},
-                                    new SelectListItem(){ Text= "Mayo", Value = "05"},
-                                    new SelectListItem(){ Text= "Junio", Value = "06"},
-                                    new SelectListItem(){ Text= "Julio", Value = "07"},
-                                    new SelectListItem(){ Text= "Agosto", Value = "08"},
-                                    new SelectListItem(){ Text= "Setiembre", Value = "09"},
-                                    new SelectListItem(){ Text= "Octubre", Value = "10"},
-                                    new SelectListItem(){ Text= "Noviembre", Value = "11"},
-                                    new SelectListItem(){ Text= "Diciembre", Value = "12"}
-                                },
-                                 new { @class = "form-control form-control-sm" })
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div>
-                                <label for="txtdesde">Fecha Desde</label>
-                                @Html.TextBoxFor(m => m.txtdesde,
-                               new { @class = "form-control form-control-sm", @type = "date" })
-                            </div>
-                            <div>
-                                <label for="txthasta">Fecha Hasta</label>
-                                @Html.TextBoxFor(m => m.txthasta,
-                               new { @type = "date", @class = "form-control form-control-sm" })
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div>
-                                <button type="submit" id="btnbusca" class="btn btn-dark btn-sm">
-                                    <i class="fa fa-calculator"></i>&nbsp;&nbsp;Calcular
-                                </button>
-                            </div>
-                            <div class="pt-4">
-                                <button type="button" id="btngenera" class="btn btn-primary btn-sm">
-                                    <i class="fa fa-check-square"></i>&nbsp;&nbsp;Generar Pre-Facturacion
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                }
+
                 <table id="dglista" class="table table-bordered table-hover table-sm">
                     <thead class="thead-light">
                         <tr>
@@ -129,7 +200,7 @@
                                         <div style="display:none">
                                             @*<div id="tableGoesHere">
 
-                                    </div>*@
+                                                </div>*@
                                         </div>
                                     </td>
                                     <td class="cellCodigoCliente">@PreFacturacion.CodigoCliente </td>
@@ -149,253 +220,27 @@
         </div>
 
     </div>
+
     <!-- /.col -->
-</div>
+</section>
 @section Scripts {
     @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
     @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
     @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @*BOTONES EXPORT*@
+    @Scripts.Render("~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js")
+    @Scripts.Render("~/Content/plugins/jszip/jszip.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-buttons/js/buttons.html5.min.js")
+    @*EXPORT*@
     @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
     @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Scripts/Salud/PreFacturacion/Index.js")
 
     <script>
-        $(function () {
-
-            $('#dglista').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
-                "pageLength": 50,
-                "language": {
-                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
-                }
-            });
-        });
+        var mensaje = "@TempData["mensaje"]";
+        mostrarMensaje(mensaje);
     </script>
 
-    <script>
-
-        $('#anio').change(function () {
-            $("#mes").prop('selectedIndex', 1);
-            var anioi = $("#anio :selected").val();
-            var mese = $("#mes :selected").val();
-
-            var LastDay = new Date(anioi, mese, 0);
-            var ultimo = LastDay.toISOString().slice(0, 10);
-            console.log(ultimo)
-
-            $('#txtdesde').attr('value', anioi + '-' + mese + '-' + '01');
-            $('#txthasta').attr('value', ultimo);
-        });
-
-        $('#mes').change(function () {
-            var anioi = $("#anio :selected").val();
-            var mese = $("#mes :selected").val();
-
-            var LastDay = new Date(anioi, mese, 0);
-            var ultimo = LastDay.toISOString().slice(0, 10);
-
-            $('#txtdesde').attr('value', anioi + '-' + mese + '-' + '01');
-            $('#txthasta').attr('value', ultimo);
-
-        });
-    </script>
-
-    <script>
-        $("body").on("click", "img[src*='plus.jpg']", function () {
-            $("img[src*='minus.jpg']").click();
-            //$('table#dglista tr#ad').remove();
-            $(this).attr("src", "/images/plus.jpg");
-            $(this).closest("tr").after("<tr id='ad'><td></td><td id='tab' colspan = '999'>" + $(this).next().html() + "</td></tr>");
-            var row = $(this).closest("tr");
-            var year = $('#anio').val()
-            var month = $('#mes').val()
-            var pcsespecial = "0";
-            var pcsstatus = "0";
-            var codigo = row.find(".cellCodigoCliente").html();
-            var tipoasegurado = row.find(".cellDescripcionTipoAsegurado").html();
-
-            $(this).attr("src", "/images/minus.jpg");
-            $.ajax({
-                type: "GET",
-                url: "/PreFacturacion/Detalle",
-                data: {
-                    'anoProceso': year,
-                    'mesProceso': month,
-                    'pcsEspecial': pcsespecial,
-                    'pcsStatus': pcsstatus,
-                    'CodigoCliente': codigo,
-                    'DescripcionTipoAsegurado': tipoasegurado
-                },
-                dataType: "text",
-                success: function (r) {
-                    var dataparseada = JSON.parse(r);
-                    document.getElementById('tab').innerHTML = json2table(dataparseada, 'table');
-                }
-            });
-
-        });
-        //Assign Click event to Minus Image.
-        $("body").on("click", "img[src*='minus.jpg']", function () {
-            $(this).attr("src", "/images/plus.jpg");
-            $(this).closest("tr").next().remove();
-        });
-
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $('#btnbusca').click(function () {
-                $('#loading').css('display', 'block');
-            });
-            $('#btngenera').click(function () {
-                $('#loading').css('display', 'block');
-            });
-
-            $("#mes").prop('selectedIndex', 1);
-            var anioi = $("#anio :selected").val();
-            var mese = $("#mes :selected").val();
-
-            var LastDay = new Date(anioi, mese, 0);
-            var ultimo = LastDay.toISOString().slice(0, 10);
-            console.log(ultimo)
-
-            $('#txtdesde').attr('value', anioi + '-' + mese + '-' + '01');
-            $('#txthasta').attr('value', ultimo);
-        });
-    </script>
-
-    <script type="text/javascript">
-
-        dateTimeReviver = function (key, value) {
-            var a;
-            if (typeof value === 'string') {
-                a = /\/Date\((\d*)\)\//.exec(value);
-                if (a) {
-
-                    var dt = new Date(+a[1]);
-
-                    var dateString = moment(dt).format('YYYY-MM-DD');
-
-                    return dateString;
-                }
-                //console.log(a);
-            }
-            return value;
-        }
-
-        function json2table(json, classes) {
-
-            json = JSON.parse(JSON.stringify(json), dateTimeReviver);
-            //json = JSON.parse(JSON.stringify(json))
-            console.log(json);
-
-            var cols = Object.keys(json[0]);
-
-            var headerRow = '';
-            var bodyRows = '';
-
-            classes = classes || '';
-
-            function capitalizeFirstLetter(string) {
-                return string.charAt(0).toUpperCase() + string.slice(1);
-            }
-
-            cols.map(function (col) {
-                headerRow += '<th>' + capitalizeFirstLetter(col) + '</th>';
-            });
-
-            json.map(function (row) {
-                bodyRows += '<tr>';
-
-                cols.map(function (colName) {
-                    bodyRows += '<td>' + row[colName] + '</td>';
-                })
-
-                bodyRows += '</tr>';
-            });
-
-            return '<table class="table ' +
-                classes +
-                '"><thead class="bg-info"><tr>' +
-                headerRow +
-                '</tr></thead><tbody>' +
-                bodyRows +
-                '</tbody></table>';
-        }
-    </script>
-
-    <script>
-        $('#allchk').change(function () {
-            if ($(this).prop('checked')) {
-                $('tbody tr td input[type="checkbox"]').each(function () {
-                    $(this).prop('checked', true);
-                });
-            } else {
-                $('tbody tr td input[type="checkbox"]').each(function () {
-                    $(this).prop('checked', false);
-                });
-            }
-        });
-    </script>
-
-
-    <script>
-
-        $('#btngenera').click(function () {
-
-            //Reference the Table.
-            var grid = document.getElementById("dglista");
-
-            //Reference the CheckBoxes in Table.
-            var checkBoxes = grid.getElementsByTagName("INPUT");
-            var message = "Id Name                  Country\n";
-
-            var year = $('#anio').val()
-            var month = $('#mes').val()
-            var pcsespecial = "0";
-            var pcsstatus = "0";
-            var des = $('#txtdesde').val();
-            var has = $('#txthasta').val();
-
-            //Loop through the CheckBoxes.
-            for (var i = 0; i < checkBoxes.length; i++) {
-                if (checkBoxes[i].checked) {
-
-                    var row = checkBoxes[i].parentNode.parentNode;
-                    var codigo = row.cells[1].innerHTML;
-                    var tipoasegurado = row.cells[4].innerHTML;
-
-                    $.ajax({
-                        type: "GET",
-                        url: "/PreFacturacion/Generar",
-                        data: {
-                            'anoProceso': year,
-                            'mesProceso': month,
-                            'txtdesde': des,
-                            'txthasta': has,
-                            'pcsEspecial': pcsespecial,
-                            'pcsStatus': pcsstatus,
-                            'CodigoCliente': codigo,
-                            'DescripcionTipoAsegurado': tipoasegurado
-                        },
-                        dataType: "text",
-                        success: function (r) {
-
-                        }
-                    });
-                }
-            }
-
-            window.location = ('@Url.Action("Buscar", "PreFacturacion", @Model)').replaceAll('amp;','');
-
-        });
-
-    </script>
-    }
+}
 
 

@@ -17,5 +17,7 @@ namespace Entidades
         public int status { get; set; }    
         public int codigoCliente { get; set; }
         public int descripcionTipoAseg { get; set; }
+        public string mensajeEPF { get; set; }
+        public string PcsStatus { get; set; }
     }
 }

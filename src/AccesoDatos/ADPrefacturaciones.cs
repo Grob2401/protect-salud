@@ -24,6 +24,7 @@ namespace AccesoDatos
                 GenericDataAccess.AgregarParametro(oCommand, "@fchDesde", enpf.txtdesde, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@fchHasta", enpf.txthasta, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@pcsEspecial", enpf.option, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@PcsStatus", enpf.PcsStatus, TipoParametro.STR, Direccion.INPUT);
 
                 DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
                 while (oDataReader.Read())
@@ -96,13 +97,100 @@ namespace AccesoDatos
             }
         }
 
-        public bool Actualizar(string anio, string mes, string psespecial, string status, string cliente, string tipoAseg)
+        public bool Generar(string anio, string mes, string psespecial, string status, string cliente, string tipoAseg)
         {
 
             DbCommand oCommand = null;
             try
             {
                 oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_Facturacion_PreFacturacion_Generar");
+                GenericDataAccess.AgregarParametro(oCommand, "@anoProceso", anio, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@mesProceso", mes, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@pcsEspecial", psespecial, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@pcsStatus", status, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCliente", cliente, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@DescripcionTipoAsegurado", tipoAseg, TipoParametro.STR, Direccion.INPUT);
+
+                if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Excepciones.ManejoExcepciones(ex);
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
+        public bool Aprobar(string anio, string mes, string psespecial, string status, string cliente, string tipoAseg)
+        {
+
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_Facturacion_PreFacturacion_Aprobar");
+                GenericDataAccess.AgregarParametro(oCommand, "@anoProceso", anio, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@mesProceso", mes, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@pcsEspecial", psespecial, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@pcsStatus", status, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCliente", cliente, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@DescripcionTipoAsegurado", tipoAseg, TipoParametro.STR, Direccion.INPUT);
+
+                if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Excepciones.ManejoExcepciones(ex);
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
+        public bool ctaCorriente(string anio, string mes, string psespecial, string status, string cliente, string tipoAseg)
+        {
+
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_Facturacion_PreFacturacion_GenerarConCtaCorriente");
+                GenericDataAccess.AgregarParametro(oCommand, "@anoProceso", anio, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@mesProceso", mes, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@pcsEspecial", psespecial, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@pcsStatus", status, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCliente", cliente, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@DescripcionTipoAsegurado", tipoAseg, TipoParametro.STR, Direccion.INPUT);
+
+                if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Excepciones.ManejoExcepciones(ex);
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
+        public bool Facturar(string anio, string mes, string psespecial, string status, string cliente, string tipoAseg)
+        {
+
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_Facturacion_PreFacturacion_Facturar");
                 GenericDataAccess.AgregarParametro(oCommand, "@anoProceso", anio, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@mesProceso", mes, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@pcsEspecial", psespecial, TipoParametro.STR, Direccion.INPUT);

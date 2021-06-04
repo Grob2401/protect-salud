@@ -20,9 +20,24 @@ namespace LogicaNegocio
             return (new ADPrefacturaciones()).Contratos( anio,  mes,  psespecial,  status,  cliente,  tipoAseg);
         }
 
-        public static bool Actualizar(string anio, string mes, string psespecial, string status, string cliente, string tipoAseg)
+        public static bool Generar(string anio, string mes, string psespecial, string status, string cliente, string tipoAseg)
         {
-            return (new ADPrefacturaciones()).Actualizar(anio, mes, psespecial, status, cliente, tipoAseg);
+            return (new ADPrefacturaciones()).Generar(anio, mes, psespecial, status, cliente, tipoAseg);
+        }
+
+        public static bool Aprobar(string anio, string mes, string psespecial, string status, string cliente, string tipoAseg)
+        {
+            return (new ADPrefacturaciones()).Aprobar(anio, mes, psespecial, status, cliente, tipoAseg);
+        }
+
+        public static bool ctaCorriente(string anio, string mes, string psespecial, string status, string cliente, string tipoAseg)
+        {
+            return (new ADPrefacturaciones()).ctaCorriente(anio, mes, psespecial, status, cliente, tipoAseg);
+        }
+
+        public static bool Facturar(string anio, string mes, string psespecial, string status, string cliente, string tipoAseg)
+        {
+            return (new ADPrefacturaciones()).Facturar(anio, mes, psespecial, status, cliente, tipoAseg);
         }
 
     }

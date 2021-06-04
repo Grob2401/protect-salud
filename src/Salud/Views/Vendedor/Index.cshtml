@@ -65,15 +65,8 @@
                             <div class="col-md-12">
                                 <div class="btn-group-justified">
                                     <button type="button" id="btnVendedor" class="btn btn-info btn-sm" data-dismiss="modal" data-toggle="modal">
-                                        @*onclick=PopupForm('@Url.Action("Modal","Vendedor")')>*@
                                         <i class="fa fa-plus text-warning"></i>&nbsp;&nbsp;Agregar Vendedor
                                     </button>
-                                    @*<button type="button" class="btn btn-danger btn-sm">
-                                            <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Listar Sociedad
-                                        </button>
-                                        <button type="button" class="btn btn-primary btn-sm">
-                                            <i class="fa fa-place-of-worship text-warning"></i>&nbsp;&nbsp;Canales Disponibles
-                                        </button>*@
                                 </div>
                             </div>
                         </div>
@@ -341,19 +334,6 @@
         $(document).ready(function () {
             $('.js-example-basic-single').select2();
         });
-
-        var mensaje = "@TempData["mensaje"]";
-
-        if (mensaje != "") {
-            Swal.fire({
-                icon: 'success',
-                title: 'Excelente',
-                text: mensaje,
-                showCloseButton: true
-            });
-        }
-
-
     </script>
 
     <script>
