@@ -21,6 +21,8 @@ namespace Entidades
         public string CodigoPrima { get; set; }
         public string DescripcionPrima { get; set; }
         public double AporteAfiliado { get; set; }
-        
+        public int PcsStatus { get; set; }
+        public string estado { get; set; }
+
     }
 }

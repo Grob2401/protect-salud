@@ -83,6 +83,8 @@ namespace AccesoDatos
                     oENPreFacturacionDetalleContrato.CodigoPrima = oDataReader["CodigoPrima"].ToString();
                     oENPreFacturacionDetalleContrato.DescripcionPrima = oDataReader["DescripcionPrima"].ToString();
                     oENPreFacturacionDetalleContrato.AporteAfiliado = Convert.ToDouble(oDataReader["AporteAfiliado"]);
+                    oENPreFacturacionDetalleContrato.PcsStatus = Convert.ToInt32(oDataReader["PcsStatus"]);
+                    oENPreFacturacionDetalleContrato.estado = oDataReader["estado"].ToString();
                     oENPreFacturacionDetalleContratos.Add(oENPreFacturacionDetalleContrato);
                 }
                 return oENPreFacturacionDetalleContratos;
