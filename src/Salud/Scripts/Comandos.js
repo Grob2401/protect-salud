@@ -15,7 +15,7 @@ const loadDropDownList = (result, selectId, optionDataField, optionDisplayField,
     for (const elem of result) {
         /// Creating...
         const option = document.createElement('option'); // CodigoCategoria, CodigoParentesco
-        option.id = elem[optionDataField];
+        option.value = elem[optionDataField];
         option.text = elem[optionDisplayField];
 
         /// Inserting...

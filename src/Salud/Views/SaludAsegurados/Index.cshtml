@@ -82,15 +82,15 @@
         /// Depending Dropdownlist...
         const drpDepartamento = document.querySelector('#drpDepartamento');
         drpDepartamento.addEventListener('change', () => {
-            const id = drpDepartamento[drpDepartamento.selectedIndex].id;
+            const id = drpDepartamento[drpDepartamento.selectedIndex].value;
             fillDropDownListByAjax('drpProvincia', 'CodigoProv', 'DescripcionProv', '/SaludAsegurados/GetProvincias', 'GET', { dptoid: id }); // Provincia
             emptyDropDownList('drpDistrito'); // Distrito
 
         });
         const drpProvincia = document.querySelector('#drpProvincia');
         drpProvincia.addEventListener('change', () => {
-            const idDepartamento = drpDepartamento[drpDepartamento.selectedIndex].id;
-            const idProvincia = drpProvincia[drpProvincia.selectedIndex].id;
+            const idDepartamento = drpDepartamento[drpDepartamento.selectedIndex].value;
+            const idProvincia = drpProvincia[drpProvincia.selectedIndex].value;
             fillDropDownListByAjax('drpDistrito', 'CodigoDist', 'DescripcionDist', '/SaludAsegurados/GetDistritos', 'GET', { dptoid: idDepartamento, provid: idProvincia }); // Distrito
         });
 

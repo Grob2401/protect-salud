@@ -166,8 +166,6 @@
 
     const fillModal = (asegurado = {}) => {
 
-
-
         const lockControl = (control = null) => {
             if (control) {
                 control.setAttribute('disabled', 'disabled');
@@ -175,16 +173,33 @@
             }
         }
 
+        const selectOption = (drp, valueId) => {
+            if (drp) {
+                drp.selectedIndex = drp.querySelector(`option[value="${valueId}"]`).index;
+            }
+        }
+
         /// Controls
-        const txtNombreCliente = document.querySelector('#txtNombreCliente'); lockControl(txtNombreCliente);
-        const txtCodigoTitular = document.querySelector('#txtCodigoTitular'); lockControl(txtCodigoTitular);
-        const txtCategoria = document.querySelector('#txtCategoria'); lockControl(txtCategoria);
+        const txtNombreCliente = document.querySelector('#txtNombreCliente');
+        const txtCodigoTitular = document.querySelector('#txtCodigoTitular');
+        const txtCategoria = document.querySelector('#txtCategoria');
         const drpParentesco = document.querySelector('#drpParentesco');
+        const drpVendedor = document.querySelector('#drpVendedor');
+        const drpCentroCosto = document.querySelector('#drpCentroCosto');
+        const drpDocumentoIdentidad = document.querySelector('#drpDocumentoIdentidad');
+
+        /// Lock Controls
+        lockControl(txtNombreCliente);
+        lockControl(txtCodigoTitular);
+        lockControl(txtCategoria);
 
         /// Fill
         txtNombreCliente.value = asegurado.CodigoCliente;
         txtCodigoTitular.value = asegurado.CodigoTitular;
         txtCategoria.value = asegurado.Categoria;
-        drpParentesco.selectedIndex = drpParentesco.querySelector(`#${asegurado.CodigoParentesco}`).index;
+        selectOption(drpParentesco, asegurado.CodigoParentesco);
+        drpVendedor.selectedIndex = 1;
+        drpCentroCosto.selectedIndex = 1;
+        selectOption(drpDocumentoIdentidad, asegurado.CodigoDocumentoIdentidad);
     }
 </script>
