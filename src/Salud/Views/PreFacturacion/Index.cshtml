@@ -165,58 +165,60 @@
             </div>
         </div>
     </div>
-    <div class="col-12">
-        <div class="card card-primary card-outline">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-table"></i>
-                    Listado
-                </h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body ">
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-primary card-outline">
+                @*<div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-table"></i>
+                            Listado
+                        </h3>
+                    </div>*@
+                <!-- /.card-header -->
+                <div class="card-body ">
 
-                <table id="dglista" class="table table-bordered table-hover table-sm">
-                    <thead class="thead-light">
-                        <tr>
-                            <th></th>
-                            <th>CODIGO</th>
-                            <th>RUC</th>
-                            <th>RAZON SOCIAL</th>
-                            <th>TIPO ASEGURADO</th>
-                            <th>AFILIADOS</th>
-                            <th>APORTES</th>
-                            <th><input type="checkbox" id="allchk" /></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (ViewBag.PreFacturaciones != null)
-                        {
-                            foreach (ENPreFacturacion PreFacturacion in (List<ENPreFacturacion>)ViewBag.PreFacturaciones)
+                    <table id="dglista" class="table table-bordered">
+                        <thead class="bg-gradient-lightblue">
+                            <tr>
+                                <th></th>
+                                <th>CODIGO</th>
+                                <th>RUC</th>
+                                <th>RAZON SOCIAL</th>
+                                <th>TIPO ASEGURADO</th>
+                                <th>AFILIADOS</th>
+                                <th>APORTES</th>
+                                <th><input type="checkbox" id="allchk" /></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.PreFacturaciones != null)
                             {
-                                <tr>
-                                    <td>
-                                        <img src="~/Images/plus.jpg" />
-                                        <div style="display:none">
-                                            @*<div id="tableGoesHere">
+                                foreach (ENPreFacturacion PreFacturacion in (List<ENPreFacturacion>)ViewBag.PreFacturaciones)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img src="~/Images/plus.jpg" />
+                                            <div style="display:none">
+                                                @*<div id="tableGoesHere">
 
-                                                </div>*@
-                                        </div>
-                                    </td>
-                                    <td class="cellCodigoCliente">@PreFacturacion.CodigoCliente </td>
-                                    <td>@PreFacturacion.RucDni </td>
-                                    <td>@PreFacturacion.RazonSocial </td>
-                                    <td class="cellDescripcionTipoAsegurado">@PreFacturacion.DescripcionTipoAsegurado </td>
-                                    <td>@PreFacturacion.RegCounts </td>
-                                    <td>@PreFacturacion.AporteAfiliados </td>
-                                    <td><input style="border:none;" name="@PreFacturacion.RucDni" type="checkbox" /></td>
-                                </tr>
+                                                    </div>*@
+                                            </div>
+                                        </td>
+                                        <td class="cellCodigoCliente">@PreFacturacion.CodigoCliente </td>
+                                        <td>@PreFacturacion.RucDni </td>
+                                        <td>@PreFacturacion.RazonSocial </td>
+                                        <td class="cellDescripcionTipoAsegurado">@PreFacturacion.DescripcionTipoAsegurado </td>
+                                        <td>@PreFacturacion.RegCounts </td>
+                                        <td>@PreFacturacion.AporteAfiliados </td>
+                                        <td><input style="border:none;" name="@PreFacturacion.RucDni" type="checkbox" /></td>
+                                    </tr>
+                                }
                             }
-                        }
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
             </div>
-            <!-- /.card-body -->
         </div>
 
     </div>
@@ -234,6 +236,7 @@
     @*EXPORT*@
     @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
     @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Scripts/Shared/util.js")
     @Scripts.Render("~/Scripts/Salud/PreFacturacion/Index.js")
 
     <script>

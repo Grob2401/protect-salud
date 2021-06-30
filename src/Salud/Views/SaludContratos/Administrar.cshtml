@@ -1,0 +1,477 @@
+﻿@using Entidades;
+@model Salud.ViewModels.VMSaludContratos
+@{
+    ViewBag.Title = "Administracion de Contratos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
+    @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
+}
+
+<div class="row">
+    <div class="col-md-2">
+        <div class="card card-info card-outline shadow-lg sticky-top">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-th-list"></i>
+                    Opciones
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row justify-content-center pt-2 pb-2">
+                    <div class="col-md-7">
+                        <button type="button" id="Grabar" class="btn btn-app bg-gradient-info" data-request-url="@Url.Action("Administrar", "SaludContratos")">
+                            <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;&nbsp;Grabar
+                        </button>
+                    </div>
+                    <div class="col-md-7">
+                        <a href='@Url.Action("Index", "SaludContratos")' class="btn btn-app bg-gradient-danger">
+                            <i class="fas fa-arrow-left text-warning"></i>&nbsp;&nbsp;Regresar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="col-md-12">
+            <div class="card card-primary card-outline shadow-lg">
+                <div class="card-header">
+                    <h5 class="card-title"><i class="fas fa-building text-primary"></i>&nbsp;&nbsp;Información de la empresa :</h5>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div Class="form-group">
+                                @Html.LabelFor(model => model.SaludContratosVM.CodigoCliente, "Cliente :", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoCliente", null, new { id = "drpCodigoCliente", @class = "form-control-sm js-example-responsive", @style = "width:100%", @onchange = "callChangefunc(this.value)" })
+                                @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoCliente)
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div Class="form-group">
+                                <Label for="txtRazonSocial">Nombre o Razon Social de la empresa :</Label>
+                                @Html.TextBox("RazonSocial", null, new { id = "txtRazonSocial", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                            </div>
+                            <div Class="form-group">
+                                <Label for="txtRazonSocial">Telefono Fijo :</Label>
+                                @Html.TextBox("Telefono1", null, new { id = "txtTelefono1", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div Class="form-group">
+                                <Label for="txtPersonaContacto">Persona de Contacto :</Label>
+                                @Html.TextBox("PersonaContacto", null, new { id = "txtPersonaContacto", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                            </div>
+                            <div Class="form-group">
+                                <Label for="txtRazonSocial">Telefono Celular :</Label>
+                                @Html.TextBox("Telefono2", null, new { id = "txtTelefono2", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div Class="form-group">
+                                <Label for="txtPersonaContacto">Direccion :</Label>
+                                @Html.TextBox("Direccion", null, new { id = "txtDireccion", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                            </div>
+                            <div Class="form-group">
+                                <Label for="txtRazonSocial">Correo Electronico :</Label>
+                                @Html.TextBox("Email", null, new { id = "txtCorreo", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card card-primary card-outline shadow-lg">
+                <div class="card-header">
+                    <h5 class="card-title"><i class="fas fa-file text-primary"></i>&nbsp;&nbsp;Información para el contrato</h5>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div Class="col-md-4" hidden>
+                            <div Class="form-group">
+                                <Label for="txtCodigoContrato">CodigoContrato</Label>
+                                @Html.TextBox("CodigoContrato", new { id = "txtCodigoContrato", @class = "form-control form-control-sm", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div Class="form-group">
+                                <Label for="txtCodigoContrato">Contratos :</Label>
+                                <select id="drpCodigoContrato" class="form-control-sm js-example-responsive" style="width:100%" onchange="callChangeContrato(this.value)">
+                                </select>
+                            </div>
+                        </div>
+                        <div Class="col-md-2">
+                            <div Class="form-group">
+                                <Label for="txtInicioVigencia">InicioVigencia</Label>
+                                @*@Html.TextBoxFor(model => model.InicioVigencia, new { id = "txtInicioVigencia", @class = "form-control form-control-sm", @placeholder = "" })*@
+                                @Html.TextBox("InicioVigencia", "", new { type = "date", id = "txtInicioVigencia", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+
+                            </div>
+                        </div>
+                        <div Class="col-md-2">
+                            <div Class="form-group">
+                                <Label for="txtFinVigencia">FinVigencia</Label>
+                                @*@Html.TextBoxFor(model => model.FinVigencia, new { id = "txtFinVigencia", @class = "form-control form-control-sm", @placeholder = "" })*@
+                                @Html.TextBox("FinVigencia", "", new { type = "date", id = "txtFinVigencia", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SaludContratosVM.CodigoCorredor, "Corredor", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoCorredor", null, new { id = "drpCorredor", @class = "form-control-sm js-example-responsive", @style = "width:100%", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoCorredor)
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.row -->
+                    <hr />
+                    <div class="row">
+                        <div Class="col-md-6">
+                            <Label for="txtFinVigencia" class="text-danger">PLANES DISPONIBLES</Label>
+                            <table id="dglistaPlanDis" class="table table-bordered">
+                                <thead class="bg-gradient-lightblue">
+                                    <tr>
+                                        <th>CODIGO</th>
+                                        <th>PLAN</th>
+                                        <th>AGREGAR</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.CodigoPlan != null)
+                                    {
+                                        foreach (ENSaludPlanes plan in (List<ENSaludPlanes>)TempData["planess"])
+                                        {
+                                            <tr>
+                                                <td class="cellId">@plan.CodigoPlan </td>
+                                                <td class="cellDesc">@plan.DescripcionPlan </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="AgregaPlan btn btn-success btn-sm">
+                                                        <i class="fa fa-arrow-right text-warning"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                            <div Class="form-group" hidden>
+                                @Html.LabelFor(model => model.SaludPlanesVM.CodigoPlan, "Planes Disponibles", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoPlan", null, new { id = "drpCodigoPlan", @class = "form-control form-control-sm" })
+                                @Html.ValidationMessageFor(model => model.SaludPlanesVM.CodigoPlan)
+                            </div>
+                        </div>
+
+                        <div Class="col-md-6">
+                            <Label for="txtFinVigencia" class="text-primary">PLANES AGREGADOS</Label>
+                            <table id="dglistaPlanReg" class="table table-bordered">
+                                <thead class="bg-gradient-lightblue">
+                                    <tr>
+                                        <th>QUITAR</th>
+                                        <th>CODIGO</th>
+                                        <th>PLAN</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <div Class="form-group" hidden>
+                                @Html.LabelFor(model => model.SaludContratosPlanVM.CodigoPlanSC, "Planes Seleccionados", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoPlanSC", null, new { id = "drpCodigoPlanSel", @class = "form-control form-control-sm" })
+                                @Html.ValidationMessageFor(model => model.SaludContratosPlanVM.CodigoPlanSC)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./card-body -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Scripts/Shared/util.js")
+
+    @if (TempData["ReceivedId"] != null)
+    {
+        <script type="text/javascript">
+            window.onload = function () {
+                var mensaje = "@TempData["ReceivedId"]";
+                mostrarMensaje(mensaje);
+            };
+        </script>
+    }
+
+    <script>
+
+
+        $(function () {
+            var tablaLista
+            tablaLista = $('#dglistaPlanDis').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false,
+                "responsive": false,
+                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                "pageLength": 5,
+                "searching": true,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+        });
+
+        $(function () {
+            var tablaLista
+            tablaLista = $('#dglistaPlanReg').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false,
+                "responsive": false,
+                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                "pageLength": 5,
+                "searching": true,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+        });
+
+
+        $(document).ready(function () {
+            //$('.js-example-basic-single').select2();
+            $(".js-example-responsive").select2({
+                width: 'resolve' // need to override the changed default
+            });
+            callChangefunc(document.getElementById('drpCodigoCliente').value);
+            callChangeContrato(document.getElementById('drpCodigoContrato').value);
+        });
+
+        const razonSocial = document.getElementById('txtRazonSocial');
+        const telefono1 = document.getElementById('txtTelefono1');
+        const contacto = document.getElementById('txtPersonaContacto');
+        const telefono2 = document.getElementById('txtTelefono2');
+        const direccion = document.getElementById('txtDireccion');
+        const correo = document.getElementById('txtCorreo');
+        const codContrato = document.getElementById('drpCodigoContrato');
+
+        function callChangefunc(id) {
+            $.ajax({
+                type: "GET",
+                url: "/SaludContratos/Obtener",
+                data: {
+                    'id': id
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    var datos = [...dataparseada];
+                    var contratos = [];
+                    //console.log(datos);
+                    razonSocial.value = dataparseada[0];
+                    direccion.value = dataparseada[1];
+                    telefono1.value = dataparseada[2];
+                    contacto.value = dataparseada[3];
+                    telefono2.value = dataparseada[4];
+                    correo.value = dataparseada[5];
+                    contratos = dataparseada[6];
+
+                    codContrato.innerText = null;
+                    for (var i = 0; i < contratos.length; i++) {
+                        var opt = contratos[i].Text;
+                        var tx = contratos[i].Text;
+                        codContrato.innerHTML += "<option value=\"" + opt + "\">" + tx + "</option>";
+                    }
+                }
+            });
+        };
+
+        //-------------
+        const IniVigencia = document.getElementById('txtInicioVigencia');
+        const FinVigencia = document.getElementById('txtFinVigencia');
+
+        function callChangeContrato(id) {
+            const clienteActual = document.getElementById('drpCodigoCliente').value
+            var table = $('#dglistaPlanReg').DataTable();
+
+            table.clear().draw();
+
+            $.ajax({
+                type: "GET",
+                url: "/SaludContratos/ObtenerDatosContrato",
+                data: {
+                    'Codcliente': clienteActual,
+                    'idContrato': id,
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    var datos = [...dataparseada];
+                    var contratos = [];
+                    console.log(datos);
+
+                    var IniVigFormato = $.datepicker.formatDate('yy-mm-dd', new Date(Date(dataparseada[0])));
+                    var FinVigFormato = $.datepicker.formatDate('yy-mm-dd', new Date(Date(dataparseada[1])));
+
+                    IniVigencia.value = IniVigFormato;
+                    FinVigencia.value = FinVigFormato;
+                    $('#drpCorredor').val(dataparseada[2]).change();
+
+                    const planes = dataparseada[3];
+
+                    const planesContrato = planes.forEach(plan => {
+                        console.log(plan.CodigoPlanSC);
+                        table.row.add([
+                            "<button type='button' class='BorrarPlan btn btn-danger btn-sm'><i class='fa fa-times text-warning'></i></button>",
+                            plan.CodigoPlanSC,
+                            plan.DescripcionPlanSC
+                        ]).draw(false);
+                    });
+
+                }
+            });
+        };
+
+        $(document).ready(function () {
+            $(".AgregaPlan").click(function () {
+                txt1 = $(this).parents('tr').find("td:eq(0)").text().trim();
+                txt2 = $(this).parents('tr').find("td:eq(1)").text().trim();
+
+                var table = $('#dglistaPlanReg').DataTable();
+                var tabla = document.getElementById("dglistaPlanReg");
+                var valida = null;
+
+                for (let row of tabla.rows) {
+                    for (let cell of row.cells) {
+                        if (cell.innerText === txt1) {
+                            valida = cell.innerText;
+                        }
+                    }
+                }
+
+                if (valida == null) {
+                    table.row.add([
+                        "<button type='button' class='BorrarPlan btn btn-danger btn-sm'><i class='fa fa-times text-warning'></i></button>",
+                        txt1,
+                        txt2
+                    ]).draw(false);
+                }
+                else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Mensaje',
+                        html: 'El plan <b class="text-info">' + txt2 + '</b> ya fue asignado',
+                        showCloseButton: true
+                    })
+                    return false;
+                }
+
+            });
+
+
+            $('#dglistaPlanReg').on('click', '.BorrarPlan', function () {
+                var table = $('#dglistaPlanReg').DataTable();
+                table
+                    .row($(this).parents('tr'))
+                    .remove()
+                    .draw();
+            });
+
+        });
+
+        $("#Grabar").click(function () {
+            var url = $(this).data('request-url');
+            var table = $('#dglistaPlanReg').DataTable();
+            //console.log('hola')
+            if (!table.data().count()) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'El contrato no tiene planes asignados',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            else {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/SaludContratos/EliminarLimpiarPlanes",
+                    data: {
+                        'contrato': codContrato.value,
+                    },
+                    dataType: "text",
+                    success: function (r) {
+                        
+                    }
+                });
+
+                const tablaRecorre = $('#dglistaPlanReg').DataTable();
+                var respuesta = "";
+                var lineas = tablaRecorre.rows().count();
+                var contador = 0;
+                //console.log(lineas);
+                //console.log(contador);
+
+                tablaRecorre.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                    contador++;
+                    var data = this.data();
+                    //alert(data[rowLoop]);
+                    $.ajax({
+                        type: "POST",
+                        url: "/SaludContratos/Administrar",
+                        data: {
+                            'contrato': codContrato.value,
+                            'plan': data[1],
+                            'fecini': IniVigencia.value,
+                            'fecfin': FinVigencia.value,
+                        },
+                        dataType: "text",
+                        success: function (r) {
+                            //console.log(contador);
+                            if (lineas === contador) {
+                                //debugger;
+                                window.location.href = url;
+                            }
+                        }
+                    });
+                });
+            }
+        });
+
+
+    </script>
+    <script src="~/Scripts/Comandos.js"></script>
+
+
+}

@@ -40,6 +40,11 @@ namespace Salud.Controllers
             {
                 ViewData["Vendedores"] = TempData["Vendedores"];
             }
+            else
+            {
+                var lstVendedores = LNVendedor.ObtenerTodos("0");
+                ViewData["Vendedores"] = lstVendedores;
+            }
 
             return View();
         }
@@ -55,9 +60,8 @@ namespace Salud.Controllers
             //return Json(new { data = lstVendedores.ToList() }, JsonRequestBehavior.AllowGet);
         }
 
-        [SessionExpire]
         [HttpPost]
-        [ValidateAntiForgeryToken]
+
         public ActionResult Mantenimiento(ENVendedores pla)
         {
             var valor = 0;
@@ -67,9 +71,11 @@ namespace Salud.Controllers
                 {
                     valor = pla.IdSociedad;
                     ModelState.Clear();
+                    TempData["Seleccion"] = valor;
+                    TempData["mensaje"] = "Vendedor registrado";
                 }
                 return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Vendedor registrado" });
-                //return Json(new { success = true, message = "Grabado Correctamente" }, JsonRequestBehavior.AllowGet);
+                //return Json(new { pla, message = "Vendedor registrado" }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -77,15 +83,16 @@ namespace Salud.Controllers
                 {
                     valor = pla.IdSociedad;
                     ModelState.Clear();
+                    TempData["Seleccion"] = valor;
+                    TempData["mensaje"] = "Vendedor modificado";
                 }
                 return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Vendedor modificado" });
-                //return Json(new { success = true, message = "Actualizado Correctamente" }, JsonRequestBehavior.AllowGet);
+                //return Json(new { pla, message = "Vendedor modificado" }, JsonRequestBehavior.AllowGet);
+
             }
         }
 
-        [SessionExpire]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public ActionResult MantenimientoComision(ENVendedores vcomision)
         {
             var valor = "";
@@ -94,10 +101,9 @@ namespace Salud.Controllers
                 valor = Session["Seleccion"].ToString();
                 ModelState.Clear();
             }
-            return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Datos registrados" });
+            return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Comisión Asignada" });
         }
 
-        [SessionExpire]
         [HttpPost]
         public ActionResult Eliminar(string id)
         {
@@ -132,10 +138,20 @@ namespace Salud.Controllers
             {
                 ViewData["Vendedores"] = TempData["Vendedores"];
             }
+            else
+            {
+                var lstVendedores = LNVendedor.ObtenerTodos("0");
+                ViewData["Vendedores"] = lstVendedores;
+            }
 
             if (TempData["Asignados"] != null)
             {
                 ViewData["Asignados"] = TempData["Asignados"];
+            }
+            else
+            {
+                var lstVendedoresAsignados = LNVendedor.ObtenerAsignados("0");
+                ViewData["Asignados"] = lstVendedoresAsignados;
             }
 
             return View();

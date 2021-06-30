@@ -1,7 +1,7 @@
 ﻿@using Entidades;
 @model ENCanalesVendedores
 @{
-    ViewBag.Title = "Asignacion";
+    ViewBag.Title = "Asignación de canal a vendedores";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Styles {
@@ -40,7 +40,7 @@
         <div class="col">
             @using (Html.BeginForm("GetVendedoresSinAsignar", "Vendedor", FormMethod.Get, new { id = "Form1", name = "Form1", autocomplete = "off" }))
             {
-                <div class="card card-primary card-outline">
+                <div class="card card-primary card-outline shadow-lg">
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-building"></i>
@@ -64,7 +64,7 @@
             }
         </div>
         <div class="col">
-            <div class="card card-primary card-outline">
+            <div class="card card-primary card-outline shadow-lg">
                 <div class="card-header">
                     <h3 class="card-title">
                         <i class="fas fa-list"></i>
@@ -72,9 +72,16 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    <div class="col">
-                        <div class="form">
-
+                    <div class="col text-center">
+                        <div class="col-md-12">
+                            <div class="btn-group-justified">
+                                <button type="button" id="btnVendedor" class="btn btn-info btn-sm" onclick="location.href='@Url.Action("Index","Vendedor")'">
+                                    <i class="fa fa-user text-warning"></i>&nbsp;&nbsp;Ir Vendedores
+                                </button>
+                                <button type="button" id="btnVendedor" class="btn btn-success btn-sm" onclick="window.location.href='@Url.Action("Index","Canal")'">
+                                    <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Ir Canales
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -83,7 +90,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <div class="card card-primary card-outline">
+            <div class="card card-primary card-outline shadow-lg">
                 <div class="card-header">
                     <h3 class="card-title">
                         <i class="fas fa-users"></i>
@@ -94,8 +101,8 @@
                 <div class="card-body ">
                     <div class="row">
                         <div class="col-md-12">
-                            <table id="dglista" class="table table-bordered table-hover table-sm text-uppercase">
-                                <thead class="thead-light">
+                            <table id="dglista" class="table table-bordered text-uppercase">
+                                <thead class="bg-gradient-lightblue">
                                     <tr>
                                         <th>CODIGO</th>
                                         <th>SOCIEDAD</th>
@@ -117,8 +124,8 @@
                                                 <td>@ven.ApellidoMaterno </td>
                                                 <td>@ven.Nombres </td>
                                                 <td class="text-center">
-                                                    <button type="button" class="botonedit btn btn-outline-success btn-sm">
-                                                        Asignar Canal
+                                                    <button type="button" class="botonedit btn btn-info btn-sm">
+                                                        <i class="fas fa-cart-plus text-warning"></i>&nbsp;&nbsp;Asignar Canal
                                                     </button>
                                                 </td>
                                             </tr>
@@ -131,8 +138,8 @@
                     <hr class="border border-dark" />
                     <div class="row">
                         <div class="col-md-12">
-                            <table id="dglista1" class="table table-bordered table-hover table-sm">
-                                <thead class="thead-light">
+                            <table id="dglista1" class="table table-bordered text-uppercase">
+                                <thead class="bg-gradient-lightblue">
                                     <tr>
                                         <th hidden>CODIGO CANAL</th>
                                         <th hidden>CODIGO VENDEDOR</th>
@@ -267,6 +274,7 @@
                 "responsive": true,
                 "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
                 "pageLength": 5,
+                "searching": false,
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }
@@ -281,6 +289,7 @@
                 "responsive": true,
                 "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
                 "pageLength": 5,
+                "searching": false,
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }

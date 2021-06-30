@@ -39,6 +39,11 @@ namespace Salud.Controllers
             {
                 ViewData["Canales"] = TempData["Canales"];
             }
+            else
+            {
+                var lstCanales = LNCanal.ObtenerTodos("0");
+                ViewData["Canales"] = lstCanales;
+            }
 
             return View();
         }
@@ -57,13 +62,11 @@ namespace Salud.Controllers
         public JsonResult GetListaJSON(string slcSociedad)
         {
             var lstCanales = LNCanal.ObtenerTodos(slcSociedad);
-            TempData["CanalesJSON"] = new SelectList(lstCanales.ToList(), "IDCanal", "DescripcionCanal");          
+            TempData["CanalesJSON"] = new SelectList(lstCanales.ToList(), "IDCanal", "DescripcionCanal");
             return Json(TempData["CanalesJSON"], JsonRequestBehavior.AllowGet);
         }
 
-        [SessionExpire]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public ActionResult Mantenimiento(ENCanales canal)
         {
             var valor = 0;
@@ -85,21 +88,19 @@ namespace Salud.Controllers
                 }
                 return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Canal registrado" });
 
-            }           
+            }
         }
 
-        [SessionExpire]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult MantenimientoComision(ENCanales vcomision)
+        [HttpGet]
+        public ActionResult MantenimientoComision(ENCanales vcomision,string slcSociedad)
         {
             var valor = "";
             if (LNCanal.InsertarComision(vcomision))
             {
-                valor = Session["Seleccion"].ToString();
+                valor = slcSociedad;
                 ModelState.Clear();
             }
-            return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Datos registrados" });
+            return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Comisión Asignada" });
         }
 
         [SessionExpire]

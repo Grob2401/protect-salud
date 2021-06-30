@@ -18,12 +18,12 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <a class="btn btn-app" href='@Url.Action("Crear", "CentroCostos")'>
-                    <i class="fas fa-file"></i> Agregar
+                <a class="btn btn-app bg-gradient-secondary" href='@Url.Action("Crear", "CentroCostos")'>
+                    <i class="fas fa-plus-circle text-warning"></i> Agregar
                 </a>
 
                 <table id="dglista" class="table table-bordered table-hover">
-                    <thead>
+                    <thead class="bg-gradient-lightblue">
                         <tr>
                             <th>CodigoCliente</th>
                             <th>RUC</th>
@@ -44,16 +44,12 @@
                                 <form action='@Url.Action("Eliminar", "CentroCostos", new {id = centrocostos.CodigoCentroCosto,idcliente=centrocostos.CodigoCliente})' method="POST"
                                       onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
                                     @Html.AntiForgeryToken()
-                                    <div class="btn-group" role="group">
+                                    <div class="text-center" role="group">
                                         <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "CentroCostos", new {id = centrocostos.CodigoCentroCosto,idcliente=centrocostos.CodigoCliente})'>
-                                            <i class="fas fa-pencil-alt">
-                                            </i>
-                                            Editar
+                                            <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;Editar
                                         </a>
                                         <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
-                                            <i class="fas fa-trash">
-                                            </i>
-                                            Eliminar
+                                            <i class="fas fa-times text-warning"></i>&nbsp;&nbsp;Eliminar
                                         </button>
                                     </div>
                                 </form>

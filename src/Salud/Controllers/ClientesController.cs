@@ -33,6 +33,11 @@ namespace Salud.Controllers
                 Ubigeo = VMUbigeo
             };
 
+            if (TempData["Mensaje_Cliente"] != null)
+            {
+                ViewBag.Message = "Cliente registrado correctamente";
+            }
+
             //return View(ClienteViewModel);
 
             return View();
@@ -92,42 +97,39 @@ namespace Salud.Controllers
 
                 oENClientes = new ENClientes();
            }
+
             return View(oENClientes);
 
         }
 
         [SessionExpire]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Crear(ENClientes cliente)
         {
-            if (ModelState.IsValid)
+            if (cliente.CodigoCliente is null)
             {
-                if (cliente.CodigoCliente is null)
+
+                if (LNClientes.Insertar(cliente))
                 {
-
-                    if (LNClientes.Insertar(cliente))
-                    {
-                        ViewBag.Message = "Registro Grabado Correctamente";
-                        ModelState.Clear();
-                    }
-                   //return Json(new { success = true, message = "Grabado Correctamente" }, JsonRequestBehavior.AllowGet);
-
+                    ViewBag.Message = "Registro Grabado Correctamente";
+                    ModelState.Clear();
+                    TempData["Mensaje_Cliente"] = "Cliente registrado correctamente";
                 }
-                else
-                {
+                //return Json(new { success = true, message = "Grabado Correctamente" }, JsonRequestBehavior.AllowGet);
 
-                    if (LNClientes.Actualizar(cliente))
-                    {
-                        ViewBag.Message = "Registro Actualizado Correctamente";
-                        ModelState.Clear();
-                    }
-                   //return Json(new { success = true, message = "Actualizado Correctamente" }, JsonRequestBehavior.AllowGet);
-                  
-                }
-                return RedirectToAction("Index", "Clientes");
             }
-            return View();
+            else
+            {
+
+                if (LNClientes.Actualizar(cliente))
+                {
+                    ViewBag.Message = "Registro Actualizado Correctamente";
+                    ModelState.Clear();
+                }
+                //return Json(new { success = true, message = "Actualizado Correctamente" }, JsonRequestBehavior.AllowGet);
+
+            }
+            return RedirectToAction("Index", "Clientes");
         }
 
         [SessionExpire]

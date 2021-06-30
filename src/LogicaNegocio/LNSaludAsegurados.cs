@@ -19,7 +19,7 @@ namespace LogicaNegocio
             return (new ADSaludAsegurados()).Cantidad(keywords ?? string.Empty);
         }
 
-        public static bool Insertar(ENSaludAsegurados oENSaludAsegurados)
+        public static string Insertar(ENSaludAsegurados oENSaludAsegurados)
         {
             return (new ADSaludAsegurados()).Insertar(oENSaludAsegurados);
         }
@@ -37,6 +37,11 @@ namespace LogicaNegocio
         public static ENSaludAsegurados ObtenerUno(string CodigoCliente, string CodigoTitular, string Categoria)
         {
             return (new ADSaludAsegurados()).ObtenerUno(CodigoCliente, CodigoTitular, Categoria);
+        }
+
+        public static List<ENSaludAsegurados> ObtenerSaludAsegurados(string tipoConsulta, string codCliente, string codTitular, string codDependiente, string codContrato)
+        {
+            return (new ADSaludAsegurados()).ObtenerSaludAsegurados(tipoConsulta,codCliente,codTitular,codDependiente,codContrato);
         }
     }
 }

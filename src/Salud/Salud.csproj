@@ -146,6 +146,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\VMAfiliacion.cs" />
+    <Compile Include="ViewModels\VMAsegurados.cs" />
     <Compile Include="ViewModels\VMClientes.cs" />
     <Compile Include="ViewModels\VMSaludContratos.cs" />
   </ItemGroup>
@@ -1942,6 +1944,7 @@
     <Content Include="Scripts\notify.min.js" />
     <Content Include="Scripts\Scripts.js" />
     <Content Include="Scripts\Salud\PreFacturacion\Index.js" />
+    <Content Include="Scripts\Shared\util.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1975,7 +1978,7 @@
     <Content Include="Views\Clientes\_BusquedaClientes.cshtml" />
     <Content Include="Views\Clientes\_Prueba.cshtml" />
     <Content Include="Views\Clientes\Test.cshtml" />
-    <Content Include="Views\SaludAsegurados\Index.cshtml" />
+    <Content Include="Views\SaludAsegurados\Index_.cshtml" />
     <Content Include="Views\SaludAsegurados\Crear.cshtml" />
     <Content Include="Views\SaludContratos\Index.cshtml" />
     <Content Include="Views\SaludContratos\Crear.cshtml" />
@@ -1987,6 +1990,10 @@
     <Content Include="Views\Vendedor\Index.cshtml" />
     <Content Include="Views\Vendedor\Asignacion.cshtml" />
     <Content Include="Views\Shared\_Loading.cshtml" />
+    <Content Include="Views\SaludContratos\Administrar.cshtml" />
+    <Content Include="Views\SaludAsegurados\Afiliacion.cshtml" />
+    <Content Include="Views\SaludAsegurados\Index.cshtml" />
+    <Content Include="Views\SaludAsegurados\Mantenimiento.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

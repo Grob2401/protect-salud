@@ -9,10 +9,10 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Crear Usuario</h5>
+            <div class="modal-header bg-info">
+                <h5 class="modal-title" id="exampleModalLabel">Nuevo Usuario</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true" class="text-white">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -21,78 +21,77 @@
                         <!-- left column -->
                         <div class="col-md-12">
                             <!-- jquery validation -->
-                            <div class="card card-primary">
-                                <div class="card-header">
-                                    <h3 class="card-title">Completar <small>Todos los campos</small></h3>
-                                </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
-                                <form role="form" id="frmUsuario" method="post" action='@Url.Action("Crear", "Usuario")'>
-                                    @Html.HiddenFor(m => m.int_IdUsuario)
-                                    @Html.AntiForgeryToken()
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            <label for="txtNombre">Nombre</label>
-                                            @*<input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">*@
-                                            @Html.TextBoxFor(m => m.var_Nombre, new { id = "txtNombre", @class = "form-control", @placeholder = "Ingrese nombre" })
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="txtApellidos">Apellidos</label>
-                                            @*<input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">*@
-                                            @Html.TextBoxFor(m => m.var_Apellidos, new { id = "txtApellidos", @class = "form-control", @placeholder = "Ingrese Apellido" })
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="txtDNI">DNI</label>
-                                            @*<input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">*@
-                                            @Html.TextBoxFor(m => m.var_DNI, new { type = "number", id = "txtDNI", @class = "form-control", @placeholder = "Ingrese DNI" })
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Sexo</label>
-                                            <select class="form-control" name="bit_Sexo">
-                                                <option value="default">Seleccione</option>
-                                                <option value="true" @((Model == null || Model.bit_Sexo == true) ? "selected='selected'" : "")>Masculino</option>
-                                                <option value="false" @((Model == null || Model.bit_Sexo == false) ? "selected='selected'" : "")>Femenino</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Fecha de Nacimiento:</label>
+                            <form role="form" id="frmUsuario" method="post" action='@Url.Action("Crear", "Usuario")'>
+                                @Html.HiddenFor(m => m.int_IdUsuario)
+                                @Html.AntiForgeryToken()
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="txtNombre">Nombre</label>
+                                        @*<input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">*@
+                                        @Html.TextBoxFor(m => m.var_Nombre, new { id = "txtNombre", @class = "form-control", @placeholder = "Ingrese nombre" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtApellidos">Apellidos</label>
+                                        @*<input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">*@
+                                        @Html.TextBoxFor(m => m.var_Apellidos, new { id = "txtApellidos", @class = "form-control", @placeholder = "Ingrese Apellido" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtDNI">DNI</label>
+                                        @*<input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">*@
+                                        @Html.TextBoxFor(m => m.var_DNI, new { type = "number", id = "txtDNI", @class = "form-control", @placeholder = "Ingrese DNI" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Sexo</label>
+                                        <select class="form-control" name="bit_Sexo">
+                                            <option value="default">Seleccione</option>
+                                            <option value="true" @((Model == null || Model.bit_Sexo == true) ? "selected='selected'" : "")>Masculino</option>
+                                            <option value="false" @((Model == null || Model.bit_Sexo == false) ? "selected='selected'" : "")>Femenino</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Fecha de Nacimiento:</label>
 
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">
-                                                        <i class="far fa-calendar-alt"></i>
-                                                    </span>
-                                                </div>
-                                                @*<input type="date" class="form-control float-right" id="txtFechaNacimiento" name="dtm_FechaNacimiento">*@
-                                                @Html.TextBoxFor(m => m.dtm_FechaNacimiento, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaNacimiento", @class = "form-control float-right" })
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="far fa-calendar-alt"></i>
+                                                </span>
                                             </div>
-                                            <!-- /.input group -->
+                                            @*<input type="date" class="form-control float-right" id="txtFechaNacimiento" name="dtm_FechaNacimiento">*@
+                                            @Html.TextBoxFor(m => m.dtm_FechaNacimiento, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaNacimiento", @class = "form-control float-right" })
                                         </div>
+                                        <!-- /.input group -->
+                                    </div>
 
-                                        <div class="form-group">
-                                            <label for="txtMail">Correo Electrónico</label>
-                                            @*<input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">*@
-                                            @Html.TextBoxFor(m => m.var_Mail, new { Id = "txtMail", @class = "form-control", @placeholder = "Ingrese correo electronico" })
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="txtPassword">Password</label>
-                                            @*<input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">*@
-                                            @Html.PasswordFor(m => m.var_Password, new { Id = "txtPassword", @class = "form-control", @placeholder = "Ingrese correo electronico" })
-                                        </div>
-                                        <div class="form-group mb-0">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" name="int_Estado" class="custom-control-input" id="exampleCheck1" value="1" @((Model == null || Model.int_Estado == 1) ? "checked='checked'" : "")>
-                                                <label class="custom-control-label" for="exampleCheck1">Activo</label>
-                                            </div>
+                                    <div class="form-group">
+                                        <label for="txtMail">Correo Electrónico</label>
+                                        @*<input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">*@
+                                        @Html.TextBoxFor(m => m.var_Mail, new { Id = "txtMail", @class = "form-control", @placeholder = "Ingrese correo electronico" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtPassword">Password</label>
+                                        @*<input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">*@
+                                        @Html.PasswordFor(m => m.var_Password, new { Id = "txtPassword", @class = "form-control", @placeholder = "Ingrese correo electronico" })
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" name="int_Estado" class="custom-control-input" id="exampleCheck1" value="1" @((Model == null || Model.int_Estado == 1) ? "checked='checked'" : "")>
+                                            <label class="custom-control-label" for="exampleCheck1">Activo</label>
                                         </div>
                                     </div>
-                                    <!-- /.card-body -->
-                                    <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">Grabar</button>
-                                        <a href='@Url.Action("Index", "Usuario")' class="btn btn-default float-right">Cancelar</a>
-                                    </div>
-                                </form>
-                            </div>
+                                </div>
+                                <!-- /.card-body -->
+                                <hr />
+                                <button type="submit" class="btn btn-info btn-sm">
+                                    <i class="fa fa-check text-warning"></i>&nbsp;&nbsp;Guardar
+                                </button>
+                                <a href='@Url.Action("Index", "Usuario")' class="btn btn-danger btn-sm float-right">
+                                    <i class="fa fa-times text-warning"></i>&nbsp;&nbsp;Cancelar
+                                </a>
+                            </form>
+                            
                             <!-- /.card -->
                         </div>
                     </div>

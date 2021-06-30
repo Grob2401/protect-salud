@@ -5,209 +5,485 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm())
+@section Styles {
+    @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
+    @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
+}
+
+@using (Html.BeginForm("Guardar", "SaludAsegurados", FormMethod.Post, new { id = "Form1", onsubmit = "return validateForm()" }))
 {
     @Html.AntiForgeryToken()
-
-
-    <div class="form-horizontal">
-        <h4>Grupos Familiares</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Datos del Asegurado</h5>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
+    <input id="hdClienteCodigo" type="hidden" name="name" value='@ViewBag.Cliente' />
+    <input id="hdContratoCodigo" type="hidden" name="name" value='@ViewBag.Contrato' />
+    <input id="hdPlan" type="hidden" name="name" value='0000000008' />
+    <div class="row">
+        <div class="col-md-2">
+            <div class="card card-info card-outline shadow-lg sticky-top">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-th-list"></i>
+                        Opciones
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-center pt-2 pb-2">
+                        <div class="col col-md-7">
+                            <button type="submit" class="btn btn-app bg-gradient-info">
+                                <i class="fa fa-save text-warning"></i>&nbsp;&nbsp;Guardar
+                            </button>
+                        </div>
+                        @*<div class="col col-md-7">
+                                <a href='@Url.Action("Crear", "SaludAsegurados")' class="btn btn-app bg-gradient-secondary">
+                                    <i class="fa fa-file-signature text-warning"></i>&nbsp;&nbsp;Limpiar
+                                </a>
+                            </div>*@
+                        <div class="col col-md-7">
+                            <button id="btnRegresar" onclick="goBackMantenimiento(event);" class="btn btn-app bg-gradient-danger" data-request-url="@Url.Action("Mantenimiento", "SaludAsegurados")">
+                                <i class="fa fa-arrow-left text-warning"></i>&nbsp;&nbsp;Regresar
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="card card-primary card-outline shadow-lg">
+                <div class="card-header">
+                    <h5 class="card-title"><i class="fas fa-user-astronaut"></i>&nbsp;&nbsp;Datos del Asegurado</h5>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
 
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-1">
-                                <div class="form-group">
-                                    <label for="txtCodigoCliente">CodigoCliente</label>
-                                    <input type="text" id="txtCodigoCliente" class="form-control form-control-sm" />
-                                </div>
-                            </div>
-                            <div class="col-sm-1">
-                                <div class="form-group">
-                                    <label for="txtCodigoTitular">CodigoTitular</label>
-                                    @Html.TextBoxFor(model => model.CodigoTitular, new { id = "txtCodigoTitular", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
-                            </div>
-                            <div class="col-sm-1">
-                                <div class="form-group">
-                                    <label for="txtCategoria">Categoria</label>
-                                    @Html.TextBoxFor(model => model.Categoria, new { id = "txtCategoria", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
-                            </div>
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.CodigoParentesco, "CodigoParentesco", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoParentesco", null, new { id = "drpParentesco", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.CodigoParentesco)
-                                </div>
-                            </div>
-
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.CodigoVendedor, htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoVendedor", null, new { id = "drpVendedor", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.CodigoVendedor, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.CodigoCentroCosto, "CodigoCentroCosto", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoCentroCosto", null, new { id = "drpCodigoCentroCosto", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.CodigoCentroCosto)
-                                </div>
-                            </div>
-
-                            <div class="col-sm-1">
-                                <div class="form-group">
-                                    <label class="control-label">Documento de Identidad</label>
-                                    <select id="drpCodigoDocumentoIdentidad" class="form-control form-control-sm">
-                                        <option disabled="">-- Seleccione --</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="txtNumeroDocumentoIdentidad">NumeroDocumento</label>
-                                    @Html.TextBoxFor(model => model.NumeroDocumentoIdentidad, new { id = "txtNumeroDocumentoIdentidad", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
-                            </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="txtApellidoPaterno">ApellidoPaterno</label>
-                                    @Html.TextBoxFor(model => model.ApellidoPaterno, new { id = "txtApellidoPaterno", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
-                            </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="txtApellidoMaterno">ApellidoMaterno</label>
-                                    @Html.TextBoxFor(model => model.ApellidoMaterno, new { id = "txtApellidoMaterno", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
-                            </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="txtApellidosNombres">Nombres</label>
-                                    @Html.TextBoxFor(model => model.Nombres, new { id = "txtNombres", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
-                            </div>
-
-                            <div class="col-sm-1">
-                                <div class="form-group">
-                                    <label class="control-label">Sexo</label>
-                                    <select id="drpCodigoSexo" class="form-control form-control-sm">
-                                        <option disabled="">-- Seleccione --</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="txtFechaNacimiento">FechaNacimiento</label>
-                                    @Html.TextBoxFor(model => model.FechaNacimiento, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaNacimiento", @class = "form-control form-control-sm float-right" })
-                                </div>
-                            </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="txtFechaAlta">FechaAlta</label>
-                                    @Html.TextBoxFor(model => model.FechaAlta, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaAlta", @class = "form-control form-control-sm float-right" })
-
-                                </div>
-                            </div>
-
-                            <div Class="col-sm-1">
-                                <div Class="form-group">
-                                    <label for="txtTelefono">Telefono</label>
-                                    @Html.TextBoxFor(model => model.Telefono, new { id = "txtTelefono", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
-                            </div>
-                            <div Class="col-sm-1">
-                                <div Class="form-group">
-                                    <label for="txtCelular">Celular</label>
-                                    @Html.TextBoxFor(model => model.Celular, new { id = "txtCelular", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
-                            </div>
-
-                            <div Class="col-sm-2">
-                                <div Class="form-group">
-                                    <label for="txtEmail">Email</label>
-                                    @Html.TextBoxFor(model => model.Email, new { id = "txtEmail", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
-                            </div>
-                            <div Class="col-sm-3">
-                                <div Class="form-group">
-                                    <label for="txtDireccion">Direccion</label>
-                                    @Html.TextBoxFor(model => model.Direccion, new { id = "txtDireccion", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
-                            </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label class="control-label">Departamento</label>
-                                    <select id="drpDepartamento" class="form-control form-control-sm">
-                                        <option disabled="">-- Seleccione --</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label class="control-label">Provincia</label>
-                                    <select id="drpProvincia" class="form-control form-control-sm">
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label class="control-label">Distrito</label>
-                                    <select id="drpDistrito" class="form-control form-control-sm">
-                                    </select>
-                                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoParentesco, "Parentesco", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoParentesco", null, new { id = "drpParentesco", @class = "form-control form-control-sm" })
+                                @Html.ValidationMessageFor(model => model.CodigoParentesco)
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoCentroCosto, "Centro de Costo", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoCentroCosto", null, new { id = "drpCodigoCentroCosto", @class = "form-control form-control-sm" })
+                                @Html.ValidationMessageFor(model => model.CodigoCentroCosto)
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="txtCodigoTrabajador">Codigo Trabajador</label>
+                                @Html.TextBoxFor(model => model.CodigoTrabajador, "", new { id = "txtCodigoTrabajador", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+                        <div class="col-md-3" hidden>
+                            <div class="form-group">
+                                <label for="txtCodigoCliente">Codigo Cliente</label>
+                                @Html.TextBoxFor(model => model.CodigoCliente, "", new { id = "txtCodigoCliente", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="col-md-3" hidden>
+                            <div class="form-group">
+                                <label for="txtCodigoCliente">Codigo Contrato</label>
+                                @Html.TextBoxFor(model => model.CodigoContrato, "", new { id = "txtCodigoContrato", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="col-md-3" hidden>
+                            <div class="form-group">
+                                <label for="txtCodigoTitular">CodigoTitular</label>
+                                @Html.TextBoxFor(model => model.CodigoTitular, new { id = "txtCodigoTitular", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+                        <div class="col-md-3" hidden>
+                            <div class="form-group">
+                                <label for="txtCategoria">Categoria</label>
+                                @Html.TextBoxFor(model => model.Categoria, new { id = "txtCategoria", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoDocumentoIdentidad, "Tipo Documento", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoDocumentoIdentidad", null, new { id = "drpCodigoDocumentoIdentidad", @class = "form-control form-control-sm" })
+                                @Html.ValidationMessageFor(model => model.CodigoDocumentoIdentidad)
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="txtNumeroDocumentoIdentidad">Documento</label>
+                                @Html.TextBoxFor(model => model.NumeroDocumentoIdentidad, new { id = "txtNumeroDocumentoIdentidad", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="txtApellidoPaterno">Apellido Paterno</label>
+                                @Html.TextBoxFor(model => model.ApellidoPaterno, new { id = "txtApellidoPaterno", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="txtApellidoMaterno">Apellido Materno</label>
+                                @Html.TextBoxFor(model => model.ApellidoMaterno, new { id = "txtApellidoMaterno", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="txtApellidosNombres">Nombres</label>
+                                @Html.TextBoxFor(model => model.Nombres, new { id = "txtNombres", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="txtFechaNacimiento">Fecha Nacimiento</label>
+                                @Html.TextBoxFor(model => model.FechaNacimiento, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaNacimiento", @class = "form-control form-control-sm float-right", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoSexo, "Sexo", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoSexo", null, new { id = "drpCodigoSexo", @class = "form-control form-control-sm" })
+                                @Html.ValidationMessageFor(model => model.CodigoSexo)
+                            </div>
+                        </div>
+                        <div Class="col-md-2">
+                            <div Class="form-group">
+                                <label for="txtTelefono">Telefono</label>
+                                @Html.TextBoxFor(model => model.Telefono, new { id = "txtTelefono", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+                        <div Class="col-md-2">
+                            <div Class="form-group">
+                                <label for="txtCelular">Celular</label>
+                                @Html.TextBoxFor(model => model.Celular, new { id = "txtCelular", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+                        <div Class="col-md-4">
+                            <div Class="form-group">
+                                <label for="txtEmail">Email</label>
+                                @Html.TextBoxFor(model => model.Email, new { id = "txtEmail", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+                        <div Class="col-md-6">
+                            <div Class="form-group">
+                                <label for="txtDireccion">Direccion</label>
+                                @Html.TextBoxFor(model => model.Direccion, new { id = "txtDireccion", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+                        <div Class="col-md-2">
+                            <div Class="form-group">
+                                <label for="txtDireccion">Talla</label>
+                                @Html.TextBoxFor(model => model.Talla, new { id = "txtTalla", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+                        <div Class="col-md-2">
+                            <div Class="form-group">
+                                <label for="txtDireccion">Peso</label>
+                                @Html.TextBoxFor(model => model.Peso, new { id = "txtPeso", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="txtFechaAlta">FechaAlta</label>
+                                @Html.TextBoxFor(model => model.FechaAlta, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaAlta", @class = "form-control form-control-sm float-right", @readonly = "readonly", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoDpto, "Departamento", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoDpto", null, new { id = "drpDepartamento", @class = "form-control form-control-sm", @onchange = "callChangeDepartamento(this.value)" })
+                                @Html.ValidationMessageFor(model => model.CodigoDpto)
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoProv, "Provincia", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoProv", null, new { id = "drpProvincia", @class = "form-control form-control-sm", @onchange = "callChangeProvincia(this.value)" })
+                                @Html.ValidationMessageFor(model => model.CodigoProv)
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoDist, "Distrito", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoDist", null, new { id = "drpDistrito", @class = "form-control form-control-sm" })
+                                @Html.ValidationMessageFor(model => model.CodigoDist)
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoVendedor, htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoVendedor", null, new { id = "drpVendedor", @class = "form-control form-control-sm" })
+                                @Html.ValidationMessageFor(model => model.CodigoVendedor, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoPlan, "Codigo Plan", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoPlan", null, new { id = "drpPlanes", @class = "form-control form-control-sm" })
+                                @Html.ValidationMessageFor(model => model.CodigoPlan, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="card-footer">
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Grabar</button>
-                    <a href='@Url.Action("Index", "SaludAsegurados")' class="btn btn-default float-right">Cancelar</a>
-                </div>
-            </div>
-        </div>
-
-
     </div>
 
-
 }
-    @section Scripts {
 
-        @Scripts.Render("~/Content/plugins/jquery-validation/jquery.validate.min.js")
-        @Scripts.Render("~/Content/plugins/jquery-validation/additional-methods.min.js")
-        <script src="~/Scripts/Comandos.js"></script>
-    }
+@section Scripts  {
+
+    @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Scripts/Shared/util.js")
+
+
+    <script>
+        var mensaje = "@ViewBag.MensajeAddAfiliado";
+        if (mensaje != "") {
+
+            if (mensaje.includes("Correcto")) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Correcto',
+                    html: mensaje,
+                    showCloseButton: true
+                });
+            }
+            else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    html: mensaje,
+                    showCloseButton: true
+                });
+            }
+
+        }
+
+
+    </script>
+
+    <script>
+        function validateForm() {
+            var codTrabajadorVal = document.forms["Form1"]["txtCodigoTrabajador"].value;
+            var codTitularVal = document.forms["Form1"]["txtCodigoTitular"].value.trim();
+            var apaternoVal = document.forms["Form1"]["txtApellidoPaterno"].value.trim();
+            var amaternoVal = document.forms["Form1"]["txtApellidoMaterno"].value.trim();
+            var nombresVal = document.forms["Form1"]["txtNombres"].value.trim();
+            var numeroDocumentoVal = document.forms["Form1"]["txtNumeroDocumentoIdentidad"].value.trim();
+            var fechaNacimientoVal = document.forms["Form1"]["txtFechaNacimiento"].value.trim();
+            var correoVal = document.forms["Form1"]["txtEmail"].value.trim();
+            var telefonoVal = document.forms["Form1"]["txtTelefono"].value.trim();
+            var celularVal = document.forms["Form1"]["txtCelular"].value.trim();
+            var direccionVal = document.forms["Form1"]["txtDireccion"].value.trim();
+            //---
+
+            if (codTrabajadorVal == "" && apaternoVal == "" && amaternoVal == "" && nombresVal == "" && numeroDocumentoVal == "" &&
+                fechaNacimientoVal == "" && correoVal == "" && telefonoVal == "" && celularVal == "" && direccionVal == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado información válida',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            //--
+            if (codTrabajadorVal == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado Código de Trabajador',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (apaternoVal == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado Apellido Paterno',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (amaternoVal == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado Apellido Materno',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (nombresVal == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado Nombres',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (numeroDocumentoVal == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado Número de Documento',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (fechaNacimientoVal == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado Fecha de Nacimiento',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (correoVal == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado su Correo Electrónico',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (telefonoVal == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado su Teléfono fijo',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (celularVal == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado su Número de Celular',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (direccionVal == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado su dirección',
+                    showCloseButton: true
+                })
+                return false;
+            }
+        }
+
+        $(document).ready(function () {
+
+            callChangeDepartamento(document.getElementById('drpDepartamento').value);
+
+            const valorCliente = document.getElementById('hdClienteCodigo').value;
+            const valorContrato = document.getElementById('hdContratoCodigo').value;
+            //-----
+            const textoContrato = document.getElementById('txtCodigoContrato')
+            const textoCliente = document.getElementById('txtCodigoCliente');
+            //-----
+            textoCliente.value = valorCliente;
+            textoContrato.value = valorContrato;
+
+            var parentesco01 = document.getElementById('drpParentesco');
+            if (parentesco01.value == 'T') {
+                document.getElementById('txtCategoria').value = '00';
+            }
+
+        });
+
+        function goBackMantenimiento(e) {
+            e.preventDefault;
+            const valorCliente = document.getElementById('hdClienteCodigo').value;
+            const valorContrato = document.getElementById('hdContratoCodigo').value;
+            const urlBtn = document.getElementById('btnRegresar');
+
+            var url = urlBtn.getAttribute('data-request-url');
+            const url_final = `?CodigoCliente=${valorCliente}&CodigoContrato=${valorContrato}`;
+
+            window.location.href = url + url_final;
+        }
+
+
+        function callChangeDepartamento(id) {
+            const prov = document.getElementById('drpProvincia');
+            //------------------
+            $.ajax({
+                type: "GET",
+                url: "/SaludAsegurados/GetProvincias",
+                data: {
+                    'dptoid': id,
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    prov.innerText = null;
+                    for (var i = 0; i < dataparseada.length; i++) {
+                        var opt = dataparseada[i].CodigoProv;
+                        var tx = dataparseada[i].DescripcionProv;
+                        prov.innerHTML += "<option value=\"" + opt + "\">" + tx + "</option>";
+                    }
+
+                }
+            });
+            callChangeProvincia(prov.value);
+        }
+
+        function callChangeProvincia(id) {
+            const dep = document.getElementById('drpDepartamento').value;
+            const dis = document.getElementById('drpDistrito');
+            //------------------
+            $.ajax({
+                type: "GET",
+                url: "/SaludAsegurados/GetDistritos",
+                data: {
+                    'dptoid': dep,
+                    'provid': id
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    dis.innerText = null;
+                    console.log(dataparseada);
+                    for (var i = 0; i < dataparseada.length; i++) {
+                        var opt = dataparseada[i].CodigoDist;
+                        var tx = dataparseada[i].DescripcionDist;
+                        dis.innerHTML += "<option value=\"" + opt + "\">" + tx + "</option>";
+                    }
+
+                }
+            });
+        }
+    </script>
+}
 
 
 

@@ -18,5 +18,7 @@ namespace Salud.ViewModels
         public ENSaludContratoPlan SaludContratosPlanVM { get; set; }
         public List<ENSaludContratoPlan> VMListaSaludContratosPlan { get; set; }
 
+        public ENClientes VMClientes { get; set; }
+
     }
 }

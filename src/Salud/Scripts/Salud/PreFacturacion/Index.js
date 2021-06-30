@@ -98,7 +98,7 @@ $("body").on("click", "img[src*='plus.jpg']", function () {
     var tipoasegurado = row.find(".cellDescripcionTipoAsegurado").html();
 
     $(this).attr("src", "/images/minus.jpg");
-    $.ajax({
+    $.ajax({    
         type: "GET",
         url: "/PreFacturacion/Detalle",
         data: {
@@ -572,59 +572,6 @@ dateTimeReviver = function (key, value) {
         //console.log(a);
     }
     return value;
-}
-
-function mostrarMensaje(msj01) {
-    var strvalue = msj01;
-    console.log(strvalue);
-    if (strvalue != null && strvalue != "") {
-        Swal.fire({
-            icon: 'info',
-            title: 'Advertencia',
-            text: strvalue,
-            showCloseButton: true
-        });
-    };
-}
-
-function json2table(json, classes) {
-
-    json = JSON.parse(JSON.stringify(json), dateTimeReviver);
-    //json = JSON.parse(JSON.stringify(json))
-    console.log(json);
-
-    var cols = Object.keys(json[0]);
-
-    var headerRow = '';
-    var bodyRows = '';
-
-    classes = classes || '';
-
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    cols.map(function (col) {
-        headerRow += '<th>' + capitalizeFirstLetter(col) + '</th>';
-    });
-
-    json.map(function (row) {
-        bodyRows += '<tr>';
-
-        cols.map(function (colName) {
-            bodyRows += '<td>' + row[colName] + '</td>';
-        })
-
-        bodyRows += '</tr>';
-    });
-
-    return '<table class="table ' +
-        classes +
-        '"><thead class="bg-info"><tr>' +
-        headerRow +
-        '</tr></thead><tbody>' +
-        bodyRows +
-        '</tbody></table>';
 }
 
 //#########################################################################

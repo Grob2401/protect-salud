@@ -1,189 +1,360 @@
 ﻿@model Entidades.ENClientes
 @{
-    ViewBag.Title = "Crear";
+    ViewBag.Title = "Registro de Cliente";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@section Styles {
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
+    @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
+}
 
-@using (Html.BeginForm())
+@*@using (Html.BeginForm())*@
+@using (Html.BeginForm("Crear", "Clientes", FormMethod.Post, new { id = "Form", onsubmit = "return validateForm()" }))
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Clientes</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Datos del Contratante</h5>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="card card-info card-outline shadow-lg sticky-top">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-th-list"></i>
+                        Opciones
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-center pt-2 pb-2">
+                        <div class="col col-md-7">
+                            <button type="submit" class="btn btn-app bg-gradient-info">
+                                <i class="fa fa-save text-warning"></i>&nbsp;&nbsp;Guardar
                             </button>
                         </div>
+                        <div class="col col-md-7">
+                            <a href='@Url.Action("Crear", "Clientes")' class="btn btn-app bg-gradient-secondary">
+                                <i class="fa fa-file-signature text-warning"></i>&nbsp;&nbsp;Limpiar
+                            </a>
+                        </div>
+                        <div class="col col-md-7">
+                            <a href='@Url.Action("Index", "Clientes")' class="btn btn-app bg-gradient-danger">
+                                <i class="fa fa-arrow-left text-warning"></i>&nbsp;&nbsp;Regresar
+                            </a>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="m-auto col-md-10">
+            <div class="card card-primary card-outline shadow-lg">
+                <div class="card-header">
+                    <h5 class="card-title">Contratante</h5>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
 
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="txtCodigoCliente">Código Cliente</label>
-                                    @Html.TextBoxFor(model => model.CodigoCliente, new { id = "txtCodigoCliente", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
-                                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="col-md-9">
+                            <div class="form-group" hidden>
+                                <label for="txtCodigoCliente">Código Cliente</label>
+                                @Html.TextBoxFor(model => model.CodigoCliente, new { id = "txtCodigoCliente", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
                             </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.CodigoTipoCliente, "Tipo Cliente", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoTipoCliente", null, new { id = "drpTipoCliente", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.CodigoTipoCliente)
-                                </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoCorredor, "Corredor :", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoCorredor", null, new { id = "drpCorredor", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.CodigoCorredor)
                             </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="txtRucDni">RUC</label>
-                                    @Html.TextBoxFor(model => model.RucDni, new { id = "txtRucDni", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoEjecutivo, "Ejecutivo :", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoEjecutivo", null, new { id = "drpEjecutivo", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.CodigoEjecutivo)
                             </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="txtRazonSocial">RazonSocial</label>
-                                    @Html.TextBoxFor(model => model.RazonSocial, new { id = "txtRazonSocial", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoTipoCliente, "Tipo Cliente :", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoTipoCliente", null, new { id = "drpTipoCliente", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.CodigoTipoCliente)
                             </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <Label for="txtApellidoPaterno">Paterno</Label>
-                                    @Html.TextBoxFor(model => model.Paterno, new { id = "txtApellidoPaterno", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="txtRucDni">RUC :</label>
+                                @Html.TextBoxFor(model => model.RucDni, new { id = "txtRucDni", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <Label for="txtApellidoMaterno">Materno</Label>
-                                    @Html.TextBoxFor(model => model.Materno, new { id = "txtApellidoMaterno", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="txtRazonSocial">RazonSocial :</label>
+                                @Html.TextBoxFor(model => model.RazonSocial, new { id = "txtRazonSocial", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <Label for="txtApellidosNombres">Nombres</Label>
-                                    @Html.TextBoxFor(model => model.Nombres, new { id = "txtApellidosNombres", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="txtNombreCorto">NombreCorto</label>
+                                @Html.TextBoxFor(model => model.NombreCorto, new { id = "txtNombreCorto", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="txtNombreCorto">NombreCorto</label>
-                                    @Html.TextBoxFor(model => model.NombreCorto, new { id = "txtNombreCorto", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <Label for="txtApellidosNombres">Nombres :</Label>
+                                @Html.TextBoxFor(model => model.Nombres, new { id = "txtApellidosNombres", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="txtPersonaContacto">PersonaContacto</label>
-                                    @Html.TextBoxFor(model => model.PersonaContacto, new { id = "txtPersonaContacto", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <Label for="txtApellidoPaterno">Apellido Paterno :</Label>
+                                @Html.TextBoxFor(model => model.Paterno, new { id = "txtApellidoPaterno", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
-
-                            <div class="col-sm-1">
-                                <div class="form-group">
-                                    <label for="txtTelefono1">Telefono1</label>
-                                    @Html.TextBoxFor(model => model.Telefono1, new { id = "txtTelefono1", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <Label for="txtApellidoMaterno">Apellido Materno :</Label>
+                                @Html.TextBoxFor(model => model.Materno, new { id = "txtApellidoMaterno", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
-                            <div class="col-sm-1">
-                                <div class="form-group">
-                                    <label for="txtTelefono2">Telefono2</label>
-                                    @Html.TextBoxFor(model => model.Telefono2, new { id = "txtTelefono2", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoDpto, "Departamento", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoDpto", null, new { id = "drpDepartamento", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.CodigoDpto)
                             </div>
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="txtEmail">Email</label>
-                                    @Html.TextBoxFor(model => model.Email, new { id = "txtEmail", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoProv, "Provincia", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoProv", null, new { id = "drpProvincia", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.CodigoProv)
                             </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="txtPaginaWeb">PaginaWeb</label>
-                                    @Html.TextBoxFor(model => model.PaginaWeb, new { id = "txtPaginaWeb", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoDist, "Distrito", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoDist", null, new { id = "drpDistrito", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.CodigoDist)
                             </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.CodigoCorredor, "Corredor", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoCorredor", null, new { id = "drpCorredor", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.CodigoCorredor)
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Email</label>
+                                @Html.TextBoxFor(model => model.Email, new { id = "Email", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.CodigoEjecutivo, "Ejecutivo", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoEjecutivo", null, new { id = "drpEjecutivo", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.CodigoEjecutivo)
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="txtTelefono1">Telefono1</label>
+                                @Html.TextBoxFor(model => model.Telefono1, new { id = "txtTelefono1", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
-
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="txtCodigoCotizacion">Dirección</label>
-                                    @Html.TextBoxFor(model => model.Direccion, new { id = "txtDireccion", @class = "form-control form-control-sm", @placeholder = "" })
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="txtTelefono2">Telefono2</label>
+                                @Html.TextBoxFor(model => model.Telefono2, new { id = "txtTelefono2", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
-                            
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.CodigoDpto, "Departamento", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoDpto", null, new { id = "drpDepartamento", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.CodigoDpto)
-                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="txtPaginaWeb">PaginaWeb</label>
+                                @Html.TextBoxFor(model => model.PaginaWeb, new { id = "txtPaginaWeb", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.CodigoProv, "Provincia", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoProv", null, new { id = "drpProvincia", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.CodigoProv)
-                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="txtCodigoCotizacion">Dirección</label>
+                                @Html.TextBoxFor(model => model.Direccion, new { id = "txtDireccion", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.CodigoDist, "Distrito", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoDist", null, new { id = "drpDistrito", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.CodigoDist)
-                                </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label for="txtPersonaContacto">PersonaContacto :</label>
+                                @Html.TextBoxFor(model => model.PersonaContacto, new { id = "txtPersonaContacto", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer">
-                    </div>
                 </div>
-
-
             </div>
+
+
         </div>
+    </div>
+
+    <div class="form-horizontal">
+
 
         <div class="row">
-            <div class="card-footer">
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Grabar</button>
-                    <a href='@Url.Action("Index", "Clientes")' class="btn btn-default float-right">Cancelar</a>
-                </div>
-            </div>
+
         </div>
     </div>
 }
 
 @section Scripts {
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
+    @Scripts.Render("~/Scripts/Shared/util.js")
 
-    @Scripts.Render("~/Content/plugins/jquery-validation/jquery.validate.min.js")
-    @Scripts.Render("~/Content/plugins/jquery-validation/additional-methods.min.js")
+
+    <script>
+        $(document).ready(function () {
+            //$('.js-example-basic-single').select2();
+            $(".js-example-responsive").select2({
+                width: 'resolve' // need to override the changed default
+            });
+        });
+
+
+        function validateForm() {
+            var corredor = document.forms["Form"]["drpCorredor"].value.trim();
+            var ejecutivo = document.forms["Form"]["drpEjecutivo"].value.trim();
+            var rucDNI = document.forms["Form"]["txtRucDni"].value.trim();
+            var razonSocial = document.forms["Form"]["txtRazonSocial"].value.trim();
+            var nombreCorto = document.forms["Form"]["txtNombreCorto"].value.trim();
+            var apellidosNombres = document.forms["Form"]["txtApellidosNombres"].value.trim();
+            var email1 = document.forms["Form"]["Email"].value;
+            var telefono1 = document.forms["Form"]["txtTelefono1"].value.trim();
+            var telefono2 = document.forms["Form"]["txtTelefono2"].value.trim();
+            var paginaWeb = document.forms["Form"]["txtPaginaWeb"].value.trim();
+            var direccion = document.forms["Form"]["txtDireccion"].value.trim();
+            var personaContacto = document.forms["Form"]["txtPersonaContacto"].value.trim();
+            //console.log(email1);
+            //---
+
+            if (corredor == "00000" && ejecutivo == "000" && rucDNI == "" && razonSocial == "" && nombreCorto == "" && apellidosNombres == "" && email1 == ""
+                && telefono1 == "" && telefono2 == "" && paginaWeb == "" && direccion == "" && personaContacto == "") {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Advertencia',
+                    html: 'No ha ingresado información del cliente',
+                    showCloseButton: true,
+                });
+                return false;
+            }
+            //--
+            if (corredor == "00000") {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Advertencia',
+                    html: 'No ha seleccionado corredor',
+                    showCloseButton: true,
+                });
+                return false;
+            }
+
+            if (ejecutivo == "000") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    html: 'No ha seleccionado ejecutivo',
+                    showCloseButton: true,
+                });
+                return false;
+            }
+
+            if (rucDNI == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    html: 'Ingrese RUC o DNI',
+                    showCloseButton: true,
+                });
+                return false;
+            }
+            //---
+            if (razonSocial == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    html: 'Ingrese Razón Social',
+                    showCloseButton: true,
+                });
+                return false;
+            }
+            //---
+            if (nombreCorto == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    html: 'Ingrese Nombre Corto',
+                    showCloseButton: true,
+                });
+                return false;
+            }
+            //---
+            if (apellidosNombres == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    html: 'Ingrese Apellidos y Nombres',
+                    showCloseButton: true,
+                });
+                return false;
+            }
+
+            //---
+            if (email1 == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    html: 'Ingrese Correo',
+                    showCloseButton: true,
+                });
+                return false;
+            } 
+            //---
+            if (telefono1 == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    html: 'Ingrese Teléfono',
+                    showCloseButton: true,
+                });
+                return false;
+            }
+            //---
+            if (telefono2 == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    html: 'Ingrese Teléfono',
+                    showCloseButton: true,
+                });
+                return false;
+            }
+            //---
+            if (paginaWeb == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    html: 'Ingrese página Web',
+                    showCloseButton: true,
+                });
+                return false;
+            }
+            //---
+            if (direccion == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    html: 'Ingrese dirección',
+                    showCloseButton: true,
+                });
+                return false;
+            }
+            //---
+            if (personaContacto == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    html: 'Ingrese persona de contacto',
+                    showCloseButton: true,
+                });
+                return false;
+            }
+        }
+
+    </script>
+
     <script src="~/Scripts/Comandos.js"></script>
+
+
 }

@@ -17,10 +17,15 @@ namespace Entidades
         public string Categoria { get; set; }
         public string Celular { get; set; }
         public string CodigoCentroCosto { get; set; }
+        public string DescripcionCentroCosto { get; set; }
         public string CodigoCliente { get; set; }
+        public string CodigoContrato { get; set; }
+        public string CodigoPlan { get; set; }
         public string CodigoCotizacion { get; set; }
         public string CodigoDocumentoIdentidad { get; set; }
+        public string DescripcionDocumentoIdentidad { get; set; }
         public string CodigoParentesco { get; set; }
+        public string DescripcionParentesco { get; set; }
         public string CodigoSexo { get; set; }
         public string CodigoTipoTrabajador { get; set; }
         public string CodigoTitular { get; set; }
@@ -29,12 +34,16 @@ namespace Entidades
         public string Direccion { get; set; }
         public string Email { get; set; }
         public string Estado { get; set; }
+        public string CodFechaAlta { get; set; }
         public DateTime FechaAlta { get; set; }
+        public string CodFechaBaja { get; set; }
         public DateTime FechaBaja { get; set; }
         public DateTime FechaEmisionCarnet { get; set; }
         public DateTime FechaFinLatencia { get; set; }
         public DateTime FechaInicioLatencia { get; set; }
         public DateTime FechaNacimiento { get; set; }
+        public DateTime InicioVigencia { get; set; }
+        public DateTime FinVigencia { get; set; }
         public DateTime FechaReemisionCarnet { get; set; }
         public string Nombres { get; set; }
         public string NumeroDocumentoIdentidad { get; set; }
@@ -50,6 +59,7 @@ namespace Entidades
         public string SCTRTipoTrabajador { get; set; }
         public string Talla { get; set; }
         public string Telefono { get; set; }
+        public string Edad { get; set; }
 
         public string CodigoDpto { get; set; }
         public string DescripcionDpto { get; set; }
@@ -58,6 +68,14 @@ namespace Entidades
         public string CodigoDist { get; set; }
         public string DescripcionDist { get; set; }
         public string CodigoVendedor { get; set; }
+        //---
+        public string CodigoMedico { get; set; }
+        public DateTime FechaIniAdscrip { get; set; }
+        public string PreExistCodigos { get; set; }
+        public string PreExistOtros { get; set; }
+        public string AppUserCodigo { get; set; }
+        public string CodigoPlanOriginal { get; set; }
+
 
     }
 }

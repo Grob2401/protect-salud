@@ -21,7 +21,7 @@ namespace Salud.Controllers
             return View();
         }
 
-        public ActionResult Crear(string id = "", string idcliente = "")
+        public ActionResult Administrar(string id = "", string idcliente = "",string mensaje = "")
 
         {
             ENSaludContratos oENSaludContratos = null;
@@ -41,7 +41,23 @@ namespace Salud.Controllers
             //Fin
             ViewBag.CodigoCliente = new SelectList(LNClientes.ObtenerTodos().ToList(), "CodigoCliente", "RazonSocial");
             ViewBag.CodigoPlan = new SelectList(LNSaludPlanes.ObtenerTodos().ToList(), "CodigoPlan", "DescripcionPlan");
-            ViewBag.CodigoPlanSC = new SelectList(LNSaludContratoPlan.ObtenerTodos(idcliente,id).ToList(), "CodigoPlanSC", "DescripcionPlanSC");
+            var planess = LNSaludPlanes.ObtenerTodos();
+            TempData["planess"] = planess;
+            ViewBag.CodigoPlanSC = new SelectList(LNSaludContratoPlan.ObtenerTodos(idcliente, id).ToList(), "CodigoPlanSC", "DescripcionPlanSC");
+
+            var mensajeAsignacion = Session["mensajeAsignacion"];
+            if (mensajeAsignacion != null)
+            {
+                TempData["ReceivedId"] = mensajeAsignacion;
+                Session["mensajeAsignacion"] = null;
+                mensajeAsignacion = null;
+            }
+            else
+            {
+                TempData["ReceivedId"] = null;
+            }
+
+
 
             if (id != "")
             {
@@ -59,7 +75,7 @@ namespace Salud.Controllers
                 oENSaludContratos = new ENSaludContratos();
                 oVMSaludContratos = new VMSaludContratos();
 
-                oContratoViewModel.SaludContratosVM.InicioVigencia= DateTime.Now;
+                oContratoViewModel.SaludContratosVM.InicioVigencia = DateTime.Now;
                 oContratoViewModel.SaludContratosVM.FinVigencia = oContratoViewModel.SaludContratosVM.InicioVigencia.AddYears(1);
 
                 //oVMSaludContratos.SaludContratosVM.InicioVigencia= DateTime.Now;
@@ -83,6 +99,110 @@ namespace Salud.Controllers
 
         [SessionExpire]
         [HttpPost]
+        public ActionResult Administrar(string contrato, string plan, string fecini, string fecfin)
+        {
+
+            var arr = fecini.Split('-');
+
+            var dia1 = Convert.ToInt32(arr[2]);
+            var mes1 = Convert.ToInt32(arr[1]);
+            var anio1 = Convert.ToInt32(arr[0]);
+
+            var arr2 = fecfin.Split('-');
+
+            var dia2 = Convert.ToInt32(arr2[2]);
+            var mes2 = Convert.ToInt32(arr2[1]);
+            var anio2 = Convert.ToInt32(arr2[0]);
+
+            DateTime dtini = new DateTime(anio1, mes1, dia1);
+            DateTime dtfin = new DateTime(anio2, mes2, dia2);
+
+            ENSaludContratoPlan oContratoPlan = new ENSaludContratoPlan()
+            {
+                CodigoContrato = contrato,
+                CodigoPlanSC = plan,
+                FechaInicioContratoPlan = dtini,
+                FechaFinContratoPlan = dtfin,
+            };
+
+            bool todoOK = false;
+            if (oContratoPlan.CodigoPlanSC != null)
+            {
+                todoOK = LNSaludContratoPlan.Insertar(oContratoPlan);
+            }
+
+            if (todoOK)
+            {
+                Session["mensajeAsignacion"] = "Datos registrados correctamente";
+                return Json(TempData["mensajeAsignacion"], JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                Session["mensajeAsignacion"] = "Error al asignar planes";
+                return View();
+            }
+        }
+
+        public ActionResult Crear(string id = "", string idcliente = "")
+        {
+
+            ENSaludContratos oENSaludContratos = null;
+            VMSaludContratos oVMSaludContratos = null;
+            ////Prueba
+            var VMContratos = new ENSaludContratos();
+            var VMPlanes = new ENSaludPlanes();
+            var VMListaPlanes = new List<ENSaludPlanes>();
+
+            var oContratoViewModel = new VMSaludContratos
+            {
+                SaludContratosVM = VMContratos,
+                SaludPlanesVM = VMPlanes,
+                VMListaSaludPlanes = VMListaPlanes
+            };
+
+            if (id != "")
+            {
+                oENSaludContratos = LNSaludContratos.ObtenerUno(idcliente, id);
+                ViewBag.CodigoCliente = new SelectList(LNClientes.ObtenerTodos().ToList(), "CodigoCliente", "RazonSocial", oENSaludContratos.CodigoCliente);
+                ViewBag.CodigoTipoContrato = new SelectList(LNTipoContrato.ObtenerTodos().ToList(), "CodigoTipoContrato", "DescripcionTipoContrato", oENSaludContratos.CodigoTipoContrato);
+                ViewBag.CodigoCorredor = new SelectList(LNSCTRCorredor.ObtenerTodos().ToList(), "CodigoCorredor", "DescripcionCorredor", oENSaludContratos.CodigoCorredor);
+                ViewBag.CodigoEjecutivo = new SelectList(LNSCTREjecutivos.ObtenerTodos().ToList(), "CodigoEjecutivo", "NombreEjecutivo", oENSaludContratos.CodigoEjecutivo);
+                oContratoViewModel.SaludContratosVM.InicioVigencia = oENSaludContratos.InicioVigencia;
+                oContratoViewModel.SaludContratosVM.FinVigencia = oENSaludContratos.FinVigencia;
+                oContratoViewModel.SaludContratosVM.CodigoContrato = oENSaludContratos.CodigoContrato;
+            }
+            else
+            {
+                oENSaludContratos = new ENSaludContratos();
+                oVMSaludContratos = new VMSaludContratos();
+
+                oContratoViewModel.SaludContratosVM.InicioVigencia = DateTime.Now;
+                oContratoViewModel.SaludContratosVM.FinVigencia = oContratoViewModel.SaludContratosVM.InicioVigencia.AddYears(1);
+
+                //oVMSaludContratos.SaludContratosVM.InicioVigencia= DateTime.Now;
+                //oVMSaludContratos.SaludContratosVM.FinVigencia = oVMSaludContratos.SaludContratosVM.InicioVigencia.AddYears(1);
+
+                oENSaludContratos.InicioVigencia = DateTime.Now; // valores default para nuevos
+                oENSaludContratos.FinVigencia = oENSaludContratos.InicioVigencia.AddYears(1); // valores default para nuevos
+                //oENSaludContratos.FinVigencia = DateTime.Parse("31/12/2100"); // valores default para nuevos
+
+                ViewBag.CodigoCliente = new SelectList(LNClientes.ObtenerTodos().ToList(), "CodigoCliente", "RazonSocial");
+                ViewBag.CodigoContrato = new SelectList(LNSaludContratos.ObtenerTodos("").ToList(), "CodigoContrato", "CodigoContrato");
+                ViewBag.CodigoTipoContrato = new SelectList(LNTipoContrato.ObtenerTodos().ToList(), "CodigoTipoContrato", "DescripcionTipoContrato");
+                ViewBag.CodigoCorredor = new SelectList(LNSCTRCorredor.ObtenerTodos().ToList(), "CodigoCorredor", "DescripcionCorredor");
+                ViewBag.CodigoEjecutivo = new SelectList(LNSCTREjecutivos.ObtenerTodos().ToList(), "CodigoEjecutivo", "NombreEjecutivo");
+                //ViewBag.CodigoPlan = new SelectList(LNSaludPlanes.ObtenerTodos().ToList(), "CodigoPlan", "Descripcion");
+
+            }
+            //return View(oENSaludContratos);
+            return View(oContratoViewModel);
+            //return View(oVMSaludContratos);
+
+
+        }
+
+        [SessionExpire]
+        [HttpPost]
         public ActionResult Crear(ENSaludContratos contrato)
         {
             if (ModelState.IsValid)
@@ -95,11 +215,65 @@ namespace Salud.Controllers
                 {
                     LNSaludContratos.Insertar(contrato);
                 }
-                return RedirectToAction("Index", "SaludContratos");
+                TempData["mensaje"] = "Informacion de Contrato guardado";
+                return RedirectToAction("Crear", "SaludContratos");
             }
             return View();
         }
 
+        [HttpGet]
+        public ActionResult Obtener(string id)
+        {
+            ENClientes cliente = new ENClientes();
+            cliente = LNClientes.ObtenerUno(id);
+            var contratos = new SelectList(LNSaludContratos.ObtenerTodos(id).ToList(), "CodigoContrato", "CodigoContrato");
+
+            var razon = (cliente.RazonSocial == null ? "" : cliente.RazonSocial);
+            var direccion = (cliente.Direccion == null ? "" : cliente.Direccion);
+            var telefono1 = (cliente.Telefono1 == null ? "" : cliente.Telefono1);
+            var contacto = (cliente.PersonaContacto == null ? "" : cliente.PersonaContacto);
+            var telefono2 = (cliente.Telefono2 == null ? "" : cliente.Telefono2);
+            var email = (cliente.Email == null ? "" : cliente.Email);
+
+            object[] variables = { razon, direccion, telefono1, contacto, telefono2, email, contratos };
+
+            return Json(variables, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult EliminarLimpiarPlanes(string contrato)
+        {
+            //var arr = fecini.Split('-');
+
+            //var dia1 = Convert.ToInt32(arr[2]);
+            //var mes1 = Convert.ToInt32(arr[1]);
+            //var anio1 = Convert.ToInt32(arr[0]);
+
+            //DateTime dtini = new DateTime(anio1, mes1, dia1);
+
+            bool vali = LNSaludContratoPlan.Eliminar(contrato);
+
+            return Json(vali, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult ObtenerDatosContrato(string Codcliente, string idContrato)
+        {
+            ENSaludContratos contrato = new ENSaludContratos();
+            contrato = LNSaludContratos.ObtenerUno(Codcliente, idContrato);
+
+            ENSaludContratoPlan plan = new ENSaludContratoPlan();
+            List<ENSaludContratoPlan> planes = new List<ENSaludContratoPlan>();
+
+            var inicioVigencia = (contrato.InicioVigencia == null ? DateTime.Now : contrato.InicioVigencia);
+            var finVigencia = (contrato.FinVigencia == null ? DateTime.Now : contrato.FinVigencia);
+            var corredor = (contrato.CodigoCorredor == null ? "" : contrato.CodigoCorredor);
+             planes = LNSaludContratoPlan.ObtenerTodos(Codcliente,idContrato);
+
+            object[] variables = { inicioVigencia, finVigencia, corredor, planes };
+
+            return Json(variables, JsonRequestBehavior.AllowGet);
+        }
 
         [SessionExpire]
         public ActionResult Eliminar(string id = "", string idcliente = "")

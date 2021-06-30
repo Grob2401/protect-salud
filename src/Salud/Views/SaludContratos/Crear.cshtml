@@ -1,25 +1,45 @@
 ﻿@*@model Entidades.ENSaludContratos*@
 @model Salud.ViewModels.VMSaludContratos
 @{
-    ViewBag.Title = "Crear";
+    ViewBag.Title = "Agregar";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-@using (Html.BeginForm())
+@section Styles {
+    @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
+}
+@using (Html.BeginForm("Crear", "SaludContratos", FormMethod.Post, new { id = "Form1", onsubmit = "return validateForm()" }))
 {
-    @Html.AntiForgeryToken()
-
-
-    <div class="form-horizontal">
-        <h4>Contratos</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-        <div class="row">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="card card-info card-outline shadow-lg sticky-top">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-th-list"></i>
+                        Opciones
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-center pt-2 pb-2">
+                        <button type="submit" class="btn btn-app bg-gradient-info">
+                            <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;&nbsp;Grabar
+                        </button>
+                        <a href='@Url.Action("Crear", "SaludContratos")' class="btn btn-app bg-gradient-secondary">
+                            <i class="fas fa-file-invoice text-warning"></i>&nbsp;&nbsp;Nuevo
+                        </a>
+                        <a href='@Url.Action("Index", "SaludContratos")' class="btn btn-app bg-gradient-danger">
+                            <i class="fas fa-arrow-left text-warning"></i>&nbsp;&nbsp;Regresar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="col-md-12">
-                <div class="card">
+                <div class="card card-primary card-outline shadow-lg">
                     <div class="card-header">
-                        <h5 class="card-title">Datos del Contrato</h5>
+                        <h5 class="card-title"><i class="fas fa-building text-primary"></i>&nbsp;&nbsp;Información de la empresa :</h5>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
@@ -28,174 +48,175 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <div class="row">
-                            <div Class="col-sm-2">
+                        <div class="row pb-4">
+                            <div class="col-md-8">
                                 <div Class="form-group">
-                                    <Label for="txtCodigoContrato">CodigoContrato</Label>
-                                    @Html.TextBoxFor(model => model.SaludContratosVM.CodigoContrato, new { id = "txtCodigoContrato", @class = "form-control form-control-sm", @readonly = "readonly" })
-                                </div>
-                            </div>
-                            <div Class="col-sm-3">
-                                <div Class="form-group">
-                                    @Html.LabelFor(model => model.SaludContratosVM.CodigoCliente, "CodigoCliente", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoCliente", null, new { id = "drpCodigoCliente", @class = "form-control form-control-sm" })
+                                    @Html.LabelFor(model => model.SaludContratosVM.CodigoCliente, "Cliente :", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("CodigoCliente", null, new { id = "drpCodigoCliente", @class = "form-control-sm js-example-responsive", @style = "width:100%", @onchange = "callChangefunc(this.value)" })
                                     @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoCliente)
                                 </div>
                             </div>
-
-                            <div Class="col-sm-2">
+                            <div class="col-md-6">
+                                <div Class="form-group">
+                                    <Label for="txtRazonSocial">Nombre o Razon Social de la empresa :</Label>
+                                    @Html.TextBoxFor(model => model.VMClientes.RazonSocial, new { id = "txtRazonSocial", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div Class="form-group">
+                                    <Label for="txtPersonaContacto">Direccion :</Label>
+                                    @Html.TextBoxFor(model => model.VMClientes.Direccion, new { id = "txtDireccion", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.row -->
+                        <h5 class="card-title"><i class="fas fa-file text-primary"></i>&nbsp;&nbsp;Información para el contrato</h5>
+                        <br />
+                        <hr class="pt-4" />
+                        <div class="row">
+                            <div class="col-md-4">
                                 <div Class="form-group">
                                     @Html.LabelFor(model => model.SaludContratosVM.CodigoTipoContrato, "CodigoTipoContrato", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoTipoContrato", null, new { id = "drpCodigoTipoContrato", @class = "form-control form-control-sm" })
+                                    @Html.DropDownList("CodigoTipoContrato", null, new { id = "drpCodigoTipoContrato", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                     @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoTipoContrato)
                                 </div>
                             </div>
-
-                            <div Class="col-sm-2">
+                            <div Class="col-md-4">
                                 <div Class="form-group">
-                                    <Label for="txtInicioVigencia">InicioVigencia</Label>
+                                    @Html.LabelFor(model => model.SaludContratosVM.CodigoCotizacion, "Cotizacion :", htmlAttributes: new { @class = "control-label" })
+                                    @Html.TextBox("CodigoCotizacion", null, new { id = "txtCotizacion", @class = "form-control form-control-sm", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div Class="col-md-4">
+                                <div Class="form-group">
+                                    @Html.LabelFor(model => model.SaludContratosVM.InicioVigencia, "Inicio Vigencia", htmlAttributes: new { @class = "control-label" })
                                     @*@Html.TextBoxFor(model => model.InicioVigencia, new { id = "txtInicioVigencia", @class = "form-control form-control-sm", @placeholder = "" })*@
-                                    @Html.TextBoxFor(model => model.SaludContratosVM.InicioVigencia, "{0:yyyy-MM-dd}", new { type = "date", id = "txtInicioVigencia", @class = "form-control form-control-sm float-right" })
+                                    @Html.TextBox("InicioVigencia", "{0:yyyy-MM-dd}", new { type = "date", id = "txtInicioVigencia", @class = "form-control form-control-sm float-right", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
 
                                 </div>
                             </div>
-
-                            <div Class="col-sm-2">
+                            <div class="col-md-4">
                                 <div Class="form-group">
-                                    <Label for="txtFinVigencia">FinVigencia</Label>
+                                    @Html.LabelFor(model => model.SaludContratosVM.FinVigencia, "Fin Vigencia", htmlAttributes: new { @class = "control-label" })
                                     @*@Html.TextBoxFor(model => model.FinVigencia, new { id = "txtFinVigencia", @class = "form-control form-control-sm", @placeholder = "" })*@
-                                    @Html.TextBoxFor(model => model.SaludContratosVM.FinVigencia, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFinVigencia", @class = "form-control form-control-sm float-right" })
+                                    @Html.TextBox("FinVigencia", "{0:yyyy-MM-dd}", new { type = "date", id = "txtFinVigencia", @class = "form-control form-control-sm float-right", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
 
                                 </div>
                             </div>
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.SaludContratosVM.CodigoCorredor, "Corredor", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoCorredor", null, new { id = "drpCorredor", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoCorredor)
-                                </div>
-                            </div>
-
-                            <div class="col-sm-2">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.SaludContratosVM.CodigoEjecutivo, "Ejecutivo", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoEjecutivo", null, new { id = "drpEjecutivo", @class = "form-control form-control-sm" })
+                                    @Html.DropDownList("CodigoEjecutivo", null, new { id = "drpEjecutivo", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                     @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoEjecutivo)
                                 </div>
                             </div>
-
-
-                            @*Prueba de Vista Parcial*@
-                            @*@{
-                                    Html.RenderPartial("_Ubigeo");
-                                }*@
-                            @*Fin Prueba*@
-
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.SaludContratosVM.CodigoCorredor, "Corredor", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("CodigoCorredor", null, new { id = "drpCorredor", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                    @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoCorredor)
+                                </div>
+                            </div>
                         </div>
-                        <!-- /.row -->
                     </div>
-                    <!-- ./card-body -->
-                    <div class="card-footer">
-                        <!-- /.row -->
-                    </div>
-                    <!-- /.card-footer -->
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Planes por Contrato</h5>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <div class="row">
-
-                            <div Class="col-sm-3">
-                                <div Class="form-group">
-                                    @Html.LabelFor(model => model.SaludPlanesVM.CodigoPlan, "Planes Disponibles", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoPlan", null, new { id = "drpCodigoPlan", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.SaludPlanesVM.CodigoPlan)
-                                </div>
-                            </div>
-                            <div Class="col-sm-3">
-                                <div Class="form-group">
-                                    <br />
-                                </div>
-                            </div>
-                            <div Class="col-sm-3">
-                                <div Class="form-group">
-                                    <br />
-                                    <button type="submit" class="btn btn-primary">>></button>
-                                </div>
-                            </div>
-                            <div Class="col-sm-3">
-                                <div Class="form-group">
-                                    @*@Html.Label("Seleccionados")*@
-                                    @Html.LabelFor(model => model.SaludContratosPlanVM.CodigoPlanSC, "Planes Seleccionados", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoPlanSC", null, new { id = "drpCodigoPlanSel", @class = "form-control form-control-sm" })
-                                    @Html.ValidationMessageFor(model => model.SaludContratosPlanVM.CodigoPlanSC)
-
-
-                                    @*@Html.ListBox("listaPlanes", Model.VMListaSaludPlanes, new { @style = "width:200px;height:100px;" })
-                @Html.ListBoxFor(model => model.SaludPlanesVM.CodigoPlan, Model.SaludContratosPlanVM)
-                @Html.ListBoxFor(m => m.SelectedCountry, new SelectList(Model.CountryList, "Value", "Text", Model.CountryList.SelectedValue), new { @Id = "lstcountry", @style = "width:200px;height:60px;" })
-                @Html.ListBoxFor(model => model.SaludContratosPlanVM.CodigoPlan, new SelectList(Model.VMListaSaludContratosPlan, "Value", "Text",""), new { @Id = "lstSeleccionados", @style = "width:200px;height:60px;" })*@
-                                    <br />
-                                    <br />
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-
-                            
-                        </div>
-
-                        <div class="row">
-
-                        </div>
-                        <!-- /.row -->
-                    </div>
-                    <!-- ./card-body -->
-                    <div class="card-footer">
-                        <!-- /.row -->
-                    </div>
-                    <!-- /.card-footer -->
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="card-footer">
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Grabar</button>
-                    <a href='@Url.Action("Index", "SaludContratos")' class="btn btn-default float-right">Cancelar</a>
-                </div>
-            </div>
-        </div>
-
-
     </div>
-
 
 }
 @section Scripts {
 
     @Scripts.Render("~/Content/plugins/jquery-validation/jquery.validate.min.js")
     @Scripts.Render("~/Content/plugins/jquery-validation/additional-methods.min.js")
+    @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Scripts/Shared/util.js")
+
+    <script>
+        var mensaje = "@TempData["mensaje"]";
+        mostrarMensaje(mensaje);
+
+        $(document).ready(function () {
+            //$('.js-example-basic-single').select2();
+            $(".js-example-responsive").select2({
+                width: 'resolve' // need to override the changed default
+            });
+            callChangefunc(document.getElementById('drpCodigoCliente').value);
+        });
+
+        //const comboCliente = document.getElementById('drpCodigoCliente');
+        const razonSocial = document.getElementById('txtRazonSocial');
+        const direccion = document.getElementById('txtDireccion');
+
+
+        function callChangefunc(id)
+        {
+            $.ajax({
+                type: "GET",
+                url: "/SaludContratos/Obtener",
+                data: {
+                    'id': id
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r).toString();
+                    razonSocial.value = dataparseada.split('-')[0];
+                    direccion.value = dataparseada.split('-')[1];
+                }
+            });
+        };
+
+
+
+        function validateForm() {
+            var ejecutivo = document.forms["Form1"]["drpEjecutivo"].value.trim(); //000
+            var broker = document.forms["Form1"]["drpCorredor"].value.trim();//00000
+            var cotizacion = document.forms["Form1"]["txtCotizacion"].value.trim();//""
+            //---
+
+            if (ejecutivo == "000" && broker == "00000" && cotizacion == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado información válida',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            //--
+            if (ejecutivo == "000") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'Debe seleccionar un Ejecutivo',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (broker == "00000") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'Debe seleccionar un Corredor',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (cotizacion == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'IDebe ingresar un código de cotización',
+                    showCloseButton: true
+                })
+                return false;
+            }
+        }
+
+
+    </script>
     <script src="~/Scripts/Comandos.js"></script>
 
 
 }
-
-
-
-
-

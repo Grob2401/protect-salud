@@ -1,0 +1,215 @@
+﻿
+@using Entidades;
+@model Salud.ViewModels.VMAfiliacion
+
+@{
+    ViewBag.Title = "Crear";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
+    @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
+}
+
+@Html.AntiForgeryToken()
+<div class="row">
+    <div class="col-md-2">
+        <div class="card card-info card-outline shadow-lg sticky-top">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-th-list"></i>
+                    Opciones
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row justify-content-center pt-2 pb-2">
+                    <button id="btnCrearTitular" onclick="goCrearTitularDependiente(this.id);" class="btn btn-app bg-gradient-primary" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
+                        <i class="fa fa-user-plus text-warning"></i>&nbsp;&nbsp;Titular
+                    </button>
+                    <button id="btnCrearDependiente" onclick="goCrearTitularDependiente(this.id);" class="btn btn-app bg-gradient-success" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
+                        <i class="fa fa-user-plus text-warning"></i>&nbsp;&nbsp;Dependiente
+                    </button>
+                    <a href='@Url.Action("Crear", "SaludAsegurados")' class="btn btn-app bg-gradient-info">
+                        <i class="fa fa-file-signature text-warning"></i>&nbsp;&nbsp;Grabar
+                    </a>
+                    <a href='@Url.Action("Afiliacion", "SaludAsegurados")' class="btn btn-app bg-gradient-danger">
+                        <i class="fa fa-arrow-left text-warning"></i>&nbsp;&nbsp;Regresar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <div class="card card-primary card-outline shadow-lg">
+            <div class="card-header">
+                <h5 class="card-title"><i class="fas fa-user-astronaut"></i>&nbsp;&nbsp;Datos del Contratante</h5>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <h3 class="text-lg font-weight-bold text-primary">Datos del Contratante</h3>
+                <hr />
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group" hidden>
+                            @Html.LabelFor(model => model.VMCliente.CodigoCliente, "Identificador RUC o DNI:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.VMCliente.CodigoCliente, "", new { type = "text", id = "txtCodigoCli", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.VMCliente.RucDni, "Identificador RUC o DNI:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.VMCliente.RucDni, "", new { type = "text", id = "txtRUCDNI", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.VMContrato.CodigoContrato, "Codigo Contrato", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownList("CodigoContrato", null, new { id = "drpContrato", @class = "form-control form-control-sm", disabled = "true" })
+                            @Html.ValidationMessageFor(model => model.VMContrato.CodigoContrato)
+                        </div>
+                    </div>
+                    <div Class="col-md-2">
+                        <div Class="form-group">
+                            @Html.LabelFor(model => model.VMContrato.InicioVigencia, "Inicio Vigencia", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.VMContrato.InicioVigencia, "{0:yyyy-MM-dd}", new { type = "date", id = "txtInicioVigencia", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+
+                        </div>
+                    </div>
+                    <div Class="col-md-2">
+                        <div Class="form-group">
+                            @Html.LabelFor(model => model.VMContrato.FinVigencia, "Fin Vigencia", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.VMContrato.FinVigencia, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFinVigencia", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.VMCliente.RazonSocial, "Nombre o Razon Social:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.VMCliente.RazonSocial, "", new { type = "text", id = "txtRazonSocial", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <h3 class="text-lg font-weight-bold text-primary">Grupo Familiar</h3>
+                <hr />
+                <div class="row">
+                    <div Class="col-md-12">
+                        <table id="dglistaGrupoFamiliar" class="table table-bordered">
+                            <thead class="bg-gradient-lightblue">
+                                <tr>
+                                    <th>Parentesco</th>
+                                    <th>Afiliado</th>
+                                    <th>Edad</th>
+                                    <th>Fecha Alta</th>
+                                    <th>Fecha Baja</th>
+                                    <th>Estado</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ENSaludAsegurados SaludASegurados in (List<ENSaludAsegurados>)ViewBag.Asegurados)
+                                {
+                                    <tr>
+                                        <td>@SaludASegurados.DescripcionParentesco </td>
+                                        <td>@SaludASegurados.ApellidosNombres </td>
+                                        <td>@SaludASegurados.Edad </td>
+                                        <td>@SaludASegurados.FechaAlta </td>
+                                        <td>@SaludASegurados.FechaBaja </td>
+                                        <td>@SaludASegurados.Estado </td>
+                                        <td class="project-actions text-center">
+                                            <button type="button" class="botonedit btn btn-info btn-sm mr-3">
+                                                <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
+                                            </button>
+                                            <button type="button" class="botoncomi btn btn-primary btn-sm mr-3">
+                                                <i class="fa fa-coins text-warning"></i>&nbsp;&nbsp;Imprimir
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Scripts/Shared/util.js")
+    
+<script>
+         var mensaje = "@ViewBag.MensajeAddAfiliado";
+        if (mensaje != "") {
+
+            if (mensaje.includes("Correcto")) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Correcto',
+                    html: mensaje,
+                    showCloseButton: true
+                });
+            }
+            else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    html: mensaje,
+                    showCloseButton: true
+                });
+            }
+
+        }
+</script>
+
+    <script>
+        $(function () {
+            var tablaLista = $('#dglistaGrupoFamiliar').DataTable({
+                destroy: true,
+                "paging": true,
+                "lengthChange": false,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false,
+                "responsive": false,
+                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                "pageLength": 50,
+                "searching": true,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+        });
+
+
+        function goCrearTitularDependiente(id) {
+            console.log('hola');
+            const valorCliente = document.getElementById('txtCodigoCli').value;
+            const valorContrato = document.getElementById('drpContrato').value;
+            const idtitu = "";
+            const cate = "";
+            const urlBtn = document.getElementById(id);
+
+            var url = urlBtn.getAttribute('data-request-url');
+            const url_final = `?idcliente=${valorCliente}&idtitular=${idtitu}&idcategoria=${cate}&idcontrato=${valorContrato}`
+            console.log(url + url_final);
+            window.location.href = url + url_final;
+        }
+    </script>
+}
+

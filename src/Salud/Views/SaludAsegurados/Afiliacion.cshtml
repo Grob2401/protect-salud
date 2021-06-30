@@ -1,0 +1,331 @@
+﻿@using Entidades;
+@model Salud.ViewModels.VMAfiliacion
+@{
+    ViewBag.Title = "Afiliaciones";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
+    @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-12">
+            <div class="card card-primary card-outline shadow-lg">
+                <div class="card-header">
+                    <div class="col">
+                        <div class="text-center">
+                            <h5 class="card-title"><i class="fas fa-building text-primary"></i>&nbsp;&nbsp;Cliente Contrato</h5>
+                        </div>
+                    </div>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div Class="form-group">
+                                @Html.LabelFor(model => model.VMCliente.CodigoCliente, "Cliente :", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoCliente", null, new { id = "drpCodigoCliente", @class = "form-control-sm js-example-responsive", @style = "width:100%", @onchange = "callChangefunc(this.value)" })
+                                @Html.ValidationMessageFor(model => model.VMCliente.CodigoCliente)
+                            </div>
+                        </div>
+                        <div Class="col-md-4" hidden>
+                            <div Class="form-group">
+                                <Label for="txtCodigoContrato">CodigoContrato</Label>
+                                @Html.TextBox("CodigoContrato", new { id = "txtCodigoContrato", @class = "form-control form-control-sm", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div Class="form-group">
+                                <Label for="txtCodigoContrato">Contratos :</Label>
+                                <select id="drpCodigoContrato" class="form-control-sm js-example-responsive" style="width:100%" onchange="callChangeContrato(this.value)">
+                                </select>
+                            </div>
+                        </div>
+                        <div Class="col-md-2">
+                            <div Class="form-group">
+                                <Label for="txtInicioVigencia">InicioVigencia</Label>
+                                @*@Html.TextBoxFor(model => model.InicioVigencia, new { id = "txtInicioVigencia", @class = "form-control form-control-sm", @placeholder = "" })*@
+                                @Html.TextBox("InicioVigencia", "", new { type = "date", id = "txtInicioVigencia", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+
+                            </div>
+                        </div>
+                        <div Class="col-md-2">
+                            <div Class="form-group">
+                                <Label for="txtFinVigencia">FinVigencia</Label>
+                                @*@Html.TextBoxFor(model => model.FinVigencia, new { id = "txtFinVigencia", @class = "form-control form-control-sm", @placeholder = "" })*@
+                                @Html.TextBox("FinVigencia", "", new { type = "date", id = "txtFinVigencia", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <a href='@Url.Action("Index", "SaludAsegurados")' class="btn btn-default btn-sm bg-gradient-danger pull-right">
+                            <i class="fas fa-arrow-left text-warning"></i>&nbsp;&nbsp;Regresar
+                        </a>
+                    </div>
+                    <!-- /.row -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card card-primary card-outline shadow-lg">
+                <div class="card-header">
+                    <h5 class="card-title"><i class="fas fa-file text-primary"></i>&nbsp;&nbsp;Información de Asegurados</h5>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <button id="btnAgregarAfiliado" onclick="goMantenimiento();" class="btn btn-default btn-sm bg-gradient-primary" data-request-url="@Url.Action("Mantenimiento", "SaludAsegurados")">
+                                <i class="fas fa-user-plus text-warning"></i>&nbsp;&nbsp; Agregar Afiliado
+                            </button>
+                            <button onclick="getSAsegurados();" class="btn btn-default btn-sm bg-gradient-success">
+                                <i class="fas fa-file-excel text-warning"></i>&nbsp;&nbsp;Carga Masiva
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div Class="col-md-12">
+                            <table id="dglistaAsegurados" class="table table-bordered">
+                                <thead class="bg-gradient-lightblue">
+                                    <tr>
+                                        <th></th>
+                                        <th>CODIGO CLIENTE</th>
+                                        <th>CODIGO TITULAR</th>
+                                        <th>AFILIADOS (APELLIDOS Y NOMBRES)</th>
+                                        <th>NACIMIENTO</th>
+                                        <th>EDAD</th>
+                                        <th>FCHALTA</th>
+                                        <th>FCHBAJA</th>
+                                        <th>ESTADO</th>
+                                        <th>CARTA DE PRESENTACIÓN</th>
+
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./card-body -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Scripts/Shared/util.js")
+
+
+    @if (TempData["ReceivedId"] != null)
+    {
+        <script type="text/javascript">
+            window.onload = function () {
+                var mensaje = "@TempData["ReceivedId"]";
+                mostrarMensaje(mensaje);
+            };
+        </script>
+    }
+
+    <script>
+        $(function () {
+            var tablaLista = $('#dglistaAsegurados').DataTable({
+                destroy: true,
+                "paging": true,
+                "lengthChange": false,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false,
+                "responsive": false,
+                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                "pageLength": 50,
+                "searching": true,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+        });
+
+
+        $(document).ready(function () {
+            //$('.js-example-basic-single').select2();
+            $(".js-example-responsive").select2({
+                width: 'resolve' // need to override the changed default
+            });
+            callChangefunc(document.getElementById('drpCodigoCliente').value);
+        });
+
+
+        function callChangefunc(id) {
+            const codContrato = document.getElementById('drpCodigoContrato');
+            let primerValor = 0;
+            $.ajax({
+                type: "GET",
+                url: "/SaludContratos/Obtener",
+                data: {
+                    'id': id
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    var datos = [...dataparseada];
+                    var contratos = [];
+                    contratos = dataparseada[6];
+                    //console.log(primerValor);
+                    codContrato.innerText = null;
+                    for (var i = 0; i < contratos.length; i++) {
+                        var opt = contratos[i].Text;
+                        var tx = contratos[i].Text;
+                        codContrato.innerHTML += "<option value=\"" + opt + "\">" + tx + "</option>";
+                    }
+                    primerValor = contratos[0].Text;
+                    console.log(primerValor);
+                    callChangeContrato(primerValor);
+                }
+            });
+            console.log(primerValor);
+            //callChangeContrato(0);
+        };
+
+        function callChangeContrato(id) {
+            const clienteActual = document.getElementById('drpCodigoCliente').value
+            const IniVigencia = document.getElementById('txtInicioVigencia');
+            const FinVigencia = document.getElementById('txtFinVigencia');
+            var table = $('#dglistaAsegurados').DataTable();      
+            table.clear().draw();
+            //------------------
+            $.ajax({
+                type: "GET",
+                url: "/SaludAsegurados/getSaludAsegurados",
+                data: {
+                    'tipoConsulta': 'TITULARES',
+                    'Codcliente': clienteActual,
+                    'codContrato': id,
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    var datos = [...dataparseada];
+                    //console.log(datos);
+
+                    var IniVigFormato = $.datepicker.formatDate('yy-mm-dd', new Date(Date(dataparseada[0])));
+                    var FinVigFormato = $.datepicker.formatDate('yy-mm-dd', new Date(Date(dataparseada[1])));
+
+                    IniVigencia.value = IniVigFormato;
+                    FinVigencia.value = FinVigFormato;
+
+
+                    const asegurados = dataparseada[2];
+
+                    const aseguradosTodos = asegurados.forEach(asegurado => {
+                        //console.log(asegurado.CodigoCliente);
+                        table.row.add([
+                            `<img src='../Images/plus.jpg' />`,
+                            asegurado.CodigoCliente,
+                            asegurado.CodigoTitular,
+                            asegurado.ApellidosNombres,
+                            asegurado.FechaNacimiento,
+                            asegurado.Edad,
+                            asegurado.FechaAlta,
+                            asegurado.FechaBaja,
+                            asegurado.Estado,
+                            `<button type='button' class='EditarAsegurado btn btn-warning btn-sm'><i class='fa fa-edit text-info'></i>&nbsp;&nbsp;Editar</button>`,
+                        ]).draw(false);
+                    });
+
+                }
+            });
+        };
+
+        dateTimeReviver = function (key, value) {
+            var a;
+            if (typeof value === 'string') {
+                a = /\/Date\((\d*)\)\//.exec(value);
+                if (a) {
+
+                    var dt = new Date(+a[1]);
+
+                    var dateString = moment(dt).format('YYYY-MM-DD');
+
+                    return dateString;
+                }
+                //console.log(a);
+            }
+            return value;
+        }
+
+        $("body").on("click", "img[src*='plus.jpg']", function () {
+            $("img[src*='minus.jpg']").click();
+            //$('table#dglista tr#ad').remove();
+            $(this).attr("src", "/images/plus.jpg");
+            $(this).closest("tr").after("<tr id='ad'><td></td><td id='tab' colspan = '999'>" + $(this).next().html() + "</td></tr>");
+            var row = $(this).closest("tr");
+
+            var Codcliente = row.find("td:eq(1)").text();
+            var Codtitular = row.find("td:eq(2)").text();
+
+            $(this).attr("src", "/images/minus.jpg");
+            $.ajax({
+                type: "GET",
+                url: "/SaludAsegurados/getSoloAsegurados",
+                data: {
+                    'tipoConsulta': 'GRUPOFAMILIAR',
+                    'codCliente': Codcliente,
+                    'codTitular': Codtitular,
+                    'codDependiente': '',
+                    'codContrato': ''
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    console.log(dataparseada);
+                    document.getElementById('tab').innerHTML = json2table(dataparseada, 'table');
+                }
+            });
+
+        });
+
+        //Assign Click event to Minus Image.
+        $("body").on("click", "img[src*='minus.jpg']", function () {
+            $(this).attr("src", "/images/plus.jpg");
+            $(this).closest("tr").next().remove();
+        });
+
+        function goMantenimiento() {
+            const valorCliente = document.getElementById('drpCodigoCliente').value;
+            const valorContrato = document.getElementById('drpCodigoContrato').value;
+            const urlBtn = document.getElementById('btnAgregarAfiliado');
+
+            var url = urlBtn.getAttribute('data-request-url');
+            const url_final = `?CodigoCliente=${valorCliente}&CodigoContrato=${valorContrato}`
+
+            window.location.href = url + url_final;
+        }
+
+    </script>
+
+
+
+}
+
+
+
