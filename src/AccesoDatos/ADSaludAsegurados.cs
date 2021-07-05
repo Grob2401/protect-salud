@@ -292,7 +292,13 @@ namespace AccesoDatos
                     oENSaludAsegurados.Peso = oDataReader["Peso"].ToString();
                     oENSaludAsegurados.RegAddDate = DateTime.Parse(oDataReader["RegAddDate"].ToString());
                     oENSaludAsegurados.RegAddUser = oDataReader["RegAddUser"].ToString();
-                    oENSaludAsegurados.RegEdtDate = DateTime.Parse(oDataReader["RegEdtDate"].ToString());
+                    //oENSaludAsegurados.RegEdtDate = DateTime.Parse(oDataReader["RegEdtDate"].ToString());
+
+                    oENSaludAsegurados.RegEdtDate = oDataReader["RegEdtDate"] == DBNull.Value
+                    ? DateTime.Now
+                    : Convert.ToDateTime(oDataReader["RegEdtDate"]);
+
+
                     oENSaludAsegurados.RegEdtUser = oDataReader["RegEdtUser"].ToString();
                     oENSaludAsegurados.SCTREstadoCivil = oDataReader["SCTREstadoCivil"].ToString();
                     oENSaludAsegurados.SCTRMoneda = oDataReader["SCTRMoneda"].ToString();
@@ -315,13 +321,39 @@ namespace AccesoDatos
             }
         }
 
-        public string Insertar(ENSaludAsegurados oENSaludAsegurados)
+        public string Insertar(ENSaludAsegurados oENSaludAsegurados , string ope)
         {
 
             DbCommand oCommand = null;
             string sUbigeo = "";
+            string sTipoOpe = "";
+            string cate = "";
             try
             {
+
+                if (ope == "editar")
+                {
+                    sTipoOpe = "EDT";
+                    cate = oENSaludAsegurados.Categoria;
+                }
+                else if (ope == "insertar")
+                {
+                    if (oENSaludAsegurados.CodigoTitular == "" || oENSaludAsegurados.CodigoTitular == null)
+                    {
+                        oENSaludAsegurados.CodigoTitular = "";
+                    }
+
+                    if (oENSaludAsegurados.CodigoParentesco == "T" && oENSaludAsegurados.Categoria == null)
+                    {
+                        sTipoOpe = "NEW";
+                        cate = "";
+                    }
+                    else
+                    {
+                        sTipoOpe = "ADD";
+                        cate = "";
+                    }
+                }
 
                 if (oENSaludAsegurados.CodigoUbigeo is null)
                 {
@@ -333,10 +365,10 @@ namespace AccesoDatos
                 }
 
                 oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_AseguradosMantenimientoSalud_V2");
-                GenericDataAccess.AgregarParametro(oCommand, "@PcsTipo", "NEW", TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@PcsTipo", sTipoOpe, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodCliente", oENSaludAsegurados.CodigoCliente, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodTitular", "", TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodCategoria", oENSaludAsegurados.Categoria, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodTitular", oENSaludAsegurados.CodigoTitular, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodCategoria", cate, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodContrato", oENSaludAsegurados.CodigoContrato, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodPlanSalud", oENSaludAsegurados.CodigoPlan, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodTra", oENSaludAsegurados.CodigoTrabajador, TipoParametro.STR, Direccion.INPUT);
@@ -387,14 +419,20 @@ namespace AccesoDatos
                 string datos = "";
                 DataTable dt = new DataTable();
                 dt = ds.Tables[0];
+                var contador = ds.Tables.Count;
+                var ultimaTabla = ds.Tables.Count - 1;
 
-                if (ds.Tables[1].Rows[0][0].ToString() == "1") 
+                if (contador > 0)
                 {
-                    datos = ds.Tables[1].Rows[0][0].ToString() +"-" + ds.Tables[0].Rows[0][0].ToString();
-                }
-                else
-                {
-                    datos = ds.Tables[1].Rows[0][0].ToString() + "-" + ds.Tables[1].Rows[0][1].ToString() + "-" + ds.Tables[0].Rows[0][0].ToString();
+                    if (oENSaludAsegurados.CodigoParentesco == "T" && ope == "insertar")
+                    {
+                        datos = ds.Tables[ultimaTabla].Rows[0][0].ToString() + "-" + ds.Tables[0].Rows[0][0].ToString();
+                    }
+                    else
+                    {
+                        datos = ds.Tables[ultimaTabla].Rows[0][0].ToString() + "-" + oENSaludAsegurados.CodigoTitular;
+                    }
+                   
                 }
                
                 //-----------------------------------------------------------
@@ -588,7 +626,6 @@ namespace AccesoDatos
                             oEnListaSaludAsegurados.DescripcionCentroCosto = oDataReader["CentroCtoDes"].ToString();
                             oEnListaSaludAsegurados.Talla = oDataReader["Talla"].ToString();
                             oEnListaSaludAsegurados.Peso = oDataReader["Peso"].ToString();
-                            oEnListaSaludAsegurados.Estado = oDataReader["Estado"].ToString();
 
                             oListaSaludAsegurados.Add(oEnListaSaludAsegurados);
                             break;

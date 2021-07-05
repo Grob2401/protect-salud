@@ -1,19 +1,17 @@
 ﻿function mostrarMensaje(msj01) {
     var strvalue = msj01;
     var icono = '';
-    console.log(msj01);
+    //console.log(msj01);
     if (strvalue != null && strvalue != "") {
 
         switch (strvalues.split(',')[0]) {
             case 'Correcto':
                 icono = 'info';
-                console.log(icono);
+                //console.log(icono);
             default:
                 icono = 'warning';
-                console.log(icono);
+                //console.log(icono);
         }
-
-
 
         Swal.fire({
             icon: icono,
@@ -41,7 +39,7 @@ function json2table(json, classes) {
 
     json = JSON.parse(JSON.stringify(json), dateTimeReviver);
     //json = JSON.parse(JSON.stringify(json))
-    console.log(json);
+    //console.log(json);
 
     var cols = Object.keys(json[0]);
 

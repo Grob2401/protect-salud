@@ -11,6 +11,7 @@ using System.Runtime.Caching;
 using System.Configuration;
 using Salud.ViewModels;
 using System.Globalization;
+using System.Web.Script.Serialization;
 
 namespace Salud.Controllers
 {
@@ -20,7 +21,7 @@ namespace Salud.Controllers
         public ActionResult Index()
         {
 
-            var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados("TODOS","","","","");
+            var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados("TODOS", "", "", "", "");
             ViewBag.Asegurados = ASEGURADOS;
             TempData["ASEGURADOS"] = ASEGURADOS;
             return View();
@@ -67,7 +68,7 @@ namespace Salud.Controllers
 
 
         [HttpGet]
-        public ActionResult Crear(string idcliente = "", string idtitular = "", string idcategoria = "",string idcontrato = "")
+        public ActionResult Crear(string idcliente = "", string idtitular = "", string idcategoria = "", string idcontrato = "")
         {
             if (idcliente != "" && idcontrato != "")
             {
@@ -81,11 +82,26 @@ namespace Salud.Controllers
                 TempData["MensajeAgregarAFiliado"] = null;
             }
 
+            if (idtitular != "")
+            {
+                TempData["CodigoTitular"] = idtitular;
+            }
+            else
+            {
+                TempData["CodigoTitular"] = null;
+            }
+
+            if (idcategoria != "")
+            {
+                TempData["Categoria"] = idcategoria;
+            }
+
+
             ENSaludAsegurados oENSaludAsegurados = null;
             ViewBag.CodigoCliente = new SelectList(LNClientes.ObtenerTodos().ToList(), "CodigoCliente", "RazonSocial");
             if (idtitular != "" && idcategoria != "" && idcliente != "")
             {
-                oENSaludAsegurados = LNSaludAsegurados.ObtenerUno(idcliente,idtitular,idcategoria);
+                oENSaludAsegurados = LNSaludAsegurados.ObtenerUno(idcliente, idtitular, idcategoria);
                 ViewBag.CodigoDpto = new SelectList(LNUbigeoDpto.ObtenerDpto().ToList(), "CodigoDpto", "DescripcionDpto", oENSaludAsegurados.CodigoDpto);
                 ViewBag.CodigoProv = new SelectList(LNUbigeoProv.ObtenerProv(oENSaludAsegurados.CodigoDpto).ToList(), "CodigoProv", "DescripcionProv", oENSaludAsegurados.CodigoProv);
                 ViewBag.CodigoDist = new SelectList(LNUbigeoDist.ObtenerDist(oENSaludAsegurados.CodigoDpto, oENSaludAsegurados.CodigoProv).ToList(), "CodigoDist", "DescripcionDist", oENSaludAsegurados.CodigoDist);
@@ -95,7 +111,7 @@ namespace Salud.Controllers
                 ViewBag.CodigoSexo = new SelectList(LNSaludSexo.ObtenerTodos().ToList(), "CodigoSexo", "DescripcionSexo", oENSaludAsegurados.CodigoSexo);
                 ViewBag.CodigoDocumentoIdentidad = new SelectList(LNTipoDocumentoIdentidad.ObtenerTodos().ToList(), "CodigoDocumentoIdentidad", "DescripcionDocumentoIdentidad", oENSaludAsegurados.CodigoDocumentoIdentidad);
                 ViewBag.CodigoTipoTrabajador = new SelectList(LNTipoAsegurado.ObtenerTodos().ToList(), "CodigoTipoAsegurado", "DescripcionTipoAsegurado", oENSaludAsegurados.CodigoTipoTrabajador);
-
+                ViewBag.CodigoPlan = new SelectList(LNSaludContratoPlan.ObtenerTodos(idcliente, idcontrato).ToList(), "CodigoPlanSC", "DescripcionPlanSC", oENSaludAsegurados.CodigoPlan);
 
                 //ViewBag.CodigoCliente = new SelectList(LNClientes.ObtenerTodos().ToList(), "CodigoCliente", "RazonSocial", oENSaludCentroCostos.CodigoCliente);
             }
@@ -105,9 +121,21 @@ namespace Salud.Controllers
                 ViewBag.CodigoProv = new SelectList(LNUbigeoProv.ObtenerProv("15").ToList(), "CodigoProv", "DescripcionProv");
                 ViewBag.CodigoDist = new SelectList(LNUbigeoDist.ObtenerDist("15", "01").ToList(), "CodigoDist", "DescripcionDist");
 
-                ENSaludParentesco paren = LNSaludParentesco.ObtenerTodos().Find(smodel => smodel.CodigoParentesco == "T");
+                if (idtitular != "")
+                {
+                    var parentescos = LNSaludParentesco.ObtenerTodos().Where(u => u.CodigoParentesco != "T");
+                    ViewBag.CodigoParentesco = new SelectList(parentescos, "CodigoParentesco", "DescripcionParentesco");
 
-                ViewBag.CodigoParentesco = new SelectList(LNSaludParentesco.ObtenerTodos().ToList(), "CodigoParentesco", "DescripcionParentesco",paren.CodigoParentesco);
+                }
+                else
+                {
+                    ENSaludParentesco paren = LNSaludParentesco.ObtenerTodos().Find(smodel => smodel.CodigoParentesco == "T");
+                    ViewBag.CodigoParentesco = new SelectList(LNSaludParentesco.ObtenerTodos().ToList(), "CodigoParentesco", "DescripcionParentesco", paren.CodigoParentesco);
+                }
+
+
+
+
                 ViewBag.CodigoVendedor = new SelectList(LNVendedores.ObtenerTodos().ToList(), "CodigoVendedor", "DescripcionVendedor");
                 ViewBag.CodigoCentroCosto = new SelectList(LNSaludCentroCostos.ObtenerTodos("000494").ToList(), "CodigoCentroCosto", "DescripcionCentroCosto");
                 ViewBag.CodigoSexo = new SelectList(LNSaludSexo.ObtenerTodos().ToList(), "CodigoSexo", "DescripcionSexo");
@@ -121,7 +149,7 @@ namespace Salud.Controllers
         }
 
         [HttpGet]
-        public ActionResult Mantenimiento(string CodigoCLiente = "", string CodigoTitular = "", string CodigoContrato = "")
+        public ActionResult Mantenimiento(string CodigoCLiente = "", string CodigoTitular = "", string CodigoContrato = "",string origen = "")
         {
             var VMContratos = new ENSaludContratos();
             var VMClientes = new ENClientes();
@@ -133,6 +161,20 @@ namespace Salud.Controllers
                 ViewBag.MensajeAddAfiliado = TempData["MensajeAgregarAFiliado"];
                 TempData["MensajeAgregarAFiliado"] = null;
             }
+
+            if (CodigoTitular != "")
+            {
+                ViewBag.MuestraBtnDependiente = 1;
+                ViewBag.CodigoTitular = CodigoTitular.ToString();
+                ViewBag.CodigoCliente = CodigoCLiente.ToString();
+                ViewBag.CodigoContratoID = CodigoContrato.ToString();
+            }
+
+            if (origen != "")
+            {
+                ViewBag.Origen = origen;
+            }
+
 
             ENSaludContratos oENSaludContratos = null;
             ENClientes oENClientes = null;
@@ -162,11 +204,11 @@ namespace Salud.Controllers
 
         [SessionExpire]
         [HttpPost]
-        public ActionResult Guardar(ENSaludAsegurados asegurado)
-        {
+        public ActionResult Guardar(ENSaludAsegurados asegurado, string registrar, string editar)
+        {          
             var format = "yyyy-MM-dd";
             //------------------------
-            var fecnac = asegurado.FechaNacimiento.ToString("yyyy-MM-dd").Split('-');
+             var fecnac = asegurado.FechaNacimiento.ToString("yyyy-MM-dd").Split('-');
             var anio = Convert.ToInt32(fecnac[0]);
             var mes = Convert.ToInt32(fecnac[1]);
             var dia = Convert.ToInt32(fecnac[2]);
@@ -200,6 +242,8 @@ namespace Salud.Controllers
                 Talla = asegurado.Talla,
                 Peso = asegurado.Peso,
                 CodigoProv = asegurado.CodigoProv,
+                CodigoDist = asegurado.CodigoDist,
+                CodigoDpto = asegurado.CodigoDpto,
                 CodigoMedico = "0",
                 FechaIniAdscrip = ini2,
                 PreExistCodigos = "",
@@ -222,30 +266,43 @@ namespace Salud.Controllers
 
             string resultado = "";
 
-            if (obj.CodigoTitular == null)
+            if (!string.IsNullOrEmpty(registrar))
             {
-                resultado = LNSaludAsegurados.Insertar(obj);
+                //Insertar Asegurado
+                if (asegurado.CodigoParentesco == "C" || asegurado.CodigoParentesco == "M" || asegurado.CodigoParentesco == "P")
+                {
+                    var listaAsegurados = LNSaludAsegurados.ObtenerSaludAsegurados("DEPENDIENTES", asegurado.CodigoCliente, asegurado.CodigoTitular, asegurado.Categoria, asegurado.CodigoContrato).ToList();
+                    
+                    if (listaAsegurados.Count > 0)
+                    {
+                        List<ENSaludAsegurados> listado = listaAsegurados.ToList();
+                        var parentescotxt = listado[0].DescripcionParentesco;
+                        TempData["MensajeAgregarAFiliado"] = "AVISO : El tipo de afiliado "+ parentescotxt.ToString() +" ya existe en el grupo familiar.";
+                        return RedirectToAction("Crear", new { idcliente = asegurado.CodigoCliente, idtitular = asegurado.CodigoTitular, idcategoria = "", idcontrato = asegurado.CodigoContrato });
+                    }
+                }
+
+                resultado = LNSaludAsegurados.Insertar(obj,"insertar");
             }
-            else
+            if (!string.IsNullOrEmpty(editar))
             {
-                //resultado = LNSaludAsegurados.Actualizar(obj);
+                //Edicion Asegurado
+                resultado = LNSaludAsegurados.Insertar(obj,"editar");
             }
+           
             string[] resultados = { };
             resultados = resultado.Split('-');
 
             if (resultados[0] == "1")
             {
-                TempData["MensajeAgregarAFiliado"] = "Correcto, Información registrada.";
+                TempData["MensajeAgregarAFiliado"] = "CORRECTO : Los datos del asegurado han sido registrados";
                 return RedirectToAction("Mantenimiento", new { CodigoCLiente = obj.CodigoCliente, CodigoTitular = resultados[1].ToString(), CodigoContrato = obj.CodigoContrato });
             }
             else
             {
-                TempData["MensajeAgregarAFiliado"] = resultados[1];
+                TempData["MensajeAgregarAFiliado"] = "AVISO : " + resultados[0].ToString();
                 return RedirectToAction("Crear", new { idcliente = obj.CodigoCliente, idtitular = obj.CodigoTitular, idcategoria = obj.Categoria, idcontrato = obj.CodigoContrato });
             }
-
-
-
         }
 
         [SessionExpire]
@@ -356,7 +413,7 @@ namespace Salud.Controllers
             }
             else
             {
-                LNSaludAsegurados.Insertar(asegurado);
+                LNSaludAsegurados.Insertar(asegurado,"insertar");
             }
             return null;
         }
@@ -377,6 +434,7 @@ namespace Salud.Controllers
             var listaAsegurados = LNSaludAsegurados.ObtenerSaludAsegurados(tipoConsulta, codCliente, codTitular, codDependiente, codContrato).ToList();
 
             object[] variables = { inicioVigencia, finVigencia, listaAsegurados };
+            //var json = new JavaScriptSerializer().Serialize(variables);
 
             return Json(variables, JsonRequestBehavior.AllowGet);
 
@@ -389,8 +447,19 @@ namespace Salud.Controllers
         {
             var listaAsegurados = LNSaludAsegurados.ObtenerSaludAsegurados(tipoConsulta, codCliente, codTitular, codDependiente, codContrato)
                 .ToList()
-                .Select(i => new { i.CodigoCliente, i.Categoria, i.CodigoTipoTrabajador, i.DescripcionParentesco, 
-                    i.ApellidosNombres,i.Edad,i.FechaAlta,i.FechaBaja,i.CodigoUbigeo,i.Estado});
+                .Select(i => new
+                {
+                    i.CodigoCliente,
+                    i.Categoria,
+                    i.CodigoTipoTrabajador,
+                    i.DescripcionParentesco,
+                    i.ApellidosNombres,
+                    i.Edad,
+                    i.FechaAlta,
+                    i.FechaBaja,
+                    i.CodigoUbigeo,
+                    i.Estado
+                });
             return Json(listaAsegurados, JsonRequestBehavior.AllowGet);
         }
 

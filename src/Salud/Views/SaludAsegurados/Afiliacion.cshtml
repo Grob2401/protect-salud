@@ -1,7 +1,7 @@
 ﻿@using Entidades;
 @model Salud.ViewModels.VMAfiliacion
 @{
-    ViewBag.Title = "Afiliaciones";
+    ViewBag.Title = "Afiliaciones Regulares";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Styles {
@@ -79,7 +79,7 @@
         <div class="col-md-12">
             <div class="card card-primary card-outline shadow-lg">
                 <div class="card-header">
-                    <h5 class="card-title"><i class="fas fa-file text-primary"></i>&nbsp;&nbsp;Información de Asegurados</h5>
+                    <h5 class="card-title"><i class="fas fa-file text-primary"></i>&nbsp;&nbsp;Asegurados por Contrato&nbsp;&nbsp;<i class="fas fa-arrow-right text-danger"></i>&nbsp;&nbsp;<label id="contratoLabel" class="text-primary"></label> </h5>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
@@ -91,7 +91,7 @@
                     <div class="row">
                         <div class="col">
                             <button id="btnAgregarAfiliado" onclick="goMantenimiento();" class="btn btn-default btn-sm bg-gradient-primary" data-request-url="@Url.Action("Mantenimiento", "SaludAsegurados")">
-                                <i class="fas fa-user-plus text-warning"></i>&nbsp;&nbsp; Agregar Afiliado
+                                <i class="fas fa-user-plus text-warning"></i>&nbsp;&nbsp; Nuevo Titular
                             </button>
                             <button onclick="getSAsegurados();" class="btn btn-default btn-sm bg-gradient-success">
                                 <i class="fas fa-file-excel text-warning"></i>&nbsp;&nbsp;Carga Masiva
@@ -100,7 +100,7 @@
                     </div>
                     <div class="row">
                         <div Class="col-md-12">
-                            <table id="dglistaAsegurados" class="table table-bordered">
+                            <table id="dglistaAsegurados" class="table table-bordered" >
                                 <thead class="bg-gradient-lightblue">
                                     <tr>
                                         <th></th>
@@ -112,7 +112,7 @@
                                         <th>FCHALTA</th>
                                         <th>FCHBAJA</th>
                                         <th>ESTADO</th>
-                                        <th>CARTA DE PRESENTACIÓN</th>
+                                        <th>VER</th>
 
                                     </tr>
                                 </thead>
@@ -146,7 +146,7 @@
         </script>
     }
 
-    <script>
+<script>
         $(function () {
             var tablaLista = $('#dglistaAsegurados').DataTable({
                 destroy: true,
@@ -210,7 +210,11 @@
             const clienteActual = document.getElementById('drpCodigoCliente').value
             const IniVigencia = document.getElementById('txtInicioVigencia');
             const FinVigencia = document.getElementById('txtFinVigencia');
-            var table = $('#dglistaAsegurados').DataTable();      
+            var table = $('#dglistaAsegurados').DataTable();
+            const labelContrato = document.getElementById('contratoLabel');
+            labelContrato.textContent = id;
+            
+            
             table.clear().draw();
             //------------------
             $.ajax({
@@ -225,7 +229,7 @@
                 success: function (r) {
                     var dataparseada = JSON.parse(r);
                     var datos = [...dataparseada];
-                    //console.log(datos);
+                    console.log(datos);
 
                     var IniVigFormato = $.datepicker.formatDate('yy-mm-dd', new Date(Date(dataparseada[0])));
                     var FinVigFormato = $.datepicker.formatDate('yy-mm-dd', new Date(Date(dataparseada[1])));
@@ -243,12 +247,12 @@
                             asegurado.CodigoCliente,
                             asegurado.CodigoTitular,
                             asegurado.ApellidosNombres,
-                            asegurado.FechaNacimiento,
+                            (new Date(parseInt(asegurado.FechaNacimiento.substr(6)))).toLocaleDateString(),
                             asegurado.Edad,
-                            asegurado.FechaAlta,
-                            asegurado.FechaBaja,
+                            (new Date(parseInt(asegurado.FechaAlta.substr(6)))).toLocaleDateString(),
+                            (new Date(parseInt(asegurado.FechaBaja.substr(6)))).toLocaleDateString(),
                             asegurado.Estado,
-                            `<button type='button' class='EditarAsegurado btn btn-warning btn-sm'><i class='fa fa-edit text-info'></i>&nbsp;&nbsp;Editar</button>`,
+                            `<button type='button' class='btn btn-info btn-sm' onclick='EditarAsegurado(event);'  data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'><i class='fa fa-users text-warning'></i>&nbsp;&nbsp;Grupo Familiar</button>`,
                         ]).draw(false);
                     });
 
@@ -316,12 +320,25 @@
             const urlBtn = document.getElementById('btnAgregarAfiliado');
 
             var url = urlBtn.getAttribute('data-request-url');
-            const url_final = `?CodigoCliente=${valorCliente}&CodigoContrato=${valorContrato}`
+            const url_final = `?CodigoCliente=${valorCliente}&CodigoContrato=${valorContrato}&origen=A`
 
             window.location.href = url + url_final;
-        }
+    }
 
-    </script>
+    function EditarAsegurado(e) {
+        const boton = e.target;
+        const Codcliente = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
+        const Codtitular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+        const valorContrato = document.getElementById('drpCodigoContrato').value;
+        const url = boton.getAttribute('data-request-url');
+
+        const url_parametros = `?CodigoCLiente=${Codcliente.trim()}&CodigoTitular=${Codtitular.trim()}&CodigoContrato=${valorContrato.trim()}`
+        console.log(url + url_parametros);
+        window.location.href = url + url_parametros;
+
+    };
+
+</script>
 
 
 

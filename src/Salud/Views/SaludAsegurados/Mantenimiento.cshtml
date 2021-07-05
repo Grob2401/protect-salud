@@ -26,18 +26,48 @@
             </div>
             <div class="card-body">
                 <div class="row justify-content-center pt-2 pb-2">
-                    <button id="btnCrearTitular" onclick="goCrearTitularDependiente(this.id);" class="btn btn-app bg-gradient-primary" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
-                        <i class="fa fa-user-plus text-warning"></i>&nbsp;&nbsp;Titular
-                    </button>
-                    <button id="btnCrearDependiente" onclick="goCrearTitularDependiente(this.id);" class="btn btn-app bg-gradient-success" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
-                        <i class="fa fa-user-plus text-warning"></i>&nbsp;&nbsp;Dependiente
-                    </button>
-                    <a href='@Url.Action("Crear", "SaludAsegurados")' class="btn btn-app bg-gradient-info">
+
+
+                    @{
+
+                        if (ViewBag.MuestraBtnDependiente != null)
+                        {
+
+                            <button id="btnCrearDependiente" onclick="goCrearDependiente(this.id);" class="btn btn-app bg-gradient-success" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
+                                <i class="fa fa-user-plus text-warning"></i>&nbsp;&nbsp;Dependiente
+                            </button>
+
+                        }
+                        else
+                        {
+                            <button id="btnCrearTitular" onclick="goCrearTitular(this.id);" class="btn btn-app bg-gradient-primary" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
+                                <i class="fa fa-user-plus text-warning"></i>&nbsp;&nbsp;Titular
+                            </button>
+                        }
+
+                    }
+                    <a href='@Url.Action("Crear", "SaludAsegurados")' class="btn btn-app bg-gradient-info" hidden>
                         <i class="fa fa-file-signature text-warning"></i>&nbsp;&nbsp;Grabar
                     </a>
-                    <a href='@Url.Action("Afiliacion", "SaludAsegurados")' class="btn btn-app bg-gradient-danger">
-                        <i class="fa fa-arrow-left text-warning"></i>&nbsp;&nbsp;Regresar
-                    </a>
+
+                    @{
+                        if (ViewBag.Origen == "I")
+                        {
+                            <a href='@Url.Action("Index", "SaludAsegurados")' class="btn btn-app bg-gradient-danger">
+                                <i class="fa fa-arrow-left text-warning"></i>&nbsp;&nbsp;Regresar
+                            </a>
+                        }
+                        else
+                        {
+                            <a href='@Url.Action("Afiliacion", "SaludAsegurados")' class="btn btn-app bg-gradient-danger">
+                                <i class="fa fa-arrow-left text-warning"></i>&nbsp;&nbsp;Regresar
+                            </a>
+                        }
+
+
+                    }
+
+
                 </div>
             </div>
         </div>
@@ -103,29 +133,29 @@
                     <div Class="col-md-12">
                         <table id="dglistaGrupoFamiliar" class="table table-bordered">
                             <thead class="bg-gradient-lightblue">
-                                <tr>
-                                    <th>Parentesco</th>
-                                    <th>Afiliado</th>
-                                    <th>Edad</th>
-                                    <th>Fecha Alta</th>
-                                    <th>Fecha Baja</th>
-                                    <th>Estado</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
+                                <th>Parentesco</th>
+                                <th>Categoria</th>
+                                <th>Afiliado</th>
+                                <th>Edad</th>
+                                <th>Fecha Alta</th>
+                                <th>Fecha Baja</th>
+                                <th>Estado</th>
+                                <th></th>
                             </thead>
                             <tbody>
                                 @foreach (ENSaludAsegurados SaludASegurados in (List<ENSaludAsegurados>)ViewBag.Asegurados)
                                 {
                                     <tr>
+
                                         <td>@SaludASegurados.DescripcionParentesco </td>
+                                        <td>@SaludASegurados.Categoria </td>
                                         <td>@SaludASegurados.ApellidosNombres </td>
                                         <td>@SaludASegurados.Edad </td>
                                         <td>@SaludASegurados.FechaAlta </td>
                                         <td>@SaludASegurados.FechaBaja </td>
                                         <td>@SaludASegurados.Estado </td>
                                         <td class="project-actions text-center">
-                                            <button type="button" class="botonedit btn btn-info btn-sm mr-3">
+                                            <button type="button" class="botonedit btn btn-info btn-sm mr-3" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
                                                 <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
                                             </button>
                                             <button type="button" class="botoncomi btn btn-primary btn-sm mr-3">
@@ -152,15 +182,15 @@
     @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
     @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
     @Scripts.Render("~/Scripts/Shared/util.js")
-    
-<script>
+
+    <script>
          var mensaje = "@ViewBag.MensajeAddAfiliado";
         if (mensaje != "") {
 
-            if (mensaje.includes("Correcto")) {
+            if (mensaje.includes("CORRECTO")) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Correcto',
+                    title: 'DATOS GUARDADOS',
                     html: mensaje,
                     showCloseButton: true
                 });
@@ -168,14 +198,14 @@
             else {
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Advertencia',
+                    title: 'ADVERTENCIA',
                     html: mensaje,
                     showCloseButton: true
                 });
             }
 
         }
-</script>
+    </script>
 
     <script>
         $(function () {
@@ -196,9 +226,23 @@
             });
         });
 
+        $(".botonedit").click(function () {            
+            txt1 = $(this).parents('tr').find("td:eq(1)").text().trim();
+            const clienteCod = '@ViewBag.CodigoCliente';
+            const titularCod = '@ViewBag.CodigoTitular';
+            const contratoCod = '@ViewBag.CodigoContratoID';
 
-        function goCrearTitularDependiente(id) {
-            console.log('hola');
+            var url = $(this).attr('data-request-url');
+            console.log(url);
+            const url_final = `?idcliente=${clienteCod}&idtitular=${titularCod}&idcategoria=${txt1}&idcontrato=${contratoCod}`
+            console.log(url + url_final);
+            window.location.href = url + url_final;
+
+        });
+
+
+
+        function goCrearTitular(id) {
             const valorCliente = document.getElementById('txtCodigoCli').value;
             const valorContrato = document.getElementById('drpContrato').value;
             const idtitu = "";
@@ -210,6 +254,22 @@
             console.log(url + url_final);
             window.location.href = url + url_final;
         }
+
+        function goCrearDependiente(id) {
+            var CTitular = "@ViewBag.CodigoTitular";
+
+            const valorCliente = document.getElementById('txtCodigoCli').value;
+            const valorContrato = document.getElementById('drpContrato').value;
+            const idtitu = CTitular;
+            const cate = "";
+            const urlBtn = document.getElementById(id);
+
+            var url = urlBtn.getAttribute('data-request-url');
+            const url_final = `?idcliente=${valorCliente}&idtitular=${idtitu}&idcategoria=${cate}&idcontrato=${valorContrato}`
+            console.log(url + url_final);
+            window.location.href = url + url_final;
+        }
+
     </script>
 }
 

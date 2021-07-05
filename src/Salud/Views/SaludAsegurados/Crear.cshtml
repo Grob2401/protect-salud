@@ -30,9 +30,21 @@
                 <div class="card-body">
                     <div class="row justify-content-center pt-2 pb-2">
                         <div class="col col-md-7">
-                            <button type="submit" class="btn btn-app bg-gradient-info">
-                                <i class="fa fa-save text-warning"></i>&nbsp;&nbsp;Guardar
-                            </button>
+                            @{
+                                if (TempData["Categoria"] == null)
+                                {
+
+                                    <button type="submit" class="btn btn-app bg-gradient-info" name="registrar" value="registrar">
+                                        <i class="fa fa-save text-warning"></i>&nbsp;&nbsp;Guardar
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-app bg-gradient-info" name="editar" value="editar">
+                                        <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
+                                    </button>
+                                }
+                            }
                         </div>
                         @*<div class="col col-md-7">
                                 <a href='@Url.Action("Crear", "SaludAsegurados")' class="btn btn-app bg-gradient-secondary">
@@ -61,14 +73,36 @@
 
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.CodigoParentesco, "Parentesco", htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownList("CodigoParentesco", null, new { id = "drpParentesco", @class = "form-control form-control-sm" })
+                                @Html.DropDownList("CodigoParentesco", null, new { id = "drpParentesco", @class = "form-control form-control-sm", @onchange = "callChangeParen(this)" })
                                 @Html.ValidationMessageFor(model => model.CodigoParentesco)
                             </div>
                         </div>
+                        @{
+
+                            if (TempData["CodigoTitular"] != null)
+                            {
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="txtCodigoTitular">CodigoTitular</label>
+                                        @Html.TextBoxFor(model => model.CodigoTitular, new { id = "txtCodigoTitular", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="txtCategoria">Categoria</label>
+                                        @Html.TextBoxFor(model => model.Categoria, new { id = "txtCategoria", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                                    </div>
+                                </div>
+
+                            }
+
+                        }
                     </div>
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -95,18 +129,7 @@
                                 @Html.TextBoxFor(model => model.CodigoContrato, "", new { id = "txtCodigoContrato", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
                             </div>
                         </div>
-                        <div class="col-md-3" hidden>
-                            <div class="form-group">
-                                <label for="txtCodigoTitular">CodigoTitular</label>
-                                @Html.TextBoxFor(model => model.CodigoTitular, new { id = "txtCodigoTitular", @class = "form-control form-control-sm", @placeholder = "" })
-                            </div>
-                        </div>
-                        <div class="col-md-3" hidden>
-                            <div class="form-group">
-                                <label for="txtCategoria">Categoria</label>
-                                @Html.TextBoxFor(model => model.Categoria, new { id = "txtCategoria", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
-                            </div>
-                        </div>
+
                         <div class="col-md-1">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.CodigoDocumentoIdentidad, "Tipo Documento", htmlAttributes: new { @class = "control-label" })
@@ -283,6 +306,22 @@
     </script>
 
     <script>
+
+        function goBackMantenimiento(e) {
+            e.preventDefault();
+            let CTitular = "";
+            CTitular = "@TempData["CodigoTitular"]";
+
+            const valorCliente = document.getElementById('hdClienteCodigo').value;
+            const valorContrato = document.getElementById('hdContratoCodigo').value;
+            const urlBtn = document.getElementById('btnRegresar');
+
+            var url = urlBtn.getAttribute('data-request-url');
+            const url_final = `?CodigoCliente=${valorCliente}&CodigoTitular=${CTitular}&CodigoContrato=${valorContrato}`;
+
+            window.location.href = url + url_final;
+        }
+
         function validateForm() {
             var codTrabajadorVal = document.forms["Form1"]["txtCodigoTrabajador"].value;
             var codTitularVal = document.forms["Form1"]["txtCodigoTitular"].value.trim();
@@ -413,24 +452,43 @@
             textoCliente.value = valorCliente;
             textoContrato.value = valorContrato;
 
-            var parentesco01 = document.getElementById('drpParentesco');
-            if (parentesco01.value == 'T') {
-                document.getElementById('txtCategoria').value = '00';
-            }
+            const CodigoTitula = document.getElementById('txtCodigoTitular');
+            CodigoTitula.value = "@TempData["CodigoTitular"]";
 
+            callChangeParen('drpParentesco')
         });
 
-        function goBackMantenimiento(e) {
-            e.preventDefault;
-            const valorCliente = document.getElementById('hdClienteCodigo').value;
-            const valorContrato = document.getElementById('hdContratoCodigo').value;
-            const urlBtn = document.getElementById('btnRegresar');
 
-            var url = urlBtn.getAttribute('data-request-url');
-            const url_final = `?CodigoCliente=${valorCliente}&CodigoContrato=${valorContrato}`;
+        function callChangeParen(id)
+        {
+            //console.log(id);
+            var parentesco01 = document.getElementById('drpParentesco');
+            //console.log(parentesco01.value);
 
-            window.location.href = url + url_final;
+            switch (parentesco01.value) {
+                case 'T':
+                    document.getElementById('txtCategoria').value = '00';
+                    break;
+                case 'C':
+                    document.getElementById('txtCategoria').value = '01';
+                    break;
+                case 'H':
+                    document.getElementById('txtCategoria').value = '04';
+                    break;
+                case 'M':
+                    document.getElementById('txtCategoria').value = '03';
+                    break;
+                case 'O':
+                    document.getElementById('txtCategoria').value = '05';
+                    break;
+                case 'P':
+                    document.getElementById('txtCategoria').value = '02';
+                    break;
+                default:
+            }
         }
+
+
 
 
         function callChangeDepartamento(id) {
@@ -472,7 +530,7 @@
                 success: function (r) {
                     var dataparseada = JSON.parse(r);
                     dis.innerText = null;
-                    console.log(dataparseada);
+                    //console.log(dataparseada);
                     for (var i = 0; i < dataparseada.length; i++) {
                         var opt = dataparseada[i].CodigoDist;
                         var tx = dataparseada[i].DescripcionDist;

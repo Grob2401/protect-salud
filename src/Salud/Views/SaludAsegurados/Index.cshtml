@@ -1,7 +1,7 @@
 ﻿@using Entidades;
 @model Salud.ViewModels.VMAsegurados
 @{
-    ViewBag.Title = "Busqueda Asegurados";
+    ViewBag.Title = "Búsqueda Asegurados";
 }
 @section Styles {
     @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
@@ -22,14 +22,14 @@
             <div class="card-body">
                 <div class="row justify-content-center pt-2 pb-2">
 
-                    <button type="button" id="Grabar" class="btn btn-app bg-gradient-info" data-request-url="@Url.Action("Afiliacion", "SaludAsegurados")">
-                        <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;&nbsp;Exportar
-                    </button>
-                    <button onclick="getSAsegurados();" class="btn btn-app bg-gradient-success">
-                        <i class="fas fa-users text-warning"></i>&nbsp;&nbsp;Asegurados
-                    </button>
+                    @*<button type="button" id="Grabar" class="btn btn-app bg-gradient-info" data-request-url="@Url.Action("Afiliacion", "SaludAsegurados")">
+                            <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;&nbsp;Exportar
+                        </button>
+                        <button onclick="getSAsegurados();" class="btn btn-app bg-gradient-success">
+                            <i class="fas fa-users text-warning"></i>&nbsp;&nbsp;Asegurados
+                        </button>*@
                     <a href='@Url.Action("Afiliacion", "SaludAsegurados")' class="btn btn-app bg-gradient-primary">
-                        <i class="fas fa-user-circle text-warning"></i>&nbsp;&nbsp;Afiliacion
+                        <i class="fas fa-user-circle text-warning"></i>&nbsp;&nbsp;Afiliaciones
                     </a>
                     <a href='@Url.Action("Index", "SaludAsegurados")' class="btn btn-app bg-gradient-danger">
                         <i class="fas fa-circle-notch text-warning"></i>&nbsp;&nbsp;Refrescar
@@ -38,7 +38,7 @@
             </div>
         </div>
     </div>
-    <div class="col-10">
+    <div class="col col-md-10">
         <div class="card card-primary card-outline">
             @*<div class="card-header">
                     <h3 class="card-title">
@@ -49,11 +49,12 @@
             <!-- /.card-header -->
             <div class="card-body ">
 
-                <table id="dglista" class="table table-bordered">
+                <table id="dglista" class="table table-bordered table-responsive">
                     <thead class="bg-gradient-lightblue">
                         <tr>
                             <th></th>
                             <th>CODIGO CLIENTE</th>
+                            <th>CODIGO CONTRATO</th>
                             <th>CODIGO TITULAR</th>
                             <th>AFILIADOS (NOMBRES Y APELLIDOS)</th>
                             <th>NACIMIENTO</th>
@@ -61,7 +62,8 @@
                             <th>FECHA ALTA</th>
                             <th>FECHA BAJA</th>
                             <th>ESTADO</th>
-                            <th>OPCIONES</th>
+                            <th>EDITAR</th>
+                            <th>CARTA</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -69,32 +71,35 @@
                         {
                             foreach (ENSaludAsegurados asegurado in (List<ENSaludAsegurados>)ViewBag.Asegurados)
                             {
-                                <tr>
-                                    <td>
-                                        <img src="~/Images/plus.jpg" />
-                                        <div style="display:none">
-                                            @*<div id="tableGoesHere">
+                        <tr>
+                            <td>
+                                <img src="~/Images/plus.jpg" />
+                                <div style="display:none">
+                                    @*<div id="tableGoesHere">
 
-                                                </div>*@
-                                        </div>
-                                    </td>
-                                    <td class="cellCodigoCliente">@asegurado.CodigoCliente </td>
-                                    <td class="cellCodigoTitular">@asegurado.CodigoTitular </td>
-                                    <td>@asegurado.ApellidosNombres </td>
-                                    <td>@asegurado.FechaNacimiento </td>
-                                    <td class="cellDescripcionTipoAsegurado">@asegurado.Edad </td>
-                                    <td>@asegurado.FechaAlta </td>
-                                    <td>@asegurado.FechaBaja </td>
-                                    <td>@asegurado.Estado </td>
-                                    <td width="400" class="text-center">
-                                        <button type="button" class="botonedit btn btn-info btn-sm mr-3">
-                                            <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
-                                        </button>
-                                        <button type="button" class="botoncomi btn btn-primary btn-sm mr-3">
-                                            <i class="fa fa-print text-warning"></i>&nbsp;&nbsp;Imprimir
-                                        </button>
-                                    </td>
-                                </tr>
+                </div>*@
+                                </div>
+                            </td>
+                            <td class="cellCodigoCliente">@asegurado.CodigoCliente </td>
+                            <td class="cellCodigoTitular">@asegurado.CodigoTitular </td>
+                            <td class="cellCodigoTitular">@asegurado.CodigoContrato </td>
+                            <td>@asegurado.ApellidosNombres </td>
+                            <td>@asegurado.FechaNacimiento </td>
+                            <td class="cellDescripcionTipoAsegurado">@asegurado.Edad </td>
+                            <td>@asegurado.FechaAlta </td>
+                            <td>@asegurado.FechaBaja </td>
+                            <td>@asegurado.Estado </td>
+                            <td class="text-center" width="100px">
+                                <button type="button" class="botonedit btn btn-info btn-sm W-100" onclick='EditarAsegurado(event);'  data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'>
+                                    <i class="fa fa-edit text-warning"></i>&nbsp;Editar
+                                </button>
+                            </td>
+                            <td class="text-center" width="110px">
+                                <button type="button" class="botoncomi btn btn-primary btn-sm">
+                                    <i class="fa fa-print text-warning"></i>&nbsp;Imprimir
+                                </button>
+                            </td>
+                        </tr>
                             }
                         }
                     </tbody>
@@ -117,15 +122,42 @@
     @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
     @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
     @Scripts.Render("~/Scripts/Shared/util.js")
-    @Scripts.Render("~/Scripts/Salud/PreFacturacion/Index.js")
 
     <script>
         var mensaje = "@TempData["mensaje"]";
         mostrarMensaje(mensaje);
     </script>
 
-
     <script>
+        $(document).ready(function () {
+            $('#dglista').DataTable({
+                paging: true,
+                lengthChange: false,
+                ordering: false,
+                info: true,
+                autoWidth: false,
+                responsive: true,
+                lengthMenu: [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                pageLength: 50,
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                },
+                //"scrollY": "500px",
+                //"buttons": [
+                //    { "extend": 'pdf', "text": 'Export', "className": 'btn btn-default btn-xs' }
+                //],
+                dom: 'Bfrtip',
+                buttons: [{
+                    extend: 'excelHtml5',
+                    text: 'Exportar Excel',
+                    className: 'btn btn-outline-info btn-sm',
+                    customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                    }
+                }]
+            });
+        });
 
         $("body").on("click", "img[src*='plus.jpg']", function () {
             $("img[src*='minus.jpg']").click();
@@ -156,6 +188,42 @@
             });
 
         });
+
+        //Assign Click event to Minus Image.
+        $("body").on("click", "img[src*='minus.jpg']", function () {
+            $(this).attr("src", "/images/plus.jpg");
+            $(this).closest("tr").next().remove();
+        });
+
+        function EditarAsegurado(e) {
+            const boton = e.target;
+            const Cliente = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
+            const Contrato = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+            const Titular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+            const url = boton.getAttribute('data-request-url');
+            console.log(`${Cliente}-${Contrato}-${Titular}-${url}`);
+            const url_parametros = `?CodigoCLiente=${Cliente.trim()}&CodigoTitular=${Titular.trim()}&CodigoContrato=${Contrato.trim()}&origen=I`
+            console.log(url + url_parametros);
+            window.location.href = url + url_parametros;
+
+        };
+
+        dateTimeReviver = function (key, value) {
+            var a;
+            if (typeof value === 'string') {
+                a = /\/Date\((\d*)\)\//.exec(value);
+                if (a) {
+
+                    var dt = new Date(+a[1]);
+
+                    var dateString = moment(dt).format('YYYY-MM-DD');
+
+                    return dateString;
+                }
+                //console.log(a);
+            }
+            return value;
+        }
 
     </script>
 

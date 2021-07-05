@@ -1838,6 +1838,7 @@
     <Content Include="Images\loading.gif" />
     <Content Include="Images\minus.jpg" />
     <Content Include="Images\plus.jpg" />
+    <Content Include="Images\visa.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\dist\css\adminlte.css.map" />

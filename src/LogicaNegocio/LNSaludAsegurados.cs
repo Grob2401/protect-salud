@@ -19,9 +19,9 @@ namespace LogicaNegocio
             return (new ADSaludAsegurados()).Cantidad(keywords ?? string.Empty);
         }
 
-        public static string Insertar(ENSaludAsegurados oENSaludAsegurados)
+        public static string Insertar(ENSaludAsegurados oENSaludAsegurados,string ope)
         {
-            return (new ADSaludAsegurados()).Insertar(oENSaludAsegurados);
+            return (new ADSaludAsegurados()).Insertar(oENSaludAsegurados,ope);
         }
 
         public static bool Actualizar(ENSaludAsegurados oENSaludAsegurados)
