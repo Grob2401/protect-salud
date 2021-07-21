@@ -16,6 +16,7 @@ public string CodigoCorredor { get; set; }
 public string CodigoCotizacion { get; set; }
 public string CodigoEjecutivo { get; set; }
 public string CodigoTipoContrato { get; set; }
+public string CodigoTipoPrima { get; set; }        
 public DateTime FinVigencia { get; set; }
 public string FlagTmp { get; set; }
 public DateTime InicioVigencia { get; set; }

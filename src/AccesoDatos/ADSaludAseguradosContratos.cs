@@ -9,161 +9,10 @@ using System.Data.SqlClient;
 namespace AccesoDatos
 {
 
-    public class ADSaludAsegurados
+    public class ADSaludAseguradosContratos
     {
         public String dataProviderName = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ProviderName;
         public String connectionString = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ConnectionString;
-
-        public List<ENSaludAsegurados> ObtenerTodos(int page, int rowsPerPage, string keywords)
-        {
-            DbCommand oCommand = null;
-            List<ENSaludAsegurados> oListaSaludAsegurados = new List<ENSaludAsegurados>();
-            try
-            {
-                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenSaludAsegurados_sel");
-                if (page > 0) GenericDataAccess.AgregarParametro(oCommand, "@page", page, TipoParametro.INT, Direccion.INPUT);
-                if (rowsPerPage > 0) GenericDataAccess.AgregarParametro(oCommand, "@rowsPerPage", rowsPerPage, TipoParametro.INT, Direccion.INPUT);
-                if (keywords != null) GenericDataAccess.AgregarParametro(oCommand, "@keywords", keywords, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
-                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
-                while (oDataReader.Read())
-                {
-                    ENSaludAsegurados oEnListaSaludAsegurados = new ENSaludAsegurados();
-                    oEnListaSaludAsegurados.ApellidoMaterno = oDataReader["ApellidoMaterno"].ToString();
-                    oEnListaSaludAsegurados.ApellidoPaterno = oDataReader["ApellidoPaterno"].ToString();
-                    oEnListaSaludAsegurados.ApellidosNombres = oDataReader["ApellidosNombres"].ToString();
-                    oEnListaSaludAsegurados.CantidadCarnet = Convert.ToInt32(oDataReader["CantidadCarnet"]);
-                    oEnListaSaludAsegurados.Categoria = oDataReader["Categoria"].ToString();
-                    oEnListaSaludAsegurados.Celular = oDataReader["Celular"].ToString();
-                    oEnListaSaludAsegurados.CodigoCentroCosto = oDataReader["CodigoCentroCosto"].ToString();
-                    oEnListaSaludAsegurados.CodigoCliente = oDataReader["CodigoCliente"].ToString();
-                    oEnListaSaludAsegurados.CodigoCotizacion = oDataReader["CodigoCotizacion"].ToString();
-                    oEnListaSaludAsegurados.CodigoDocumentoIdentidad = oDataReader["CodigoDocumentoIdentidad"].ToString();
-                    oEnListaSaludAsegurados.CodigoParentesco = oDataReader["CodigoParentesco"].ToString();
-                    oEnListaSaludAsegurados.CodigoSexo = oDataReader["CodigoSexo"].ToString();
-                    oEnListaSaludAsegurados.CodigoTipoTrabajador = oDataReader["CodigoTipoTrabajador"].ToString();
-                    oEnListaSaludAsegurados.CodigoTitular = oDataReader["CodigoTitular"].ToString();
-                    oEnListaSaludAsegurados.CodigoTrabajador = oDataReader["CodigoTrabajador"].ToString();
-                    oEnListaSaludAsegurados.CodigoUbigeo = oDataReader["CodigoUbigeo"].ToString();
-                    oEnListaSaludAsegurados.Direccion = oDataReader["Direccion"].ToString();
-                    oEnListaSaludAsegurados.Email = oDataReader["Email"].ToString();
-                    oEnListaSaludAsegurados.Estado = oDataReader["Estado"].ToString();
-                    //oEnListaSaludAsegurados.FechaAlta = DateTime.Parse(oDataReader["FechaAlta"].ToString());
-
-                    oEnListaSaludAsegurados.FechaAlta = oDataReader["FechaAlta"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FechaAlta"]);
-
-                    //oEnListaSaludAsegurados.FechaBaja = DateTime.Parse(oDataReader["FechaBaja"].ToString());
-
-                    oEnListaSaludAsegurados.FechaBaja = oDataReader["FechaBaja"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FechaBaja"]);
-
-                    //oEnListaSaludAsegurados.FechaEmisionCarnet = DateTime.Parse(oDataReader["FechaEmisionCarnet"].ToString());
-
-                    oEnListaSaludAsegurados.FechaEmisionCarnet = oDataReader["FechaEmisionCarnet"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FechaEmisionCarnet"]);
-
-                    //oEnListaSaludAsegurados.FechaFinLatencia = DateTime.Parse(oDataReader["FechaFinLatencia"].ToString());
-
-                    oEnListaSaludAsegurados.FechaFinLatencia = oDataReader["FechaFinLatencia"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FechaFinLatencia"]);
-
-
-
-                    //oEnListaSaludAsegurados.FechaInicioLatencia = DateTime.Parse(oDataReader["FechaInicioLatencia"].ToString());
-
-
-                    oEnListaSaludAsegurados.FechaInicioLatencia = oDataReader["FechaInicioLatencia"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FechaInicioLatencia"]);
-
-
-
-                    //oEnListaSaludAsegurados.FechaNacimiento = DateTime.Parse(oDataReader["FechaNacimiento"].ToString());
-
-                    oEnListaSaludAsegurados.FechaNacimiento = oDataReader["FechaNacimiento"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FechaNacimiento"]);
-
-
-
-                    //oEnListaSaludAsegurados.FechaReemisionCarnet = DateTime.Parse(oDataReader["FechaReemisionCarnet"].ToString());
-
-                    oEnListaSaludAsegurados.FechaReemisionCarnet = oDataReader["FechaReemisionCarnet"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FechaReemisionCarnet"]);
-
-
-
-
-                    oEnListaSaludAsegurados.Nombres = oDataReader["Nombres"].ToString();
-
-                    //oEnListaSaludAsegurados.NumeroDocumentoIdentidad = oDataReader["NumeroDocumentoIdentidad"].ToString();
-
-                    oEnListaSaludAsegurados.NumeroDocumentoIdentidad = oDataReader["NumeroDocumentoIdentidad"] == DBNull.Value
-                    ? ""
-                    : oDataReader["NumeroDocumentoIdentidad"].ToString();
-
-                    oEnListaSaludAsegurados.Peso = oDataReader["Peso"].ToString();
-
-                    oEnListaSaludAsegurados.RegAddDate = DateTime.Parse(oDataReader["RegAddDate"].ToString());
-                    oEnListaSaludAsegurados.RegAddUser = oDataReader["RegAddUser"].ToString();
-
-                    //oEnListaSaludAsegurados.RegEdtDate = DateTime.Parse(oDataReader["RegEdtDate"].ToString());
-                    if (!DateTime.TryParse(oDataReader["RegEdtDate"].ToString(), out DateTime regEdtDate)) regEdtDate = DateTime.Now;
-                    oEnListaSaludAsegurados.RegEdtDate = regEdtDate;
-
-                    oEnListaSaludAsegurados.RegEdtUser = oDataReader["RegEdtUser"].ToString();
-
-                    //oEnListaSaludAsegurados.SCTREstadoCivil = oDataReader["SCTREstadoCivil"].ToString();
-                    //oEnListaSaludAsegurados.SCTRMoneda = oDataReader["SCTRMoneda"].ToString();
-                    //oEnListaSaludAsegurados.SCTRPSCertificado = oDataReader["SCTRPSCertificado"].ToString();
-                    //oEnListaSaludAsegurados.SCTRSueldo = oDataReader["SCTRSueldo"].ToString();
-                    //oEnListaSaludAsegurados.SCTRTipoTrabajador = oDataReader["SCTRTipoTrabajador"].ToString();
-
-                    oEnListaSaludAsegurados.SCTREstadoCivil = oDataReader["SCTREstadoCivil"] == DBNull.Value
-                    ? ""
-                    : oDataReader["SCTREstadoCivil"].ToString();
-
-                    oEnListaSaludAsegurados.SCTRMoneda = oDataReader["SCTRMoneda"] == DBNull.Value
-                    ? ""
-                    : oDataReader["SCTRMoneda"].ToString();
-
-                    oEnListaSaludAsegurados.SCTRSueldo = oDataReader["SCTRSueldo"] == DBNull.Value
-                    ? ""
-                    : oDataReader["SCTRSueldo"].ToString();
-
-
-
-                    oEnListaSaludAsegurados.SCTRPSCertificado = oDataReader["SCTRPSCertificado"] == DBNull.Value
-                    ? ""
-                    : oDataReader["SCTRPSCertificado"].ToString();
-
-
-                    oEnListaSaludAsegurados.SCTRTipoTrabajador = oDataReader["SCTRTipoTrabajador"] == DBNull.Value
-                    ? ""
-                    : oDataReader["SCTRTipoTrabajador"].ToString();
-
-                    oEnListaSaludAsegurados.Talla = oDataReader["Talla"].ToString();
-                    oEnListaSaludAsegurados.Telefono = oDataReader["Telefono"].ToString();
-
-                    oListaSaludAsegurados.Add(oEnListaSaludAsegurados);
-                }
-                return oListaSaludAsegurados;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
-            finally
-            {
-                GenericDataAccess.CerrarConexion(oCommand, null);
-            }
-        }
 
         public int Cantidad(string keywords)
         {
@@ -301,8 +150,6 @@ namespace AccesoDatos
 
                     oENSaludAsegurados.RegEdtUser = oDataReader["RegEdtUser"].ToString();
                     oENSaludAsegurados.SCTREstadoCivil = oDataReader["SCTREstadoCivil"].ToString();
-                    oENSaludAsegurados.CodigoTipoEstadoCivil = oDataReader["CodigoTipoEstadoCivil"].ToString();
-                    
                     oENSaludAsegurados.SCTRMoneda = oDataReader["SCTRMoneda"].ToString();
                     oENSaludAsegurados.SCTRPSCertificado = oDataReader["SCTRPSCertificado"].ToString();
                     oENSaludAsegurados.SCTRSueldo = oDataReader["SCTRSueldo"].ToString();
@@ -323,7 +170,7 @@ namespace AccesoDatos
             }
         }
 
-        public string Insertar(ENSaludAsegurados oENSaludAsegurados, string ope)
+        public string Insertar(ENSaludAsegurados oENSaludAsegurados , string ope)
         {
 
             DbCommand oCommand = null;
@@ -366,7 +213,7 @@ namespace AccesoDatos
                     sUbigeo = oENSaludAsegurados.CodigoUbigeo;
                 }
 
-                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_AseguradosMantenimientoSalud_V3");
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_AseguradosMantenimientoSalud_V2");
                 GenericDataAccess.AgregarParametro(oCommand, "@PcsTipo", sTipoOpe, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodCliente", oENSaludAsegurados.CodigoCliente, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodTitular", oENSaludAsegurados.CodigoTitular, TipoParametro.STR, Direccion.INPUT);
@@ -388,9 +235,9 @@ namespace AccesoDatos
                 GenericDataAccess.AgregarParametro(oCommand, "@CodParent", oENSaludAsegurados.CodigoParentesco, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodTalla", oENSaludAsegurados.Talla, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodPeso", oENSaludAsegurados.Peso, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodProveedor", "", TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodProveedor", oENSaludAsegurados.CodigoProv, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodMedico", "", TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@FechaIniAdscrip", "", TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@FechaIniAdscrip", oENSaludAsegurados.FechaIniAdscrip, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@PreExistCodigos", "", TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@PreExistOtros", "", TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@AppUserCodigo", "CROJAS", TipoParametro.STR, Direccion.INPUT);
@@ -402,7 +249,6 @@ namespace AccesoDatos
                 GenericDataAccess.AgregarParametro(oCommand, "@CodigoPlanOriginal", oENSaludAsegurados.CodigoPlan, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@FchIniLatencia", oENSaludAsegurados.FechaInicioLatencia, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@FchFinLatencia", oENSaludAsegurados.FechaFinLatencia, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoTipoEstadoCivil", oENSaludAsegurados.CodigoTipoEstadoCivil, TipoParametro.STR, Direccion.INPUT);
 
 
                 var query = oCommand.CommandText;
@@ -435,9 +281,9 @@ namespace AccesoDatos
                     {
                         datos = ds.Tables[ultimaTabla].Rows[0][0].ToString() + "-" + oENSaludAsegurados.CodigoTitular;
                     }
-
+                   
                 }
-
+               
                 //-----------------------------------------------------------
                 if (ds.Tables.Count > 0)
                     return datos;
@@ -556,18 +402,14 @@ namespace AccesoDatos
             }
         }
 
-        public List<ENSaludAsegurados> ObtenerSaludAsegurados(int page, int rows, string Keywords, string tipoConsulta, string tipoCliente, string codCliente, string codTitular, string codDependiente, string codContrato)
+        public List<ENSaludAsegurados> ObtenerSaludAsegurados(string tipoConsulta,string codCliente,string codTitular,string codDependiente, string codContrato)
         {
             DbCommand oCommand = null;
             List<ENSaludAsegurados> oListaSaludAsegurados = new List<ENSaludAsegurados>();
             try
             {
                 oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_AseguradosConsulta");
-                GenericDataAccess.AgregarParametro(oCommand, "@page", page, TipoParametro.INT, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@rowsPerPage", rows, TipoParametro.INT, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@keywords", Keywords, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@TipoConsulta", tipoConsulta == null ? "" : tipoConsulta, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@TipoCliente", tipoCliente == null ? "" : tipoCliente, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodCliente", codCliente == null ? "" : codCliente, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodTitular", codTitular == null ? "" : codTitular, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodDependiente", codDependiente == null ? "" : codDependiente, TipoParametro.STR, Direccion.INPUT);
@@ -597,32 +439,10 @@ namespace AccesoDatos
                             oEnListaSaludAsegurados.FechaBaja = oDataReader["FchBaja"] == DBNull.Value
                             ? DateTime.Now
                             : Convert.ToDateTime(oDataReader["FchBaja"]);
-                            oEnListaSaludAsegurados.CodigoUbigeo = oDataReader["CodigoUbigeo"].ToString();
+                            oEnListaSaludAsegurados.CodigoUbigeo = oDataReader["CodigoUbigeo"].ToString();                           
                             oEnListaSaludAsegurados.Estado = oDataReader["Estado"].ToString();
                             oListaSaludAsegurados.Add(oEnListaSaludAsegurados);
                             break;
-
-                        case "POTESTATIVOS":
-                            oEnListaSaludAsegurados.CodigoCliente = oDataReader["CodigoCliente"].ToString();
-                            oEnListaSaludAsegurados.CodigoTitular = oDataReader["CodigoTitular"].ToString();
-                            oEnListaSaludAsegurados.Categoria = oDataReader["Categoria"].ToString();
-                            oEnListaSaludAsegurados.ApellidosNombres = oDataReader["Asegurado"].ToString();
-                            oEnListaSaludAsegurados.CodigoContrato = oDataReader["CodigoContrato"].ToString();
-                            oEnListaSaludAsegurados.FechaNacimiento = oDataReader["FechaNacimiento"] == DBNull.Value
-                            ? DateTime.Now
-                            : Convert.ToDateTime(oDataReader["FechaNacimiento"]);
-                            oEnListaSaludAsegurados.Edad = oDataReader["Edad"].ToString();
-                            oEnListaSaludAsegurados.FechaAlta = oDataReader["FechaAlta"] == DBNull.Value
-                            ? DateTime.Now
-                            : Convert.ToDateTime(oDataReader["FechaAlta"]);
-                            oEnListaSaludAsegurados.FechaBaja = oDataReader["FechaBaja"] == DBNull.Value
-                            ? DateTime.Now
-                            : Convert.ToDateTime(oDataReader["FechaBaja"]);
-                            oEnListaSaludAsegurados.Estado = oDataReader["Estado"].ToString();
-
-                            oListaSaludAsegurados.Add(oEnListaSaludAsegurados);
-                            break;
-
                         default:
                             oEnListaSaludAsegurados.CodigoCliente = oDataReader["CodCliente"].ToString();
                             oEnListaSaludAsegurados.CodigoTitular = oDataReader["CodTitular"].ToString();
@@ -660,7 +480,7 @@ namespace AccesoDatos
                             break;
                     }
 
-
+                   
                 }
                 return oListaSaludAsegurados;
             }
@@ -674,182 +494,6 @@ namespace AccesoDatos
             }
         }
 
-        // exec sp_Afl_AseguradosIndependientes '0000001249'
-        public List<ENSaludAsegurados> ObtenerSaludAseguradosIndependientesPagos(string codContrato)
-        {
-            DbCommand oCommand = null;
-            List<ENSaludAsegurados> oListaSaludAsegurados = new List<ENSaludAsegurados>();
-            try
-            {
-                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_AseguradosIndependientes");
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoContrato", codContrato == null ? "" : codContrato, TipoParametro.STR, Direccion.INPUT);
-                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
-                while (oDataReader.Read())
-                {
-                    ENSaludAsegurados oEnListaSaludAsegurados = new ENSaludAsegurados();
-
-                    oEnListaSaludAsegurados.CodigoCliente = oDataReader["CodCliente"].ToString();
-                    oEnListaSaludAsegurados.CodigoTitular = oDataReader["CodTitular"].ToString();
-                    oEnListaSaludAsegurados.Categoria = oDataReader["CodCategoria"].ToString();
-                    oEnListaSaludAsegurados.CodigoTrabajador = oDataReader["CodTrabajador"].ToString();
-                    oEnListaSaludAsegurados.CodigoTipoTrabajador = oDataReader["CodigoTipoTrabajador"].ToString();
-                    oEnListaSaludAsegurados.CodigoParentesco = oDataReader["CodParent"].ToString();
-                    oEnListaSaludAsegurados.DescripcionParentesco = oDataReader["Parent"].ToString();
-                    oEnListaSaludAsegurados.ApellidoPaterno = oDataReader["ApePat"].ToString();
-                    oEnListaSaludAsegurados.ApellidoMaterno = oDataReader["ApeMat"].ToString();
-                    oEnListaSaludAsegurados.Nombres = oDataReader["Nombre"].ToString();
-                    oEnListaSaludAsegurados.ApellidosNombres = oDataReader["ApeNom"].ToString();
-                    oEnListaSaludAsegurados.Asegurado = oDataReader["Asegurado"].ToString();
-                    oEnListaSaludAsegurados.Edad = oDataReader["Edad"].ToString();
-                    oEnListaSaludAsegurados.FechaAlta = oDataReader["FchAlta"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FchAlta"]);
-                    oEnListaSaludAsegurados.FechaBaja = oDataReader["FchBaja"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FchBaja"]);
-                    oEnListaSaludAsegurados.CodigoUbigeo = oDataReader["CodigoUbigeo"].ToString();
-
-                    oListaSaludAsegurados.Add(oEnListaSaludAsegurados);
-
-
-                }
-                return oListaSaludAsegurados;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
-            finally
-            {
-                GenericDataAccess.CerrarConexion(oCommand, null);
-            }
-        }
-
-        //exec sp_Afl_AseguradosObtenerCuotasNoPagadas '00253579','000494','00','0000001239'
-        public List<ENSaludAseguradosContratosPagos> ObtenerSaludAseguradosCuotasNoPagadas(string codCliente, string codTitular, string categoria, string codContrato)
-        {
-            DbCommand oCommand = null;
-            List<ENSaludAseguradosContratosPagos> oListaSaludAsegurados = new List<ENSaludAseguradosContratosPagos>();
-            try
-            {
-                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_AseguradosObtenerCuotasNoPagadas");
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoTitular", codTitular == null ? "" : codTitular, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCliente", codCliente == null ? "" : codCliente, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@Categoria", categoria == null ? "" : categoria, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoContrato", codContrato == null ? "" : codContrato, TipoParametro.STR, Direccion.INPUT);
-                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
-                while (oDataReader.Read())
-                {
-                    ENSaludAseguradosContratosPagos oEnListaSaludAsegurados = new ENSaludAseguradosContratosPagos();
-
-                    oEnListaSaludAsegurados.IdCuota = oDataReader["IdCuota"].ToString();
-                    oEnListaSaludAsegurados.CodigoTitular = oDataReader["CodigoTitular"].ToString();
-                    oEnListaSaludAsegurados.CodigoCliente = oDataReader["CodigoCliente"].ToString();
-                    oEnListaSaludAsegurados.Categoria = oDataReader["Categoria"].ToString();
-                    oEnListaSaludAsegurados.CodigoContrato = oDataReader["CodigoContrato"].ToString();
-                    oEnListaSaludAsegurados.FechaInicioCuota = oDataReader["FechaInicioCuota"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FechaInicioCuota"]);
-
-                    oEnListaSaludAsegurados.FechaFinCuota = oDataReader["FechaFinCuota"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FechaFinCuota"]);
-
-                    oEnListaSaludAsegurados.FechaPago = oDataReader["FechaPago"] == DBNull.Value
-                    ? DateTime.Now
-:                   Convert.ToDateTime(oDataReader["FechaPago"]);
-
-                    oEnListaSaludAsegurados.CodigoTipoDocumentoPago = oDataReader["CodigoTipoDocumentoPago"].ToString();
-                    oEnListaSaludAsegurados.NumeroDocumentoPago = oDataReader["NumeroDocumentoPago"].ToString();
-                    oEnListaSaludAsegurados.Monto = oDataReader["Monto"].ToString();
-                    oEnListaSaludAsegurados.Estado = oDataReader["Estado"].ToString();
-
-                    oEnListaSaludAsegurados.FechaCreacion = oDataReader["FechaCreacion"] == DBNull.Value
-                    ? DateTime.Now
-:                   Convert.ToDateTime(oDataReader["FechaCreacion"]);
-
-                    oEnListaSaludAsegurados.CreadoPor = oDataReader["CreadoPor"].ToString();
-                    oEnListaSaludAsegurados.ModificadoPor = oDataReader["ModificadoPor"].ToString();
-                    oEnListaSaludAsegurados.FechaModificacion = oDataReader["FechaModificacion"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FechaModificacion"]);
-
-                    oListaSaludAsegurados.Add(oEnListaSaludAsegurados);
-                }
-                return oListaSaludAsegurados;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
-            finally
-            {
-                GenericDataAccess.CerrarConexion(oCommand, null);
-            }
-        }
-
-        public List<ENSaludAseguradosContratosPagos> ObtenerAseguradosTodasCuotas(string codCliente, string codTitular, string categoria, string codContrato)
-        {
-            DbCommand oCommand = null;
-            List<ENSaludAseguradosContratosPagos> oListaSaludAsegurados = new List<ENSaludAseguradosContratosPagos>();
-            try
-            {
-                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_AseguradosObtenerTodasCuotas");
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoTitular", codTitular == null ? "" : codTitular, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCliente", codCliente == null ? "" : codCliente, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@Categoria", categoria == null ? "" : categoria, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoContrato", codContrato == null ? "" : codContrato, TipoParametro.STR, Direccion.INPUT);
-                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
-                while (oDataReader.Read())
-                {
-                    ENSaludAseguradosContratosPagos oEnListaSaludAsegurados = new ENSaludAseguradosContratosPagos();
-
-                    oEnListaSaludAsegurados.IdCuota = oDataReader["IdCuota"].ToString();
-                    oEnListaSaludAsegurados.CodigoTitular = oDataReader["CodigoTitular"].ToString();
-                    oEnListaSaludAsegurados.CodigoCliente = oDataReader["CodigoCliente"].ToString();
-                    oEnListaSaludAsegurados.Categoria = oDataReader["Categoria"].ToString();
-                    oEnListaSaludAsegurados.CodigoContrato = oDataReader["CodigoContrato"].ToString();
-                    oEnListaSaludAsegurados.FechaInicioCuota = oDataReader["FechaInicioCuota"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FechaInicioCuota"]);
-
-                    oEnListaSaludAsegurados.FechaFinCuota = oDataReader["FechaFinCuota"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FechaFinCuota"]);
-
-                    oEnListaSaludAsegurados.FechaPago = oDataReader["FechaPago"] == DBNull.Value
-                    ? DateTime.Now
-: Convert.ToDateTime(oDataReader["FechaPago"]);
-
-                    oEnListaSaludAsegurados.CodigoTipoDocumentoPago = oDataReader["CodigoTipoDocumentoPago"].ToString();
-                    oEnListaSaludAsegurados.DescripcionTipoDocumentoPago = oDataReader["DescripcionTipoDocumentoPago"].ToString();
-                    oEnListaSaludAsegurados.NumeroDocumentoPago = oDataReader["NumeroDocumentoPago"].ToString();
-                    oEnListaSaludAsegurados.Monto = oDataReader["Monto"].ToString();
-                    oEnListaSaludAsegurados.Estado = oDataReader["Estado"].ToString();
-
-                    oEnListaSaludAsegurados.FechaCreacion = oDataReader["FechaCreacion"] == DBNull.Value
-                    ? DateTime.Now
-: Convert.ToDateTime(oDataReader["FechaCreacion"]);
-
-                    oEnListaSaludAsegurados.CreadoPor = oDataReader["CreadoPor"].ToString();
-                    oEnListaSaludAsegurados.ModificadoPor = oDataReader["ModificadoPor"].ToString();
-                    oEnListaSaludAsegurados.FechaModificacion = oDataReader["FechaModificacion"] == DBNull.Value
-                    ? DateTime.Now
-                    : Convert.ToDateTime(oDataReader["FechaModificacion"]);
-
-                    oListaSaludAsegurados.Add(oEnListaSaludAsegurados);
-                }
-                return oListaSaludAsegurados;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
-            finally
-            {
-                GenericDataAccess.CerrarConexion(oCommand, null);
-            }
-        }
 
     }
 }

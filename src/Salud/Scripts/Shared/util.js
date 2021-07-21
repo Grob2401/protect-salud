@@ -4,7 +4,7 @@
     //console.log(msj01);
     if (strvalue != null && strvalue != "") {
 
-        switch (strvalues.split(',')[0]) {
+        switch (strvalue.split(',')[0]) {
             case 'Correcto':
                 icono = 'info';
                 //console.log(icono);

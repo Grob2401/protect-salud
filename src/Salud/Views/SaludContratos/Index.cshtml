@@ -1,4 +1,5 @@
 ﻿@using Entidades;
+@model Entidades.ENClientes
 @{
     ViewBag.Title = "Contratos";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,6 +7,7 @@
 @section Styles {
     @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
     @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
 }
 <div class="row">
     <div class="col-md-2">
@@ -46,60 +48,87 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body ">
-                
-                <table id="dglista" class="table table-bordered table-hover">
-                    <thead class="bg-gradient-lightblue">
-                        <tr>
-                            <th>CodigoCliente</th>
-                            <th>RazonSocial</th>
-                            <th>RUC</th>
-                            <th>Contrato</th>
-                            <th>TipoContrato</th>
-                            <th>InicioVigencia</th>
-                            <th>FinVigencia</th>
-                            <th>Corredor</th>
-                            <th>Ejecutivo</th>
-                            <th style="width: 15%"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (ENSaludContratos SaludContratos in (List<ENSaludContratos>)ViewBag.SaludContratos)
-                        {
+                @using (Html.BeginForm("Index", "SaludContratos", FormMethod.Post))
+                {
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="drpTipoCliente">Tipo Cliente:</label>
+                                <input type="hidden" id="hdCodigoTipoCliente" name="hdCodigoTipoCliente" />
+                                @Html.DropDownList("CodigoTipoCliente", null, new { id = "drpTipoCliente", @class = "form-control-sm js-example-responsive", @style = "width:100%", @onchange = "callChangeGetValor(this)" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="drpTipoCliente">Búsqueda:</label>
+                                <input type="text" id="txtBusquedaContratos" class="form-control form-control-sm" name="txtBusquedaContratos" placeholder="| Razón Social |" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label style="visibility:hidden;">Búsqueda:</label>
+                                <div>
+                                    <button type="submit" class="btn btn-dark btn-sm">
+                                        <i class="fa fa-search-plus text-warning"></i>&nbsp;&nbsp;Buscar Contrato
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table id="dglista" class="table table-bordered table-hover">
+                        <thead class="bg-gradient-lightblue">
                             <tr>
-                                <td>@SaludContratos.CodigoCliente </td>
-                                <td>@SaludContratos.RazonSocial </td>
-                                <td>@SaludContratos.RUC </td>
-                                <td>@SaludContratos.CodigoContrato </td>
-                                <td>@SaludContratos.CodigoTipoContrato </td>
-                                <td>@SaludContratos.InicioVigencia </td>
-                                <td>@SaludContratos.FinVigencia </td>
-                                <td>@SaludContratos.CodigoCorredor </td>
-                                <td>@SaludContratos.CodigoEjecutivo </td>
-
-                                <td class="project-actions text-center">
-                                    <form action='@Url.Action("Eliminar", "SaludContratos", new {id = SaludContratos.CodigoContrato,idcliente=SaludContratos.CodigoCliente})' method="POST"
-                                          onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
-                                        @Html.AntiForgeryToken()
-                                        <div class="text-center" role="group">
-                                            <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "SaludContratos", new {id = SaludContratos.CodigoContrato,idcliente=SaludContratos.CodigoCliente})'>
-                                                <i class="fas fa-pencil-alt text-warning">
-                                                </i>&nbsp;&nbsp;
-                                                Editar
-                                            </a>
-                                            <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
-                                                <i class="fas fa-times text-warning">
-                                                </i>&nbsp;&nbsp;
-                                                Eliminar
-                                            </button>
-                                        </div>
-                                    </form>
-
-                                </td>
+                                <th>CLIENTE</th>
+                                <th>RAZON SOCIAL</th>
+                                <th>RUC | DNI</th>
+                                <th>CONTRATO</th>
+                                <th>TIPO CONTRATO</th>
+                                <th>INICIO VIGENCIA</th>
+                                <th>FIN VIGENCIA</th>
+                                <th hidden>Corredor</th>
+                                <th hidden>Ejecutivo</th>
+                                <th style="width: 15%"></th>
                             </tr>
-                        }
-                    </tbody>
+                        </thead>
+                        <tbody>
+                            @foreach (ENSaludContratos SaludContratos in (List<ENSaludContratos>)ViewBag.SaludContratos)
+                            {
+                                <tr>
+                                    <td>@SaludContratos.CodigoCliente </td>
+                                    <td>@SaludContratos.RazonSocial </td>
+                                    <td>@SaludContratos.RUC </td>
+                                    <td>@SaludContratos.CodigoContrato </td>
+                                    <td>@SaludContratos.CodigoTipoContrato </td>
+                                    <td>@SaludContratos.InicioVigencia.ToString("dd-MM-yyyy")</td>
+                                    <td>@SaludContratos.FinVigencia.ToString("dd-MM-yyyy") </td>
+                                    <td hidden>@SaludContratos.CodigoCorredor </td>
+                                    <td hidden>@SaludContratos.CodigoEjecutivo </td>
 
-                </table>
+                                    <td class="project-actions text-center">
+                                        <form action='@Url.Action("Eliminar", "SaludContratos", new { id = SaludContratos.CodigoContrato, idcliente = SaludContratos.CodigoCliente })' method="POST"
+                                              onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
+                                            @Html.AntiForgeryToken()
+                                            <div class="text-center" role="group">
+                                                <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "SaludContratos",new RouteValueDictionary( new { idcontrato = SaludContratos.CodigoContrato, idcliente = SaludContratos.CodigoCliente }))'>
+                                                    <i class="fas fa-pencil-alt text-warning">
+                                                    </i>&nbsp;&nbsp;
+                                                    Editar
+                                                </a>
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                                    <i class="fas fa-times text-warning">
+                                                    </i>&nbsp;&nbsp;
+                                                    Eliminar
+                                                </button>
+                                            </div>
+                                        </form>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                }
             </div>
             <!-- /.card-body -->
         </div>
@@ -112,8 +141,28 @@
     @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
     @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
     @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
 
     <script>
+
+        $(document).ready(function () {
+            //$('.js-example-basic-single').select2();
+            $(".js-example-responsive").select2({
+                width: 'resolve' // need to override the changed default
+            });
+            const combito = document.getElementById("drpTipoCliente");
+            callChangeGetValor(combito);
+        });
+
+        function callChangeGetValor(combo) {
+            let valor = "";
+            const idTipoCliente = document.getElementById("hdCodigoTipoCliente");
+            idTipoCliente.value = combo.value;
+            valor = idTipoCliente.value
+            console.log(valor);
+        }
+
+
         $(function () {
 
             $('#dglista').DataTable({
@@ -124,7 +173,8 @@
                 "autoWidth": false,
                 "responsive": true,
                 "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
-                pageLength: 20,
+                pageLength: 10,
+                "searching": false,
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }

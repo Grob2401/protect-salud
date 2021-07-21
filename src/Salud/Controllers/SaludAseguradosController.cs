@@ -17,17 +17,60 @@ namespace Salud.Controllers
 {
     public class SaludAseguradosController : Controller
     {
+
+        #region INDEXS
+        //####################ASEGURADOS
+        //##############################
         [SessionExpire]
         public ActionResult Index()
         {
-
-            var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados("TODOS", "", "", "", "");
+            var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados(1,100,"","TITULARES","", "", "", "", "");
             ViewBag.Asegurados = ASEGURADOS;
+            ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
+            TempData["ASEGURADOS"] = ASEGURADOS;
+            return View();
+        }
+        //####################ASEGURADOS POST
+        //##############################"####
+        [SessionExpire]
+        [HttpPost]
+        public ActionResult Index(string hdCodigoTipoCliente, string txtBusquedaAsegurados = "")
+        {
+            var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, txtBusquedaAsegurados, "TITULARES", hdCodigoTipoCliente, "", "", "", "");
+            ViewBag.Asegurados = ASEGURADOS;
+            ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             TempData["ASEGURADOS"] = ASEGURADOS;
             return View();
         }
 
+        //#####ASEGURADOS INDEPENDIENTES
+        //##############################
+        [HttpGet]
+        [SessionExpire]
+        public ActionResult Independientes()
+        {
+            var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, "","POTESTATIVOS", "", "", "", "", "");
+            ViewBag.Asegurados = ASEGURADOS;
+            ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
+            return View();
+        }
 
+        //#####ASEGURADOS INDEPENDIENTES POST
+        //##############################
+        [HttpPost]
+        [SessionExpire]
+        public ActionResult Independientes(string hdCodigoTipoCliente, string txtBusquedaAsegurados = "")
+        {
+            var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, txtBusquedaAsegurados, "POTESTATIVOS", hdCodigoTipoCliente, "", "", "", "");
+            ViewBag.Asegurados = ASEGURADOS;
+            ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
+            return View();
+        }
+
+        //####################AFILIACION
+        //##############################
+        [HttpGet]
+        [SessionExpire]
         public ActionResult Afiliacion()
         {
             ENSaludContratos oENSaludContratos = null;
@@ -66,8 +109,95 @@ namespace Salud.Controllers
             return View();
         }
 
+        //#################MANTENIMIENTO
+        //##############################
+        [HttpGet]
+        [SessionExpire]
+        public ActionResult Mantenimiento(string CodigoCLiente = "", string CodigoTitular = "", string CodigoContrato = "", string origen = "")
+        {
+            var VMContratos = new ENSaludContratos();
+            var VMClientes = new ENClientes();
+            var VMAsegurado = new ENSaludAsegurados();
+            var VMAsegurados = new List<ENSaludAsegurados>();
+
+            if (TempData["MensajeAgregarAFiliado"] != null)
+            {
+                ViewBag.MensajeAddAfiliado = TempData["MensajeAgregarAFiliado"];
+                TempData["MensajeAgregarAFiliado"] = null;
+            }
+
+            if (CodigoTitular != "")
+            {
+                ViewBag.MuestraBtnDependiente = 1;
+                ViewBag.CodigoTitular = CodigoTitular.ToString();
+                ViewBag.CodigoCliente = CodigoCLiente.ToString();
+                ViewBag.CodigoContratoID = CodigoContrato.ToString();
+            }
+
+            if (origen != "")
+            {
+                ViewBag.Origen = origen;
+            }
+
+
+            ENSaludContratos oENSaludContratos = null;
+            ENClientes oENClientes = null;
+
+            var oContratoViewModel = new VMAfiliacion
+            {
+                VMCliente = VMClientes,
+                VMContrato = VMContratos,
+                VMSaludAsegurado = VMAsegurado,
+                VMSaludAsegurados = VMAsegurados
+            };
+
+            var listaAsegurados = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, "","GRUPOFAMILIAR", "", CodigoCLiente, CodigoTitular, "", CodigoContrato).ToList();
+            ViewBag.Asegurados = listaAsegurados;
+
+
+            oENClientes = LNClientes.ObtenerTodos().Find(smodel => smodel.CodigoCliente == CodigoCLiente);
+            oENSaludContratos = LNSaludContratos.ObtenerTodos(CodigoCLiente).Find(smodel => smodel.CodigoContrato == CodigoContrato);
+            ViewBag.CodigoContrato = new SelectList(LNSaludContratos.ObtenerTodos(CodigoCLiente).ToList(), "CodigoContrato", "CodigoContrato", oENSaludContratos.CodigoContrato);
+            oContratoViewModel.VMCliente.CodigoCliente = oENClientes.CodigoCliente;
+            oContratoViewModel.VMCliente.RazonSocial = oENClientes.RazonSocial;
+            oContratoViewModel.VMCliente.RucDni = oENClientes.RucDni;
+            oContratoViewModel.VMContrato.InicioVigencia = oENSaludContratos.InicioVigencia;
+            oContratoViewModel.VMContrato.FinVigencia = oENSaludContratos.FinVigencia;
+            return View(oContratoViewModel);
+        }
+
+        #endregion
+
+
+
+        #region PAGOS
+
+        [SessionExpire]
+        public ActionResult IndependientesPagos(string contrato)
+        {
+            var INDEPENDIENTESXCONTRATO = LNSaludAsegurados.ObtenerSaludAseguradosIndependientesPagos(contrato);
+            return Json(INDEPENDIENTESXCONTRATO, JsonRequestBehavior.AllowGet);
+        }
+
+        [SessionExpire]
+        public ActionResult ObtenerCuotasNoPagadas(string cliente, string titular, string categoria, string contrato)
+        {
+            var CUOTASNOPAGADAS = LNSaludAsegurados.ObtenerSaludAseguradosCuotasNoPagadas(cliente, titular, categoria, contrato);
+            return Json(CUOTASNOPAGADAS, JsonRequestBehavior.AllowGet);
+        }
+
+        [SessionExpire]
+        public ActionResult ObtenerTodasCuotas(string cliente, string titular, string categoria, string contrato)
+        {
+            var CUOTASNOPAGADAS = LNSaludAsegurados.ObtenerAseguradosTodasCuotas(cliente, titular, categoria, contrato);
+            return Json(CUOTASNOPAGADAS, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
 
         [HttpGet]
+        [SessionExpire]
         public ActionResult Crear(string idcliente = "", string idtitular = "", string idcategoria = "", string idcontrato = "")
         {
             if (idcliente != "" && idcontrato != "")
@@ -112,7 +242,8 @@ namespace Salud.Controllers
                 ViewBag.CodigoDocumentoIdentidad = new SelectList(LNTipoDocumentoIdentidad.ObtenerTodos().ToList(), "CodigoDocumentoIdentidad", "DescripcionDocumentoIdentidad", oENSaludAsegurados.CodigoDocumentoIdentidad);
                 ViewBag.CodigoTipoTrabajador = new SelectList(LNTipoAsegurado.ObtenerTodos().ToList(), "CodigoTipoAsegurado", "DescripcionTipoAsegurado", oENSaludAsegurados.CodigoTipoTrabajador);
                 ViewBag.CodigoPlan = new SelectList(LNSaludContratoPlan.ObtenerTodos(idcliente, idcontrato).ToList(), "CodigoPlanSC", "DescripcionPlanSC", oENSaludAsegurados.CodigoPlan);
-
+                ViewBag.CodigoTipoEstadoCivil = new SelectList(LNSaludEstadoCivil.ObtenerTodos().ToList(), "CodigoTipoEstadoCivil", "DescripcionTipoEstadoCivil", oENSaludAsegurados.CodigoTipoEstadoCivil);
+                ViewBag.CodigoPais = new SelectList(LNTipoPais.ObtenerTodos().ToList(), "CodigoTipoPais", "DescripcionTipoPais", oENSaludAsegurados.Pais);
                 //ViewBag.CodigoCliente = new SelectList(LNClientes.ObtenerTodos().ToList(), "CodigoCliente", "RazonSocial", oENSaludCentroCostos.CodigoCliente);
             }
             else
@@ -142,64 +273,12 @@ namespace Salud.Controllers
                 ViewBag.CodigoDocumentoIdentidad = new SelectList(LNTipoDocumentoIdentidad.ObtenerTodos().ToList(), "CodigoDocumentoIdentidad", "DescripcionDocumentoIdentidad");
                 ViewBag.CodigoTipoTrabajador = new SelectList(LNTipoAsegurado.ObtenerTodos().ToList(), "CodigoTipoAsegurado", "DescripcionTipoAsegurado");
                 ViewBag.CodigoPlan = new SelectList(LNSaludContratoPlan.ObtenerTodos(idcliente, idcontrato).ToList(), "CodigoPlanSC", "DescripcionPlanSC");
+                ViewBag.CodigoTipoEstadoCivil = new SelectList(LNSaludEstadoCivil.ObtenerTodos().ToList(), "CodigoTipoEstadoCivil", "DescripcionTipoEstadoCivil");
+                ViewBag.CodigoPais = new SelectList(LNTipoPais.ObtenerTodos().ToList(), "CodigoTipoPais", "DescripcionTipoPais");
 
                 oENSaludAsegurados = new ENSaludAsegurados();
             }
             return View(oENSaludAsegurados);
-        }
-
-        [HttpGet]
-        public ActionResult Mantenimiento(string CodigoCLiente = "", string CodigoTitular = "", string CodigoContrato = "",string origen = "")
-        {
-            var VMContratos = new ENSaludContratos();
-            var VMClientes = new ENClientes();
-            var VMAsegurado = new ENSaludAsegurados();
-            var VMAsegurados = new List<ENSaludAsegurados>();
-
-            if (TempData["MensajeAgregarAFiliado"] != null)
-            {
-                ViewBag.MensajeAddAfiliado = TempData["MensajeAgregarAFiliado"];
-                TempData["MensajeAgregarAFiliado"] = null;
-            }
-
-            if (CodigoTitular != "")
-            {
-                ViewBag.MuestraBtnDependiente = 1;
-                ViewBag.CodigoTitular = CodigoTitular.ToString();
-                ViewBag.CodigoCliente = CodigoCLiente.ToString();
-                ViewBag.CodigoContratoID = CodigoContrato.ToString();
-            }
-
-            if (origen != "")
-            {
-                ViewBag.Origen = origen;
-            }
-
-
-            ENSaludContratos oENSaludContratos = null;
-            ENClientes oENClientes = null;
-
-            var oContratoViewModel = new VMAfiliacion
-            {
-                VMCliente = VMClientes,
-                VMContrato = VMContratos,
-                VMSaludAsegurado = VMAsegurado,
-                VMSaludAsegurados = VMAsegurados
-            };
-
-            var listaAsegurados = LNSaludAsegurados.ObtenerSaludAsegurados("GRUPOFAMILIAR", CodigoCLiente, CodigoTitular, "", CodigoContrato).ToList();
-            ViewBag.Asegurados = listaAsegurados;
-
-
-            oENClientes = LNClientes.ObtenerTodos().Find(smodel => smodel.CodigoCliente == CodigoCLiente);
-            oENSaludContratos = LNSaludContratos.ObtenerTodos(CodigoCLiente).Find(smodel => smodel.CodigoContrato == CodigoContrato);
-            ViewBag.CodigoContrato = new SelectList(LNSaludContratos.ObtenerTodos(CodigoCLiente).ToList(), "CodigoContrato", "CodigoContrato", oENSaludContratos.CodigoContrato);
-            oContratoViewModel.VMCliente.CodigoCliente = oENClientes.CodigoCliente;
-            oContratoViewModel.VMCliente.RazonSocial = oENClientes.RazonSocial;
-            oContratoViewModel.VMCliente.RucDni = oENClientes.RucDni;
-            oContratoViewModel.VMContrato.InicioVigencia = oENSaludContratos.InicioVigencia;
-            oContratoViewModel.VMContrato.FinVigencia = oENSaludContratos.FinVigencia;
-            return View(oContratoViewModel);
         }
 
         [SessionExpire]
@@ -239,6 +318,7 @@ namespace Salud.Controllers
                 FinVigencia = ini2,
                 CodigoCentroCosto = asegurado.CodigoCentroCosto,
                 CodigoParentesco = asegurado.CodigoParentesco,
+                CodigoTipoEstadoCivil = asegurado.CodigoTipoEstadoCivil,
                 Talla = asegurado.Talla,
                 Peso = asegurado.Peso,
                 CodigoProv = asegurado.CodigoProv,
@@ -261,7 +341,8 @@ namespace Salud.Controllers
                 FechaEmisionCarnet = ini2,
                 FechaReemisionCarnet = ini2,
                 RegAddDate = ini2,
-                RegEdtDate = ini2
+                RegEdtDate = ini2,
+                Pais = asegurado.Pais,
             };
 
             string resultado = "";
@@ -271,7 +352,7 @@ namespace Salud.Controllers
                 //Insertar Asegurado
                 if (asegurado.CodigoParentesco == "C" || asegurado.CodigoParentesco == "M" || asegurado.CodigoParentesco == "P")
                 {
-                    var listaAsegurados = LNSaludAsegurados.ObtenerSaludAsegurados("DEPENDIENTES", asegurado.CodigoCliente, asegurado.CodigoTitular, asegurado.Categoria, asegurado.CodigoContrato).ToList();
+                    var listaAsegurados = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, "","DEPENDIENTES", "", asegurado.CodigoCliente, asegurado.CodigoTitular, asegurado.Categoria, asegurado.CodigoContrato).ToList();
                     
                     if (listaAsegurados.Count > 0)
                     {
@@ -308,7 +389,6 @@ namespace Salud.Controllers
         [SessionExpire]
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         public ActionResult Eliminar(int Id)
         {
             if (ModelState.IsValid)
@@ -423,7 +503,7 @@ namespace Salud.Controllers
         //############################
         [SessionExpire]
         [HttpGet]
-        public ActionResult getSaludAsegurados(string tipoConsulta, string codCliente, string codTitular, string codDependiente, string codContrato)
+        public ActionResult getSaludAsegurados(string tipoConsulta, string tipoCliente, string codCliente, string codTitular, string codDependiente, string codContrato)
         {
 
             ENSaludContratos contrato = new ENSaludContratos();
@@ -431,7 +511,7 @@ namespace Salud.Controllers
 
             var inicioVigencia = (contrato.InicioVigencia == null ? DateTime.Now : contrato.InicioVigencia);
             var finVigencia = (contrato.FinVigencia == null ? DateTime.Now : contrato.FinVigencia);
-            var listaAsegurados = LNSaludAsegurados.ObtenerSaludAsegurados(tipoConsulta, codCliente, codTitular, codDependiente, codContrato).ToList();
+            var listaAsegurados = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, "",tipoConsulta, tipoCliente, codCliente, codTitular, codDependiente, codContrato).ToList();
 
             object[] variables = { inicioVigencia, finVigencia, listaAsegurados };
             //var json = new JavaScriptSerializer().Serialize(variables);
@@ -443,9 +523,9 @@ namespace Salud.Controllers
 
         [SessionExpire]
         [HttpGet]
-        public ActionResult getSoloAsegurados(string tipoConsulta, string codCliente, string codTitular, string codDependiente, string codContrato)
+        public ActionResult getSoloAsegurados(string tipoConsulta,string tipoCliente, string codCliente, string codTitular, string codDependiente, string codContrato)
         {
-            var listaAsegurados = LNSaludAsegurados.ObtenerSaludAsegurados(tipoConsulta, codCliente, codTitular, codDependiente, codContrato)
+            var listaAsegurados = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, "",tipoConsulta, tipoCliente, codCliente, codTitular, codDependiente, codContrato)
                 .ToList()
                 .Select(i => new
                 {

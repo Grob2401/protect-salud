@@ -13,16 +13,6 @@
 
 <style>
 
-    #loading {
-        position: fixed;
-        left: 0px;
-        top: 0px;
-        width: 100%;
-        height: 100%;
-        z-index: 9999;
-        background: url('../../Images/loading.gif') 50% 50% no-repeat rgba(249, 249, 249, 0.7);
-    }
-
     .modal-backdrop.fade {
         opacity: 0;
         filter: alpha(opacity=0);
@@ -46,9 +36,7 @@
             transform: scale(1);
         }
 </style>
-<div id="loading" style="display:none;">
-</div>
-<section id="content">
+<section>
 
     @using (Html.BeginForm("GetLista", "Canal", FormMethod.Get, new { id = "Form1", name = "Form1" }))
     {
@@ -320,11 +308,11 @@
     </script>
     <script>
 
-        $(document).ready(function () {
-            $('#btnbuscar').click(function () {
-                $('#loading').css('display', 'block');
-            });
-        });
+        //$(document).ready(function () {
+        //    $('#btnbuscar').click(function () {
+        //        $('#loading').css('display', 'block');
+        //    });
+        //});
 
         //function isPostBack() {
 

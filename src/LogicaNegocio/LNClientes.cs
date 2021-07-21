@@ -9,6 +9,11 @@ namespace LogicaNegocio
 
     public class LNClientes
     {
+        public static List<ENClientes> ObtenerTodos(int page, int rows, string type, string Keywords)
+        {
+            return new ADClientes().ObtenerTodos( page,  rows,  type,  Keywords);
+        }
+
         public static List<ENClientes> ObtenerTodos()
         {
             return new ADClientes().ObtenerTodos();

@@ -1,0 +1,486 @@
+﻿@using Entidades;
+@model Salud.ViewModels.VMAseguradosIndependientes
+@{
+    ViewBag.Title = "Búsqueda Asegurados";
+}
+@section Styles {
+    @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
+    @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
+}
+
+<div class="row">
+    <div class="col col-md-2">
+        <div class="card card-info card-outline shadow-lg sticky-top">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-th-list"></i>
+                    Opciones
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row justify-content-center pt-2 pb-2">
+
+                    @*<button type="button" id="Grabar" class="btn btn-app bg-gradient-info" data-request-url="@Url.Action("Afiliacion", "SaludAsegurados")">
+                            <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;&nbsp;Exportar
+                        </button>
+                        <button onclick="getSAsegurados();" class="btn btn-app bg-gradient-success">
+                            <i class="fas fa-users text-warning"></i>&nbsp;&nbsp;Asegurados
+                        </button>*@
+                    <a href='@Url.Action("Afiliacion", "SaludAsegurados")' class="btn btn-app bg-gradient-primary">
+                        <i class="fas fa-user-circle text-warning"></i>&nbsp;&nbsp;Afiliaciones
+                    </a>
+                    <a href='@Url.Action("Index", "SaludAsegurados")' class="btn btn-app bg-gradient-danger">
+                        <i class="fas fa-circle-notch text-warning"></i>&nbsp;&nbsp;Refrescar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col col-md-10">
+        <div class="card card-primary card-outline">
+            @*<div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-table"></i>
+                        Listado
+                    </h3>
+                </div>*@
+            <!-- /.card-header -->
+            <div class="card-body ">
+                @using (Html.BeginForm("Index", "SaludAsegurados", FormMethod.Post))
+                {
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="drpTipoCliente">Tipo Cliente:</label>
+                                <input type="hidden" id="hdCodigoTipoCliente" name="hdCodigoTipoCliente" />
+                                @Html.DropDownList("CodigoTipoCliente", null, new { id = "drpTipoCliente", @class = "form-control-sm js-example-responsive", @style = "width:100%", @onchange = "callChangeGetValor(this)" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="drpTipoCliente">Búsqueda:</label>
+                                <input type="text" id="txtBusquedaAsegurados" class="form-control form-control-sm" name="txtBusquedaAsegurados" placeholder="| Nombres y Apellidos |" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label style="visibility:hidden;">Búsqueda:</label>
+                                <div>
+                                    <button type="submit" class="btn btn-dark btn-sm">
+                                        <i class="fa fa-search-plus text-warning"></i>&nbsp;&nbsp;Buscar Afiliado
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table id="dglista" class="table table-bordered table-responsive-md">
+                        <thead class="bg-gradient-lightblue">
+                            <tr>
+                                <th></th>
+                                <th>CLIENTE</th>
+                                <th>CONTRATO</th>
+                                <th>TITULAR</th>
+                                <th>CATEG.</th>
+                                <th>ASEGURADO</th>
+                                <th>NACIMIENTO</th>
+                                <th>EDAD</th>
+                                <th>F.ALTA</th>
+                                <th>F.BAJA</th>
+                                <th>ESTADO</th>
+                                <th>EDITAR</th>
+                                <th>PAGOS</th>
+                                <th>CARTA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.Asegurados != null)
+                            {
+                                foreach (ENSaludAsegurados asegurado in (List<ENSaludAsegurados>)ViewBag.Asegurados)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img src="~/Images/plus.jpg" />
+                                            <div style="display:none">
+                                                @*<div id="tableGoesHere">
+
+                                                    </div>*@
+                                            </div>
+                                        </td>
+                                        <td class="cellCodigoCliente">@asegurado.CodigoCliente </td>
+                                        <td class="cellCodigoContrato">@asegurado.CodigoContrato </td>
+                                        <td class="cellCodigoTitular">@asegurado.CodigoTitular </td>
+                                        <td class="cellCategoria">@asegurado.Categoria </td>
+                                        <td>@asegurado.ApellidosNombres </td>
+                                        <td>@asegurado.FechaNacimiento.ToString("dd-MM-yyyy")  </td>
+                                        <td class="cellDescripcionTipoAsegurado">@asegurado.Edad </td>
+                                        <td>@asegurado.FechaAlta.ToString("dd-MM-yyyy") </td>
+                                        <td>@asegurado.FechaBaja.ToString("dd-MM-yyyy")  </td>
+                                        <td>@asegurado.Estado </td>
+                                        <td class="text-center" width="100px">
+                                            <button type="button" class="botonedit btn btn-default bg-gradient-success btn-sm" onclick='EditarAsegurado(event);' data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'>
+                                                <i class="fa fa-edit text-warning"></i>&nbsp;Editar
+                                            </button>
+                                        </td>
+                                        <td class="text-center" width="110px">
+                                            <button type="button" class="botoncomi btn btn-default bg-gradient-primary btn-sm" onclick='modal(event);'>
+                                                <i class="fa fa-coins text-warning"></i>&nbsp;Pagos
+                                            </button>
+                                        </td>
+                                        <td class="text-center" width="110px">
+                                            <button type="button" class="botoncomi btn btn-default bg-gradient-secondary btn-sm">
+                                                <i class="fa fa-print text-warning"></i>&nbsp;Imprimir
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+
+    <div class="modal fade-scale" id="modalNuevoVendedor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-7x fa-money-bill-wave text-warning"></i>&nbsp;&nbsp;Pago de Afiliados</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row justify-content-center">
+                        <input id="hdContrato" type="hidden" name="name" />
+                        <table id="dglista2" class="table table-bordered table-sm" hidden>
+                            <thead class="bg-gradient-lightblue">
+                                <tr>
+                                    <th>CODIGO CLIENTE</th>
+                                    <th>CODIGO TITULAR</th>
+                                    <th>CATEGORIA</th>
+                                    <th>PARENTESCO</th>
+                                    <th>AFILIADO</th>
+                                    <th>EDAD</th>
+                                    <th>FECHA ALTA</th>
+                                    <th>FECHA BAJA</th>
+                                    <th>SELECCIONAR</th>
+                                    <th>INFO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+                        <table id="dgCuotasNoPagadas" class="table table-bordered table-sm" hidden>
+                            <thead class="bg-gradient-lightblue">
+                                <tr>
+                                    <th>NRO</th>
+                                    <th>FECHA INICIO</th>
+                                    <th>FECHA FIN</th>
+                                    <th>MONTO</th>
+                                    <th>TIPO DOC. PAGO</th>
+                                    <th>NRO. DOC. PAGO</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+                        <table id="dgCuotasTodas" class="table table-bordered table-sm" hidden>
+                            <thead class="bg-gradient-lightblue">
+                                <tr>
+                                    <th>NRO</th>
+                                    <th>FECHA INICIO</th>
+                                    <th>FECHA FIN</th>
+                                    <th>MONTO</th>
+                                    <th>TIPO DOC.</th>
+                                    <th>NRO. PAGO</th>
+                                    <th>FECHA PAGO</th>
+                                    <th>ESTADO</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @*BOTONES EXPORT*@
+    @Scripts.Render("~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js")
+    @Scripts.Render("~/Content/plugins/jszip/jszip.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-buttons/js/buttons.html5.min.js")
+    @*EXPORT*@
+    @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
+    @Scripts.Render("~/Scripts/Shared/util.js")
+
+    <script>
+        var mensaje = "@TempData["mensaje"]";
+        mostrarMensaje(mensaje);
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+            //$('.js-example-basic-single').select2();
+            $(".js-example-responsive").select2({
+                width: 'resolve' // need to override the changed default
+            });
+            const combito = document.getElementById("drpTipoCliente");
+            callChangeGetValor(combito);
+        });
+
+        function callChangeGetValor(combo) {
+            let valor = "";
+            const idTipoCliente = document.getElementById("hdCodigoTipoCliente");
+            idTipoCliente.value = combo.value;
+            valor = idTipoCliente.value
+            console.log(valor);
+        }
+
+        $(document).ready(function () {
+            $('#dglista').DataTable({
+                paging: true,
+                lengthChange: false,
+                ordering: false,
+                info: true,
+                autoWidth: false,
+                responsive: true,
+                lengthMenu: [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                pageLength: 50,
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                },
+                "searching": false,
+                //"scrollY": "500px",
+                //"buttons": [
+                //    { "extend": 'pdf', "text": 'Export', "className": 'btn btn-default btn-xs' }
+                //],
+                //dom: 'Bfrtip',
+                //buttons: [{
+                //    extend: 'excelHtml5',
+                //    text: 'Exportar Excel',
+                //    className: 'btn btn-outline-info btn-sm',
+                //    customize: function (xlsx) {
+                //        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                //    }
+                //}]
+            });
+        });
+
+        function modal(e) {
+            console.log(e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling);
+            const Contrato = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+
+            var tabla1 = document.getElementById("dglista2");
+            var tabla2 = document.getElementById("dgCuotasNoPagadas");
+            var tabla3 = document.getElementById("dgCuotasTodas");
+            var hiden = document.getElementById("hdContrato");
+
+            $("#dglista2").find("tr:not(:first)").remove();
+            $("#dgCuotasNoPagadas").find("tr:not(:first)").remove();
+            $("#dgCuotasTodas").find("tr:not(:first)").remove();
+            tabla1.removeAttribute("hidden");
+            tabla2.setAttribute("hidden", "");
+            tabla3.setAttribute("hidden", "");
+
+            hiden.value = Contrato;
+
+            $.ajax({
+                type: "GET",
+                url: "/SaludAsegurados/IndependientesPagos",
+                data: {
+                    'contrato': Contrato,
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    //console.log(dataparseada);
+                    ToTabla(dataparseada, "dglista2", "0");
+                    $('#modalNuevoVendedor').modal('show');
+                }
+            });
+        }
+
+        function seleccionar(e) {
+            const codigoCliente = e.target.parentElement.parentElement.firstElementChild.textContent;
+            const codigoTitular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
+            const codigoCategoria = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+            const contrato = document.getElementById("hdContrato");
+
+            $("#dgCuotasNoPagadas").find("tr:not(:first)").remove();
+            var ta = document.getElementById("dgCuotasNoPagadas");
+            ta.removeAttribute("hidden");
+            $.ajax({
+                type: "GET",
+                url: "/SaludAsegurados/ObtenerCuotasNoPagadas",
+                data: {
+                    'cliente': codigoCliente,
+                    'titular': codigoTitular,
+                    'categoria': codigoCategoria,
+                    'contrato': contrato.value,
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    console.log(dataparseada);
+                    ToTabla(dataparseada, "dgCuotasNoPagadas", "1");
+                }
+            });
+        }
+
+        function info(e) {
+            const codigoCliente = e.target.parentElement.parentElement.firstElementChild.textContent;
+            const codigoTitular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
+            const codigoCategoria = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+            const contrato = document.getElementById("hdContrato");
+            console.log(`
+                            ${codigoCliente}
+                            ${codigoTitular}
+                            ${codigoCategoria}
+                            ${contrato.value.trim()}
+                            `);
+            $("#dgCuotasTodas").find("tr:not(:first)").remove();
+            var ta1 = document.getElementById("dgCuotasNoPagadas");
+            var ta2 = document.getElementById("dgCuotasTodas");
+            ta1.setAttribute("hidden", "");
+            ta2.removeAttribute("hidden");
+            $.ajax({
+                type: "GET",
+                url: "/SaludAsegurados/ObtenerTodasCuotas",
+                data: {
+                    'cliente': codigoCliente,
+                    'titular': codigoTitular,
+                    'categoria': codigoCategoria,
+                    'contrato': contrato.value.trim(),
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    console.log(dataparseada);
+                    ToTabla(dataparseada, "dgCuotasTodas", "2");
+                }
+            });
+        }
+
+
+        function EditarAsegurado(e) {
+            const boton = e.target;
+            const Cliente = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
+            const Contrato = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+            const Titular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+            const url = boton.getAttribute('data-request-url');
+            console.log(`${Cliente}-${Contrato}-${Titular}-${url}`);
+            const url_parametros = `?CodigoCLiente=${Cliente.trim()}&CodigoTitular=${Titular.trim()}&CodigoContrato=${Contrato.trim()}&origen=I`
+            console.log(url + url_parametros);
+            window.location.href = url + url_parametros;
+
+        };
+
+        dateTimeReviver = function (key, value) {
+            var a;
+            if (typeof value === 'string') {
+                a = /\/Date\((\d*)\)\//.exec(value);
+                if (a) {
+
+                    var dt = new Date(+a[1]);
+
+                    var dateString = moment(dt).format('YYYY-MM-DD');
+
+                    return dateString;
+                }
+                //console.log(a);
+            }
+            return value;
+        }
+
+        function ToTabla(arreglo, tabla, op) {
+            var ta = document.getElementById(tabla);
+            let arregloDatos = [];
+            arregloDatos = arreglo;
+            //console.log(arregloDatos);
+            if (op == '0') {
+                arregloDatos.forEach(dato => {
+                    $(ta).find('tbody').append(`<tr>
+                            <td>${dato.CodigoCliente}</td>
+                            <td>${dato.CodigoTitular}</td>
+                            <td>${dato.Categoria}</td>
+                            <td>${dato.DescripcionParentesco}</td>
+                            <td>${dato.Asegurado}</td>
+                            <td>${dato.Edad}</td>
+                            <td>${(new Date(parseInt(dato.FechaAlta.substr(6)))).toLocaleDateString()}</td>
+                            <td>${(new Date(parseInt(dato.FechaBaja.substr(6)))).toLocaleDateString()}</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-primary btn-sm" onclick='seleccionar(event);'>
+                                    <i class="fa fa-check text-warning"></i>&nbsp;Seleccionar
+                                </button>
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-success btn-sm" onclick='info(event);'>
+                                    <i class="fa fa-info text-warning"></i>&nbsp;Info
+                                </button>
+                            </td>
+                        </tr>
+                        `);
+                });
+            }
+            else if (op == '1') {
+                arregloDatos.forEach(dato => {
+                    $(ta).find('tbody').append(`<tr>
+                            <td>${dato.IdCuota}</td>
+                            <td>${(new Date(parseInt(dato.FechaInicioCuota.substr(6)))).toLocaleDateString()}</td>
+                            <td>${(new Date(parseInt(dato.FechaFinCuota.substr(6)))).toLocaleDateString()}</td>
+                            <td>${dato.Monto}</td>
+                            <td>${dato.CodigoTipoDocumentoPago}</td>
+                            <td>${dato.NumeroDocumentoPago}</td>
+                            <td><input style="border:none;" name=${dato.IdCuota} type="checkbox" /></td>
+                        </tr>
+                        `);
+                });
+            }
+            else if (op == '2') {
+                arregloDatos.forEach(dato => {
+                    $(ta).find('tbody').append(`<tr>
+                            <td>${dato.IdCuota}</td>
+                            <td>${(new Date(parseInt(dato.FechaInicioCuota.substr(6)))).toLocaleDateString()}</td>
+                            <td>${(new Date(parseInt(dato.FechaFinCuota.substr(6)))).toLocaleDateString()}</td>
+                            <td>${dato.Monto}</td>
+                            <td>${dato.DescripcionTipoDocumentoPago}</td>
+                            <td>${dato.NumeroDocumentoPago}</td>
+                            <td>${(new Date(parseInt(dato.FechaPago.substr(6)))).toLocaleDateString()}</td>
+                            <td>${dato.Estado}</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-danger btn-sm" onclick='seleccionar(event);'>
+                                    <i class="fa fa-times text-warning"></i>&nbsp;Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                        `);
+                });
+            }
+        }
+
+    </script>
+
+
+}
+
+

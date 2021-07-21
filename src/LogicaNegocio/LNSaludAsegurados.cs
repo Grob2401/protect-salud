@@ -39,9 +39,24 @@ namespace LogicaNegocio
             return (new ADSaludAsegurados()).ObtenerUno(CodigoCliente, CodigoTitular, Categoria);
         }
 
-        public static List<ENSaludAsegurados> ObtenerSaludAsegurados(string tipoConsulta, string codCliente, string codTitular, string codDependiente, string codContrato)
+        public static List<ENSaludAsegurados> ObtenerSaludAsegurados(int page, int rows, string Keywords, string tipoConsulta,string tipoCliente, string codCliente, string codTitular, string codDependiente, string codContrato)
         {
-            return (new ADSaludAsegurados()).ObtenerSaludAsegurados(tipoConsulta,codCliente,codTitular,codDependiente,codContrato);
+            return (new ADSaludAsegurados()).ObtenerSaludAsegurados(page, rows, Keywords, tipoConsulta,tipoCliente, codCliente,codTitular,codDependiente,codContrato);
+        }
+
+        public static List<ENSaludAsegurados> ObtenerSaludAseguradosIndependientesPagos(string codContrato)
+        {
+            return (new ADSaludAsegurados()).ObtenerSaludAseguradosIndependientesPagos(codContrato);
+        }
+
+        public static List<ENSaludAseguradosContratosPagos> ObtenerSaludAseguradosCuotasNoPagadas(string codCliente, string codTitular, string categoria, string codContrato)
+        {
+            return (new ADSaludAsegurados()).ObtenerSaludAseguradosCuotasNoPagadas(codCliente,codTitular,categoria,codContrato);
+        }
+
+        public static List<ENSaludAseguradosContratosPagos> ObtenerAseguradosTodasCuotas(string codCliente, string codTitular, string categoria, string codContrato)
+        {
+            return (new ADSaludAsegurados()).ObtenerAseguradosTodasCuotas(codCliente, codTitular, categoria, codContrato);
         }
     }
 }

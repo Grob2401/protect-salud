@@ -56,66 +56,63 @@
 
                 <div class="card-body">
                     <ul class="nav nav-tabs">
-                        <li class="nav-link bg-primary active"><a data-toggle="tab" href="#DatosGenerales">DATOS GENERALES</a></li>
-                        <li class="nav-link bg-success"><a data-toggle="tab" href="#MediosdePago">MEDIOS DE PAGO</a></li>
+                        <li class="nav-link active"><a data-toggle="tab" href="#DatosGenerales">DATOS GENERALES</a></li>
+                        <li class="nav-link"><a data-toggle="tab" href="#MediosdePago">MEDIOS DE PAGO</a></li>
                     </ul>
 
-                    <div class="tab-content mt-3">
-                        <div id="DatosGenerales" class="tab-pane p-3 border-left border-primary active">
+                    <div class="tab-content">
+                        <div id="DatosGenerales" class="tab-pane p-3 border-left border-default active">
                             <div class="row">
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                <div class="col-md-9">
+                                <div class="col-md-4">
                                     <div class="form-group" hidden>
                                         <label for="txtCodigoCliente">Código Cliente</label>
                                         @Html.TextBoxFor(model => model.CodigoCliente, new { id = "txtCodigoCliente", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
                                     </div>
                                     <div class="form-group">
-                                        @Html.LabelFor(model => model.CodigoCorredor, "Corredor :", htmlAttributes: new { @class = "control-label" })
-                                        @Html.DropDownList("CodigoCorredor", null, new { id = "drpCorredor", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
-                                        @Html.ValidationMessageFor(model => model.CodigoCorredor)
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.CodigoEjecutivo, "Ejecutivo :", htmlAttributes: new { @class = "control-label" })
-                                        @Html.DropDownList("CodigoEjecutivo", null, new { id = "drpEjecutivo", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
-                                        @Html.ValidationMessageFor(model => model.CodigoEjecutivo)
-                                    </div>
-                                    <div class="form-group">
                                         @Html.LabelFor(model => model.CodigoTipoCliente, "Tipo Cliente :", htmlAttributes: new { @class = "control-label" })
-                                        @Html.DropDownList("CodigoTipoCliente", null, new { id = "drpTipoCliente", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                        @Html.DropDownList("CodigoTipoCliente", null, new { id = "drpTipoCliente", @class = "form-control-sm js-example-responsive", @style = "width:100%", @onchange = "callChangeRazonSocialNombre(this)" })
                                         @Html.ValidationMessageFor(model => model.CodigoTipoCliente)
                                     </div>
                                 </div>
+
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="txtRucDni">RUC :</label>
-                                        @Html.TextBoxFor(model => model.RucDni, new { id = "txtRucDni", @class = "form-control form-control-sm", @placeholder = "" })
+                                        <label for="txtRucDni">Tipo Documento:</label>
+                                        @Html.DropDownListFor(model => model.CodigoDocumentoIdentidad, null, new { id = "drpTipoDocumento", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                     </div>
                                 </div>
                                 <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txtRucDni">RUC / DNI:</label>
+                                        @Html.TextBoxFor(model => model.RucDni, new { id = "txtRucDni", @class = "form-control form-control-sm", @placeholder = "" })
+                                    </div>
+                                </div>
+                                <div class="col-md-8" id="RS">
                                     <div class="form-group">
                                         <label for="txtRazonSocial">RazonSocial :</label>
                                         @Html.TextBoxFor(model => model.RazonSocial, new { id = "txtRazonSocial", @class = "form-control form-control-sm", @placeholder = "" })
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" id="NC">
                                     <div class="form-group">
                                         <label for="txtNombreCorto">NombreCorto</label>
                                         @Html.TextBoxFor(model => model.NombreCorto, new { id = "txtNombreCorto", @class = "form-control form-control-sm", @placeholder = "" })
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" id="NN">
                                     <div class="form-group">
                                         <Label for="txtApellidosNombres">Nombres :</Label>
                                         @Html.TextBoxFor(model => model.Nombres, new { id = "txtApellidosNombres", @class = "form-control form-control-sm", @placeholder = "" })
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" id="AP">
                                     <div class="form-group">
                                         <Label for="txtApellidoPaterno">Apellido Paterno :</Label>
                                         @Html.TextBoxFor(model => model.Paterno, new { id = "txtApellidoPaterno", @class = "form-control form-control-sm", @placeholder = "" })
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" id="AM">
                                     <div class="form-group">
                                         <Label for="txtApellidoMaterno">Apellido Materno :</Label>
                                         @Html.TextBoxFor(model => model.Materno, new { id = "txtApellidoMaterno", @class = "form-control form-control-sm", @placeholder = "" })
@@ -180,7 +177,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="MediosdePago" class="tab-pane p-3 border-left border-success fade">
+                        <div id="MediosdePago" class="tab-pane p-3 border-left border-default fade">
                             <div class="row">
                                 <div class="col-md-12">
                                     <h5>Tarjetas</h5>
@@ -245,156 +242,111 @@
             $(".js-example-responsive").select2({
                 width: 'resolve' // need to override the changed default
             });
+            const combito = document.getElementById("drpTipoCliente");
+            callChangeRazonSocialNombre(combito);
         });
+
+        function callChangeRazonSocialNombre(combo)
+        {
+            const razonSocial = document.getElementById("RS");
+            const nombreCorto = document.getElementById("NC");
+            const nombres = document.getElementById("NN");
+            const apellidoPaterno = document.getElementById("AP");
+            const apellidoMaterno = document.getElementById("AM");
+                                    
+            console.log(combo.value);
+            if (combo.value === "01")
+            {
+                razonSocial.removeAttribute("hidden");
+                nombreCorto.removeAttribute("hidden");
+                nombres.setAttribute("hidden", "");
+                apellidoPaterno.setAttribute("hidden", "");
+                apellidoMaterno.setAttribute("hidden", "");
+                $("#drpTipoDocumento").val("08").change();
+                $("#drpTipoDocumento").attr("disabled", "true");
+            }
+            else
+            {
+                razonSocial.setAttribute("hidden", "");
+                nombreCorto.setAttribute("hidden", "");
+                nombres.removeAttribute("hidden");
+                apellidoPaterno.removeAttribute("hidden");
+                apellidoMaterno.removeAttribute("hidden");
+                $("#drpTipoDocumento").val("01").change();
+                $("#drpTipoDocumento").removeAttr("disabled");
+            }
+        }
 
 
         function validateForm() {
-            var corredor = document.forms["Form"]["drpCorredor"].value.trim();
-            var ejecutivo = document.forms["Form"]["drpEjecutivo"].value.trim();
             var rucDNI = document.forms["Form"]["txtRucDni"].value.trim();
-            var razonSocial = document.forms["Form"]["txtRazonSocial"].value.trim();
-            var nombreCorto = document.forms["Form"]["txtNombreCorto"].value.trim();
-            var apellidosNombres = document.forms["Form"]["txtApellidosNombres"].value.trim();
-            var email1 = document.forms["Form"]["Email"].value;
-            var telefono1 = document.forms["Form"]["txtTelefono1"].value.trim();
-            var telefono2 = document.forms["Form"]["txtTelefono2"].value.trim();
-            var paginaWeb = document.forms["Form"]["txtPaginaWeb"].value.trim();
-            var direccion = document.forms["Form"]["txtDireccion"].value.trim();
-            var personaContacto = document.forms["Form"]["txtPersonaContacto"].value.trim();
-            //console.log(email1);
+            const combito = document.getElementById("drpTipoCliente");
+            console.log(combito.value);
             //---
-
-            if (corredor == "00000" && ejecutivo == "000" && rucDNI == "" && razonSocial == "" && nombreCorto == "" && apellidosNombres == "" && email1 == ""
-                && telefono1 == "" && telefono2 == "" && paginaWeb == "" && direccion == "" && personaContacto == "") {
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Advertencia',
-                    html: 'No ha ingresado información del cliente',
-                    showCloseButton: true,
-                });
-                return false;
-            }
-            //--
-            if (corredor == "00000") {
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Advertencia',
-                    html: 'No ha seleccionado corredor',
-                    showCloseButton: true,
-                });
-                return false;
-            }
-
-            if (ejecutivo == "000") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    html: 'No ha seleccionado ejecutivo',
-                    showCloseButton: true,
-                });
-                return false;
-            }
 
             if (rucDNI == "") {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Advertencia',
-                    html: 'Ingrese RUC o DNI',
-                    showCloseButton: true,
-                });
-                return false;
-            }
-            //---
-            if (razonSocial == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    html: 'Ingrese Razón Social',
-                    showCloseButton: true,
-                });
-                return false;
-            }
-            //---
-            if (nombreCorto == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    html: 'Ingrese Nombre Corto',
-                    showCloseButton: true,
-                });
-                return false;
-            }
-            //---
-            if (apellidosNombres == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    html: 'Ingrese Apellidos y Nombres',
+                    html: 'Ingrese número de documento RUC/DNI',
                     showCloseButton: true,
                 });
                 return false;
             }
 
-            //---
-            if (email1 == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    html: 'Ingrese Correo',
-                    showCloseButton: true,
-                });
-                return false;
+            if (combito.value === "01") { 
+                var razonSocial = document.forms["Form"]["txtRazonSocial"].value.trim();
+                //---
+                if (razonSocial == "") {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Advertencia',
+                        html: 'Ingrese Razón Social',
+                        showCloseButton: true,
+                    });
+                    return false;
+                }
+                //---
             }
-            //---
-            if (telefono1 == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    html: 'Ingrese Teléfono',
-                    showCloseButton: true,
-                });
-                return false;
+            else
+            {
+                var Nombres = document.forms["Form"]["txtApellidosNombres"].value.trim();
+                var apellidosPaterno = document.forms["Form"]["txtApellidoPaterno"].value.trim();
+                var apellidoMaterno = document.forms["Form"]["txtApellidoMaterno"].value.trim();
+                //---
+                if (Nombres == "") {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Advertencia',
+                        html: 'Ingrese Nombres',
+                        showCloseButton: true,
+                    });
+                    return false;
+                }
+                //---
+                if (apellidosPaterno == "") {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Advertencia',
+                        html: 'Ingrese apellido paterno',
+                        showCloseButton: true,
+                    });
+                    return false;
+                }
+                //---
+                if (apellidoMaterno == "") {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Advertencia',
+                        html: 'Ingrese apellido materno',
+                        showCloseButton: true,
+                    });
+                    return false;
+                }
             }
-            //---
-            if (telefono2 == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    html: 'Ingrese Teléfono',
-                    showCloseButton: true,
-                });
-                return false;
-            }
-            //---
-            if (paginaWeb == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    html: 'Ingrese página Web',
-                    showCloseButton: true,
-                });
-                return false;
-            }
-            //---
-            if (direccion == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    html: 'Ingrese dirección',
-                    showCloseButton: true,
-                });
-                return false;
-            }
-            //---
-            if (personaContacto == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    html: 'Ingrese persona de contacto',
-                    showCloseButton: true,
-                });
-                return false;
-            }
+
+            
+            
         }
 
     </script>

@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace Salud.ViewModels
 {
-    public class VMAsegurados
+    public class VMAseguradosRegulares
     {
         public ENSaludAsegurados VMSaludAsegurado { get; set; }
         public List<ENSaludAsegurados> VMSaludAsegurados { get; set; }

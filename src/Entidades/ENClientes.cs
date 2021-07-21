@@ -42,6 +42,7 @@ namespace Entidades
         public string DescripcionProv { get; set; }
         public string CodigoDist { get; set; }
         public string DescripcionDist { get; set; }
+        public string CodigoDocumentoIdentidad { get; set; }
 
     }
 }

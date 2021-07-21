@@ -13,6 +13,7 @@ namespace Entidades
         public string ApellidoMaterno { get; set; }
         public string ApellidoPaterno { get; set; }
         public string ApellidosNombres { get; set; }
+        public string Asegurado { get; set; }
         public int CantidadCarnet { get; set; }
         public string Categoria { get; set; }
         public string Celular { get; set; }
@@ -60,6 +61,7 @@ namespace Entidades
         public string Talla { get; set; }
         public string Telefono { get; set; }
         public string Edad { get; set; }
+        public string Pais { get; set; }
 
         public string CodigoDpto { get; set; }
         public string DescripcionDpto { get; set; }
@@ -75,6 +77,7 @@ namespace Entidades
         public string PreExistOtros { get; set; }
         public string AppUserCodigo { get; set; }
         public string CodigoPlanOriginal { get; set; }
+        public string CodigoTipoEstadoCivil { get; set; }
 
 
     }

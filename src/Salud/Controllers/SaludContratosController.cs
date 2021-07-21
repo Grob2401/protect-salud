@@ -18,6 +18,17 @@ namespace Salud.Controllers
         {
             string sCodigoCliente = "";
             ViewBag.SaludContratos = LNSaludContratos.ObtenerTodos(sCodigoCliente);
+            ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
+            return View();
+        }
+
+        [SessionExpire]
+        [HttpPost]
+        public ActionResult Index(string hdCodigoTipoCliente, string txtBusquedaContratos = "")
+        {
+            string sCodigoCliente = "";
+            ViewBag.SaludContratos = LNSaludContratos.ObtenerTodos(1, 100, hdCodigoTipoCliente, txtBusquedaContratos);
+            ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             return View();
         }
 
@@ -66,10 +77,12 @@ namespace Salud.Controllers
                 ViewBag.CodigoTipoContrato = new SelectList(LNTipoContrato.ObtenerTodos().ToList(), "CodigoTipoContrato", "DescripcionTipoContrato", oENSaludContratos.CodigoTipoContrato);
                 ViewBag.CodigoCorredor = new SelectList(LNSCTRCorredor.ObtenerTodos().ToList(), "CodigoCorredor", "DescripcionCorredor", oENSaludContratos.CodigoCorredor);
                 ViewBag.CodigoEjecutivo = new SelectList(LNSCTREjecutivos.ObtenerTodos().ToList(), "CodigoEjecutivo", "NombreEjecutivo", oENSaludContratos.CodigoEjecutivo);
+                ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
                 oContratoViewModel.SaludContratosVM.InicioVigencia = oENSaludContratos.InicioVigencia;
                 oContratoViewModel.SaludContratosVM.FinVigencia = oENSaludContratos.FinVigencia;
                 oContratoViewModel.SaludContratosVM.CodigoContrato = oENSaludContratos.CodigoContrato;
             }
+
             else
             {
                 oENSaludContratos = new ENSaludContratos();
@@ -89,6 +102,7 @@ namespace Salud.Controllers
                 ViewBag.CodigoTipoContrato = new SelectList(LNTipoContrato.ObtenerTodos().ToList(), "CodigoTipoContrato", "DescripcionTipoContrato");
                 ViewBag.CodigoCorredor = new SelectList(LNSCTRCorredor.ObtenerTodos().ToList(), "CodigoCorredor", "DescripcionCorredor");
                 ViewBag.CodigoEjecutivo = new SelectList(LNSCTREjecutivos.ObtenerTodos().ToList(), "CodigoEjecutivo", "NombreEjecutivo");
+                ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
                 //ViewBag.CodigoPlan = new SelectList(LNSaludPlanes.ObtenerTodos().ToList(), "CodigoPlan", "Descripcion");
 
             }
@@ -143,10 +157,16 @@ namespace Salud.Controllers
             }
         }
 
-        public ActionResult Crear(string id = "", string idcliente = "")
+        public ActionResult Crear(string idcontrato = "", string idcliente = "")
         {
 
-            ENSaludContratos oENSaludContratos = null;
+            if (TempData["mensaje"] != null)
+            {
+                ViewBag.mensaje = TempData["mensaje"];
+            }
+
+
+                ENSaludContratos oENSaludContratos = null;
             VMSaludContratos oVMSaludContratos = null;
             ////Prueba
             var VMContratos = new ENSaludContratos();
@@ -160,16 +180,19 @@ namespace Salud.Controllers
                 VMListaSaludPlanes = VMListaPlanes
             };
 
-            if (id != "")
+            if (idcontrato != "")
             {
-                oENSaludContratos = LNSaludContratos.ObtenerUno(idcliente, id);
+                oENSaludContratos = LNSaludContratos.ObtenerUno(idcliente, idcontrato);
                 ViewBag.CodigoCliente = new SelectList(LNClientes.ObtenerTodos().ToList(), "CodigoCliente", "RazonSocial", oENSaludContratos.CodigoCliente);
+                ViewBag.CodigoContrato = idcontrato;
                 ViewBag.CodigoTipoContrato = new SelectList(LNTipoContrato.ObtenerTodos().ToList(), "CodigoTipoContrato", "DescripcionTipoContrato", oENSaludContratos.CodigoTipoContrato);
+                ViewBag.CodigoTipoPrima = new SelectList(LNTipoPrima.ObtenerTodos().ToList(), "CodigoTipoPrima", "DescripcionTipoPrima", oENSaludContratos.CodigoTipoPrima);
                 ViewBag.CodigoCorredor = new SelectList(LNSCTRCorredor.ObtenerTodos().ToList(), "CodigoCorredor", "DescripcionCorredor", oENSaludContratos.CodigoCorredor);
                 ViewBag.CodigoEjecutivo = new SelectList(LNSCTREjecutivos.ObtenerTodos().ToList(), "CodigoEjecutivo", "NombreEjecutivo", oENSaludContratos.CodigoEjecutivo);
-                oContratoViewModel.SaludContratosVM.InicioVigencia = oENSaludContratos.InicioVigencia;
-                oContratoViewModel.SaludContratosVM.FinVigencia = oENSaludContratos.FinVigencia;
-                oContratoViewModel.SaludContratosVM.CodigoContrato = oENSaludContratos.CodigoContrato;
+                ViewBag.InicioVigencia = oENSaludContratos.InicioVigencia;
+                ViewBag.FinVigencia = oENSaludContratos.FinVigencia;
+                ViewBag.CodigoContrato = oENSaludContratos.CodigoContrato;
+                ViewBag.CodigoCotizacion = oENSaludContratos.CodigoCotizacion;
             }
             else
             {
@@ -189,6 +212,7 @@ namespace Salud.Controllers
                 ViewBag.CodigoCliente = new SelectList(LNClientes.ObtenerTodos().ToList(), "CodigoCliente", "RazonSocial");
                 ViewBag.CodigoContrato = new SelectList(LNSaludContratos.ObtenerTodos("").ToList(), "CodigoContrato", "CodigoContrato");
                 ViewBag.CodigoTipoContrato = new SelectList(LNTipoContrato.ObtenerTodos().ToList(), "CodigoTipoContrato", "DescripcionTipoContrato");
+                ViewBag.CodigoTipoPrima = new SelectList(LNTipoPrima.ObtenerTodos().ToList(), "CodigoTipoPrima", "DescripcionTipoPrima");
                 ViewBag.CodigoCorredor = new SelectList(LNSCTRCorredor.ObtenerTodos().ToList(), "CodigoCorredor", "DescripcionCorredor");
                 ViewBag.CodigoEjecutivo = new SelectList(LNSCTREjecutivos.ObtenerTodos().ToList(), "CodigoEjecutivo", "NombreEjecutivo");
                 //ViewBag.CodigoPlan = new SelectList(LNSaludPlanes.ObtenerTodos().ToList(), "CodigoPlan", "Descripcion");
@@ -210,12 +234,13 @@ namespace Salud.Controllers
                 if (contrato.CodigoContrato != null)
                 {
                     LNSaludContratos.Actualizar(contrato);
+                    TempData["mensaje"] = "Contrato Actualizado";
                 }
                 else
                 {
                     LNSaludContratos.Insertar(contrato);
+                    TempData["mensaje"] = "Contrato Registrado";
                 }
-                TempData["mensaje"] = "Informacion de Contrato guardado";
                 return RedirectToAction("Crear", "SaludContratos");
             }
             return View();

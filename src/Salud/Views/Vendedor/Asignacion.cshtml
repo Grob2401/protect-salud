@@ -11,7 +11,7 @@
     @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
 }
 
-<style>
+@*<style>
 
     #loading {
         position: fixed;
@@ -34,8 +34,8 @@
     }
 </style>
 <div id="loading" style="display:none;">
-</div>
-<section id="content">
+</div>*@
+<section>
     <div class="row">
         <div class="col">
             @using (Html.BeginForm("GetVendedoresSinAsignar", "Vendedor", FormMethod.Get, new { id = "Form1", name = "Form1", autocomplete = "off" }))

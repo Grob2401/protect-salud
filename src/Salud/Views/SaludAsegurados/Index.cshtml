@@ -1,5 +1,5 @@
 ﻿@using Entidades;
-@model Salud.ViewModels.VMAsegurados
+@model Salud.ViewModels.VMAseguradosRegulares
 @{
     ViewBag.Title = "Búsqueda Asegurados";
 }
@@ -48,63 +48,90 @@
                 </div>*@
             <!-- /.card-header -->
             <div class="card-body ">
-
-                <table id="dglista" class="table table-bordered table-responsive">
-                    <thead class="bg-gradient-lightblue">
-                        <tr>
-                            <th></th>
-                            <th>CODIGO CLIENTE</th>
-                            <th>CODIGO CONTRATO</th>
-                            <th>CODIGO TITULAR</th>
-                            <th>AFILIADOS (NOMBRES Y APELLIDOS)</th>
-                            <th>NACIMIENTO</th>
-                            <th>EDAD</th>
-                            <th>FECHA ALTA</th>
-                            <th>FECHA BAJA</th>
-                            <th>ESTADO</th>
-                            <th>EDITAR</th>
-                            <th>CARTA</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (ViewBag.Asegurados != null)
-                        {
-                            foreach (ENSaludAsegurados asegurado in (List<ENSaludAsegurados>)ViewBag.Asegurados)
-                            {
-                        <tr>
-                            <td>
-                                <img src="~/Images/plus.jpg" />
-                                <div style="display:none">
-                                    @*<div id="tableGoesHere">
-
-                </div>*@
+                @using (Html.BeginForm("Index", "SaludAsegurados", FormMethod.Post))
+                {
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="drpTipoCliente">Tipo Cliente:</label>
+                                <input type="hidden" id="hdCodigoTipoCliente" name="hdCodigoTipoCliente" />
+                                @Html.DropDownList("CodigoTipoCliente", null, new { id = "drpTipoCliente", @class = "form-control-sm js-example-responsive", @style = "width:100%", @onchange = "callChangeGetValor(this)" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="drpTipoCliente">Búsqueda:</label>
+                                <input type="text" id="txtBusquedaAsegurados" class="form-control form-control-sm" name="txtBusquedaAsegurados" placeholder="| Nombres y Apellidos |" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label style="visibility:hidden;">Búsqueda:</label>
+                                <div>
+                                    <button type="submit" class="btn btn-dark btn-sm">
+                                        <i class="fa fa-search-plus text-warning"></i>&nbsp;&nbsp;Buscar Afiliado
+                                    </button>
                                 </div>
-                            </td>
-                            <td class="cellCodigoCliente">@asegurado.CodigoCliente </td>
-                            <td class="cellCodigoTitular">@asegurado.CodigoTitular </td>
-                            <td class="cellCodigoTitular">@asegurado.CodigoContrato </td>
-                            <td>@asegurado.ApellidosNombres </td>
-                            <td>@asegurado.FechaNacimiento </td>
-                            <td class="cellDescripcionTipoAsegurado">@asegurado.Edad </td>
-                            <td>@asegurado.FechaAlta </td>
-                            <td>@asegurado.FechaBaja </td>
-                            <td>@asegurado.Estado </td>
-                            <td class="text-center" width="100px">
-                                <button type="button" class="botonedit btn btn-info btn-sm W-100" onclick='EditarAsegurado(event);'  data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'>
-                                    <i class="fa fa-edit text-warning"></i>&nbsp;Editar
-                                </button>
-                            </td>
-                            <td class="text-center" width="110px">
-                                <button type="button" class="botoncomi btn btn-primary btn-sm">
-                                    <i class="fa fa-print text-warning"></i>&nbsp;Imprimir
-                                </button>
-                            </td>
-                        </tr>
+                            </div>
+                        </div>
+                    </div>
+                    <table id="dglista" class="table table-bordered table-responsive">
+                        <thead class="bg-gradient-lightblue">
+                            <tr>
+                                <th></th>
+                                <th>CODIGO CLIENTE</th>
+                                <th>CODIGO TITULAR</th>
+                                <th>CODIGO CONTRATO</th>
+                                <th>AFILIADOS (NOMBRES Y APELLIDOS)</th>
+                                <th>NACIMIENTO</th>
+                                <th>EDAD</th>
+                                <th>FECHA ALTA</th>
+                                <th>FECHA BAJA</th>
+                                <th>ESTADO</th>
+                                <th>EDITAR</th>
+                                <th>CARTA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.Asegurados != null)
+                            {
+                                foreach (ENSaludAsegurados asegurado in (List<ENSaludAsegurados>)ViewBag.Asegurados)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img src="~/Images/plus.jpg" />
+                                            <div style="display:none">
+                                                @*<div id="tableGoesHere">
+
+                                        </div>*@
+                                            </div>
+                                        </td>
+                                        <td class="cellCodigoCliente">@asegurado.CodigoCliente </td>
+                                        <td class="cellCodigoTitular">@asegurado.CodigoTitular </td>
+                                        <td class="cellCodigoTitular">@asegurado.CodigoContrato </td>
+                                        <td>@asegurado.ApellidosNombres </td>
+                                        <td>@asegurado.FechaNacimiento.ToString("dd-MM-yyyy") </td>
+                                        <td class="cellDescripcionTipoAsegurado">@asegurado.Edad </td>
+                                        <td>@asegurado.FechaAlta.ToString("dd-MM-yyyy") </td>
+                                        <td>@asegurado.FechaBaja.ToString("dd-MM-yyyy") </td>
+                                        <td>@asegurado.Estado </td>
+                                        <td class="text-center" width="100px">
+                                            <button type="button" class="botonedit btn btn-info btn-sm W-100" onclick='EditarAsegurado(event);' data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'>
+                                                <i class="fa fa-edit text-warning"></i>&nbsp;Editar
+                                            </button>
+                                        </td>
+                                        <td class="text-center" width="110px">
+                                            <button type="button" class="botoncomi btn btn-primary btn-sm">
+                                                <i class="fa fa-print text-warning"></i>&nbsp;Imprimir
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
                             }
-                        }
-                    </tbody>
-                </table>
-            </div>
+                        </tbody>
+                    </table>
+                }
+                </div>
             <!-- /.card-body -->
         </div>
     </div>
@@ -121,6 +148,7 @@
     @*EXPORT*@
     @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
     @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
     @Scripts.Render("~/Scripts/Shared/util.js")
 
     <script>
@@ -130,6 +158,24 @@
 
     <script>
         $(document).ready(function () {
+            //$('.js-example-basic-single').select2();
+            $(".js-example-responsive").select2({
+                width: 'resolve' // need to override the changed default
+            });
+            const combito = document.getElementById("drpTipoCliente");
+            callChangeGetValor(combito);
+        });
+
+        function callChangeGetValor(combo) {
+            let valor = "";
+            const idTipoCliente = document.getElementById("hdCodigoTipoCliente");
+            idTipoCliente.value = combo.value;
+            valor = idTipoCliente.value
+            console.log(valor);
+        }
+
+
+        $(document).ready(function () {
             $('#dglista').DataTable({
                 paging: true,
                 lengthChange: false,
@@ -138,7 +184,8 @@
                 autoWidth: false,
                 responsive: true,
                 lengthMenu: [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
-                pageLength: 50,
+                pageLength: 10,
+                "searching": false,
                 language: {
                     url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 },
@@ -224,6 +271,9 @@
             }
             return value;
         }
+
+
+
 
     </script>
 

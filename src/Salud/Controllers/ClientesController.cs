@@ -21,8 +21,9 @@ namespace Salud.Controllers
         [SessionExpire]
         public ActionResult Index()
         {
-            ViewBag.Clientes = LNClientes.ObtenerTodos();
-            //var VMCliente = new List<ENClientes>();
+            ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
+            ViewBag.Clientes = LNClientes.ObtenerTodos(1,100,"","");
+            //var VMCliente = new List<ENClientes>();int page, int rows, string type, string Keywords
             //var VMUbigeo = new List<ENUbigeoCompleto>();
             var VMCliente = new ENClientes();
             var VMUbigeo = new ENUbigeoCompleto();
@@ -42,6 +43,36 @@ namespace Salud.Controllers
 
             return View();
         }
+
+
+        // GET: Clientes
+        [SessionExpire]
+        [HttpPost]
+        public ActionResult Index(string hdCodigoTipoCliente = "", string txtBusquedaClientes = "")
+        {
+            ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
+            ViewBag.Clientes = LNClientes.ObtenerTodos(1, 100, hdCodigoTipoCliente, txtBusquedaClientes);
+            //var VMCliente = new List<ENClientes>();int page, int rows, string type, string Keywords
+            //var VMUbigeo = new List<ENUbigeoCompleto>();
+            var VMCliente = new ENClientes();
+            var VMUbigeo = new ENUbigeoCompleto();
+
+            var ClienteViewModel = new VMClientes
+            {
+                Clientes = VMCliente,
+                Ubigeo = VMUbigeo
+            };
+
+            if (TempData["Mensaje_Cliente"] != null)
+            {
+                ViewBag.Message = "Cliente registrado correctamente";
+            }
+
+            //return View(ClienteViewModel);
+
+            return View("Index");
+        }
+
 
         public ActionResult Test()
         {
@@ -84,6 +115,7 @@ namespace Salud.Controllers
                 ViewBag.CodigoCorredor = new SelectList(LNSCTRCorredor.ObtenerTodos().ToList(), "CodigoCorredor", "DescripcionCorredor", oENClientes.CodigoCorredor);
                 ViewBag.CodigoEjecutivo = new SelectList(LNSCTREjecutivos.ObtenerTodos().ToList(), "CodigoEjecutivo", "NombreEjecutivo", oENClientes.CodigoEjecutivo);
                 ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente", oENClientes.CodigoTipoCliente);
+                ViewBag.CodigoDocumentoIdentidad = new SelectList(LNTipoDocumentoIdentidad.ObtenerTodos().ToList(), "CodigoDocumentoIdentidad", "DescripcionDocumentoIdentidad");
 
             }
             else
@@ -94,6 +126,7 @@ namespace Salud.Controllers
                 ViewBag.CodigoCorredor = new SelectList(LNSCTRCorredor.ObtenerTodos().ToList(), "CodigoCorredor", "DescripcionCorredor");
                 ViewBag.CodigoEjecutivo = new SelectList(LNSCTREjecutivos.ObtenerTodos().ToList(), "CodigoEjecutivo", "NombreEjecutivo");
                 ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
+                ViewBag.CodigoDocumentoIdentidad = new SelectList(LNTipoDocumentoIdentidad.ObtenerTodos().ToList(), "CodigoDocumentoIdentidad", "DescripcionDocumentoIdentidad");
 
                 oENClientes = new ENClientes();
            }

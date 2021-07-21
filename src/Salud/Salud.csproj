@@ -147,7 +147,8 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\VMAfiliacion.cs" />
-    <Compile Include="ViewModels\VMAsegurados.cs" />
+    <Compile Include="ViewModels\VMAseguradosIndependientes.cs" />
+    <Compile Include="ViewModels\VMAseguradosRegulares.cs" />
     <Compile Include="ViewModels\VMClientes.cs" />
     <Compile Include="ViewModels\VMSaludContratos.cs" />
   </ItemGroup>
@@ -1838,6 +1839,7 @@
     <Content Include="Images\loading.gif" />
     <Content Include="Images\minus.jpg" />
     <Content Include="Images\plus.jpg" />
+    <Content Include="Images\spinner.gif" />
     <Content Include="Images\visa.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -1995,6 +1997,7 @@
     <Content Include="Views\SaludAsegurados\Afiliacion.cshtml" />
     <Content Include="Views\SaludAsegurados\Index.cshtml" />
     <Content Include="Views\SaludAsegurados\Mantenimiento.cshtml" />
+    <Content Include="Views\SaludAsegurados\Independientes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -73,10 +73,10 @@
 
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.CodigoParentesco, "Parentesco", htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownList("CodigoParentesco", null, new { id = "drpParentesco", @class = "form-control form-control-sm", @onchange = "callChangeParen(this)" })
+                                @Html.DropDownList("CodigoParentesco", null, new { id = "drpParentesco", @class = "form-control-sm js-example-responsive", @onchange = "callChangeParen(this)", @style = "width:100%" })
                                 @Html.ValidationMessageFor(model => model.CodigoParentesco)
                             </div>
                         </div>
@@ -85,13 +85,13 @@
                             if (TempData["CodigoTitular"] != null)
                             {
 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="txtCodigoTitular">CodigoTitular</label>
                                         @Html.TextBoxFor(model => model.CodigoTitular, new { id = "txtCodigoTitular", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="txtCategoria">Categoria</label>
                                         @Html.TextBoxFor(model => model.Categoria, new { id = "txtCategoria", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
@@ -104,17 +104,25 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                @Html.LabelFor(model => model.CodigoCentroCosto, "Centro de Costo", htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownList("CodigoCentroCosto", null, new { id = "drpCodigoCentroCosto", @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.CodigoCentroCosto)
+                                @Html.LabelFor(model => model.CodigoDocumentoIdentidad, "Tipo Documento", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoDocumentoIdentidad", null, new { id = "drpCodigoDocumentoIdentidad", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.CodigoDocumentoIdentidad)
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label for="txtCodigoTrabajador">Codigo Trabajador</label>
-                                @Html.TextBoxFor(model => model.CodigoTrabajador, "", new { id = "txtCodigoTrabajador", @class = "form-control form-control-sm", @placeholder = "" })
+                                <label for="txtNumeroDocumentoIdentidad">Documento</label>
+                                @Html.TextBoxFor(model => model.NumeroDocumentoIdentidad, new { id = "txtNumeroDocumentoIdentidad", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="txtNumeroDocumentoIdentidad">Estado Civil</label>
+                                @Html.LabelFor(model => model.CodigoTipoEstadoCivil, "Estado Civil", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoTipoEstadoCivil", null, new { id = "drpCodigoEstadoCivl", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.CodigoTipoEstadoCivil)
                             </div>
                         </div>
                         <div class="col-md-3" hidden>
@@ -129,66 +137,66 @@
                                 @Html.TextBoxFor(model => model.CodigoContrato, "", new { id = "txtCodigoContrato", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
                             </div>
                         </div>
-
-                        <div class="col-md-1">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                @Html.LabelFor(model => model.CodigoDocumentoIdentidad, "Tipo Documento", htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownList("CodigoDocumentoIdentidad", null, new { id = "drpCodigoDocumentoIdentidad", @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.CodigoDocumentoIdentidad)
+                                <label for="txtApellidosNombres">Nombres</label>
+                                @Html.TextBoxFor(model => model.Nombres, new { id = "txtNombres", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="txtNumeroDocumentoIdentidad">Documento</label>
-                                @Html.TextBoxFor(model => model.NumeroDocumentoIdentidad, new { id = "txtNumeroDocumentoIdentidad", @class = "form-control form-control-sm", @placeholder = "" })
-                            </div>
-                        </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="txtApellidoPaterno">Apellido Paterno</label>
                                 @Html.TextBoxFor(model => model.ApellidoPaterno, new { id = "txtApellidoPaterno", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="txtApellidoMaterno">Apellido Materno</label>
                                 @Html.TextBoxFor(model => model.ApellidoMaterno, new { id = "txtApellidoMaterno", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
                         </div>
 
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="txtApellidosNombres">Nombres</label>
-                                @Html.TextBoxFor(model => model.Nombres, new { id = "txtNombres", @class = "form-control form-control-sm", @placeholder = "" })
-                            </div>
-                        </div>
-                        <div class="col-md-2">
+
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="txtFechaNacimiento">Fecha Nacimiento</label>
                                 @Html.TextBoxFor(model => model.FechaNacimiento, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaNacimiento", @class = "form-control form-control-sm float-right", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.CodigoSexo, "Sexo", htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownList("CodigoSexo", null, new { id = "drpCodigoSexo", @class = "form-control form-control-sm" })
+                                @Html.DropDownList("CodigoSexo", null, new { id = "drpCodigoSexo", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                 @Html.ValidationMessageFor(model => model.CodigoSexo)
                             </div>
                         </div>
-                        <div Class="col-md-2">
+
+                        <div Class="col-md-4">
                             <div Class="form-group">
                                 <label for="txtTelefono">Telefono</label>
                                 @Html.TextBoxFor(model => model.Telefono, new { id = "txtTelefono", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
                         </div>
-                        <div Class="col-md-2">
+                        <div Class="col-md-4">
                             <div Class="form-group">
                                 <label for="txtCelular">Celular</label>
                                 @Html.TextBoxFor(model => model.Celular, new { id = "txtCelular", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
                         </div>
                         <div Class="col-md-4">
+                            <div Class="form-group">
+                                <label for="txtDireccion">Talla</label>
+                                @Html.TextBoxFor(model => model.Talla, new { id = "txtTalla", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+                        <div Class="col-md-4">
+                            <div Class="form-group">
+                                <label for="txtDireccion">Peso</label>
+                                @Html.TextBoxFor(model => model.Peso, new { id = "txtPeso", @class = "form-control form-control-sm", @placeholder = "" })
+                            </div>
+                        </div>
+                        <div Class="col-md-6">
                             <div Class="form-group">
                                 <label for="txtEmail">Email</label>
                                 @Html.TextBoxFor(model => model.Email, new { id = "txtEmail", @class = "form-control form-control-sm", @placeholder = "" })
@@ -200,61 +208,67 @@
                                 @Html.TextBoxFor(model => model.Direccion, new { id = "txtDireccion", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
                         </div>
-                        <div Class="col-md-2">
-                            <div Class="form-group">
-                                <label for="txtDireccion">Talla</label>
-                                @Html.TextBoxFor(model => model.Talla, new { id = "txtTalla", @class = "form-control form-control-sm", @placeholder = "" })
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Pais, "País", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoPais", null, new { id = "drpPais", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.Pais)
                             </div>
                         </div>
-                        <div Class="col-md-2">
-                            <div Class="form-group">
-                                <label for="txtDireccion">Peso</label>
-                                @Html.TextBoxFor(model => model.Peso, new { id = "txtPeso", @class = "form-control form-control-sm", @placeholder = "" })
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoDpto, "Departamento", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoDpto", null, new { id = "drpDepartamento", @class = "form-control-sm js-example-responsive", @style = "width:100%", @onchange = "callChangeDepartamento(this.value)" })
+                                @Html.ValidationMessageFor(model => model.CodigoDpto)
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoProv, "Provincia", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoProv", null, new { id = "drpProvincia", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.CodigoProv)
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CodigoDist, "Distrito", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoDist", null, new { id = "drpDistrito", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.CodigoDist)
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="txtFechaAlta">FechaAlta</label>
                                 @Html.TextBoxFor(model => model.FechaAlta, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaAlta", @class = "form-control form-control-sm float-right", @readonly = "readonly", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
 
                             </div>
                         </div>
-
-
-
-
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                @Html.LabelFor(model => model.CodigoDpto, "Departamento", htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownList("CodigoDpto", null, new { id = "drpDepartamento", @class = "form-control form-control-sm", @onchange = "callChangeDepartamento(this.value)" })
-                                @Html.ValidationMessageFor(model => model.CodigoDpto)
+                                @Html.LabelFor(model => model.CodigoCentroCosto, "Centro de Costo", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoCentroCosto", null, new { id = "drpCodigoCentroCosto", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                @Html.ValidationMessageFor(model => model.CodigoCentroCosto)
                             </div>
                         </div>
-                        <div class="col-md-2">
+
+                        <div class="col-md-3">
                             <div class="form-group">
-                                @Html.LabelFor(model => model.CodigoProv, "Provincia", htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownList("CodigoProv", null, new { id = "drpProvincia", @class = "form-control form-control-sm", @onchange = "callChangeProvincia(this.value)" })
-                                @Html.ValidationMessageFor(model => model.CodigoProv)
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.CodigoDist, "Distrito", htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownList("CodigoDist", null, new { id = "drpDistrito", @class = "form-control form-control-sm" })
-                                @Html.ValidationMessageFor(model => model.CodigoDist)
+                                <label for="txtCodigoTrabajador">Codigo Trabajador</label>
+                                @Html.TextBoxFor(model => model.CodigoTrabajador, "", new { id = "txtCodigoTrabajador", @class = "form-control form-control-sm", @placeholder = "" })
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.CodigoVendedor, htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownList("CodigoVendedor", null, new { id = "drpVendedor", @class = "form-control form-control-sm" })
+                                @Html.DropDownList("CodigoVendedor", null, new { id = "drpVendedor", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                 @Html.ValidationMessageFor(model => model.CodigoVendedor, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.CodigoPlan, "Codigo Plan", htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownList("CodigoPlan", null, new { id = "drpPlanes", @class = "form-control form-control-sm" })
+                                @Html.DropDownList("CodigoPlan", null, new { id = "drpPlanes", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                 @Html.ValidationMessageFor(model => model.CodigoPlan, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -306,6 +320,14 @@
     </script>
 
     <script>
+
+
+        $(document).ready(function () {
+            //$('.js-example-basic-single').select2();
+            $(".js-example-responsive").select2({
+                width: 'resolve' // need to override the changed default
+            });
+        });
 
         function goBackMantenimiento(e) {
             e.preventDefault();

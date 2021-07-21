@@ -141,24 +141,24 @@ $('#allchk').change(function () {
 //#########################################################################
 
 $(document).ready(function () {
-    $('#btnbusca').click(function () {
-        $('#loading').css('display', 'block');
-    });
-    $('#chkTodos').click(function () {
-        $('#loading').css('display', 'block');
-    });
-    $('#chkGenerados').click(function () {
-        $('#loading').css('display', 'block');
-    });
-    $('#chkAprobados').click(function () {
-        $('#loading').css('display', 'block');
-    });
-    $('#chkGenerarCuentaCorriente').click(function () {
-        $('#loading').css('display', 'block');
-    });
-    $('#chkFacturados').click(function () {
-        $('#loading').css('display', 'block');
-    });
+    //$('#btnbusca').click(function () {
+    //    $('#loading').css('display', 'block');
+    //});
+    //$('#chkTodos').click(function () {
+    //    $('#loading').css('display', 'block');
+    //});
+    //$('#chkGenerados').click(function () {
+    //    $('#loading').css('display', 'block');
+    //});
+    //$('#chkAprobados').click(function () {
+    //    $('#loading').css('display', 'block');
+    //});
+    //$('#chkGenerarCuentaCorriente').click(function () {
+    //    $('#loading').css('display', 'block');
+    //});
+    //$('#chkFacturados').click(function () {
+    //    $('#loading').css('display', 'block');
+    //});
     //$('#btngenera').click(function () {
     //    $('#loading').css('display', 'block');
     //});

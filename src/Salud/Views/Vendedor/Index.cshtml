@@ -11,7 +11,7 @@
     @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
 }
 <style>
-
+/*
     #loading {
         position: fixed;
         left: 0px;
@@ -21,7 +21,7 @@
         z-index: 9999;
         background: url('../../Images/loading.gif') 50% 50% no-repeat rgba(249, 249, 249, 0.7);
     }
-
+*/
     .modal-backdrop.fade {
         opacity: 0;
         filter: alpha(opacity=0);
@@ -45,9 +45,9 @@
             transform: scale(1);
         }
 </style>
-<div id="loading" style="display:none;">
-</div>
-<section id="content">
+@*<div id="loading" style="display:none;">
+</div>*@
+<section>
     @using (Html.BeginForm("GetLista", "Vendedor", FormMethod.Get, new { id = "Form1", name = "Form1", autocomplete = "off" }))
     {
         <div class="row">
@@ -363,11 +363,11 @@
         });
     </script>
     <script>
-        $(document).ready(function () {
-            $('#btnbuscar').click(function () {
-                $('#loading').css('display', 'block');
-            });
-        });
+        //$(document).ready(function () {
+        //    $('#btnbuscar').click(function () {
+        //        $('#loading').css('display', 'block');
+        //    });
+        //});
 
 
         $('#btnVendedor').click(function () {

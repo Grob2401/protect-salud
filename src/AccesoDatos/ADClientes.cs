@@ -12,6 +12,7 @@ namespace AccesoDatos
         public String dataProviderName = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ProviderName;
         public String connectionString = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ConnectionString;
 
+
         public List<ENClientes> ObtenerTodos()
         {
             DbCommand oCommand = null;
@@ -24,33 +25,87 @@ namespace AccesoDatos
                 while (oDataReader.Read())
                 {
                     ENClientes oEnListaClientes = new ENClientes();
-                    oEnListaClientes.CodigoCliente = oDataReader["CodigoCliente"].ToString();
-                    oEnListaClientes.CodigoCorredor = oDataReader["CodigoCorredor"].ToString();
-                    oEnListaClientes.CodigoEjecutivo = oDataReader["CodigoEjecutivo"].ToString();
-                    oEnListaClientes.CodigoTipoCliente = oDataReader["CodigoTipoCliente"].ToString();
-                    oEnListaClientes.CodigoUsuario = oDataReader["CodigoUsuario"].ToString();
-                    oEnListaClientes.CorredorAgenciado = oDataReader["CorredorAgenciado"].ToString();
-                    oEnListaClientes.Direccion = oDataReader["Direccion"].ToString();
-                    oEnListaClientes.Email = oDataReader["Email"].ToString();
-                    //oEnListaClientes.FechaMovimiento = DateTime.Parse(oDataReader["FechaMovimiento"].ToString());
-
+                    oEnListaClientes.CodigoCliente = oDataReader["CodigoCliente"] == DBNull.Value ? "" : oDataReader["CodigoCliente"].ToString();
+                    oEnListaClientes.CodigoCorredor = oDataReader["CodigoCorredor"] == DBNull.Value ? "" : oDataReader["CodigoCorredor"].ToString();
+                    oEnListaClientes.CodigoEjecutivo = oDataReader["CodigoEjecutivo"] == DBNull.Value ? "" : oDataReader["CodigoEjecutivo"].ToString();
+                    oEnListaClientes.CodigoTipoCliente = oDataReader["CodigoTipoCliente"] == DBNull.Value ? "" : oDataReader["CodigoTipoCliente"].ToString();
+                    oEnListaClientes.CodigoUsuario = oDataReader["CodigoUsuario"] == DBNull.Value ? "" : oDataReader["CodigoUsuario"].ToString();
+                    oEnListaClientes.CorredorAgenciado = oDataReader["CorredorAgenciado"] == DBNull.Value ? "" : oDataReader["CorredorAgenciado"].ToString();
+                    oEnListaClientes.Direccion = oDataReader["Direccion"] == DBNull.Value ? "" : oDataReader["Direccion"].ToString();
+                    oEnListaClientes.Email = oDataReader["Email"] == DBNull.Value ? "" : oDataReader["Email"].ToString();
 
                     oEnListaClientes.FechaMovimiento = oDataReader["FechaMovimiento"] == DBNull.Value
                     ? DateTime.Now
                     : Convert.ToDateTime(oDataReader["FechaMovimiento"]);
 
-                    oEnListaClientes.Materno = oDataReader["Materno"].ToString();
-                    oEnListaClientes.NombreCorto = oDataReader["NombreCorto"].ToString();
-                    oEnListaClientes.Nombres = oDataReader["Nombres"].ToString();
-                    oEnListaClientes.PaginaWeb = oDataReader["PaginaWeb"].ToString();
-                    oEnListaClientes.Paterno = oDataReader["Paterno"].ToString();
-                    oEnListaClientes.PersonaContacto = oDataReader["PersonaContacto"].ToString();
-                    oEnListaClientes.PersonaContactoCobranza = oDataReader["PersonaContactoCobranza"].ToString();
-                    oEnListaClientes.RazonSocial = oDataReader["RazonSocial"].ToString();
-                    oEnListaClientes.RucDni = oDataReader["RucDni"].ToString();
-                    oEnListaClientes.Telefono1 = oDataReader["Telefono1"].ToString();
-                    oEnListaClientes.Telefono2 = oDataReader["Telefono2"].ToString();
-                    oEnListaClientes.Ubicubi = oDataReader["Ubicubi"].ToString();
+                    oEnListaClientes.Materno = oDataReader["Materno"] == DBNull.Value ? "" : oDataReader["Materno"].ToString();
+                    oEnListaClientes.NombreCorto = oDataReader["NombreCorto"] == DBNull.Value ? "" : oDataReader["NombreCorto"].ToString();
+                    oEnListaClientes.Nombres = oDataReader["Nombres"] == DBNull.Value ? "" : oDataReader["Nombres"].ToString();
+                    oEnListaClientes.PaginaWeb = oDataReader["PaginaWeb"] == DBNull.Value ? "" : oDataReader["PaginaWeb"].ToString();
+                    oEnListaClientes.Paterno = oDataReader["Paterno"] == DBNull.Value ? "" : oDataReader["Paterno"].ToString();
+                    oEnListaClientes.PersonaContacto = oDataReader["PersonaContacto"] == DBNull.Value ? "" : oDataReader["PersonaContacto"].ToString();
+                    oEnListaClientes.PersonaContactoCobranza = oDataReader["PersonaContactoCobranza"] == DBNull.Value ? "" : oDataReader["PersonaContactoCobranza"].ToString();
+                    oEnListaClientes.RazonSocial = oDataReader["RazonSocial"] == DBNull.Value ? "" : oDataReader["RazonSocial"].ToString();
+                    oEnListaClientes.RucDni = oDataReader["RucDni"] == DBNull.Value ? "" : oDataReader["RucDni"].ToString();
+                    oEnListaClientes.Telefono1 = oDataReader["Telefono1"] == DBNull.Value ? "" : oDataReader["Telefono1"].ToString();
+                    oEnListaClientes.Telefono2 = oDataReader["Telefono2"] == DBNull.Value ? "" : oDataReader["Telefono2"].ToString();
+                    oEnListaClientes.Ubicubi = oDataReader["Ubicubi"] == DBNull.Value ? "" : oDataReader["Ubicubi"].ToString();
+
+                    oListaClientes.Add(oEnListaClientes);
+                }
+                return oListaClientes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
+        public List<ENClientes> ObtenerTodos(int page, int rows, string type, string Keywords)
+        {
+            DbCommand oCommand = null;
+            List<ENClientes> oListaClientes = new List<ENClientes>();
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenClientes_sel_V2");
+                GenericDataAccess.AgregarParametro(oCommand, "@page", page, TipoParametro.INT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@rowsPerPage", rows, TipoParametro.INT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@type", type, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@keywords", Keywords, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
+                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
+                while (oDataReader.Read())
+                {
+                    ENClientes oEnListaClientes = new ENClientes();
+                    oEnListaClientes.CodigoCliente = oDataReader["CodigoCliente"] == DBNull.Value ? "" : oDataReader["CodigoCliente"].ToString();
+                    oEnListaClientes.CodigoCorredor = oDataReader["CodigoCorredor"] == DBNull.Value ? "" : oDataReader["CodigoCorredor"].ToString();
+                    oEnListaClientes.CodigoEjecutivo = oDataReader["CodigoEjecutivo"] == DBNull.Value ? "" : oDataReader["CodigoEjecutivo"].ToString();
+                    oEnListaClientes.CodigoTipoCliente = oDataReader["CodigoTipoCliente"] == DBNull.Value ? "" : oDataReader["CodigoTipoCliente"].ToString();
+                    oEnListaClientes.CodigoUsuario = oDataReader["CodigoUsuario"] == DBNull.Value ? "" : oDataReader["CodigoUsuario"].ToString();
+                    oEnListaClientes.CorredorAgenciado = oDataReader["CorredorAgenciado"] == DBNull.Value ? "" : oDataReader["CorredorAgenciado"].ToString();
+                    oEnListaClientes.Direccion = oDataReader["Direccion"] == DBNull.Value ? "" : oDataReader["Direccion"].ToString();
+                    oEnListaClientes.Email = oDataReader["Email"] == DBNull.Value ? "" : oDataReader["Email"].ToString();
+
+                    oEnListaClientes.FechaMovimiento = oDataReader["FechaMovimiento"] == DBNull.Value
+                    ? DateTime.Now
+                    : Convert.ToDateTime(oDataReader["FechaMovimiento"]);
+
+                    oEnListaClientes.Materno = oDataReader["Materno"] == DBNull.Value ? "" : oDataReader["Materno"].ToString();
+                    oEnListaClientes.NombreCorto = oDataReader["NombreCorto"] == DBNull.Value ? "" : oDataReader["NombreCorto"].ToString();
+                    oEnListaClientes.Nombres = oDataReader["Nombres"] == DBNull.Value ? "" : oDataReader["Nombres"].ToString();
+                    oEnListaClientes.PaginaWeb = oDataReader["PaginaWeb"] == DBNull.Value ? "" : oDataReader["PaginaWeb"].ToString();
+                    oEnListaClientes.Paterno = oDataReader["Paterno"] == DBNull.Value ? "" : oDataReader["Paterno"].ToString();
+                    oEnListaClientes.PersonaContacto = oDataReader["PersonaContacto"] == DBNull.Value ? "" : oDataReader["PersonaContacto"].ToString();
+                    oEnListaClientes.PersonaContactoCobranza = oDataReader["PersonaContactoCobranza"] == DBNull.Value ? "" : oDataReader["PersonaContactoCobranza"].ToString();
+                    oEnListaClientes.RazonSocial = oDataReader["RazonSocial"] == DBNull.Value ? "" : oDataReader["RazonSocial"].ToString();
+                    oEnListaClientes.RucDni = oDataReader["RucDni"] == DBNull.Value ? "" : oDataReader["RucDni"].ToString();
+                    oEnListaClientes.Telefono1 = oDataReader["Telefono1"] == DBNull.Value ? "" : oDataReader["Telefono1"].ToString();
+                    oEnListaClientes.Telefono2 = oDataReader["Telefono2"] == DBNull.Value ? "" : oDataReader["Telefono2"].ToString();
+                    oEnListaClientes.Ubicubi = oDataReader["Ubicubi"] == DBNull.Value ? "" : oDataReader["Ubicubi"].ToString();
 
                     oListaClientes.Add(oEnListaClientes);
                 }
@@ -220,6 +275,8 @@ namespace AccesoDatos
                 GenericDataAccess.AgregarParametro(oCommand, "@argTelefono1", oENClientes.Telefono1, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@argTelefono2", oENClientes.Telefono2, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@argUbicubi", sUbicubi, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argTipoDocumento", oENClientes.CodigoDocumentoIdentidad, TipoParametro.STR, Direccion.INPUT);
+                
 
                 GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode", 1, TipoParametro.INT, Direccion.OUTPUT);
                 if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)

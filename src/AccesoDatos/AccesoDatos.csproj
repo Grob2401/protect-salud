@@ -56,6 +56,8 @@
     <Compile Include="ADMonedas.cs" />
     <Compile Include="ADPrefacturaciones.cs" />
     <Compile Include="ADQuerys.cs" />
+    <Compile Include="ADPais.cs" />
+    <Compile Include="ADSaludAseguradosContratos.cs" />
     <Compile Include="ADSaludAsegurados.cs" />
     <Compile Include="ADSaludCentroCostos.cs" />
     <Compile Include="ADSaludContratoPlan.cs" />
@@ -71,6 +73,8 @@
     <Compile Include="ADSociedades.cs" />
     <Compile Include="ADTipoAsegurado.cs" />
     <Compile Include="ADTipoCliente.cs" />
+    <Compile Include="ADTipoEstadoCivil.cs" />
+    <Compile Include="ADTipoPrima.cs" />
     <Compile Include="ADTipoComision.cs" />
     <Compile Include="ADTipoContrato.cs" />
     <Compile Include="ADTipoDocumentoIdentidad .cs" />

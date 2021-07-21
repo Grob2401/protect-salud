@@ -273,8 +273,9 @@
             $(".js-example-responsive").select2({
                 width: 'resolve' // need to override the changed default
             });
+
             callChangefunc(document.getElementById('drpCodigoCliente').value);
-            callChangeContrato(document.getElementById('drpCodigoContrato').value);
+            //callChangeContrato(document.getElementById('drpCodigoContrato').value);
         });
 
         const razonSocial = document.getElementById('txtRazonSocial');
@@ -310,8 +311,11 @@
                     for (var i = 0; i < contratos.length; i++) {
                         var opt = contratos[i].Text;
                         var tx = contratos[i].Text;
+                                          
                         codContrato.innerHTML += "<option value=\"" + opt + "\">" + tx + "</option>";
                     }
+                    let variable = contratos[0].Text;
+                    callChangeContrato(variable);
                 }
             });
         };
@@ -338,7 +342,7 @@
                     var dataparseada = JSON.parse(r);
                     var datos = [...dataparseada];
                     var contratos = [];
-                    console.log(datos);
+                    //console.log(datos);
 
                     var IniVigFormato = $.datepicker.formatDate('yy-mm-dd', new Date(Date(dataparseada[0])));
                     var FinVigFormato = $.datepicker.formatDate('yy-mm-dd', new Date(Date(dataparseada[1])));
@@ -350,7 +354,7 @@
                     const planes = dataparseada[3];
 
                     const planesContrato = planes.forEach(plan => {
-                        console.log(plan.CodigoPlanSC);
+                        //console.log(plan.CodigoPlanSC);
                         table.row.add([
                             "<button type='button' class='BorrarPlan btn btn-danger btn-sm'><i class='fa fa-times text-warning'></i></button>",
                             plan.CodigoPlanSC,

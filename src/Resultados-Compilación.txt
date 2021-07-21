@@ -1,0 +1,8 @@
+﻿Operación Limpiar iniciada...
+1>------ Operación Limpiar iniciada: proyecto: Salud, configuración: Debug Any CPU ------
+2>------ Operación Limpiar iniciada: proyecto: LogicaNegocio, configuración: Debug Any CPU ------
+3>------ Operación Limpiar iniciada: proyecto: AccesoDatos, configuración: Debug Any CPU ------
+4>------ Operación Limpiar iniciada: proyecto: Excepciones, configuración: Debug Any CPU ------
+5>------ Operación Limpiar iniciada: proyecto: Entidades, configuración: Debug Any CPU ------
+6>------ Operación Limpiar iniciada: proyecto: Utilitarios, configuración: Debug Any CPU ------
+========== Limpiar: 6 correctos, 0 incorrectos, 0 omitidos ==========

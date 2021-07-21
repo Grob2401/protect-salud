@@ -63,8 +63,11 @@
     <Compile Include="LNSCTRCorredor.cs" />
     <Compile Include="LNSCTRCotizaciones.cs" />
     <Compile Include="LNSCTRCotizacionesDetalle.cs" />
+    <Compile Include="LNSaludEstadoCivil.cs" />
     <Compile Include="LNSCTREjecutivos.cs" />
     <Compile Include="LNSCTR_EmisionTemporal.cs" />
+    <Compile Include="LNTipoPais.cs" />
+    <Compile Include="LNTipoPrima.cs" />
     <Compile Include="LNTipoComision.cs" />
     <Compile Include="LNSociedades.cs" />
     <Compile Include="LNTipoAsegurado.cs" />
