@@ -48,7 +48,7 @@
                 </div>*@
             <!-- /.card-header -->
             <div class="card-body ">
-                @using (Html.BeginForm("Index", "SaludAsegurados", FormMethod.Post))
+                @using (Html.BeginForm("Independientes", "SaludAsegurados", FormMethod.Post))
                 {
                     <div class="row">
                         <div class="col-md-4">
@@ -156,7 +156,7 @@
                 <div class="modal-body">
                     <div class="row justify-content-center">
                         <input id="hdContrato" type="hidden" name="name" />
-                        <table id="dglista2" class="table table-bordered table-sm" hidden>
+                        <table id="dglista2" class="tabladglista2 table table-bordered table-sm" hidden>
                             <thead class="bg-gradient-lightblue">
                                 <tr>
                                     <th>CODIGO CLIENTE</th>
@@ -175,7 +175,7 @@
                             </tbody>
                         </table>
 
-                        <table id="dgCuotasNoPagadas" class="table table-bordered table-sm" hidden>
+                        <table id="dgCuotasNoPagadas" class="tablaCuotasNoPagadas table table-bordered table-sm" hidden>
                             <thead class="bg-gradient-lightblue">
                                 <tr>
                                     <th>NRO</th>
@@ -190,8 +190,11 @@
                             <tbody>
                             </tbody>
                         </table>
+                        <button id="AgregarCuota" type="button" class="btn btn-dark bg-gradient-secondary btn-sm" onclick="Agregar(event);" hidden>
+                            <i class="fa fa-plus-square text-warning"></i>&nbsp;Agregar
+                        </button>
 
-                        <table id="dgCuotasTodas" class="table table-bordered table-sm" hidden>
+                        <table id="dgCuotasTodas" class="tabladgCuotasTodas table table-bordered table-sm" hidden>
                             <thead class="bg-gradient-lightblue">
                                 <tr>
                                     <th>NRO</th>
@@ -269,20 +272,20 @@
                     url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 },
                 "searching": false,
-                //"scrollY": "500px",
-                //"buttons": [
-                //    { "extend": 'pdf', "text": 'Export', "className": 'btn btn-default btn-xs' }
-                //],
-                //dom: 'Bfrtip',
-                //buttons: [{
-                //    extend: 'excelHtml5',
-                //    text: 'Exportar Excel',
-                //    className: 'btn btn-outline-info btn-sm',
-                //    customize: function (xlsx) {
-                //        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                "scrollY": "500px",
+                "buttons": [
+                    { "extend": 'pdf', "text": 'Export', "className": 'btn btn-default btn-xs' }
+                ],
+                dom: 'Bfrtip',
+                buttons: [{
+                    extend: 'excelHtml5',
+                    text: 'Exportar Excel',
+                    className: 'btn btn-outline-info btn-sm',
+                    customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
 
-                //    }
-                //}]
+                    }
+                }]
             });
         });
 
@@ -326,9 +329,17 @@
             const codigoCategoria = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
             const contrato = document.getElementById("hdContrato");
 
+            const botonagregar = document.getElementById("AgregarCuota");
+            botonagregar.removeAttribute("hidden");
+
+
             $("#dgCuotasNoPagadas").find("tr:not(:first)").remove();
             var ta = document.getElementById("dgCuotasNoPagadas");
             ta.removeAttribute("hidden");
+
+            var ta2 = document.getElementById("dgCuotasTodas");
+            ta2.setAttribute("hidden", "");
+
             $.ajax({
                 type: "GET",
                 url: "/SaludAsegurados/ObtenerCuotasNoPagadas",
@@ -352,6 +363,10 @@
             const codigoTitular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
             const codigoCategoria = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
             const contrato = document.getElementById("hdContrato");
+
+            const botonagregar = document.getElementById("AgregarCuota");
+            botonagregar.setAttribute("hidden","");
+
             console.log(`
                             ${codigoCliente}
                             ${codigoTitular}
@@ -448,9 +463,10 @@
                             <td>${dato.IdCuota}</td>
                             <td>${(new Date(parseInt(dato.FechaInicioCuota.substr(6)))).toLocaleDateString()}</td>
                             <td>${(new Date(parseInt(dato.FechaFinCuota.substr(6)))).toLocaleDateString()}</td>
-                            <td>${dato.Monto}</td>
-                            <td>${dato.CodigoTipoDocumentoPago}</td>
-                            <td>${dato.NumeroDocumentoPago}</td>
+                            <td><input type="text" value="${dato.Monto}"></td>
+                            <td>@Html.DropDownList("TipoDocumentoPago", (IEnumerable<SelectListItem>)ViewBag.TipoDocumentoPago)
+                            </td>
+                            <td><input type="text" value="${dato.NumeroDocumentoPago}"></td>
                             <td><input style="border:none;" name=${dato.IdCuota} type="checkbox" /></td>
                         </tr>
                         `);
@@ -476,6 +492,62 @@
                         `);
                 });
             }
+        }
+
+        function Agregar(e) {
+
+            console.log("hola");
+
+
+            var checkedItems = $('#dgCuotasNoPagadas input[type="checkbox"]:checked').each(function () {
+                // Do something with the row
+                console.log($(this).parent('tr'));
+            });
+            if (!checkedItems) {
+                // Nothing was checked
+            }
+
+            $('.tablaCuotasNoPagadas tr').each(function () {
+                //processing this row
+                //how to process each cell(table td) where there is checkbox
+                $(this).find('td input:checked').each(function () {
+                    
+                    var currentRow = $(this).closest("tr");
+
+                    var col1 = currentRow.find("td:eq(3)").text(); // get current row 1st TD value
+                    var col2 = currentRow.find("td:eq(4)").text(); // get current row 2nd TD
+                    var col3 = currentRow.find("td:eq(5)").text(); // get current row 3rd TD
+                    var data = col1 + "\n" + col2 + "\n" + col3;
+
+                    console.log(data);
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Información',
+                        html: data,
+                        showCloseButton: true
+                    });
+
+                });
+            });
+
+
+            //$.ajax({
+            //    type: "GET",
+            //    url: "/SaludAsegurados/ObtenerTodasCuotas",
+            //    data: {
+            //        'cliente': codigoCliente,
+            //        'titular': codigoTitular,
+            //        'categoria': codigoCategoria,
+            //        'contrato': contrato.value.trim(),
+            //    },
+            //    dataType: "text",
+            //    success: function (r) {
+            //        var dataparseada = JSON.parse(r);
+            //        console.log(dataparseada);
+            //        ToTabla(dataparseada, "dgCuotasTodas", "2");
+            //    }
+            //});
+
         }
 
     </script>

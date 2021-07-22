@@ -24,7 +24,7 @@ namespace Salud.Controllers
         [SessionExpire]
         public ActionResult Index()
         {
-            var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados(1,100,"","TITULARES","", "", "", "", "");
+            var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, "", "TITULARES", "", "", "", "", "");
             ViewBag.Asegurados = ASEGURADOS;
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             TempData["ASEGURADOS"] = ASEGURADOS;
@@ -49,9 +49,10 @@ namespace Salud.Controllers
         [SessionExpire]
         public ActionResult Independientes()
         {
-            var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, "","POTESTATIVOS", "", "", "", "", "");
+            var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, "", "POTESTATIVOS", "", "", "", "", "");
             ViewBag.Asegurados = ASEGURADOS;
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
+            ViewBag.TipoDocumentoPago = new SelectList(LNTipoDocumentoPago.ObtenerTodos().ToList(), "CodigoTipoDocumentoPago", "DescripcionTipoDocumentoPago");
             return View();
         }
 
@@ -151,7 +152,7 @@ namespace Salud.Controllers
                 VMSaludAsegurados = VMAsegurados
             };
 
-            var listaAsegurados = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, "","GRUPOFAMILIAR", "", CodigoCLiente, CodigoTitular, "", CodigoContrato).ToList();
+            var listaAsegurados = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, "", "GRUPOFAMILIAR", "", CodigoCLiente, CodigoTitular, "", CodigoContrato).ToList();
             ViewBag.Asegurados = listaAsegurados;
 
 
@@ -175,7 +176,7 @@ namespace Salud.Controllers
         [SessionExpire]
         public ActionResult IndependientesPagos(string contrato)
         {
-            var INDEPENDIENTESXCONTRATO = LNSaludAsegurados.ObtenerSaludAseguradosIndependientesPagos(contrato);
+            var INDEPENDIENTESXCONTRATO = LNSaludAsegurados.ObtenerSaludAseguradosIndependientesPagos(contrato);           
             return Json(INDEPENDIENTESXCONTRATO, JsonRequestBehavior.AllowGet);
         }
 

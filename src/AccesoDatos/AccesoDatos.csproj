@@ -74,6 +74,7 @@
     <Compile Include="ADTipoAsegurado.cs" />
     <Compile Include="ADTipoCliente.cs" />
     <Compile Include="ADTipoEstadoCivil.cs" />
+    <Compile Include="ADTipoDocumentoPago.cs" />
     <Compile Include="ADTipoPrima.cs" />
     <Compile Include="ADTipoComision.cs" />
     <Compile Include="ADTipoContrato.cs" />
