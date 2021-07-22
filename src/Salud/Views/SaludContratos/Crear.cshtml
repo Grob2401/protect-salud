@@ -91,7 +91,7 @@
                             <div Class="col-md-4">
                                 <div Class="form-group">
                                     @Html.LabelFor(model => model.SaludContratosVM.CodigoCotizacion, "Cotizacion :", htmlAttributes: new { @class = "control-label" })
-                                    @Html.TextBox("CodigoCotizacion", null, new { id = "txtCotizacion", @class = "form-control form-control-sm", @placeholder = "" })
+                                    @Html.TextBox("CodigoCotizacion", "000", new { id = "txtCotizacion", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
                             <div Class="col-md-4">
@@ -100,7 +100,7 @@
                                     @Html.DropDownList("CodigoTipoPrima", null, new { id = "drpCodigoTipoPrima", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                 </div>
                             </div>
-                            <div Class="col-md-4">
+                            <div Class="col-md-6">
                                 <div Class="form-group">
                                     @Html.LabelFor(model => model.SaludContratosVM.InicioVigencia, "Inicio Vigencia", htmlAttributes: new { @class = "control-label" })
                                     @*@Html.TextBoxFor(model => model.InicioVigencia, new { id = "txtInicioVigencia", @class = "form-control form-control-sm", @placeholder = "" })*@
@@ -108,7 +108,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div Class="form-group">
                                     @Html.LabelFor(model => model.SaludContratosVM.FinVigencia, "Fin Vigencia", htmlAttributes: new { @class = "control-label" })
                                     @*@Html.TextBoxFor(model => model.FinVigencia, new { id = "txtFinVigencia", @class = "form-control form-control-sm", @placeholder = "" })*@
@@ -116,18 +116,25 @@
 
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.SaludContratosVM.CodigoEjecutivo, "Ejecutivo", htmlAttributes: new { @class = "control-label" })
                                     @Html.DropDownList("CodigoEjecutivo", null, new { id = "drpEjecutivo", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                     @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoEjecutivo)
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.SaludContratosVM.CodigoCorredor, "Corredor", htmlAttributes: new { @class = "control-label" })
                                     @Html.DropDownList("CodigoCorredor", null, new { id = "drpCorredor", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                     @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoCorredor)
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.SaludContratosVM.CodigoVendedor, "Vendedor", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("CodigoVendedor", null, new { id = "drpVendedor", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                    @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoVendedor)
                                 </div>
                             </div>
                         </div>
@@ -188,8 +195,9 @@
                 dataType: "text",
                 success: function (r) {
                     var dataparseada = JSON.parse(r).toString();
-                    razonSocial.value = dataparseada.split('-')[0];
-                    direccion.value = dataparseada.split('-')[1];
+                    console.log(dataparseada);
+                    razonSocial.value = dataparseada.split(',')[0];
+                    direccion.value = dataparseada.split(',')[1];
                 }
             });
         };
@@ -199,7 +207,6 @@
         function validateForm() {
             var ejecutivo = document.forms["Form1"]["drpEjecutivo"].value.trim(); //000
             var broker = document.forms["Form1"]["drpCorredor"].value.trim();//00000
-            var cotizacion = document.forms["Form1"]["txtCotizacion"].value.trim();//""
             //---
 
             if (ejecutivo == "000" && broker == "00000" && cotizacion == "") {
@@ -226,15 +233,6 @@
                     icon: 'warning',
                     title: 'Mensaje',
                     html: 'Debe seleccionar un Corredor',
-                    showCloseButton: true
-                })
-                return false;
-            }
-            if (cotizacion == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Mensaje',
-                    html: 'IDebe ingresar un código de cotización',
                     showCloseButton: true
                 })
                 return false;

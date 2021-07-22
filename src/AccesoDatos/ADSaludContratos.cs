@@ -153,6 +153,7 @@ namespace AccesoDatos
                 GenericDataAccess.AgregarParametro(oCommand, "@FinalVigencia", oENSaludContratos.FinVigencia, TipoParametro.DT, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodigoCorredor", oENSaludContratos.CodigoCorredor, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodigoEjecutivo", oENSaludContratos.CodigoEjecutivo, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoVendedor", oENSaludContratos.CodigoEjecutivo, TipoParametro.STR, Direccion.INPUT);
                 if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
                     return true;
                 else

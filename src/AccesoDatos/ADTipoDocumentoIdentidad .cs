@@ -14,31 +14,31 @@ public String connectionString = ConfigurationManager.ConnectionStrings["PROVEED
 
  public List<ENTipoDocumentoIdentidad > ObtenerTodos()
 {
-DbCommand oCommand = null;
-List<ENTipoDocumentoIdentidad > oListaTipoDocumentoIdentidad = new List<ENTipoDocumentoIdentidad >();
-try
-{
-  oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString,"usp_GenTipoDocumentoIdentidad _sel");
-  GenericDataAccess.AgregarParametro(oCommand,"@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
-  DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
-  while (oDataReader.Read())
-      {
-          ENTipoDocumentoIdentidad  oEnListaTipoDocumentoIdentidad  = new ENTipoDocumentoIdentidad ();
-          oEnListaTipoDocumentoIdentidad .CodigoDocumentoIdentidad=oDataReader["CodigoDocumentoIdentidad"].ToString();
-oEnListaTipoDocumentoIdentidad .DescripcionDocumentoIdentidad=oDataReader["DescripcionDocumentoIdentidad"].ToString();
+    DbCommand oCommand = null;
+    List<ENTipoDocumentoIdentidad > oListaTipoDocumentoIdentidad = new List<ENTipoDocumentoIdentidad >();
+    try
+    {
+      oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString,"usp_GenTipoDocumentoIdentidad_sel");
+      GenericDataAccess.AgregarParametro(oCommand,"@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
+      DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
+      while (oDataReader.Read())
+          {
+              ENTipoDocumentoIdentidad  oEnListaTipoDocumentoIdentidad  = new ENTipoDocumentoIdentidad ();
+              oEnListaTipoDocumentoIdentidad .CodigoDocumentoIdentidad=oDataReader["CodigoDocumentoIdentidad"].ToString();
+    oEnListaTipoDocumentoIdentidad .DescripcionDocumentoIdentidad=oDataReader["DescripcionDocumentoIdentidad"].ToString();
 
-          oListaTipoDocumentoIdentidad .Add(oEnListaTipoDocumentoIdentidad );
-     }
-     return oListaTipoDocumentoIdentidad ;
+              oListaTipoDocumentoIdentidad .Add(oEnListaTipoDocumentoIdentidad );
+         }
+         return oListaTipoDocumentoIdentidad ;
+          }
+          catch (Exception ex)
+          {
+      throw  new Exception();
       }
-      catch (Exception ex)
+       finally
       {
-  throw  new Exception();
-  }
-   finally
-  {
-   GenericDataAccess.CerrarConexion(oCommand, null);
-  }
+       GenericDataAccess.CerrarConexion(oCommand, null);
+      }
   }
 public ENTipoDocumentoIdentidad   ObtenerUno(string CodigoDocumentoIdentidad)
 {

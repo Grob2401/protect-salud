@@ -78,8 +78,9 @@
 
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="txtRucDni">Tipo Documento:</label>
-                                        @Html.DropDownListFor(model => model.CodigoDocumentoIdentidad, null, new { id = "drpTipoDocumento", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                        @Html.LabelFor(model => model.CodigoDocumentoIdentidad, "Tipo Documento", htmlAttributes: new { @class = "control-label" })
+                                        @Html.DropDownList("CodigoDocumentoIdentidad", null, new { id = "drpTipoDocumento", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                        @Html.ValidationMessageFor(model => model.CodigoDocumentoIdentidad)
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -263,7 +264,6 @@
                 apellidoPaterno.setAttribute("hidden", "");
                 apellidoMaterno.setAttribute("hidden", "");
                 $("#drpTipoDocumento").val("08").change();
-                $("#drpTipoDocumento").attr("disabled", "true");
             }
             else
             {
@@ -273,7 +273,6 @@
                 apellidoPaterno.removeAttribute("hidden");
                 apellidoMaterno.removeAttribute("hidden");
                 $("#drpTipoDocumento").val("01").change();
-                $("#drpTipoDocumento").removeAttr("disabled");
             }
         }
 

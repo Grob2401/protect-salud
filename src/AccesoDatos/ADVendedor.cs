@@ -28,22 +28,23 @@ namespace AccesoDatos
                 while (oDataReader.Read())
                 {
                     ENVendedores oEnListaVendedores = new ENVendedores();
-                    oEnListaVendedores.CodigoVendedor = oDataReader["CodigoVendedor"].ToString();
-                    oEnListaVendedores.DNI = oDataReader["DocumentoVendedor"].ToString();
-                    oEnListaVendedores.ApellidoPaterno = oDataReader["ApellidoPaterno"].ToString();
-                    oEnListaVendedores.ApellidoMaterno = oDataReader["ApellidoMaterno"].ToString();
-                    oEnListaVendedores.Nombres = oDataReader["Nombres"].ToString();
-                    oEnListaVendedores.Direccion = oDataReader["Direccion"].ToString();
-                    oEnListaVendedores.Telefono = oDataReader["Telefono"].ToString();
-                    oEnListaVendedores.Email = oDataReader["Email"].ToString();
-                    oEnListaVendedores.CodigoUsuario = oDataReader["CodigoUsuario"].ToString();
-                    oEnListaVendedores.CodigoPerfil = oDataReader["CodigoPerfil"].ToString();
-                    oEnListaVendedores.IdPersona = Convert.ToInt32(oDataReader["IdPersona"]);
-                    oEnListaVendedores.IdSociedad = Convert.ToInt32(oDataReader["IdSociedad"]);
-                    oEnListaVendedores.RazonSocial = oDataReader["RazonSocial"].ToString(); 
-                    oEnListaVendedores.Comision_Tipo_Descripcion = oDataReader["Comision_Tipo"].ToString();
-                    oEnListaVendedores.Comision_Cantidad = Convert.ToInt32(oDataReader["Comision_Cantidad"]);
-
+                    oEnListaVendedores.CodigoVendedor = oDataReader["CodigoVendedor"] == DBNull.Value ? "" : oDataReader["CodigoVendedor"].ToString();
+                    oEnListaVendedores.DNI = oDataReader["DocumentoVendedor"] == DBNull.Value ? "" : oDataReader["DocumentoVendedor"].ToString();
+                    oEnListaVendedores.ApellidoPaterno = oDataReader["ApellidoPaterno"] == DBNull.Value ? "" : oDataReader["ApellidoPaterno"].ToString();
+                    oEnListaVendedores.ApellidoMaterno = oDataReader["ApellidoMaterno"] == DBNull.Value ? "" : oDataReader["ApellidoMaterno"].ToString();
+                    oEnListaVendedores.Nombres = oDataReader["Nombres"] == DBNull.Value ? "" : oDataReader["Nombres"].ToString();
+                    oEnListaVendedores.Direccion = oDataReader["Direccion"] == DBNull.Value ? "" : oDataReader["Direccion"].ToString();
+                    oEnListaVendedores.Telefono = oDataReader["Telefono"] == DBNull.Value ? "" : oDataReader["Telefono"].ToString();
+                    oEnListaVendedores.Email = oDataReader["Email"] == DBNull.Value ? "" : oDataReader["Email"].ToString();
+                    oEnListaVendedores.CodigoUsuario = oDataReader["CodigoUsuario"] == DBNull.Value ? "" : oDataReader["CodigoUsuario"].ToString();
+                    oEnListaVendedores.CodigoPerfil = oDataReader["CodigoPerfil"] == DBNull.Value ? "" : oDataReader["CodigoPerfil"].ToString();
+                    oEnListaVendedores.IdPersona = oDataReader["IdPersona"] == DBNull.Value ? 0 : Convert.ToInt32(oDataReader["IdPersona"]);
+                    oEnListaVendedores.IdSociedad = oDataReader["IdSociedad"] == DBNull.Value ? 0 : Convert.ToInt32(oDataReader["IdSociedad"]);
+                    oEnListaVendedores.RazonSocial = oDataReader["RazonSocial"] == DBNull.Value ? "" : oDataReader["RazonSocial"].ToString();
+                    oEnListaVendedores.Comision_Tipo_Descripcion = oDataReader["Comision_Tipo"] == DBNull.Value ? "" : oDataReader["Comision_Tipo"].ToString();
+                    oEnListaVendedores.Comision_Cantidad = oDataReader["Comision_Cantidad"] == DBNull.Value ? 0 : Convert.ToInt32(oDataReader["Comision_Cantidad"]);
+                    oEnListaVendedores.CodigoVendedor = oDataReader["CodigoVendedor"] == DBNull.Value ? "" : oDataReader["CodigoVendedor"].ToString();
+                    oEnListaVendedores.Vendedor = oDataReader["Vendedor"] == DBNull.Value ? "" : oDataReader["Vendedor"].ToString();
                     oEnListaVendedores.DescripcionVendedor = oEnListaVendedores.ApellidoPaterno + " " + oEnListaVendedores.ApellidoMaterno + " " + oEnListaVendedores.Nombres;
 
                     oListaVendedores.Add(oEnListaVendedores);

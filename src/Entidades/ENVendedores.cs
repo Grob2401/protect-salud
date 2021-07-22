@@ -45,6 +45,7 @@ namespace Entidades
         public string Comision_Tipo_Descripcion { get; set; }
 
         public string Comision_CodigoVendedor { get; set; }
+        public string Vendedor { get; set; }
 
 
 

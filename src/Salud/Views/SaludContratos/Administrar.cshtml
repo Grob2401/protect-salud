@@ -218,18 +218,17 @@
     @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
     @Scripts.Render("~/Scripts/Shared/util.js")
 
-    @if (TempData["ReceivedId"] != null)
+    @*@if (TempData["ReceivedId"] != null)
     {
         <script type="text/javascript">
-            window.onload = function () {
-                var mensaje = "@TempData["ReceivedId"]";
-                mostrarMensaje(mensaje);
-            };
+        
         </script>
-    }
+    }*@
 
-    <script>
+<script>
 
+        var mensaje = "@TempData["ReceivedId"]";
+        mostrarMensaje(mensaje);
 
         $(function () {
             var tablaLista
@@ -311,7 +310,7 @@
                     for (var i = 0; i < contratos.length; i++) {
                         var opt = contratos[i].Text;
                         var tx = contratos[i].Text;
-                                          
+
                         codContrato.innerHTML += "<option value=\"" + opt + "\">" + tx + "</option>";
                     }
                     let variable = contratos[0].Text;
@@ -436,7 +435,7 @@
                     },
                     dataType: "text",
                     success: function (r) {
-                        
+
                     }
                 });
 
@@ -474,7 +473,7 @@
         });
 
 
-    </script>
+</script>
     <script src="~/Scripts/Comandos.js"></script>
 
 

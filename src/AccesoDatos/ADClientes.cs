@@ -254,8 +254,7 @@ namespace AccesoDatos
                 }
 
 
-
-                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenClientes_ins");
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenClientes_ins_V2");
                 GenericDataAccess.AgregarParametro(oCommand, "@argCodigoCorredor", oENClientes.CodigoCorredor, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@argCodigoEjecutivo", oENClientes.CodigoEjecutivo, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@argCodigoTipoCliente", oENClientes.CodigoTipoCliente, TipoParametro.STR, Direccion.INPUT);
@@ -276,7 +275,28 @@ namespace AccesoDatos
                 GenericDataAccess.AgregarParametro(oCommand, "@argTelefono2", oENClientes.Telefono2, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@argUbicubi", sUbicubi, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@argTipoDocumento", oENClientes.CodigoDocumentoIdentidad, TipoParametro.STR, Direccion.INPUT);
-                
+                //oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenClientes_ins");
+                //GenericDataAccess.AgregarParametro(oCommand, "@argCodigoCorredor", oENClientes.CodigoCorredor, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argCodigoEjecutivo", oENClientes.CodigoEjecutivo, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argCodigoTipoCliente", oENClientes.CodigoTipoCliente, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argCodigoUsuario", sCodigoUsuario, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argCorredorAgenciado", oENClientes.CorredorAgenciado, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argDireccion", oENClientes.Direccion, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argEmail", oENClientes.Email, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argMaterno", oENClientes.Materno, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argNombreCorto", oENClientes.NombreCorto, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argNombres", oENClientes.Nombres, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argPaginaWeb", oENClientes.PaginaWeb, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argPaterno", oENClientes.Paterno, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argPersonaContacto", oENClientes.PersonaContacto, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argPersonaContactoCobranza", oENClientes.PersonaContactoCobranza, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argRazonSocial", oENClientes.RazonSocial, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argRucDni", oENClientes.RucDni, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argTelefono1", oENClientes.Telefono1, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argTelefono2", oENClientes.Telefono2, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argUbicubi", sUbicubi, TipoParametro.STR, Direccion.INPUT);
+                //GenericDataAccess.AgregarParametro(oCommand, "@argTipoDocumento", oENClientes.CodigoDocumentoIdentidad, TipoParametro.STR, Direccion.INPUT);
+
 
                 GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode", 1, TipoParametro.INT, Direccion.OUTPUT);
                 if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
