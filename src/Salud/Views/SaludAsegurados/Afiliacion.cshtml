@@ -332,7 +332,7 @@
         const valorContrato = document.getElementById('drpCodigoContrato').value;
         const url = boton.getAttribute('data-request-url');
 
-        const url_parametros = `?CodigoCLiente=${Codcliente.trim()}&CodigoTitular=${Codtitular.trim()}&CodigoContrato=${valorContrato.trim()}`
+        const url_parametros = `?CodigoCLiente=${Codcliente.trim()}&CodigoTitular=${Codtitular.trim()}&CodigoContrato=${valorContrato.trim()}&origen=A`
         console.log(url + url_parametros);
         window.location.href = url + url_parametros;
 

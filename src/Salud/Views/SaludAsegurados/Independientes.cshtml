@@ -385,11 +385,11 @@
         function EditarAsegurado(e) {
             const boton = e.target;
             const Cliente = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
-            const Contrato = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
-            const Titular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+            const Titular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+            const Contrato = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
             const url = boton.getAttribute('data-request-url');
             console.log(`${Cliente}-${Contrato}-${Titular}-${url}`);
-            const url_parametros = `?CodigoCLiente=${Cliente.trim()}&CodigoTitular=${Titular.trim()}&CodigoContrato=${Contrato.trim()}&origen=I`
+            const url_parametros = `?CodigoCLiente=${Cliente.trim()}&CodigoTitular=${Titular.trim()}&CodigoContrato=${Contrato.trim()}&origen=IN`
             console.log(url + url_parametros);
             window.location.href = url + url_parametros;
 

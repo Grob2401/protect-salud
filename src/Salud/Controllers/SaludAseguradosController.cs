@@ -198,7 +198,7 @@ namespace Salud.Controllers
 
         [HttpGet]
         [SessionExpire]
-        public ActionResult Crear(string idcliente = "", string idtitular = "", string idcategoria = "", string idcontrato = "")
+        public ActionResult Crear(string idcliente = "", string idtitular = "", string idcategoria = "", string idcontrato = "", string origen = "")
         {
             if (idcliente != "" && idcontrato != "")
             {
@@ -206,7 +206,12 @@ namespace Salud.Controllers
                 ViewBag.Contrato = idcontrato;
             }
 
-            if (TempData["MensajeAgregarAFiliado"] != null)
+            if (origen != "")
+            {
+                ViewBag.Origen = origen;
+            }
+
+                if (TempData["MensajeAgregarAFiliado"] != null)
             {
                 ViewBag.MensajeAddAfiliado = TempData["MensajeAgregarAFiliado"];
                 TempData["MensajeAgregarAFiliado"] = null;

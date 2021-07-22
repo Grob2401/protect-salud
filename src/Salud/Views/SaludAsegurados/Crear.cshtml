@@ -333,13 +333,14 @@
             e.preventDefault();
             let CTitular = "";
             CTitular = "@TempData["CodigoTitular"]";
+            const origen = "@ViewBag.Origen"
 
             const valorCliente = document.getElementById('hdClienteCodigo').value;
             const valorContrato = document.getElementById('hdContratoCodigo').value;
             const urlBtn = document.getElementById('btnRegresar');
 
             var url = urlBtn.getAttribute('data-request-url');
-            const url_final = `?CodigoCliente=${valorCliente}&CodigoTitular=${CTitular}&CodigoContrato=${valorContrato}`;
+            const url_final = `?CodigoCliente=${valorCliente}&CodigoTitular=${CTitular}&CodigoContrato=${valorContrato}&origen=${origen}`;
 
             window.location.href = url + url_final;
         }

@@ -32,11 +32,12 @@
 
                         if (ViewBag.MuestraBtnDependiente != null)
                         {
-
-                            <button id="btnCrearDependiente" onclick="goCrearDependiente(this.id);" class="btn btn-app bg-gradient-success" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
-                                <i class="fa fa-user-plus text-warning"></i>&nbsp;&nbsp;Dependiente
-                            </button>
-
+                            if (ViewBag.Origen != "IN") 
+                            {
+                                <button id="btnCrearDependiente" onclick="goCrearDependiente(this.id);" class="btn btn-app bg-gradient-success" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
+                                    <i class="fa fa-user-plus text-warning"></i>&nbsp;&nbsp;Dependiente
+                                </button>
+                            }                            
                         }
                         else
                         {
@@ -51,13 +52,19 @@
                     </a>
 
                     @{
-                        if (ViewBag.Origen == "I")
+                        if (ViewBag.Origen == "I")//INDEX
                         {
                             <a href='@Url.Action("Index", "SaludAsegurados")' class="btn btn-app bg-gradient-danger">
                                 <i class="fa fa-arrow-left text-warning"></i>&nbsp;&nbsp;Regresar
                             </a>
                         }
-                        else
+                        else if(ViewBag.Origen == "IN")//INDEPENDIENTES
+                        {
+                            <a href = '@Url.Action("Independientes", "SaludAsegurados")' class="btn btn-app bg-gradient-danger">
+                                <i class="fa fa-arrow-left text-warning"></i>&nbsp;&nbsp;Regresar
+                            </a>
+                        }
+                        else if (ViewBag.Origen == "A")//AFILIACION
                         {
                             <a href='@Url.Action("Afiliacion", "SaludAsegurados")' class="btn btn-app bg-gradient-danger">
                                 <i class="fa fa-arrow-left text-warning"></i>&nbsp;&nbsp;Regresar
@@ -226,15 +233,16 @@
             });
         });
 
-        $(".botonedit").click(function () {            
+        $(".botonedit").click(function () {
             txt1 = $(this).parents('tr').find("td:eq(1)").text().trim();
             const clienteCod = '@ViewBag.CodigoCliente';
             const titularCod = '@ViewBag.CodigoTitular';
             const contratoCod = '@ViewBag.CodigoContratoID';
+            const origen = '@ViewBag.Origen';
 
             var url = $(this).attr('data-request-url');
             console.log(url);
-            const url_final = `?idcliente=${clienteCod}&idtitular=${titularCod}&idcategoria=${txt1}&idcontrato=${contratoCod}`
+            const url_final = `?idcliente=${clienteCod}&idtitular=${titularCod}&idcategoria=${txt1}&idcontrato=${contratoCod}&origen=${origen}`
             console.log(url + url_final);
             window.location.href = url + url_final;
 
