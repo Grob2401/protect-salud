@@ -851,5 +851,78 @@ namespace AccesoDatos
             }
         }
 
+        //sp_Afl_AseguradosVerificarBaja
+        public bool validarCuotas(string cliente, string titular, string categoria, string fechaFin)
+        {
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_AseguradosVerificarBaja");
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoTitular", cliente, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCliente", titular, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@Categoria", categoria, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@FechaFin", fechaFin, TipoParametro.DT, Direccion.INPUT);
+
+                int resultado = Convert.ToInt32(GenericDataAccess.ExecuteScalar(oCommand));
+                bool resultadoBool = false;
+
+                if (resultado == 1)
+                {
+                    resultadoBool = true;
+                }
+                else if (resultado == -1)
+                {
+                    resultadoBool = false;
+                }
+                return resultadoBool;
+            }
+            catch (Exception ex)
+            {
+                throw new Excepciones.ManejoExcepciones(ex);
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
+        //sp_Afl_Asegurados_VerificarMontoIndependientes
+
+        public bool VerificarMontoIndependientes(string cliente, string titular, string categoria, string codigoContrato, string fechaInicio, double monto)
+        {
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_Asegurados_VerificarMontoIndependientes");
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoTitular", cliente, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCliente", titular, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@Categoria", categoria, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoContrato", codigoContrato, TipoParametro.STR, Direccion.INPUT);                
+                GenericDataAccess.AgregarParametro(oCommand, "@FechaInicio", fechaInicio, TipoParametro.DT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@Monto", monto, TipoParametro.STR, Direccion.INPUT);
+
+                int resultado = Convert.ToInt32(GenericDataAccess.ExecuteScalar(oCommand));
+                bool resultadoBool = false;
+
+                if (resultado == 1)
+                {
+                    resultadoBool = true;
+                }
+                else if (resultado == -1)
+                {
+                    resultadoBool = false;
+                }
+                return resultadoBool;
+            }
+            catch (Exception ex)
+            {
+                throw new Excepciones.ManejoExcepciones(ex);
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
     }
 }

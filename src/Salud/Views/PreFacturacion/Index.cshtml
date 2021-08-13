@@ -9,20 +9,6 @@
     @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
     @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
 }
-@*<style>
-
-    #loading {
-        position: fixed;
-        left: 0px;
-        top: 0px;
-        width: 100%;
-        height: 100%;
-        z-index: 9999;
-        background: url('../../Images/loading.gif') 50% 50% no-repeat rgba(249, 249, 249, 0.7);
-    }
-</style>*@
-@*<div id="loading" style="display:none;">
-</div>*@
 <section>
     <div class="row">
         <div class="col col-md-6">
@@ -168,15 +154,12 @@
     <div class="row">
         <div class="col-12">
             <div class="card card-primary card-outline">
-                @*<div class="card-header">
-                        <h3 class="card-title">
-                            <i class="fas fa-table"></i>
-                            Listado
-                        </h3>
-                    </div>*@
-                <!-- /.card-header -->
                 <div class="card-body ">
-
+                    <input type="hidden" id="ruta" name="00" value='@Url.Action("Detalle", "PreFacturacion")' />
+                    <input type="hidden" id="generar_ruta" name="00" value='@Url.Action("Generar", "PreFacturacion")' />
+                    <input type="hidden" id="facturar_ruta" name="00" value='@Url.Action("Facturar", "PreFacturacion")' />
+                    <input type="hidden" id="ctacorriente_ruta" name="00" value='@Url.Action("ctaCorriente", "PreFacturacion")' />
+                    <input type="hidden" id="aprobar_ruta" name="00" value='@Url.Action("Aprobar", "PreFacturacion")' />
                     <table id="dglista" class="table table-bordered">
                         <thead class="bg-gradient-lightblue">
                             <tr>
@@ -197,11 +180,11 @@
                                 {
                                     <tr>
                                         <td>
-                                            <img src="~/Images/plus.jpg" />
+                                            <img src="~/images/plus.jpg" />
                                             <div style="display:none">
                                                 @*<div id="tableGoesHere">
 
-                                                    </div>*@
+                                    </div>*@
                                             </div>
                                         </td>
                                         <td class="cellCodigoCliente">@PreFacturacion.CodigoCliente </td>

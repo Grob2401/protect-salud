@@ -101,7 +101,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            <img src="~/Images/plus.jpg" />
+                                            <img src="~/images/plus.jpg" />
                                             <div style="display:none">
                                                 @*<div id="tableGoesHere">
 
@@ -124,7 +124,7 @@
                                             </button>
                                         </td>
                                         <td class="text-center" width="110px">
-                                            <button type="button" class="botoncomi btn btn-default bg-gradient-primary btn-sm" onclick='modal(event);'>
+                                            <button type="button" class="botoncomi btn btn-default bg-gradient-primary btn-sm" onclick='modal(event);' data-request-url='@Url.Action("IndependientesPagos", "SaludAsegurados")'>                                                
                                                 <i class="fa fa-coins text-warning"></i>&nbsp;Pagos
                                             </button>
                                         </td>
@@ -178,6 +178,9 @@
                         <table id="dgCuotasNoPagadas" class="tablaCuotasNoPagadas table table-bordered table-sm" hidden>
                             <thead class="bg-gradient-lightblue">
                                 <tr>
+                                    <th hidden>CODIGO CLIENTE</th>
+                                    <th hidden>CODIGO TITULAR</th>
+                                    <th hidden>CATEGORIA</th>
                                     <th>NRO</th>
                                     <th>FECHA INICIO</th>
                                     <th>FECHA FIN</th>
@@ -190,13 +193,16 @@
                             <tbody>
                             </tbody>
                         </table>
-                        <button id="AgregarCuota" type="button" class="btn btn-dark bg-gradient-secondary btn-sm" onclick="Agregar(event);" hidden>
+                        <button id="AgregarCuota" type="button" class="btn btn-dark bg-gradient-secondary btn-sm" onclick="Agregar(event);" data-request-url='@Url.Action("ValidarAgregarCuotas", "SaludAsegurados")' hidden>
                             <i class="fa fa-plus-square text-warning"></i>&nbsp;Agregar
                         </button>
 
                         <table id="dgCuotasTodas" class="tabladgCuotasTodas table table-bordered table-sm" hidden>
                             <thead class="bg-gradient-lightblue">
                                 <tr>
+                                    <th hidden>CODIGO CLIENTE</th>
+                                    <th hidden>CODIGO TITULAR</th>
+                                    <th hidden>CATEGORIA</th>
                                     <th>NRO</th>
                                     <th>FECHA INICIO</th>
                                     <th>FECHA FIN</th>
@@ -255,7 +261,7 @@
             const idTipoCliente = document.getElementById("hdCodigoTipoCliente");
             idTipoCliente.value = combo.value;
             valor = idTipoCliente.value
-            console.log(valor);
+            //console.log(valor);
         }
 
         $(document).ready(function () {
@@ -290,8 +296,11 @@
         });
 
         function modal(e) {
-            console.log(e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling);
+            //console.log(e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling);
+            const boton = e.target;
+            const url_method = boton.getAttribute('data-request-url');
             const Contrato = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+            console.log(Contrato);
 
             var tabla1 = document.getElementById("dglista2");
             var tabla2 = document.getElementById("dgCuotasNoPagadas");
@@ -309,7 +318,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "/SaludAsegurados/IndependientesPagos",
+                url: url_method,
                 data: {
                     'contrato': Contrato,
                 },
@@ -324,6 +333,8 @@
         }
 
         function seleccionar(e) {
+            const boton = e.target;
+            const url_method = boton.getAttribute('data-request-url');
             const codigoCliente = e.target.parentElement.parentElement.firstElementChild.textContent;
             const codigoTitular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
             const codigoCategoria = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
@@ -342,7 +353,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "/SaludAsegurados/ObtenerCuotasNoPagadas",
+                url: url_method,
                 data: {
                     'cliente': codigoCliente,
                     'titular': codigoTitular,
@@ -359,6 +370,8 @@
         }
 
         function info(e) {
+            const boton = e.target;
+            const url_method = boton.getAttribute('data-request-url');
             const codigoCliente = e.target.parentElement.parentElement.firstElementChild.textContent;
             const codigoTitular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
             const codigoCategoria = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
@@ -367,12 +380,6 @@
             const botonagregar = document.getElementById("AgregarCuota");
             botonagregar.setAttribute("hidden","");
 
-            console.log(`
-                            ${codigoCliente}
-                            ${codigoTitular}
-                            ${codigoCategoria}
-                            ${contrato.value.trim()}
-                            `);
             $("#dgCuotasTodas").find("tr:not(:first)").remove();
             var ta1 = document.getElementById("dgCuotasNoPagadas");
             var ta2 = document.getElementById("dgCuotasTodas");
@@ -380,7 +387,7 @@
             ta2.removeAttribute("hidden");
             $.ajax({
                 type: "GET",
-                url: "/SaludAsegurados/ObtenerTodasCuotas",
+                url: url_method,
                 data: {
                     'cliente': codigoCliente,
                     'titular': codigoTitular,
@@ -390,7 +397,7 @@
                 dataType: "text",
                 success: function (r) {
                     var dataparseada = JSON.parse(r);
-                    console.log(dataparseada);
+                    //console.log(dataparseada);
                     ToTabla(dataparseada, "dgCuotasTodas", "2");
                 }
             });
@@ -403,9 +410,9 @@
             const Titular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
             const Contrato = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
             const url = boton.getAttribute('data-request-url');
-            console.log(`${Cliente}-${Contrato}-${Titular}-${url}`);
+            //console.log(`${Cliente}-${Contrato}-${Titular}-${url}`);
             const url_parametros = `?CodigoCLiente=${Cliente.trim()}&CodigoTitular=${Titular.trim()}&CodigoContrato=${Contrato.trim()}&origen=IN`
-            console.log(url + url_parametros);
+            //console.log(url + url_parametros);
             window.location.href = url + url_parametros;
 
         };
@@ -444,12 +451,12 @@
                             <td>${(new Date(parseInt(dato.FechaAlta.substr(6)))).toLocaleDateString()}</td>
                             <td>${(new Date(parseInt(dato.FechaBaja.substr(6)))).toLocaleDateString()}</td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-primary btn-sm" onclick='seleccionar(event);'>
+                                <button type="button" class="btn btn-primary btn-sm" onclick='seleccionar(event);' data-request-url='@Url.Action("ObtenerCuotasNoPagadas", "SaludAsegurados")'>
                                     <i class="fa fa-check text-warning"></i>&nbsp;Seleccionar
                                 </button>
                             </td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-success btn-sm" onclick='info(event);'>
+                                <button type="button" class="btn btn-success btn-sm" onclick='info(event);' data-request-url='@Url.Action("ObtenerTodasCuotas", "SaludAsegurados")'>
                                     <i class="fa fa-info text-warning"></i>&nbsp;Info
                                 </button>
                             </td>
@@ -460,14 +467,17 @@
             else if (op == '1') {
                 arregloDatos.forEach(dato => {
                     $(ta).find('tbody').append(`<tr>
+                            <td hidden>${dato.CodigoCliente}</td>
+                            <td hidden>${dato.CodigoTitular}</td>
+                            <td hidden>${dato.Categoria}</td>
                             <td>${dato.IdCuota}</td>
                             <td>${(new Date(parseInt(dato.FechaInicioCuota.substr(6)))).toLocaleDateString()}</td>
                             <td>${(new Date(parseInt(dato.FechaFinCuota.substr(6)))).toLocaleDateString()}</td>
-                            <td><input type="text" value="${dato.Monto}"></td>
-                            <td>@Html.DropDownList("TipoDocumentoPago", (IEnumerable<SelectListItem>)ViewBag.TipoDocumentoPago)
+                            <td><input type="text" value="${dato.Monto}" name="monto"></td>
+                            <td>@Html.DropDownList("TipoDocumentoPago", (IEnumerable<SelectListItem>)ViewBag.TipoDocumentoPago , new { id = "drpTipoDocumentoPago", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                             </td>
-                            <td><input type="text" value="${dato.NumeroDocumentoPago}"></td>
-                            <td><input style="border:none;" name=${dato.IdCuota} type="checkbox" /></td>
+                            <td><input type="text" value="${dato.NumeroDocumentoPago}" name="NumeroDocumentoPago"></td>
+                            <td><input style="border:none;" name=${dato.IdCuota} type="checkbox" name="IdCuota" /></td>
                         </tr>
                         `);
                 });
@@ -475,6 +485,9 @@
             else if (op == '2') {
                 arregloDatos.forEach(dato => {
                     $(ta).find('tbody').append(`<tr>
+                            <td hidden>${dato.CodigoCliente}</td>
+                            <td hidden>${dato.CodigoTitular}</td>
+                            <td hidden>${dato.Categoria}</td>
                             <td>${dato.IdCuota}</td>
                             <td>${(new Date(parseInt(dato.FechaInicioCuota.substr(6)))).toLocaleDateString()}</td>
                             <td>${(new Date(parseInt(dato.FechaFinCuota.substr(6)))).toLocaleDateString()}</td>
@@ -496,58 +509,63 @@
 
         function Agregar(e) {
 
-            console.log("hola");
+            const boton = e.target;
+            const url_method = boton.getAttribute('data-request-url');
+            var grid = document.getElementById("dgCuotasNoPagadas");
 
+            //Reference the CheckBoxes in Table.
+            var checkBoxes = grid.getElementsByTagName("INPUT");
+            var cCliente = "";
+            var cTitular = "";
+            var cCategoria = "";
+            var idCuota = "";
+            var fechaFin = "";
+            var monto = "";
+            var tipoDocPago = "";
+            var nroDocPago = "";
 
-            var checkedItems = $('#dgCuotasNoPagadas input[type="checkbox"]:checked').each(function () {
-                // Do something with the row
-                console.log($(this).parent('tr'));
-            });
-            if (!checkedItems) {
-                // Nothing was checked
+            //Loop through the CheckBoxes.
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked) {
+                    var row = checkBoxes[i].parentNode.parentNode;
+                    cCliente = row.cells[0].childNodes[0].value;
+                    cTitular = row.cells[1].childNodes[0].value;
+                    cCategoria = row.cells[2].childNodes[0].value;
+                    codigoContrato = document.getElementById("hdContrato");
+                    fechaInicio = row.cells[4].childNodes[0].value;
+                    idCuota = row.cells[3].childNodes[0].value;
+                    fechaFin = row.cells[5].childNodes[0].value;
+                    monto = row.cells[6].childNodes[0].value;
+                    tipoDocPago = row.cells[7].childNodes[0].value;
+                    nroDocPago = row.cells[8].childNodes[0].value;
+
+                    $.ajax({
+                        type: "GET",
+                        url: url_method,
+                        data: {
+                            'cliente': cCliente,
+                            'titular': cTitular,
+                            'categoria': cCategoria,
+                            'idCuota': idCuota,
+                            'codigoContrato': codigoContrato,
+                            'fechaInicio': fechaInicio,
+                            'fechaFin': fechaFin,
+                            'monto': monto,
+                            'tipoDocPago' : tipoDocPago,
+                            'nroDocPago': nroDocPago,
+                        },
+                        dataType: "text",
+                        success: function (r) {
+                            var dataparseada = JSON.parse(r);
+                            console.log(dataparseada);
+                            mostrarMensaje(dataparseada);
+                        }
+                    });
+                }
             }
 
-            $('.tablaCuotasNoPagadas tr').each(function () {
-                //processing this row
-                //how to process each cell(table td) where there is checkbox
-                $(this).find('td input:checked').each(function () {
-                    
-                    var currentRow = $(this).closest("tr");
-
-                    var col1 = currentRow.find("td:eq(3)").text(); // get current row 1st TD value
-                    var col2 = currentRow.find("td:eq(4)").text(); // get current row 2nd TD
-                    var col3 = currentRow.find("td:eq(5)").text(); // get current row 3rd TD
-                    var data = col1 + "\n" + col2 + "\n" + col3;
-
-                    console.log(data);
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'Información',
-                        html: data,
-                        showCloseButton: true
-                    });
-
-                });
-            });
-
-
-            //$.ajax({
-            //    type: "GET",
-            //    url: "/SaludAsegurados/ObtenerTodasCuotas",
-            //    data: {
-            //        'cliente': codigoCliente,
-            //        'titular': codigoTitular,
-            //        'categoria': codigoCategoria,
-            //        'contrato': contrato.value.trim(),
-            //    },
-            //    dataType: "text",
-            //    success: function (r) {
-            //        var dataparseada = JSON.parse(r);
-            //        console.log(dataparseada);
-            //        ToTabla(dataparseada, "dgCuotasTodas", "2");
-            //    }
-            //});
-
+            //Display selected Row data in Alert Box.
+            alert(monto +" - "+ tipoDocPago +" - "+ nroDocPago);
         }
 
     </script>

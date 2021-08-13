@@ -12,6 +12,10 @@
 }
 
 <div class="row">
+    <input type="hidden" id="obtener_ruta" name="name" value='@Url.Action("Obtener", "SaludContratos")' />
+    <input type="hidden" id="saludAsegurados_ruta" name="name" value='@Url.Action("getSaludAsegurados", "SaludAsegurados")' />
+    <input type="hidden" id="soloAsegurados_ruta" name="name" value='@Url.Action("getSoloAsegurados", "SaludAsegurados")' />
+
     <div class="col-md-12">
         <div class="col-md-12">
             <div class="card card-primary card-outline shadow-lg">
@@ -100,7 +104,7 @@
                     </div>
                     <div class="row">
                         <div Class="col-md-12">
-                            <table id="dglistaAsegurados" class="table table-bordered" >
+                            <table id="dglistaAsegurados" class="table table-bordered">
                                 <thead class="bg-gradient-lightblue">
                                     <tr>
                                         <th></th>
@@ -146,7 +150,7 @@
         </script>
     }
 
-<script>
+    <script>
         $(function () {
             var tablaLista = $('#dglistaAsegurados').DataTable({
                 destroy: true,
@@ -177,10 +181,12 @@
 
         function callChangefunc(id) {
             const codContrato = document.getElementById('drpCodigoContrato');
+            var url_method = $('#obtener_ruta').val();
+            
             let primerValor = 0;
             $.ajax({
                 type: "GET",
-                url: "/SaludContratos/Obtener",
+                url: url_method,
                 data: {
                     'id': id
                 },
@@ -212,14 +218,15 @@
             const FinVigencia = document.getElementById('txtFinVigencia');
             var table = $('#dglistaAsegurados').DataTable();
             const labelContrato = document.getElementById('contratoLabel');
+            var url_method = $('#saludAsegurados_ruta').val();
             labelContrato.textContent = id;
-            
-            
+
+
             table.clear().draw();
             //------------------
             $.ajax({
                 type: "GET",
-                url: "/SaludAsegurados/getSaludAsegurados",
+                url: url_method,
                 data: {
                     'tipoConsulta': 'TITULARES',
                     'Codcliente': clienteActual,
@@ -243,7 +250,7 @@
                     const aseguradosTodos = asegurados.forEach(asegurado => {
                         //console.log(asegurado.CodigoCliente);
                         table.row.add([
-                            `<img src='../Images/plus.jpg' />`,
+                            `<img src='../images/plus.jpg' />`,
                             asegurado.CodigoCliente,
                             asegurado.CodigoTitular,
                             asegurado.ApellidosNombres,
@@ -283,6 +290,7 @@
             $(this).attr("src", "/images/plus.jpg");
             $(this).closest("tr").after("<tr id='ad'><td></td><td id='tab' colspan = '999'>" + $(this).next().html() + "</td></tr>");
             var row = $(this).closest("tr");
+            var url_method = $('#soloAsegurados_ruta').val();
 
             var Codcliente = row.find("td:eq(1)").text();
             var Codtitular = row.find("td:eq(2)").text();
@@ -290,7 +298,7 @@
             $(this).attr("src", "/images/minus.jpg");
             $.ajax({
                 type: "GET",
-                url: "/SaludAsegurados/getSoloAsegurados",
+                url: url_method,
                 data: {
                     'tipoConsulta': 'GRUPOFAMILIAR',
                     'codCliente': Codcliente,
@@ -338,7 +346,7 @@
 
     };
 
-</script>
+    </script>
 
 
 

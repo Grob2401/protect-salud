@@ -11,6 +11,8 @@
 }
 
 <div class="row">
+    "/SaludAsegurados/getSoloAsegurados"
+    <input type="hidden" id="soloAsegurados_ruta" name="name" value='@Url.Action("getSoloAsegurados", "SaludAsegurados")' />
     <div class="col col-md-2">
         <div class="card card-info card-outline shadow-lg sticky-top">
             <div class="card-header">
@@ -99,11 +101,11 @@
                                 {
                                     <tr>
                                         <td>
-                                            <img src="~/Images/plus.jpg" />
+                                            <img src="~/images/plus.jpg" />
                                             <div style="display:none">
                                                 @*<div id="tableGoesHere">
 
-                                        </div>*@
+                                                    </div>*@
                                             </div>
                                         </td>
                                         <td class="cellCodigoCliente">@asegurado.CodigoCliente </td>
@@ -131,7 +133,7 @@
                         </tbody>
                     </table>
                 }
-                </div>
+            </div>
             <!-- /.card-body -->
         </div>
     </div>
@@ -212,6 +214,8 @@
             $(this).attr("src", "/images/plus.jpg");
             $(this).closest("tr").after("<tr id='ad'><td></td><td id='tab' colspan = '999'>" + $(this).next().html() + "</td></tr>");
             var row = $(this).closest("tr");
+            var url_method = $('#soloAsegurados_ruta').val();
+            
 
             var Codcliente = row.find(".cellCodigoCliente").html();
             var Codtitular = row.find(".cellCodigoTitular").html();
@@ -219,7 +223,7 @@
             $(this).attr("src", "/images/minus.jpg");
             $.ajax({
                 type: "GET",
-                url: "/SaludAsegurados/getSoloAsegurados",
+                url: url_method,
                 data: {
                     'tipoConsulta': 'GRUPOFAMILIAR',
                     'codCliente': Codcliente,

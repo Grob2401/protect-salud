@@ -27,12 +27,13 @@
                 <table id="example2" class="table table-bordered">
                     <thead class="bg-gradient-lightblue">
                         <tr>
-                            <th>Usuario</th>
+                            <th>USUARIO</th>
                             <th>DNI</th>
-                            <th>Correo Electronico</th>
-                            <th style="width: 8%">Sexo</th>
-                            <th style="width: 8%">Estado</th>
-                            <th style="width: 15%"></th>
+                            <th>CORREO ELECTRÓNICO</th>
+                            <th style="width: 8%">SEXO</th>
+                            <th style="width: 8%">ESTADO</th>
+                            <th style="width: 8%"> EDITAR</th>
+                            <th style="width: 8%">ELIMINAR</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -69,19 +70,21 @@
                                     }
                                 </td>
                                 <td class="project-actions text-center">
+                                    <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "Usuario", new {id = usuario.int_IdUsuario})'>
+                                        <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;Editar
+                                    </a>                                    
+                                </td>
+                                <td class="project-actions text-center">
                                     <form action='@Url.Action("Eliminar", "Usuario", new {id = usuario.int_IdUsuario})' method="POST"
                                           onsubmit="return confirm('¿Está seguro de eliminar el usuario?');">
                                         @Html.AntiForgeryToken()
                                         <div class="text-center">
-                                            <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "Usuario", new {id = usuario.int_IdUsuario})'>
-                                                <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;Editar
-                                            </a>
+
                                             <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
                                                 <i class="fas fa-times text-warning"></i>&nbsp;&nbsp;Eliminar
                                             </button>
                                         </div>
                                     </form>
-
                                 </td>
                             </tr>
                         }

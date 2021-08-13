@@ -58,6 +58,18 @@ namespace LogicaNegocio
         {
             return (new ADSaludAsegurados()).ObtenerAseguradosTodasCuotas(codCliente, codTitular, categoria, codContrato);
         }
+
+        public static bool validarCuotas(string cliente, string titular, string categoria, string fechaFin)
+        {
+            return (new ADSaludAsegurados()).validarCuotas(cliente, titular, categoria, fechaFin);
+        }
+
+        public static bool VerificarMontoIndependientes(string cliente, string titular, string categoria, string codigoContrato, string fechaInicio, double monto)
+        {
+            return (new ADSaludAsegurados()).VerificarMontoIndependientes(cliente, titular, categoria, codigoContrato,fechaInicio,monto);
+        }
+
+        
     }
 }
 

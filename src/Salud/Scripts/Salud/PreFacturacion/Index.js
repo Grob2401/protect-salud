@@ -96,11 +96,12 @@ $("body").on("click", "img[src*='plus.jpg']", function () {
     var pcsstatus = "0";
     var codigo = row.find(".cellCodigoCliente").html();
     var tipoasegurado = row.find(".cellDescripcionTipoAsegurado").html();
+    var url_method = $('#ruta').val()
 
     $(this).attr("src", "/images/minus.jpg");
     $.ajax({    
         type: "GET",
-        url: "/PreFacturacion/Detalle",
+        url: url_method,
         data: {
             'anoProceso': year,
             'mesProceso': month,
@@ -182,6 +183,7 @@ $(document).ready(function () {
 
 $('#btngenera').click(function (e) {
     var url = $(this).data('request-url');
+    var url_generar = $('#generar_ruta').val();
     //Reference the Table.
     var grid = document.getElementById("dglista");
     var contador = 0;
@@ -226,7 +228,7 @@ $('#btngenera').click(function (e) {
 
                         $.ajax({
                             type: "POST",
-                            url: "/PreFacturacion/Generar",
+                            url: url_generar,
                             data: {
                                 'anoProceso': year,
                                 'mesProceso': month,
@@ -271,6 +273,7 @@ $('#btngenera').click(function (e) {
 $('#btnAprobar').click(function (e) {
 
     var url = $(this).data('request-url');
+    var url_aprobar = $('#aprobar_ruta').val();
     //Reference the Table.
     var grid = document.getElementById("dglista");
     var contador = 0;
@@ -315,7 +318,7 @@ $('#btnAprobar').click(function (e) {
 
                         $.ajax({
                             type: "POST",
-                            url: "/PreFacturacion/Aprobar",
+                            url: url_aprobar,
                             data: {
                                 'anoProceso': year,
                                 'mesProceso': month,
@@ -364,6 +367,7 @@ $('#btnAprobar').click(function (e) {
 $('#btnGenerarCuentaCorriente').click(function (e) {
 
     var url = $(this).data('request-url');
+    var url_ctaCorriente = $('#ctacorriente_ruta').val();
     //Reference the Table.
     var grid = document.getElementById("dglista");
     var contador = 0;
@@ -408,7 +412,7 @@ $('#btnGenerarCuentaCorriente').click(function (e) {
 
                         $.ajax({
                             type: "POST",
-                            url: "/PreFacturacion/ctaCorriente",
+                            url: url_ctaCorriente,
                             data: {
                                 'anoProceso': year,
                                 'mesProceso': month,
@@ -454,6 +458,7 @@ $('#btnGenerarCuentaCorriente').click(function (e) {
 
 $('#btnFacturar').click(function (e) {
     var url = $(this).data('request-url');
+    var url_aprobar = $('#aprobar_ruta').val();
     //Reference the Table.
     var grid = document.getElementById("dglista");
     var contador = 0;
@@ -498,7 +503,7 @@ $('#btnFacturar').click(function (e) {
 
                         $.ajax({
                             type: "POST",
-                            url: "/PreFacturacion/Facturar",
+                            url: url_aprobar,
                             data: {
                                 'anoProceso': year,
                                 'mesProceso': month,

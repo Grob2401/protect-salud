@@ -65,8 +65,36 @@ namespace Salud.Controllers
             var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, txtBusquedaAsegurados, "POTESTATIVOS", hdCodigoTipoCliente, "", "", "", "");
             ViewBag.Asegurados = ASEGURADOS;
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
+            ViewBag.TipoDocumentoPago = new SelectList(LNTipoDocumentoPago.ObtenerTodos().ToList(), "CodigoTipoDocumentoPago", "DescripcionTipoDocumentoPago");
             return View();
         }
+
+        public ActionResult ValidarAgregarCuotas(string cliente, string titular, string categoria, string idCuota,string codigoContrato, string fechaInicio ,string fechaFin, double monto, string tipoDocPago, string nroDocPago)
+        {
+            var mensaje = "";
+
+            if (!LNSaludAsegurados.validarCuotas(cliente,titular,categoria,fechaFin))
+            {
+                mensaje = "No se puede cancelar esta cuota debido a que el asegurado se encuentra de baja.";                
+            }
+
+            if (nroDocPago == null || nroDocPago == string.Empty)
+            {
+                mensaje = "Debe ingresar un numero de documento de pago, favor de revisar los items seleccionados.";
+            }
+
+            if (!LNSaludAsegurados.VerificarMontoIndependientes(cliente, titular, categoria, codigoContrato,  fechaInicio,  monto))
+            {
+                mensaje = "Los montos ingresados no corresponden con el valor de la prima.";
+            }
+
+            return Json(mensaje, JsonRequestBehavior.AllowGet);
+        }
+
+        //public ActionResult GuardarCuotas()
+        //{
+
+        //}
 
         //####################AFILIACION
         //##############################

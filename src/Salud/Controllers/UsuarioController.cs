@@ -27,8 +27,8 @@ namespace Salud.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(string usuario, string password)
         {
-            usuario = "grojas@grojas.com";
-            password = "123456";
+            //usuario = "grojas@grojas.com";
+            //password = "123456";
             try
             {
                 ENUsuario usuarioLogin = LNUsuario.ObtenerPorCorreoElectronico(usuario);
@@ -54,8 +54,12 @@ namespace Salud.Controllers
         public ActionResult Crear(int id = 0)
         {
             ENUsuario oENUsuario = null;
-            if (id > 0)
+            if (id > 0) 
+            { 
                 oENUsuario = LNUsuario.ObtenerUno(id);
+                var pwd = new Crypto(Crypto.CryptoTypes.encTypeTripleDES);
+                oENUsuario.var_Password = pwd.Decrypt(oENUsuario.var_Password);
+            }
             else
             {
                 oENUsuario = new ENUsuario();
@@ -70,8 +74,12 @@ namespace Salud.Controllers
         {
             if (ModelState.IsValid)
             {
-                var pwd = new Crypto(Crypto.CryptoTypes.encTypeTripleDES);
-                usuario.var_Password = pwd.Encrypt(usuario.var_Password);
+                if (usuario.var_Password != null)
+                {
+                    var pwd = new Crypto(Crypto.CryptoTypes.encTypeTripleDES);
+                    usuario.var_Password = pwd.Encrypt(usuario.var_Password);
+                }
+                
                 if (usuario.int_IdUsuario > 0)
                 {
                     LNUsuario.Actualizar(usuario);

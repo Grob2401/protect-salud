@@ -11,31 +11,9 @@
     @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
 }
 
-@*<style>
 
-    #loading {
-        position: fixed;
-        left: 0px;
-        top: 0px;
-        width: 100%;
-        height: 100%;
-        z-index: 9999;
-        background: url('../../Images/loading.gif') 50% 50% no-repeat rgba(249, 249, 249, 0.7);
-    }
-
-    .modal-backdrop.fade {
-        opacity: 0;
-        filter: alpha(opacity=0);
-    }
-
-    .modal-backdrop.in {
-        opacity: 0.5;
-        filter: alpha(opacity=50);
-    }
-</style>
-<div id="loading" style="display:none;">
-</div>*@
 <section>
+    <input type="hidden" id="listaJson_ruta" name="name" value='@Url.Action("GetListaJSON", "Canal")' />
     <div class="row">
         <div class="col">
             @using (Html.BeginForm("GetVendedoresSinAsignar", "Vendedor", FormMethod.Get, new { id = "Form1", name = "Form1", autocomplete = "off" }))
@@ -158,18 +136,18 @@
                                     {
                                         foreach (ENCanalesVendedores ven in (List<ENCanalesVendedores>)ViewData["Asignados"])
                                         {
-                                    <tr>
-                                        <td hidden>@ven.CV_IDCanal </td>
-                                        <td hidden>@ven.CV_CodigoVendedor </td>
-                                        <td>@ven.CV_DescripcionCanal </td>
-                                        <td>@ven.CV_Vendedor </td>
-                                        <td>@ven.CV_FechaInicioCanalVendedor </td>
-                                        <td>@ven.CV_FechaFinCanalVendedor </td>
-                                        <td>@((@ven.Vendedor_TipoComi == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Vendedor_TipoComi + "</span>"))</td>
-                                        <td>@((@ven.Vendedor_CantComi == "0") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Vendedor_CantComi + "</span>"))</td>
-                                        <td>@((@ven.Canal_TipoComi == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Canal_TipoComi + "</span>"))</td>
-                                        <td>@((@ven.Canal_CantComi == "0") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Canal_CantComi + "</span>"))</td>
-                                    </tr>
+                                            <tr>
+                                                <td hidden>@ven.CV_IDCanal </td>
+                                                <td hidden>@ven.CV_CodigoVendedor </td>
+                                                <td>@ven.CV_DescripcionCanal </td>
+                                                <td>@ven.CV_Vendedor </td>
+                                                <td>@ven.CV_FechaInicioCanalVendedor </td>
+                                                <td>@ven.CV_FechaFinCanalVendedor </td>
+                                                <td>@((@ven.Vendedor_TipoComi == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Vendedor_TipoComi + "</span>"))</td>
+                                                <td>@((@ven.Vendedor_CantComi == "0") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Vendedor_CantComi + "</span>"))</td>
+                                                <td>@((@ven.Canal_TipoComi == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Canal_TipoComi + "</span>"))</td>
+                                                <td>@((@ven.Canal_CantComi == "0") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Canal_CantComi + "</span>"))</td>
+                                            </tr>
                                         }
                                     }
                                 </tbody>
@@ -315,10 +293,11 @@
 
             var soci = document.getElementById("slcSociedad").value;
             document.getElementById("CV_IdSociedad").value = soci;
+            var url_method = $('#listaJson_ruta').val();
 
             $.ajax({
                 type: "GET",
-                url: "/Canal/GetListaJSON",
+                url: url_method,
                 data: {
                     'slcSociedad': control.value
                 },

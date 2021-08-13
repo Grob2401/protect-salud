@@ -12,6 +12,8 @@
 }
 
 <div class="row">
+    <input type="hidden" id="obtener_ruta" name="name" value='@Url.Action("Obtener", "SaludContratos")' />
+    <input type="hidden" id="datosContrato_ruta" name="name" value='@Url.Action("ObtenerDatosContrato", "SaludContratos")' />
     <div class="col-md-2">
         <div class="card card-info card-outline shadow-lg sticky-top">
             <div class="card-header">
@@ -284,11 +286,12 @@
         const direccion = document.getElementById('txtDireccion');
         const correo = document.getElementById('txtCorreo');
         const codContrato = document.getElementById('drpCodigoContrato');
+        var url_method = $('#obtener_ruta').val();
 
         function callChangefunc(id) {
             $.ajax({
                 type: "GET",
-                url: "/SaludContratos/Obtener",
+                url: url_method,
                 data: {
                     'id': id
                 },
@@ -326,12 +329,13 @@
         function callChangeContrato(id) {
             const clienteActual = document.getElementById('drpCodigoCliente').value
             var table = $('#dglistaPlanReg').DataTable();
+            var url_method = $('#datosContrato_ruta').val();
 
             table.clear().draw();
 
             $.ajax({
                 type: "GET",
-                url: "/SaludContratos/ObtenerDatosContrato",
+                url: url_method,
                 data: {
                     'Codcliente': clienteActual,
                     'idContrato': id,

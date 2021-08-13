@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="icon" type="image/jpg" href="~/Images/favicon.png">
+    <link rel="icon" type="image/jpg" href="~/images/favicon.png">
     <title>@ViewBag.Title -Salud</title>
 
 
@@ -54,20 +54,18 @@
             color: blue;
             font-style: italic;
             font-weight: 400;
-            background-image: url("../Images/spinner.gif");
+            background-image: url("../images/spinner.gif");
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-position: center;
         }
-
-
     </style>
 
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-   
-    <div id="coverScreen" class="LockOn" >        
+
+    <div id="coverScreen" class="LockOn">
     </div>
     <div class="wrapper">
         <!-- Navbar -->
@@ -149,7 +147,7 @@
                         <img src="~/Content/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Juan Pérez</a>
+                        <a href="#" class="d-block"><label class="text-uppercase">@Session["NombreUsuario"]</label></a>
                     </div>
                 </div>
 
@@ -185,59 +183,55 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href='@Url.Action("Index", "Canales")' onclick="$('#coverScreen').show();" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Canales</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href='@Url.Action("Index", "Vendedores")' onclick="$('#coverScreen').show();" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Vendedores</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
                                     <a href='@Url.Action("Index", "CentroCostos")' onclick="$('#coverScreen').show();" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Centros de Costo</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href='@Url.Action("Index", "Clientes")' onclick="$('#coverScreen').show();" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Clientes</p>
-                                    </a>
-                                </li>
-                                @*<li class="nav-item">
-                                        <a href='@Url.Action("Index", "Canal")' class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Canal Prueba</p>
-                                        </a>
-                                    </li>*@
-                                @*<li class="nav-item">
-                                        <a href='@Url.Action("_Prueba", "Clientes")' class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Prueba</p>
-                                        </a>
-                                    </li>*@
-
-                                <li class="nav-item">
-                                    <a href='@Url.Action("Index", "SaludContratos")' onclick="$('#coverScreen').show();" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Contratos</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href='@Url.Action("Index", "SaludAsegurados")' onclick="$('#coverScreen').show();" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Afiliación</p>
-                                    </a>
-                                </li>
-
-
-
-
+                                @*
+                                        <li class="nav-item">
+                                            <a href='@Url.Action("Index", "Canales")' onclick="$('#coverScreen').show();" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Canales</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href='@Url.Action("Index", "Vendedores")' onclick="$('#coverScreen').show();" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Vendedores</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href='@Url.Action("Index", "Clientes")' onclick="$('#coverScreen').show();" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Clientes</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href='@Url.Action("Index", "Canal")' class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Canal Prueba</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href='@Url.Action("_Prueba", "Clientes")' class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Prueba</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href='@Url.Action("Index", "SaludContratos")' onclick="$('#coverScreen').show();" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Contratos</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href='@Url.Action("Index", "SaludAsegurados")' onclick="$('#coverScreen').show();" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Afiliación</p>
+                                            </a>
+                                        </li>
+                                *@
                             </ul>
                         </li>
 
@@ -273,7 +267,31 @@
                                 <li class="nav-item">
                                     <a href='@Url.Action("Index", "PreFacturacion")' onclick="$('#coverScreen').show();" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Pre-Facturacion</p>
+                                        <p>Pre-Facturacion Empresas</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href='@Url.Action("Index", "Home")' onclick="$('#coverScreen').show();" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Bancos y Procesadoras</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href='@Url.Action("Index", "Home")' onclick="$('#coverScreen').show();" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Envio Archivos</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href='@Url.Action("Index", "Home")' onclick="$('#coverScreen').show();" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Recepción Archivos</p>
                                     </a>
                                 </li>
                             </ul>
@@ -324,6 +342,14 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
+                                    <a href='@Url.Action("Index", "Clientes")' onclick="$('#coverScreen').show();" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Registro de Cliente</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
                                     <a href='@Url.Action("Index", "SaludContratos")' onclick="$('#coverScreen').show();" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Administracion de Contratos</p>
@@ -354,14 +380,7 @@
                                     </a>
                                 </li>
                             </ul>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href='@Url.Action("Index", "Clientes")' onclick="$('#coverScreen').show();" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Registro de Cliente</p>
-                                    </a>
-                                </li>
-                            </ul>
+
                         </li>
 
 

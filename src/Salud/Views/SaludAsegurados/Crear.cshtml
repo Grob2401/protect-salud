@@ -18,6 +18,10 @@
     <input id="hdClienteCodigo" type="hidden" name="name" value='@ViewBag.Cliente' />
     <input id="hdContratoCodigo" type="hidden" name="name" value='@ViewBag.Contrato' />
     <input id="hdPlan" type="hidden" name="name" value='0000000008' />
+
+    <input type="hidden" id="provincias_ruta" name="name" value='@Url.Action("GetProvincias", "SaludAsegurados")' />
+    <input type="hidden" id="distritos_ruta" name="name" value='@Url.Action("GetDistritos", "SaludAsegurados")' />
+
     <div class="row">
         <div class="col-md-2">
             <div class="card card-info card-outline shadow-lg sticky-top">
@@ -516,10 +520,12 @@
 
         function callChangeDepartamento(id) {
             const prov = document.getElementById('drpProvincia');
+            var url_method = $('#provincias_ruta').val();
+           
             //------------------
             $.ajax({
                 type: "GET",
-                url: "/SaludAsegurados/GetProvincias",
+                url: url_method,
                 data: {
                     'dptoid': id,
                 },
@@ -541,10 +547,11 @@
         function callChangeProvincia(id) {
             const dep = document.getElementById('drpDepartamento').value;
             const dis = document.getElementById('drpDistrito');
+            var url_method = $('#distritos_ruta').val();
             //------------------
             $.ajax({
                 type: "GET",
-                url: "/SaludAsegurados/GetDistritos",
+                url: url_method,
                 data: {
                     'dptoid': dep,
                     'provid': id
