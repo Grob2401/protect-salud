@@ -87,7 +87,7 @@ $('.sev_check').click(function () {
 $("body").on("click", "img[src*='plus.jpg']", function () {
     $("img[src*='minus.jpg']").click();
     //$('table#dglista tr#ad').remove();
-    $(this).attr("src", "/images/plus.jpg");
+    $(this).attr("src", "../Images/plus.jpg");
     $(this).closest("tr").after("<tr id='ad'><td></td><td id='tab' colspan = '999'>" + $(this).next().html() + "</td></tr>");
     var row = $(this).closest("tr");
     var year = $('#anio').val()
@@ -98,7 +98,7 @@ $("body").on("click", "img[src*='plus.jpg']", function () {
     var tipoasegurado = row.find(".cellDescripcionTipoAsegurado").html();
     var url_method = $('#ruta').val()
 
-    $(this).attr("src", "/images/minus.jpg");
+    $(this).attr("src", "../Images/minus.jpg");
     $.ajax({    
         type: "GET",
         url: url_method,
@@ -121,7 +121,7 @@ $("body").on("click", "img[src*='plus.jpg']", function () {
 
 //Assign Click event to Minus Image.
 $("body").on("click", "img[src*='minus.jpg']", function () {
-    $(this).attr("src", "/images/plus.jpg");
+    $(this).attr("src", "../Images/plus.jpg");
     $(this).closest("tr").next().remove();
 });
 
