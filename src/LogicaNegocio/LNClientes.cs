@@ -43,6 +43,31 @@ namespace LogicaNegocio
         {
             return (new ADClientes()).ObtenerUnoporRUC(EmpresaRUC);
         }
+
+        public static List<ENTarjeta> ObtenerTarjetas(string id)
+        {
+            return (new ADClientes()).ObtenerTarjetas(id);
+        }
+
+        public static bool InsertarTarjeta(ENTarjeta oENTarjeta)
+        {
+            return (new ADClientes()).InsertarTarjeta(oENTarjeta);
+        }
+
+        public static bool ActualizarTarjeta(ENTarjeta oENTarjeta)
+        {
+            return (new ADClientes()).ActualizarTarjeta(oENTarjeta);
+        }
+
+        public static bool EliminarTarjeta(string id)
+        {
+            return (new ADClientes()).EliminarTarjeta(id);
+        }
+
+        
+
+
+
     }
 }
 

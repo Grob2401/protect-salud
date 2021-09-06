@@ -8,17 +8,70 @@
     @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
 }
 <div class="row">
-    <div class="col-12">
+    <div class="col" hidden>
         <div class="card card-primary card-outline shadow-lg">
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-table"></i>
-                    Mantenimiento de Usuarios
+                    Búsqueda:
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            <label for="drpTipoCliente">Usuario:</label>
+                            <input type="text" id="txtBusquedaAsegurados" class="form-control form-control-sm" name="txtBusquedaAsegurados" placeholder="| Nombres y Apellidos | Correo Electrónico | DNI |" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label style="visibility:hidden;">Búsqueda:</label>
+                            <div>
+                                <button type="submit" class="btn btn-dark btn-sm">
+                                    <i class="fa fa-search-plus text-warning"></i>&nbsp;&nbsp;Buscar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+    <div class="col">
+        <div class="card card-primary card-outline shadow-lg">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-tasks"></i>
+                    Opciones:
                 </h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
                 <div class="text-white">
+                    <a class="btn btn-app bg-gradient-secondary" data-toggle="modal" data-target="#exampleModal">
+                        <i class="fas fa-plus-circle text-warning" style="font-size: 14px;"></i> Agregar
+                    </a>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary card-outline shadow-lg">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-table"></i>
+                    Lista de Usuarios
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="text-white" hidden>
                     <a class="btn btn-app bg-gradient-secondary" data-toggle="modal" data-target="#exampleModal">
                         <i class="fas fa-plus-circle text-warning" style="font-size: 14px;"></i> Agregar
                     </a>
@@ -72,7 +125,7 @@
                                 <td class="project-actions text-center">
                                     <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "Usuario", new {id = usuario.int_IdUsuario})'>
                                         <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;Editar
-                                    </a>                                    
+                                    </a>
                                 </td>
                                 <td class="project-actions text-center">
                                     <form action='@Url.Action("Eliminar", "Usuario", new {id = usuario.int_IdUsuario})' method="POST"
@@ -98,6 +151,7 @@
     </div>
     <!-- /.col -->
 </div>
+
 <!-- Modal -->
 @Html.Partial("_UsuarioCrear", new ENUsuario() { int_Estado = 1 })
 
@@ -117,6 +171,7 @@
                 "info": true,
                 "autoWidth": false,
                 "responsive": true,
+                "searching": false,
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }

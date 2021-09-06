@@ -49,8 +49,11 @@
     <Compile Include="LNCanal.cs" />
     <Compile Include="LNCanales.cs" />
     <Compile Include="LNCIIU.cs" />
+    <Compile Include="LNBanco.cs" />
+    <Compile Include="LNLote.cs" />
     <Compile Include="LNClientes.cs" />
     <Compile Include="LNComun.cs" />
+    <Compile Include="LNMarcaTarjeta.cs" />
     <Compile Include="LNMonedas.cs" />
     <Compile Include="LNPreFacturaciones.cs" />
     <Compile Include="LNSaludAsegurados.cs" />

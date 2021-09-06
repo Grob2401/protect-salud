@@ -36,7 +36,7 @@ namespace Salud.Controllers
 
             if (TempData["Mensaje_Cliente"] != null)
             {
-                ViewBag.Message = "Cliente registrado correctamente";
+                ViewBag.Message = TempData["Mensaje_Cliente"];
             }
 
             //return View(ClienteViewModel);
@@ -95,27 +95,38 @@ namespace Salud.Controllers
         [HttpGet]
         public ActionResult Crear(string id = "")
         {
-            ENClientes oENClientes = null;
             var VMCliente = new ENClientes();
             var VMUbigeo = new ENUbigeoCompleto();
 
-            var ClienteViewModel = new VMClientes
+            if (TempData["Tarjeta_Add"] != null)
             {
-                Clientes = VMCliente,
-                Ubigeo = VMUbigeo
-            };
+                ViewBag.TarjetaAdd = TempData["Tarjeta_Add"];
+            }
+
+            if (TempData["Tarjeta_Update"] != null)
+            {
+                ViewBag.TarjetaUpdate = TempData["Tarjeta_Update"];
+            }
+
+            if (TempData["Tarjeta_Remove"] != null)
+            {
+                ViewBag.TarjetaRemove = TempData["Tarjeta_Remove"];
+            }
 
 
             if (id != "")
             {
-                oENClientes = LNClientes.ObtenerUno(id);
-                ViewBag.CodigoDpto = new SelectList(LNUbigeoDpto.ObtenerDpto().ToList(), "CodigoDpto", "DescripcionDpto", oENClientes.CodigoDpto);
-                ViewBag.CodigoProv = new SelectList(LNUbigeoProv.ObtenerProv(oENClientes.CodigoDpto).ToList(), "CodigoProv", "DescripcionProv", oENClientes.CodigoProv);
-                ViewBag.CodigoDist = new SelectList(LNUbigeoDist.ObtenerDist(oENClientes.CodigoDpto, oENClientes.CodigoProv).ToList(), "CodigoDist", "DescripcionDist", oENClientes.CodigoDist);
-                ViewBag.CodigoCorredor = new SelectList(LNSCTRCorredor.ObtenerTodos().ToList(), "CodigoCorredor", "DescripcionCorredor", oENClientes.CodigoCorredor);
-                ViewBag.CodigoEjecutivo = new SelectList(LNSCTREjecutivos.ObtenerTodos().ToList(), "CodigoEjecutivo", "NombreEjecutivo", oENClientes.CodigoEjecutivo);
-                ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente", oENClientes.CodigoTipoCliente);
-                ViewBag.CodigoDocumentoIdentidad = new SelectList(LNTipoDocumentoIdentidad.ObtenerTodos().ToList(), "CodigoDocumentoIdentidad", "DescripcionDocumentoIdentidad",oENClientes.CodigoDocumentoIdentidad);
+                VMCliente = LNClientes.ObtenerUno(id);
+                ViewBag.CodigoDpto = new SelectList(LNUbigeoDpto.ObtenerDpto().ToList(), "CodigoDpto", "DescripcionDpto", VMCliente.CodigoDpto);
+                ViewBag.CodigoProv = new SelectList(LNUbigeoProv.ObtenerProv(VMCliente.CodigoDpto).ToList(), "CodigoProv", "DescripcionProv", VMCliente.CodigoProv);
+                ViewBag.CodigoDist = new SelectList(LNUbigeoDist.ObtenerDist(VMCliente.CodigoDpto, VMCliente.CodigoProv).ToList(), "CodigoDist", "DescripcionDist", VMCliente.CodigoDist);
+                ViewBag.CodigoCorredor = new SelectList(LNSCTRCorredor.ObtenerTodos().ToList(), "CodigoCorredor", "DescripcionCorredor", VMCliente.CodigoCorredor);
+                ViewBag.CodigoEjecutivo = new SelectList(LNSCTREjecutivos.ObtenerTodos().ToList(), "CodigoEjecutivo", "NombreEjecutivo", VMCliente.CodigoEjecutivo);
+                ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente", VMCliente.CodigoTipoCliente);
+                ViewBag.CodigoDocumentoIdentidad = new SelectList(LNTipoDocumentoIdentidad.ObtenerTodos().ToList(), "CodigoDocumentoIdentidad", "DescripcionDocumentoIdentidad", VMCliente.CodigoDocumentoIdentidad);
+                ViewBag.Tarjetas = LNClientes.ObtenerTarjetas(id);
+                ViewBag.MarcaTarjetas = new SelectList(LNMarcaTarjeta.ObtenerTodos().ToList(), "CodigoMarcaTarjeta", "DescripcionMarcaTarjeta");
+                ViewBag.CodigoClienteID = id;
                 //ViewBag.CodigoVendedor = new SelectList(LNTipoDocumentoIdentidad.ObtenerTodos().ToList(), "CodigoDocumentoIdentidad", "DescripcionDocumentoIdentidad");
 
             }
@@ -128,23 +139,30 @@ namespace Salud.Controllers
                 ViewBag.CodigoEjecutivo = new SelectList(LNSCTREjecutivos.ObtenerTodos().ToList(), "CodigoEjecutivo", "NombreEjecutivo");
                 ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
                 ViewBag.CodigoDocumentoIdentidad = new SelectList(LNTipoDocumentoIdentidad.ObtenerTodos().ToList(), "CodigoDocumentoIdentidad", "DescripcionDocumentoIdentidad");
+                ViewBag.MarcaTarjetas = new SelectList(LNMarcaTarjeta.ObtenerTodos().ToList(), "CodigoMarcaTarjeta", "DescripcionMarcaTarjeta");
+                ViewBag.CodigoClienteID = null;
                 //ViewBag.CodigoVendedor = new SelectList(LNVendedor.ObtenerTodos("0").ToList(), "CodigoVendedor", "Nombres");
+            }
 
-                oENClientes = new ENClientes();
-           }
+            var ClienteViewModel = new VMClientes
+            {
+                Clientes = VMCliente,
+                Ubigeo = VMUbigeo
+            };
 
-            return View(oENClientes);
+
+            return View(ClienteViewModel);
 
         }
 
         [SessionExpire]
         [HttpPost]
-        public ActionResult Crear(ENClientes cliente)
+        public ActionResult Crear(VMClientes obj)
         {
-            if (cliente.CodigoCliente is null)
+            if (obj.Clientes.CodigoCliente is null)
             {
 
-                if (LNClientes.Insertar(cliente))
+                if (LNClientes.Insertar(obj.Clientes))
                 {
                     ViewBag.Message = "Registro Grabado Correctamente";
                     ModelState.Clear();
@@ -156,9 +174,10 @@ namespace Salud.Controllers
             else
             {
 
-                if (LNClientes.Actualizar(cliente))
+                if (LNClientes.Actualizar(obj.Clientes))
                 {
                     ViewBag.Message = "Registro Actualizado Correctamente";
+                    TempData["Mensaje_Cliente"] = "Registro Actualizado Correctamente";
                     ModelState.Clear();
                 }
                 //return Json(new { success = true, message = "Actualizado Correctamente" }, JsonRequestBehavior.AllowGet);
@@ -178,6 +197,55 @@ namespace Salud.Controllers
                 return RedirectToAction("Index", "Clientes");
             }
             return View();
+        }
+
+
+        [SessionExpire]
+        [HttpPost]
+        public ActionResult AgregarTarjeta(VMClientes obj)
+        {
+
+            if (obj.Tarjeta.IdClienteTarjetas == 0)
+            {
+                DateTime value = new DateTime(Convert.ToInt32(obj.Tarjeta.anioFinVigencia), Convert.ToInt32(obj.Tarjeta.mesFinVigencia), 30);
+                obj.Tarjeta.FechaVencimientoTarjeta = value;
+                obj.Tarjeta.Token = "";
+                obj.Tarjeta.FechaVencimientoToken = DateTime.Now.AddDays(1);
+                obj.Tarjeta.Estado = "1";
+                obj.Tarjeta.InicioVigencia = DateTime.Now;
+                obj.Tarjeta.FinVigencia = value;
+                LNClientes.InsertarTarjeta(obj.Tarjeta);
+
+                TempData["Tarjeta_Add"] = "Tarjeta Agregada";
+
+            }
+            else
+            {
+                DateTime value = new DateTime(Convert.ToInt32(obj.Tarjeta.anioFinVigencia), Convert.ToInt32(obj.Tarjeta.mesFinVigencia), 30);
+                obj.Tarjeta.FechaVencimientoTarjeta = value;
+                obj.Tarjeta.Token = "";
+                obj.Tarjeta.FechaVencimientoToken = DateTime.Now.AddDays(1);
+                obj.Tarjeta.Estado = "1";
+                obj.Tarjeta.InicioVigencia = DateTime.Now;
+                obj.Tarjeta.FinVigencia = value;
+                LNClientes.ActualizarTarjeta(obj.Tarjeta);
+
+                TempData["Tarjeta_Update"] = "Tarjeta Actualizada";
+            }
+
+            
+            return RedirectToAction("Crear", "Clientes", new { id = obj.Tarjeta.CodigoCliente });
+
+        }
+
+
+        [SessionExpire]
+        [HttpPost]
+        public ActionResult EliminarTarjeta(VMClientes obj)
+        {
+            LNClientes.EliminarTarjeta(obj.Tarjeta.IdClienteTarjetas.ToString());
+            TempData["Tarjeta_Remove"] = "Tarjeta Eliminada";
+            return RedirectToAction("Crear", "Clientes", new { id = obj.Tarjeta.CodigoCliente });
         }
 
 

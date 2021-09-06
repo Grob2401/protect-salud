@@ -140,36 +140,50 @@
                     <div Class="col-md-12">
                         <table id="dglistaGrupoFamiliar" class="table table-bordered">
                             <thead class="bg-gradient-lightblue">
-                                <th>Parentesco</th>
-                                <th>Categoria</th>
-                                <th>Afiliado</th>
-                                <th>Edad</th>
-                                <th>Fecha Alta</th>
-                                <th>Fecha Baja</th>
-                                <th>Estado</th>
-                                <th></th>
+                                <tr>
+                                    <th hidden>CLIENTE</th>
+                                    <th hidden>TITULAR</th>
+                                    <th hidden>CATEGORIA</th>
+                                    <th>Parentesco</th>
+                                    <th>Afiliado</th>
+                                    <th>Edad</th>
+                                    <th>Fecha Alta</th>
+                                    <th>Fecha Baja</th>
+                                    <th>Estado</th>
+                                    <th>Editar</th>
+                                    <th>Imprimir</th>
+                                    <th>SUSALUD</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 @foreach (ENSaludAsegurados SaludASegurados in (List<ENSaludAsegurados>)ViewBag.Asegurados)
                                 {
-                                    <tr>
-
-                                        <td>@SaludASegurados.DescripcionParentesco </td>
-                                        <td>@SaludASegurados.Categoria </td>
-                                        <td>@SaludASegurados.ApellidosNombres </td>
-                                        <td>@SaludASegurados.Edad </td>
-                                        <td>@SaludASegurados.FechaAlta </td>
-                                        <td>@SaludASegurados.FechaBaja </td>
-                                        <td>@SaludASegurados.Estado </td>
-                                        <td class="project-actions text-center">
-                                            <button type="button" class="botonedit btn btn-info btn-sm mr-3" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
-                                                <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
-                                            </button>
-                                            <button type="button" class="botoncomi btn btn-primary btn-sm mr-3">
-                                                <i class="fa fa-coins text-warning"></i>&nbsp;&nbsp;Imprimir
-                                            </button>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td hidden>@SaludASegurados.CodigoCliente</td>
+                                    <td hidden>@SaludASegurados.CodigoTitular</td>
+                                    <td hidden>@SaludASegurados.Categoria</td>
+                                    <td>@SaludASegurados.DescripcionParentesco</td>
+                                    <td>@SaludASegurados.ApellidosNombres</td>
+                                    <td>@SaludASegurados.Edad</td>
+                                    <td>@SaludASegurados.FechaAlta</td>
+                                    <td>@SaludASegurados.FechaBaja</td>
+                                    <td>@SaludASegurados.Estado</td>
+                                    <td class="project-actions text-center">
+                                        <button type="button" class="botonedit btn btn-info btn-sm mr-3" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
+                                            <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
+                                        </button>
+                                    </td>
+                                    <td class="project-actions text-center">
+                                        <button type="button" class="botoncomi btn btn-primary btn-sm mr-3">
+                                            <i class="fa fa-coins text-warning"></i>&nbsp;&nbsp;Imprimir
+                                        </button>
+                                    </td>
+                                    <td class="project-actions text-center">
+                                        <button type="button" class="botonEnviar btn btn-success btn-sm mr-3" onclick='EnvioSusalud(event);' data-request-url='@Url.Action("Consumir_LPService", "SaludAsegurados")'>
+                                            <i class="fa fa-arrow-right text-warning"></i>&nbsp;&nbsp;Registrar
+                                        </button>
+                                    </td>
+                                </tr>
                                 }
                             </tbody>
                         </table>
@@ -234,7 +248,7 @@
         });
 
         $(".botonedit").click(function () {
-            txt1 = $(this).parents('tr').find("td:eq(1)").text().trim();
+            txt1 = $(this).parents('tr').find("td:eq(2)").text().trim();
             const clienteCod = '@ViewBag.CodigoCliente';
             const titularCod = '@ViewBag.CodigoTitular';
             const contratoCod = '@ViewBag.CodigoContratoID';
@@ -248,17 +262,65 @@
 
         });
 
+        function EnvioSusalud(e) {
+
+            const boton = e.target;
+            const Ccliente = e.target.parentElement.parentElement.firstElementChild.textContent;
+            const Ctitular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
+            const Ccategoria = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+            const url_method = boton.getAttribute('data-request-url');
+
+
+            if (Ccliente != "" && Ctitular != "" && Ccategoria != "") {
+                $.ajax({
+                    type: "GET",
+                    url: url_method,
+                    data: {
+                        'metodo': 'WS_Registrar',
+                        'idcliente': Ccliente,
+                        'idtitular': Ctitular,
+                        'idcategoria': Ccategoria,
+                    },
+                    dataType: "text",
+                    success: function (r) {
+                        var dataparseada = JSON.parse(r);
+                        console.log(dataparseada);
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Servicio Web (Respuesta)',
+                            html: dataparseada,
+                            showCloseButton: true
+                        });
+                    }
+                });
+            }
+            else
+            {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'ADVERTENCIA',
+                    html: 'El registro seleccionado no cuenta con datos, intente nuevamente.',
+                    showCloseButton: true
+                });
+            }
+            console.log(Ccliente);
+            console.log(Ctitular);
+            console.log(Ccategoria);
+            console.log(url_method);
+        };
+
 
 
         function goCrearTitular(id) {
             const valorCliente = document.getElementById('txtCodigoCli').value;
             const valorContrato = document.getElementById('drpContrato').value;
+            const origen = '@ViewBag.Origen';
             const idtitu = "";
             const cate = "";
             const urlBtn = document.getElementById(id);
 
             var url = urlBtn.getAttribute('data-request-url');
-            const url_final = `?idcliente=${valorCliente}&idtitular=${idtitu}&idcategoria=${cate}&idcontrato=${valorContrato}`
+            const url_final = `?idcliente=${valorCliente}&idtitular=${idtitu}&idcategoria=${cate}&idcontrato=${valorContrato}&origen=${origen}`
             console.log(url + url_final);
             window.location.href = url + url_final;
         }
@@ -268,12 +330,13 @@
 
             const valorCliente = document.getElementById('txtCodigoCli').value;
             const valorContrato = document.getElementById('drpContrato').value;
+            const origen = '@ViewBag.Origen';
             const idtitu = CTitular;
             const cate = "";
             const urlBtn = document.getElementById(id);
 
             var url = urlBtn.getAttribute('data-request-url');
-            const url_final = `?idcliente=${valorCliente}&idtitular=${idtitu}&idcategoria=${cate}&idcontrato=${valorContrato}`
+            const url_final = `?idcliente=${valorCliente}&idtitular=${idtitu}&idcategoria=${cate}&idcontrato=${valorContrato}&origen=${origen}`
             console.log(url + url_final);
             window.location.href = url + url_final;
         }

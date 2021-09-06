@@ -78,7 +78,7 @@
                     <table id="dglista" class="table table-bordered table-responsive-md">
                         <thead class="bg-gradient-lightblue">
                             <tr>
-                                <th></th>
+                                <th hidden></th>
                                 <th>CLIENTE</th>
                                 <th>CONTRATO</th>
                                 <th>TITULAR</th>
@@ -92,6 +92,7 @@
                                 <th>EDITAR</th>
                                 <th>PAGOS</th>
                                 <th>CARTA</th>
+                                <th>SUSALUD</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -99,41 +100,46 @@
                             {
                                 foreach (ENSaludAsegurados asegurado in (List<ENSaludAsegurados>)ViewBag.Asegurados)
                                 {
-                                    <tr>
-                                        <td>
-                                            <img src="~/Images/plus.jpg" />
-                                            <div style="display:none">
-                                                @*<div id="tableGoesHere">
+                                <tr>
+                                    <td hidden>
+                                        <img src="~/Images/plus.jpg" />
+                                        <div style="display:none">
+                                            @*<div id="tableGoesHere">
 
-                                                    </div>*@
-                                            </div>
-                                        </td>
-                                        <td class="cellCodigoCliente">@asegurado.CodigoCliente </td>
-                                        <td class="cellCodigoContrato">@asegurado.CodigoContrato </td>
-                                        <td class="cellCodigoTitular">@asegurado.CodigoTitular </td>
-                                        <td class="cellCategoria">@asegurado.Categoria </td>
-                                        <td>@asegurado.ApellidosNombres </td>
-                                        <td>@asegurado.FechaNacimiento.ToString("dd-MM-yyyy")  </td>
-                                        <td class="cellDescripcionTipoAsegurado">@asegurado.Edad </td>
-                                        <td>@asegurado.FechaAlta.ToString("dd-MM-yyyy") </td>
-                                        <td>@asegurado.FechaBaja.ToString("dd-MM-yyyy")  </td>
-                                        <td>@asegurado.Estado </td>
-                                        <td class="text-center" width="100px">
-                                            <button type="button" class="botonedit btn btn-default bg-gradient-success btn-sm" onclick='EditarAsegurado(event);' data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'>
-                                                <i class="fa fa-edit text-warning"></i>&nbsp;Editar
-                                            </button>
-                                        </td>
-                                        <td class="text-center" width="110px">
-                                            <button type="button" class="botoncomi btn btn-default bg-gradient-primary btn-sm" onclick='modal(event);' data-request-url='@Url.Action("IndependientesPagos", "SaludAsegurados")'>                                                
-                                                <i class="fa fa-coins text-warning"></i>&nbsp;Pagos
-                                            </button>
-                                        </td>
-                                        <td class="text-center" width="110px">
-                                            <button type="button" class="botoncomi btn btn-default bg-gradient-secondary btn-sm">
-                                                <i class="fa fa-print text-warning"></i>&nbsp;Imprimir
-                                            </button>
-                                        </td>
-                                    </tr>
+                    </div>*@
+                                        </div>
+                                    </td>
+                                    <td class="cellCodigoCliente">@asegurado.CodigoCliente </td>
+                                    <td class="cellCodigoContrato">@asegurado.CodigoContrato </td>
+                                    <td class="cellCodigoTitular">@asegurado.CodigoTitular </td>
+                                    <td class="cellCategoria">@asegurado.Categoria </td>
+                                    <td>@asegurado.ApellidosNombres </td>
+                                    <td>@asegurado.FechaNacimiento.ToString("dd-MM-yyyy")  </td>
+                                    <td class="cellDescripcionTipoAsegurado">@asegurado.Edad </td>
+                                    <td>@asegurado.FechaAlta.ToString("dd-MM-yyyy") </td>
+                                    <td>@asegurado.FechaBaja.ToString("dd-MM-yyyy")  </td>
+                                    <td>@asegurado.Estado </td>
+                                    <td class="text-center" width="100px">
+                                        <button type="button" class="botonedit btn btn-default bg-gradient-info btn-sm" onclick='EditarAsegurado(event);' data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'>
+                                            <i class="fa fa-edit text-warning"></i>&nbsp;Editar
+                                        </button>
+                                    </td>
+                                    <td class="text-center" width="110px">
+                                        <button type="button" class="botoncomi btn btn-default bg-gradient-primary btn-sm" onclick='modal(event);' data-request-url='@Url.Action("IndependientesPagos", "SaludAsegurados")'>
+                                            <i class="fa fa-coins text-warning"></i>&nbsp;Pagos
+                                        </button>
+                                    </td>
+                                    <td class="text-center" width="110px">
+                                        <button type="button" class="botoncomi btn btn-default bg-gradient-secondary btn-sm">
+                                            <i class="fa fa-print text-warning"></i>&nbsp;Imprimir
+                                        </button>
+                                    </td>
+                                    <td class="text-center" width="110px">
+                                        <button type="button" class="botonEnviar btn btn-success btn-sm mr-3" onclick='EnvioSusalud(event);' data-request-url='@Url.Action("Consumir_LPService", "SaludAsegurados")'>
+                                            <i class="fa fa-arrow-right text-warning"></i>&nbsp;Registrar
+                                        </button>
+                                    </td>
+                                </tr>
                                 }
                             }
                         </tbody>
@@ -294,6 +300,22 @@
                 }]
             });
         });
+
+        function EditarAsegurado(e) {
+            const boton = e.target;
+            const Cliente = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
+            const Contrato = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+            const Titular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+            const url = boton.getAttribute('data-request-url');
+            console.log(`${Cliente}-${Contrato}-${Titular}-${url}`);
+            const url_parametros = `?CodigoCLiente=${Cliente.trim()}&CodigoTitular=${Titular.trim()}&CodigoContrato=${Contrato.trim()}&origen=I`
+            console.log(url + url_parametros);
+            window.location.href = url + url_parametros;
+
+        };
+
+
+
 
         function modal(e) {
             //console.log(e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling);
@@ -567,6 +589,47 @@
             //Display selected Row data in Alert Box.
             alert(monto +" - "+ tipoDocPago +" - "+ nroDocPago);
         }
+
+        function EnvioSusalud(e) {
+
+            const boton = e.target;
+            const Ccliente = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
+            const Ctitular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+            const Ccategoria = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+            const url_method = boton.getAttribute('data-request-url');
+
+            if (Ccliente != "" && Ctitular != "" && Ccategoria != "") {
+                $.ajax({
+                    type: "GET",
+                    url: url_method,
+                    data: {
+                        'metodo': 'WS_Registrar',
+                        'idcliente': Ccliente,
+                        'idtitular': Ctitular,
+                        'idcategoria': Ccategoria,
+                    },
+                    dataType: "text",
+                    success: function (r) {
+                        var dataparseada = JSON.parse(r);
+                        console.log(dataparseada);
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Servicio Web (Respuesta)',
+                            html: dataparseada,
+                            showCloseButton: true
+                        });
+                    }
+                });
+            }
+            else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'ADVERTENCIA',
+                    html: 'El registro seleccionado no cuenta con datos, intente nuevamente.',
+                    showCloseButton: true
+                });
+            }
+        };
 
     </script>
 

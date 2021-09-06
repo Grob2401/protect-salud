@@ -64,7 +64,6 @@ namespace AccesoDatos
                 GenericDataAccess.CerrarConexion(oCommand, null);
             }
         }
-
         public List<ENClientes> ObtenerTodos(int page, int rows, string type, string Keywords)
         {
             DbCommand oCommand = null;
@@ -120,6 +119,156 @@ namespace AccesoDatos
                 GenericDataAccess.CerrarConexion(oCommand, null);
             }
         }
+        public List<ENTarjeta> ObtenerTarjetas(string id)
+        {
+            DbCommand oCommand = null;
+            List<ENTarjeta> oListaTarjetas = new List<ENTarjeta>();
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_TarjetasCliente_sel");
+                GenericDataAccess.AgregarParametro(oCommand, "@argCodigoCliente", id, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
+                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
+                while (oDataReader.Read())
+                {
+                    ENTarjeta oEnListaTarjetas = new ENTarjeta();
+                    oEnListaTarjetas.IdClienteTarjetas = oDataReader["IdClienteTarjetas"] == DBNull.Value ? 0 : Convert.ToInt32(oDataReader["IdClienteTarjetas"]);
+                    oEnListaTarjetas.CodigoCliente = oDataReader["CodigoCliente"] == DBNull.Value ? "" : oDataReader["CodigoCliente"].ToString();
+                    oEnListaTarjetas.CodigoMarcaTarjeta = oDataReader["CodigoMarcaTarjeta"] == DBNull.Value ? "" : oDataReader["CodigoMarcaTarjeta"].ToString();
+                    oEnListaTarjetas.NumeroTarjeta = oDataReader["NumeroTarjeta"] == DBNull.Value ? "" : oDataReader["NumeroTarjeta"].ToString();
+                    oEnListaTarjetas.FechaVencimientoTarjeta = oDataReader["FechaVencimientoTarjeta"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(oDataReader["FechaVencimientoTarjeta"]);
+                    oEnListaTarjetas.Token = oDataReader["Token"] == DBNull.Value ? "" : oDataReader["Token"].ToString();
+                    oEnListaTarjetas.Estado = oDataReader["Estado"] == DBNull.Value ? "" : oDataReader["Estado"].ToString();
+                    oEnListaTarjetas.FechaVencimientoToken = oDataReader["FechaVencimientoToken"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(oDataReader["FechaVencimientoToken"]);
+                    oEnListaTarjetas.InicioVigencia = oDataReader["InicioVigencia"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(oDataReader["InicioVigencia"]);
+                    oEnListaTarjetas.FinVigencia = oDataReader["FinVigencia"] == DBNull.Value ? DateTime.Now : Convert.ToDateTime(oDataReader["FinVigencia"]);
+                    oEnListaTarjetas.NombreTarjeta = oDataReader["NombreTarjeta"] == DBNull.Value ? "" : oDataReader["NombreTarjeta"].ToString();
+                    oEnListaTarjetas.mesFinVigencia = oDataReader["mesFinVigencia"] == DBNull.Value ? "" : oDataReader["mesFinVigencia"].ToString();
+                    oEnListaTarjetas.anioFinVigencia = oDataReader["anioFinVigencia"] == DBNull.Value ? "" : oDataReader["anioFinVigencia"].ToString();
+                    oEnListaTarjetas.titularTarjeta = oDataReader["titularTarjeta"] == DBNull.Value ? "" : oDataReader["titularTarjeta"].ToString();
+
+                    oListaTarjetas.Add(oEnListaTarjetas);
+                }
+                return oListaTarjetas;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+        public bool InsertarTarjeta(ENTarjeta oENTarjeta)
+        {
+
+            DbCommand oCommand = null;
+            string sUbicubi = "";
+            string sCodigoUsuario = "grojas";
+            //oENClientes.Materno = "";
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_TarjetasCliente_ins");
+                GenericDataAccess.AgregarParametro(oCommand, "@argCodigoCliente", oENTarjeta.CodigoCliente, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argCodigoMarcaTarjeta", oENTarjeta.CodigoMarcaTarjeta, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argNumeroTarjeta", oENTarjeta.NumeroTarjeta, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argFechaVencimientoTarjeta", oENTarjeta.FechaVencimientoTarjeta, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argToken", oENTarjeta.Token, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argEstado", oENTarjeta.Estado, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argFechaVencimientoToken", oENTarjeta.FechaVencimientoToken, TipoParametro.DT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argInicioVigencia", oENTarjeta.InicioVigencia, TipoParametro.DT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argFinVigencia", oENTarjeta.FinVigencia, TipoParametro.DT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argNombreTarjeta", oENTarjeta.titularTarjeta, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argmesFinVigencia", oENTarjeta.mesFinVigencia, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@arganioFinVigencia", oENTarjeta.anioFinVigencia, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argtitularTarjeta", oENTarjeta.titularTarjeta, TipoParametro.STR, Direccion.INPUT);
+
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode", 1, TipoParametro.INT, Direccion.OUTPUT);
+                if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Excepciones.ManejoExcepciones(ex);
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
+        public bool ActualizarTarjeta(ENTarjeta oENTarjeta)
+        {
+
+            DbCommand oCommand = null;
+            string sUbicubi = "";
+            string sCodigoUsuario = "grojas";
+            //oENClientes.Materno = "";
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_TarjetasCliente_upd");
+                GenericDataAccess.AgregarParametro(oCommand, "@argCodigoMarcaTarjeta", oENTarjeta.CodigoMarcaTarjeta, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argNumeroTarjeta", oENTarjeta.NumeroTarjeta, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argFechaVencimientoTarjeta", oENTarjeta.FechaVencimientoTarjeta, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argToken", oENTarjeta.Token, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argEstado", oENTarjeta.Estado, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argFechaVencimientoToken", oENTarjeta.FechaVencimientoToken, TipoParametro.DT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argInicioVigencia", oENTarjeta.InicioVigencia, TipoParametro.DT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argFinVigencia", oENTarjeta.FinVigencia, TipoParametro.DT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argNombreTarjeta", oENTarjeta.titularTarjeta, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argmesFinVigencia", oENTarjeta.mesFinVigencia, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@arganioFinVigencia", oENTarjeta.anioFinVigencia, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argtitularTarjeta", oENTarjeta.titularTarjeta, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argIdClienteTarjetas", oENTarjeta.IdClienteTarjetas, TipoParametro.INT, Direccion.INPUT);
+
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode", 1, TipoParametro.INT, Direccion.OUTPUT);
+                if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Excepciones.ManejoExcepciones(ex);
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
+        public bool EliminarTarjeta(string id)
+        {
+
+            DbCommand oCommand = null;
+            string sUbicubi = "";
+            string sCodigoUsuario = "grojas";
+            //oENClientes.Materno = "";
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_TarjetasCliente_del");
+                GenericDataAccess.AgregarParametro(oCommand, "@argIdClienteTarjetas", id, TipoParametro.STR, Direccion.INPUT);
+
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode", 1, TipoParametro.INT, Direccion.OUTPUT);
+                if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Excepciones.ManejoExcepciones(ex);
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
+
         public ENClientes ObtenerUno(string CodigoCliente)
         {
             DbCommand oCommand = null;
@@ -163,10 +312,10 @@ namespace AccesoDatos
                         oENClientes.Ubicubi = "150101";
                     }
          
-                        oENClientes.CodigoDpto = oENClientes.Ubicubi.Substring(0, 2);
-                        oENClientes.CodigoProv = oENClientes.Ubicubi.Substring(2, 2);
-                        oENClientes.CodigoDist = oENClientes.Ubicubi.Substring(4, 2);
-               
+                    oENClientes.CodigoDpto = oENClientes.Ubicubi.Substring(0, 2);
+                    oENClientes.CodigoProv = oENClientes.Ubicubi.Substring(2, 2);
+                    oENClientes.CodigoDist = oENClientes.Ubicubi.Substring(4, 2);
+                    oENClientes.CodigoDocumentoIdentidad = oDataReader["CodigoDocumentoIdentidad"].ToString();
 
 
                 }
@@ -181,7 +330,6 @@ namespace AccesoDatos
                 GenericDataAccess.CerrarConexion(oCommand, null);
             }
         }
-
         public ENClientes ObtenerUnoporRUC(string EmpresaRUC)
         {
             DbCommand oCommand = null;
@@ -233,8 +381,6 @@ namespace AccesoDatos
                 GenericDataAccess.CerrarConexion(oCommand, null);
             }
         }
-
-
         public bool Insertar(ENClientes oENClientes)
         {
 
@@ -313,7 +459,6 @@ namespace AccesoDatos
                 GenericDataAccess.CerrarConexion(oCommand, null);
             }
         }
-
         public bool Actualizar(ENClientes oENClientes)
         {
 
@@ -367,7 +512,6 @@ namespace AccesoDatos
                 GenericDataAccess.CerrarConexion(oCommand, null);
             }
         }
-
         public bool Eliminar(string CodigoCliente)
         {
 

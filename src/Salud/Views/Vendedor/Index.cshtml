@@ -323,7 +323,9 @@
     @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
     @Scripts.Render("~/Scripts/Shared/util.js")
 
+
     <script>
+
         $(document).ready(function () {
             $('.js-example-basic-single').select2();
 
@@ -404,7 +406,6 @@
 
         });
 
-
         $(".botondel").click(function (e) {
             txt = $(this).parents('tr').find("td:eq(0)").text();
             console.log(txt);
@@ -440,11 +441,6 @@
             })
 
         });
-
-
-
-
-
 
         function validateForm2() {
             var dni = document.forms["Form2"]["CodigoVendedor"].value.trim();

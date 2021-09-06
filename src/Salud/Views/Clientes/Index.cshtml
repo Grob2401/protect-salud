@@ -7,6 +7,7 @@
 @section Styles {
     @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
     @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
     @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
 }
 <div class="row">
@@ -69,67 +70,67 @@
                         </div>
                     </div>
 
-                <table id="dglista" class="table table-bordered table-hover">
-                    <thead class="bg-gradient-lightblue">
-                        <tr>
-                            <th>Codigo</th>
-                            <th>RUC</th>
-                            <th>Razón Social</th>
-                            <th>Paterno</th>
-                            <th>Materno</th>
-                            <th>Nombres</th>
-                            <th>Dirección</th>
-                            <th>Teléfono</th>
-                            @*<th>Contacto</th>
-                    <th>Email</th>*@
-                            <th>TipoCliente</th>
-                            @*<th>Corredor</th>
-                    <th>Ejecutivo</th>*@
-                            <th style="width: 15%"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (ENClientes Clientes in (List<ENClientes>)ViewBag.Clientes)
-                        {
+                    <table id="dglista" class="table table-bordered table-hover">
+                        <thead class="bg-gradient-lightblue">
                             <tr>
-                                <td>@Clientes.CodigoCliente </td>
-                                <td>@Clientes.RucDni </td>
-                                <td>@Clientes.RazonSocial </td>
-                                <td>@Clientes.Paterno </td>
-                                <td>@Clientes.Materno </td>
-                                <td>@Clientes.Nombres </td>
-                                <td>@Clientes.Direccion </td>
-                                <td>@Clientes.Telefono1 </td>
-                                @*<td>@Clientes.PersonaContacto </td>
-                        <td>@Clientes.Email </td>*@
-                                <td>@Clientes.CodigoTipoCliente </td>
-                                @*<td>@Clientes.CorredorAgenciado </td>
-                        <td>@Clientes.CodigoEjecutivo </td>*@
-
-                                <td class="project-actions text-center">
-                                    <form action='@Url.Action("Eliminar", "Clientes", new {id = Clientes.CodigoCliente})' method="POST"
-                                          onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
-                                        @Html.AntiForgeryToken()
-                                        <div class="text-center" role="group">
-                                            <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "Clientes", new {id = Clientes.CodigoCliente})'>
-                                                <i class="fas fa-pencil-alt text-warning">
-                                                </i>&nbsp;
-                                                Editar
-                                            </a>
-                                            <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
-                                                <i class="fas fa-times text-warning">
-                                                </i>&nbsp;
-                                                Eliminar
-                                            </button>
-                                        </div>
-                                    </form>
-
-                                </td>
+                                <th>Codigo</th>
+                                <th>RUC</th>
+                                <th>Razón Social</th>
+                                <th>Paterno</th>
+                                <th>Materno</th>
+                                <th>Nombres</th>
+                                <th>Dirección</th>
+                                <th>Teléfono</th>
+                                @*<th>Contacto</th>
+                                    <th>Email</th>*@
+                                <th>TipoCliente</th>
+                                @*<th>Corredor</th>
+                                    <th>Ejecutivo</th>*@
+                                <th style="width: 15%"></th>
                             </tr>
-                        }
-                    </tbody>
+                        </thead>
+                        <tbody>
+                            @foreach (ENClientes Clientes in (List<ENClientes>)ViewBag.Clientes)
+                            {
+                                <tr>
+                                    <td>@Clientes.CodigoCliente </td>
+                                    <td>@Clientes.RucDni </td>
+                                    <td>@Clientes.RazonSocial </td>
+                                    <td>@Clientes.Paterno </td>
+                                    <td>@Clientes.Materno </td>
+                                    <td>@Clientes.Nombres </td>
+                                    <td>@Clientes.Direccion </td>
+                                    <td>@Clientes.Telefono1 </td>
+                                    @*<td>@Clientes.PersonaContacto </td>
+                                        <td>@Clientes.Email </td>*@
+                                    <td>@Clientes.CodigoTipoCliente </td>
+                                    @*<td>@Clientes.CorredorAgenciado </td>
+                                        <td>@Clientes.CodigoEjecutivo </td>*@
 
-                </table>
+                                    <td class="project-actions text-center">
+                                        <form action='@Url.Action("Eliminar", "Clientes", new {id = Clientes.CodigoCliente})' method="POST"
+                                              onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
+                                            @Html.AntiForgeryToken()
+                                            <div class="text-center" role="group">
+                                                <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "Clientes", new {id = Clientes.CodigoCliente})'>
+                                                    <i class="fas fa-pencil-alt text-warning">
+                                                    </i>&nbsp;
+                                                    Editar
+                                                </a>
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                                    <i class="fas fa-times text-warning">
+                                                    </i>&nbsp;
+                                                    Eliminar
+                                                </button>
+                                            </div>
+                                        </form>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
                 }
             </div>
             <!-- /.card-body -->

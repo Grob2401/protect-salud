@@ -69,7 +69,10 @@ namespace LogicaNegocio
             return (new ADSaludAsegurados()).VerificarMontoIndependientes(cliente, titular, categoria, codigoContrato,fechaInicio,monto);
         }
 
-        
+        public static bool WebService_Log(string cliente, string titular, string categoria, string ws_metodo, string ws_request, string ws_response, string response_codigo, string response_descripcion, string usuario)
+        {
+            return (new ADSaludAsegurados()).WebService_Log(cliente, titular, categoria, ws_metodo, ws_request, ws_response, response_codigo, response_descripcion, usuario);
+        }
     }
 }
 

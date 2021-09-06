@@ -1,0 +1,1033 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.laprotectora.com.pe/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.laprotectora.com.pe/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.laprotectora.com.pe/">
+      <s:element name="WS_Registrar">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="contrasena" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_cliente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_titula" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="categoria" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="centro_costo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="plan" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="afi_nombre" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="afi_apepat" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="afi_apemat" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sexo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fch_naci" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fch_alta" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fch_baja" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fch_caren" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="email" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tipo_doc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="documento" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="direccion" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="t_fijo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="t_movil" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="estado_civil" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="contrato" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="contratante" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="nacionalidad" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="continuidad" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_RegistrarResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WS_RegistrarResult" type="tns:ArrayOfRespuesta" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfRespuesta">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Respuesta" nillable="true" type="tns:Respuesta" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Respuesta">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Codigo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Descripcion" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="WS_Reactivar">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="contrasena" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_cliente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_titula" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="categoria" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NroReactivacion" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_ReactivarResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WS_ReactivarResult" type="tns:ArrayOfRespuesta" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_Actualizar">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="contrasena" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_cliente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_titula" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="categoria" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fch_alta" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fch_baja" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fch_caren" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="email" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="direccion" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="t_fijo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="t_movil" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="estado_civil" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_ActualizarResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WS_ActualizarResult" type="tns:ArrayOfRespuesta" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_Registrar_Aviso">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="contrasena" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_cliente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_titula" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="categoria" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="aviso_descripcion" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="clasificacion" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="desde" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="hasta" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="limite" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_Registrar_AvisoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WS_Registrar_AvisoResult" type="tns:ArrayOfRespuestaId" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfRespuestaId">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RespuestaId" nillable="true" type="tns:RespuestaId" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RespuestaId">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Codigo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Descripcion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Identificador" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="WS_Actualizar_Aviso">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="contrasena" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="idaviso" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="aviso_descripcion" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="clasificacion" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="desde" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="hasta" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="limite" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="estado" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_Actualizar_AvisoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WS_Actualizar_AvisoResult" type="tns:ArrayOfRespuestaId" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_Actualizar_Estado">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="contrasena" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_cliente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_titula" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="categoria" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="estado_titular" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fch_baja" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="causalBaja" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_Actualizar_EstadoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WS_Actualizar_EstadoResult" type="tns:ArrayOfRespuesta" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_Registrar_Preexistencia">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="contrasena" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_cliente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_titula" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="categoria" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="codigo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="descripcion" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_Registrar_PreexistenciaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WS_Registrar_PreexistenciaResult" type="tns:ArrayOfRespuestaId" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_Actualizar_Preexistencia">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="contrasena" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="idpreexistencia" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="codigo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="descripcion" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="estado" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_Actualizar_PreexistenciaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WS_Actualizar_PreexistenciaResult" type="tns:ArrayOfRespuestaId" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_Renovar_Contrato">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="contrasena" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_cliente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_titula" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="categoria" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fch_alta" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fch_baja" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WS_Renovar_ContratoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WS_Renovar_ContratoResult" type="tns:ArrayOfRespuesta" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ArrayOfRespuesta" nillable="true" type="tns:ArrayOfRespuesta" />
+      <s:element name="ArrayOfRespuestaId" nillable="true" type="tns:ArrayOfRespuestaId" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="WS_RegistrarSoapIn">
+    <wsdl:part name="parameters" element="tns:WS_Registrar" />
+  </wsdl:message>
+  <wsdl:message name="WS_RegistrarSoapOut">
+    <wsdl:part name="parameters" element="tns:WS_RegistrarResponse" />
+  </wsdl:message>
+  <wsdl:message name="WS_ReactivarSoapIn">
+    <wsdl:part name="parameters" element="tns:WS_Reactivar" />
+  </wsdl:message>
+  <wsdl:message name="WS_ReactivarSoapOut">
+    <wsdl:part name="parameters" element="tns:WS_ReactivarResponse" />
+  </wsdl:message>
+  <wsdl:message name="WS_ActualizarSoapIn">
+    <wsdl:part name="parameters" element="tns:WS_Actualizar" />
+  </wsdl:message>
+  <wsdl:message name="WS_ActualizarSoapOut">
+    <wsdl:part name="parameters" element="tns:WS_ActualizarResponse" />
+  </wsdl:message>
+  <wsdl:message name="WS_Registrar_AvisoSoapIn">
+    <wsdl:part name="parameters" element="tns:WS_Registrar_Aviso" />
+  </wsdl:message>
+  <wsdl:message name="WS_Registrar_AvisoSoapOut">
+    <wsdl:part name="parameters" element="tns:WS_Registrar_AvisoResponse" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_AvisoSoapIn">
+    <wsdl:part name="parameters" element="tns:WS_Actualizar_Aviso" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_AvisoSoapOut">
+    <wsdl:part name="parameters" element="tns:WS_Actualizar_AvisoResponse" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_EstadoSoapIn">
+    <wsdl:part name="parameters" element="tns:WS_Actualizar_Estado" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_EstadoSoapOut">
+    <wsdl:part name="parameters" element="tns:WS_Actualizar_EstadoResponse" />
+  </wsdl:message>
+  <wsdl:message name="WS_Registrar_PreexistenciaSoapIn">
+    <wsdl:part name="parameters" element="tns:WS_Registrar_Preexistencia" />
+  </wsdl:message>
+  <wsdl:message name="WS_Registrar_PreexistenciaSoapOut">
+    <wsdl:part name="parameters" element="tns:WS_Registrar_PreexistenciaResponse" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_PreexistenciaSoapIn">
+    <wsdl:part name="parameters" element="tns:WS_Actualizar_Preexistencia" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_PreexistenciaSoapOut">
+    <wsdl:part name="parameters" element="tns:WS_Actualizar_PreexistenciaResponse" />
+  </wsdl:message>
+  <wsdl:message name="WS_Renovar_ContratoSoapIn">
+    <wsdl:part name="parameters" element="tns:WS_Renovar_Contrato" />
+  </wsdl:message>
+  <wsdl:message name="WS_Renovar_ContratoSoapOut">
+    <wsdl:part name="parameters" element="tns:WS_Renovar_ContratoResponse" />
+  </wsdl:message>
+  <wsdl:message name="WS_RegistrarHttpGetIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="cod_cliente" type="s:string" />
+    <wsdl:part name="cod_titula" type="s:string" />
+    <wsdl:part name="categoria" type="s:string" />
+    <wsdl:part name="centro_costo" type="s:string" />
+    <wsdl:part name="plan" type="s:string" />
+    <wsdl:part name="afi_nombre" type="s:string" />
+    <wsdl:part name="afi_apepat" type="s:string" />
+    <wsdl:part name="afi_apemat" type="s:string" />
+    <wsdl:part name="sexo" type="s:string" />
+    <wsdl:part name="fch_naci" type="s:string" />
+    <wsdl:part name="fch_alta" type="s:string" />
+    <wsdl:part name="fch_baja" type="s:string" />
+    <wsdl:part name="fch_caren" type="s:string" />
+    <wsdl:part name="email" type="s:string" />
+    <wsdl:part name="tipo_doc" type="s:string" />
+    <wsdl:part name="documento" type="s:string" />
+    <wsdl:part name="direccion" type="s:string" />
+    <wsdl:part name="t_fijo" type="s:string" />
+    <wsdl:part name="t_movil" type="s:string" />
+    <wsdl:part name="estado_civil" type="s:string" />
+    <wsdl:part name="contrato" type="s:string" />
+    <wsdl:part name="contratante" type="s:string" />
+    <wsdl:part name="nacionalidad" type="s:string" />
+    <wsdl:part name="continuidad" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_RegistrarHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuesta" />
+  </wsdl:message>
+  <wsdl:message name="WS_ReactivarHttpGetIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="cod_cliente" type="s:string" />
+    <wsdl:part name="cod_titula" type="s:string" />
+    <wsdl:part name="categoria" type="s:string" />
+    <wsdl:part name="NroReactivacion" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_ReactivarHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuesta" />
+  </wsdl:message>
+  <wsdl:message name="WS_ActualizarHttpGetIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="cod_cliente" type="s:string" />
+    <wsdl:part name="cod_titula" type="s:string" />
+    <wsdl:part name="categoria" type="s:string" />
+    <wsdl:part name="fch_alta" type="s:string" />
+    <wsdl:part name="fch_baja" type="s:string" />
+    <wsdl:part name="fch_caren" type="s:string" />
+    <wsdl:part name="email" type="s:string" />
+    <wsdl:part name="direccion" type="s:string" />
+    <wsdl:part name="t_fijo" type="s:string" />
+    <wsdl:part name="t_movil" type="s:string" />
+    <wsdl:part name="estado_civil" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_ActualizarHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuesta" />
+  </wsdl:message>
+  <wsdl:message name="WS_Registrar_AvisoHttpGetIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="cod_cliente" type="s:string" />
+    <wsdl:part name="cod_titula" type="s:string" />
+    <wsdl:part name="categoria" type="s:string" />
+    <wsdl:part name="aviso_descripcion" type="s:string" />
+    <wsdl:part name="clasificacion" type="s:string" />
+    <wsdl:part name="desde" type="s:string" />
+    <wsdl:part name="hasta" type="s:string" />
+    <wsdl:part name="limite" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_Registrar_AvisoHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuestaId" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_AvisoHttpGetIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="idaviso" type="s:string" />
+    <wsdl:part name="aviso_descripcion" type="s:string" />
+    <wsdl:part name="clasificacion" type="s:string" />
+    <wsdl:part name="desde" type="s:string" />
+    <wsdl:part name="hasta" type="s:string" />
+    <wsdl:part name="limite" type="s:string" />
+    <wsdl:part name="estado" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_AvisoHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuestaId" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_EstadoHttpGetIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="cod_cliente" type="s:string" />
+    <wsdl:part name="cod_titula" type="s:string" />
+    <wsdl:part name="categoria" type="s:string" />
+    <wsdl:part name="estado_titular" type="s:string" />
+    <wsdl:part name="fch_baja" type="s:string" />
+    <wsdl:part name="causalBaja" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_EstadoHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuesta" />
+  </wsdl:message>
+  <wsdl:message name="WS_Registrar_PreexistenciaHttpGetIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="cod_cliente" type="s:string" />
+    <wsdl:part name="cod_titula" type="s:string" />
+    <wsdl:part name="categoria" type="s:string" />
+    <wsdl:part name="codigo" type="s:string" />
+    <wsdl:part name="descripcion" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_Registrar_PreexistenciaHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuestaId" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_PreexistenciaHttpGetIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="idpreexistencia" type="s:string" />
+    <wsdl:part name="codigo" type="s:string" />
+    <wsdl:part name="descripcion" type="s:string" />
+    <wsdl:part name="estado" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_PreexistenciaHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuestaId" />
+  </wsdl:message>
+  <wsdl:message name="WS_Renovar_ContratoHttpGetIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="cod_cliente" type="s:string" />
+    <wsdl:part name="cod_titula" type="s:string" />
+    <wsdl:part name="categoria" type="s:string" />
+    <wsdl:part name="fch_alta" type="s:string" />
+    <wsdl:part name="fch_baja" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_Renovar_ContratoHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuesta" />
+  </wsdl:message>
+  <wsdl:message name="WS_RegistrarHttpPostIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="cod_cliente" type="s:string" />
+    <wsdl:part name="cod_titula" type="s:string" />
+    <wsdl:part name="categoria" type="s:string" />
+    <wsdl:part name="centro_costo" type="s:string" />
+    <wsdl:part name="plan" type="s:string" />
+    <wsdl:part name="afi_nombre" type="s:string" />
+    <wsdl:part name="afi_apepat" type="s:string" />
+    <wsdl:part name="afi_apemat" type="s:string" />
+    <wsdl:part name="sexo" type="s:string" />
+    <wsdl:part name="fch_naci" type="s:string" />
+    <wsdl:part name="fch_alta" type="s:string" />
+    <wsdl:part name="fch_baja" type="s:string" />
+    <wsdl:part name="fch_caren" type="s:string" />
+    <wsdl:part name="email" type="s:string" />
+    <wsdl:part name="tipo_doc" type="s:string" />
+    <wsdl:part name="documento" type="s:string" />
+    <wsdl:part name="direccion" type="s:string" />
+    <wsdl:part name="t_fijo" type="s:string" />
+    <wsdl:part name="t_movil" type="s:string" />
+    <wsdl:part name="estado_civil" type="s:string" />
+    <wsdl:part name="contrato" type="s:string" />
+    <wsdl:part name="contratante" type="s:string" />
+    <wsdl:part name="nacionalidad" type="s:string" />
+    <wsdl:part name="continuidad" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_RegistrarHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuesta" />
+  </wsdl:message>
+  <wsdl:message name="WS_ReactivarHttpPostIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="cod_cliente" type="s:string" />
+    <wsdl:part name="cod_titula" type="s:string" />
+    <wsdl:part name="categoria" type="s:string" />
+    <wsdl:part name="NroReactivacion" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_ReactivarHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuesta" />
+  </wsdl:message>
+  <wsdl:message name="WS_ActualizarHttpPostIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="cod_cliente" type="s:string" />
+    <wsdl:part name="cod_titula" type="s:string" />
+    <wsdl:part name="categoria" type="s:string" />
+    <wsdl:part name="fch_alta" type="s:string" />
+    <wsdl:part name="fch_baja" type="s:string" />
+    <wsdl:part name="fch_caren" type="s:string" />
+    <wsdl:part name="email" type="s:string" />
+    <wsdl:part name="direccion" type="s:string" />
+    <wsdl:part name="t_fijo" type="s:string" />
+    <wsdl:part name="t_movil" type="s:string" />
+    <wsdl:part name="estado_civil" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_ActualizarHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuesta" />
+  </wsdl:message>
+  <wsdl:message name="WS_Registrar_AvisoHttpPostIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="cod_cliente" type="s:string" />
+    <wsdl:part name="cod_titula" type="s:string" />
+    <wsdl:part name="categoria" type="s:string" />
+    <wsdl:part name="aviso_descripcion" type="s:string" />
+    <wsdl:part name="clasificacion" type="s:string" />
+    <wsdl:part name="desde" type="s:string" />
+    <wsdl:part name="hasta" type="s:string" />
+    <wsdl:part name="limite" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_Registrar_AvisoHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuestaId" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_AvisoHttpPostIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="idaviso" type="s:string" />
+    <wsdl:part name="aviso_descripcion" type="s:string" />
+    <wsdl:part name="clasificacion" type="s:string" />
+    <wsdl:part name="desde" type="s:string" />
+    <wsdl:part name="hasta" type="s:string" />
+    <wsdl:part name="limite" type="s:string" />
+    <wsdl:part name="estado" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_AvisoHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuestaId" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_EstadoHttpPostIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="cod_cliente" type="s:string" />
+    <wsdl:part name="cod_titula" type="s:string" />
+    <wsdl:part name="categoria" type="s:string" />
+    <wsdl:part name="estado_titular" type="s:string" />
+    <wsdl:part name="fch_baja" type="s:string" />
+    <wsdl:part name="causalBaja" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_EstadoHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuesta" />
+  </wsdl:message>
+  <wsdl:message name="WS_Registrar_PreexistenciaHttpPostIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="cod_cliente" type="s:string" />
+    <wsdl:part name="cod_titula" type="s:string" />
+    <wsdl:part name="categoria" type="s:string" />
+    <wsdl:part name="codigo" type="s:string" />
+    <wsdl:part name="descripcion" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_Registrar_PreexistenciaHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuestaId" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_PreexistenciaHttpPostIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="idpreexistencia" type="s:string" />
+    <wsdl:part name="codigo" type="s:string" />
+    <wsdl:part name="descripcion" type="s:string" />
+    <wsdl:part name="estado" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_Actualizar_PreexistenciaHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuestaId" />
+  </wsdl:message>
+  <wsdl:message name="WS_Renovar_ContratoHttpPostIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="contrasena" type="s:string" />
+    <wsdl:part name="cod_cliente" type="s:string" />
+    <wsdl:part name="cod_titula" type="s:string" />
+    <wsdl:part name="categoria" type="s:string" />
+    <wsdl:part name="fch_alta" type="s:string" />
+    <wsdl:part name="fch_baja" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WS_Renovar_ContratoHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfRespuesta" />
+  </wsdl:message>
+  <wsdl:portType name="ServicioWebLPSoap">
+    <wsdl:operation name="WS_Registrar">
+      <wsdl:input message="tns:WS_RegistrarSoapIn" />
+      <wsdl:output message="tns:WS_RegistrarSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Reactivar">
+      <wsdl:input message="tns:WS_ReactivarSoapIn" />
+      <wsdl:output message="tns:WS_ReactivarSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar">
+      <wsdl:input message="tns:WS_ActualizarSoapIn" />
+      <wsdl:output message="tns:WS_ActualizarSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Registrar_Aviso">
+      <wsdl:input message="tns:WS_Registrar_AvisoSoapIn" />
+      <wsdl:output message="tns:WS_Registrar_AvisoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Aviso">
+      <wsdl:input message="tns:WS_Actualizar_AvisoSoapIn" />
+      <wsdl:output message="tns:WS_Actualizar_AvisoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Estado">
+      <wsdl:input message="tns:WS_Actualizar_EstadoSoapIn" />
+      <wsdl:output message="tns:WS_Actualizar_EstadoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Registrar_Preexistencia">
+      <wsdl:input message="tns:WS_Registrar_PreexistenciaSoapIn" />
+      <wsdl:output message="tns:WS_Registrar_PreexistenciaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Preexistencia">
+      <wsdl:input message="tns:WS_Actualizar_PreexistenciaSoapIn" />
+      <wsdl:output message="tns:WS_Actualizar_PreexistenciaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Renovar_Contrato">
+      <wsdl:input message="tns:WS_Renovar_ContratoSoapIn" />
+      <wsdl:output message="tns:WS_Renovar_ContratoSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ServicioWebLPHttpGet">
+    <wsdl:operation name="WS_Registrar">
+      <wsdl:input message="tns:WS_RegistrarHttpGetIn" />
+      <wsdl:output message="tns:WS_RegistrarHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Reactivar">
+      <wsdl:input message="tns:WS_ReactivarHttpGetIn" />
+      <wsdl:output message="tns:WS_ReactivarHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar">
+      <wsdl:input message="tns:WS_ActualizarHttpGetIn" />
+      <wsdl:output message="tns:WS_ActualizarHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Registrar_Aviso">
+      <wsdl:input message="tns:WS_Registrar_AvisoHttpGetIn" />
+      <wsdl:output message="tns:WS_Registrar_AvisoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Aviso">
+      <wsdl:input message="tns:WS_Actualizar_AvisoHttpGetIn" />
+      <wsdl:output message="tns:WS_Actualizar_AvisoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Estado">
+      <wsdl:input message="tns:WS_Actualizar_EstadoHttpGetIn" />
+      <wsdl:output message="tns:WS_Actualizar_EstadoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Registrar_Preexistencia">
+      <wsdl:input message="tns:WS_Registrar_PreexistenciaHttpGetIn" />
+      <wsdl:output message="tns:WS_Registrar_PreexistenciaHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Preexistencia">
+      <wsdl:input message="tns:WS_Actualizar_PreexistenciaHttpGetIn" />
+      <wsdl:output message="tns:WS_Actualizar_PreexistenciaHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Renovar_Contrato">
+      <wsdl:input message="tns:WS_Renovar_ContratoHttpGetIn" />
+      <wsdl:output message="tns:WS_Renovar_ContratoHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ServicioWebLPHttpPost">
+    <wsdl:operation name="WS_Registrar">
+      <wsdl:input message="tns:WS_RegistrarHttpPostIn" />
+      <wsdl:output message="tns:WS_RegistrarHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Reactivar">
+      <wsdl:input message="tns:WS_ReactivarHttpPostIn" />
+      <wsdl:output message="tns:WS_ReactivarHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar">
+      <wsdl:input message="tns:WS_ActualizarHttpPostIn" />
+      <wsdl:output message="tns:WS_ActualizarHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Registrar_Aviso">
+      <wsdl:input message="tns:WS_Registrar_AvisoHttpPostIn" />
+      <wsdl:output message="tns:WS_Registrar_AvisoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Aviso">
+      <wsdl:input message="tns:WS_Actualizar_AvisoHttpPostIn" />
+      <wsdl:output message="tns:WS_Actualizar_AvisoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Estado">
+      <wsdl:input message="tns:WS_Actualizar_EstadoHttpPostIn" />
+      <wsdl:output message="tns:WS_Actualizar_EstadoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Registrar_Preexistencia">
+      <wsdl:input message="tns:WS_Registrar_PreexistenciaHttpPostIn" />
+      <wsdl:output message="tns:WS_Registrar_PreexistenciaHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Preexistencia">
+      <wsdl:input message="tns:WS_Actualizar_PreexistenciaHttpPostIn" />
+      <wsdl:output message="tns:WS_Actualizar_PreexistenciaHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WS_Renovar_Contrato">
+      <wsdl:input message="tns:WS_Renovar_ContratoHttpPostIn" />
+      <wsdl:output message="tns:WS_Renovar_ContratoHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServicioWebLPSoap" type="tns:ServicioWebLPSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="WS_Registrar">
+      <soap:operation soapAction="http://www.laprotectora.com.pe/WS_Registrar" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Reactivar">
+      <soap:operation soapAction="http://www.laprotectora.com.pe/WS_Reactivar" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar">
+      <soap:operation soapAction="http://www.laprotectora.com.pe/WS_Actualizar" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Registrar_Aviso">
+      <soap:operation soapAction="http://www.laprotectora.com.pe/WS_Registrar_Aviso" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Aviso">
+      <soap:operation soapAction="http://www.laprotectora.com.pe/WS_Actualizar_Aviso" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Estado">
+      <soap:operation soapAction="http://www.laprotectora.com.pe/WS_Actualizar_Estado" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Registrar_Preexistencia">
+      <soap:operation soapAction="http://www.laprotectora.com.pe/WS_Registrar_Preexistencia" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Preexistencia">
+      <soap:operation soapAction="http://www.laprotectora.com.pe/WS_Actualizar_Preexistencia" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Renovar_Contrato">
+      <soap:operation soapAction="http://www.laprotectora.com.pe/WS_Renovar_Contrato" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServicioWebLPSoap12" type="tns:ServicioWebLPSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="WS_Registrar">
+      <soap12:operation soapAction="http://www.laprotectora.com.pe/WS_Registrar" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Reactivar">
+      <soap12:operation soapAction="http://www.laprotectora.com.pe/WS_Reactivar" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar">
+      <soap12:operation soapAction="http://www.laprotectora.com.pe/WS_Actualizar" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Registrar_Aviso">
+      <soap12:operation soapAction="http://www.laprotectora.com.pe/WS_Registrar_Aviso" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Aviso">
+      <soap12:operation soapAction="http://www.laprotectora.com.pe/WS_Actualizar_Aviso" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Estado">
+      <soap12:operation soapAction="http://www.laprotectora.com.pe/WS_Actualizar_Estado" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Registrar_Preexistencia">
+      <soap12:operation soapAction="http://www.laprotectora.com.pe/WS_Registrar_Preexistencia" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Preexistencia">
+      <soap12:operation soapAction="http://www.laprotectora.com.pe/WS_Actualizar_Preexistencia" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Renovar_Contrato">
+      <soap12:operation soapAction="http://www.laprotectora.com.pe/WS_Renovar_Contrato" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServicioWebLPHttpGet" type="tns:ServicioWebLPHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="WS_Registrar">
+      <http:operation location="/WS_Registrar" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Reactivar">
+      <http:operation location="/WS_Reactivar" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar">
+      <http:operation location="/WS_Actualizar" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Registrar_Aviso">
+      <http:operation location="/WS_Registrar_Aviso" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Aviso">
+      <http:operation location="/WS_Actualizar_Aviso" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Estado">
+      <http:operation location="/WS_Actualizar_Estado" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Registrar_Preexistencia">
+      <http:operation location="/WS_Registrar_Preexistencia" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Preexistencia">
+      <http:operation location="/WS_Actualizar_Preexistencia" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Renovar_Contrato">
+      <http:operation location="/WS_Renovar_Contrato" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServicioWebLPHttpPost" type="tns:ServicioWebLPHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="WS_Registrar">
+      <http:operation location="/WS_Registrar" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Reactivar">
+      <http:operation location="/WS_Reactivar" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar">
+      <http:operation location="/WS_Actualizar" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Registrar_Aviso">
+      <http:operation location="/WS_Registrar_Aviso" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Aviso">
+      <http:operation location="/WS_Actualizar_Aviso" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Estado">
+      <http:operation location="/WS_Actualizar_Estado" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Registrar_Preexistencia">
+      <http:operation location="/WS_Registrar_Preexistencia" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Actualizar_Preexistencia">
+      <http:operation location="/WS_Actualizar_Preexistencia" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WS_Renovar_Contrato">
+      <http:operation location="/WS_Renovar_Contrato" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ServicioWebLP">
+    <wsdl:port name="ServicioWebLPSoap" binding="tns:ServicioWebLPSoap">
+      <soap:address location="http://aws.laprotectora.com.pe/ws_servicioslp_qa/SevicioLP.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServicioWebLPSoap12" binding="tns:ServicioWebLPSoap12">
+      <soap12:address location="http://aws.laprotectora.com.pe/ws_servicioslp_qa/SevicioLP.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServicioWebLPHttpGet" binding="tns:ServicioWebLPHttpGet">
+      <http:address location="http://aws.laprotectora.com.pe/ws_servicioslp_qa/SevicioLP.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServicioWebLPHttpPost" binding="tns:ServicioWebLPHttpPost">
+      <http:address location="http://aws.laprotectora.com.pe/ws_servicioslp_qa/SevicioLP.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -50,6 +50,8 @@
     <Compile Include="ADCanal.cs" />
     <Compile Include="ADCanales.cs" />
     <Compile Include="ADCIUU.cs" />
+    <Compile Include="ADBanco.cs" />
+    <Compile Include="ADLote.cs" />
     <Compile Include="ADClientes.cs" />
     <Compile Include="ADCommon.cs" />
     <Compile Include="ADComun.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="ADTipoCliente.cs" />
     <Compile Include="ADTipoEstadoCivil.cs" />
     <Compile Include="ADTipoDocumentoPago.cs" />
+    <Compile Include="ADMarcaTarjeta.cs" />
     <Compile Include="ADTipoPrima.cs" />
     <Compile Include="ADTipoComision.cs" />
     <Compile Include="ADTipoContrato.cs" />

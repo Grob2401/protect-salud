@@ -1,0 +1,232 @@
+﻿@using Entidades;
+@model Entidades.ENLote
+@{
+    ViewBag.Title = "LOTES Y COBRANZAS";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
+    @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
+}
+<div class="row">
+    <div class="col-md-2" hidden>
+        <div class="card card-info card-outline shadow-lg sticky-top">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-th-list"></i>
+                    Opciones
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row text-center pt-2 pb-2">
+                    <div class="col-md-12">
+                        <div class="form">
+                            <a class="btn btn-app bg-gradient-secondary" href='@Url.Action("Crear", "Clientes")'>
+                                <i class="fas fa-plus-circle text-warning" style="font-size: 14px;"></i> Agregar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card card-primary card-outline shadow-lg">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-table"></i>
+                    Lotes
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body ">
+                @using (Html.BeginForm("Index", "BancosProcesadoras", FormMethod.Post))
+                {
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="drpBancos">Banco:</label>
+                                @Html.DropDownList("Bancos", null, new { id = "drpBancos", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-lg-start align-items-end">
+                            <div class="form-group">
+                                @Html.HiddenFor(model => model.IdLote, new { id = "ILote", @class = "form-control form-control-sm", Value = ViewBag.Loteid })
+                                <button type="button" class="btn btn-dark btn-sm W-100" onclick='generarTexto(event);' data-request-url='@Url.Action("GenerarTexto", "BancosProcesadoras")'>
+                                    <i class="fa fa-table text-warning"></i>&nbsp;Generar Texto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input id="hdGeneradas" type="hidden" name="name" value='@ViewBag.RutasGeneradas' />
+                        <input id="hdProcesadas" type="hidden" name="name" value='@ViewBag.RutasProcesadas' />
+                        <input id="hdRutaLog" type="hidden" name="name" value='@ViewBag.RutaLog' />
+                        <input id="hdNombreArchivo" type="hidden" name="name" value='@ViewBag.NombreArchivo' />
+                        <input id="hdStoreRetorno" type="hidden" name="name" value='@ViewBag.StoreRetorno' />
+                        <table id="dglista" class="table table-bordered table-hover">
+                            <thead class="bg-gradient-lightblue">
+                                <tr>
+                                    <th>Lote</th>
+                                    <th>Código Cliente</th>
+                                    <th>Código Contrato</th>
+                                    <th>Código Titular</th>
+                                    <th>Categoría</th>
+                                    <th hidden>Tipo Documento</th>
+                                    <th>Número Documento</th>
+                                    <th>Titular Nombre</th>
+                                    <th>Cliente Nombre</th>
+                                    <th hidden>Tipo Identificación</th>
+                                    <th>Número Identificación</th>
+                                    <th>Inicio Vigencia</th>
+                                    <th>Fin Vigencia</th>
+                                    <th hidden>Fecha Creación</th>
+                                    <th hidden>Fecha Inicio Cuota</th>
+                                    <th hidden>Fecha Fin Cuota</th>
+                                    <th>Valor Prima</th>
+                                    <th>Cuota</th>
+                                    <th hidden>Cuota Orden</th>
+                                    <th hidden>Transacción</th>
+                                    <th hidden>Usuario R</th>
+                                    <th>Estado</th>
+                                    <th hidden>Creación</th>
+                                    @*<th style="width: 9%"></th>*@
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ENLote lote in (List<ENLote>)ViewBag.Lotes)
+                                {
+                                    <tr>
+                                        <td>@lote.IdLote </td>
+                                        <td>@lote.CodigoCliente </td>
+                                        <td>@lote.CodigoContrato </td>
+                                        <td>@lote.TitularCodigo </td>
+                                        <td>@lote.TitularCategoria </td>
+                                        <td hidden>@lote.TitularTipoDocumento </td>
+                                        <td>@lote.TitularNumeroDocumento </td>
+                                        <td>@lote.TitularNombre </td>
+                                        <td>@lote.ClienteNombre </td>
+                                        <td hidden>@lote.ClienteTipoIdentificacion </td>
+                                        <td>@lote.ClienteNumeroIdentificacion </td>
+                                        <td>@lote.InicioVigencia </td>
+                                        <td>@lote.FinVigencia </td>
+                                        <td hidden>@lote.FechaCreacion </td>
+                                        <td hidden>@lote.FechaInicioCuota </td>
+                                        <td hidden>@lote.FechaFinCuota </td>
+                                        <td>@lote.ValorPrima </td>
+                                        <td>@lote.IdCuota </td>
+                                        <td hidden>@lote.IdCuotaOrden </td>
+                                        <td hidden>@lote.IdTransaccion </td>
+                                        <td hidden>@lote.LOGCREUSER </td>
+                                        <td>@lote.Estado </td>
+                                        <td hidden>@lote.LOGCREDATE </td>
+                                        @*<td class="text-center" width="100px">
+
+                        </td>*@
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <hr />
+                    <div class="row" style="height:40vh;">
+                        <textarea class="form-control h-100" id="tramaLote" readonly></textarea>
+                    </div>
+
+                }
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </div>
+    <!-- /.col -->
+</div>
+@section Scripts {
+    @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
+    @Scripts.Render("~/Scripts/Shared/util.js")
+
+    <script>
+
+        $(document).ready(function () {
+            //$('.js-example-basic-single').select2();
+            $(".js-example-responsive").select2({
+                width: 'resolve' // need to override the changed default
+            });
+        });
+
+        $(function () {
+
+            $('#dglista').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                pageLength: 3,
+                "searching": false,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+        });
+
+        function generarTexto(e) {
+            const boton = e.target;          
+            const url_method = boton.getAttribute('data-request-url');
+            const bancoValue = document.getElementById("drpBancos").value;
+            const loteValue = document.getElementById("ILote").value;
+            const textAreaTrama = document.getElementById("tramaLote");           
+
+            $.ajax({
+                type: "GET",
+                url: url_method,
+                data: {
+                    'banco': bancoValue,
+                    'lote': loteValue,
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    textAreaTrama.innerText = null;
+
+                    var ent1 = dataparseada[0];
+                    var ent2 = dataparseada[1];
+                    var exportarTexto = ent1;
+                    textAreaTrama.innerText = exportarTexto;
+
+                    var nombretext = ent2[0].NombreArchivo;
+                    download(nombretext, exportarTexto);
+                }
+            });
+        }
+
+
+        function download(filename, text) {
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
+        }
+
+        var mensaje = "@ViewBag.Message";
+        mostrarMensaje(mensaje);
+
+    </script>
+}
+

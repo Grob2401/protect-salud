@@ -98,35 +98,35 @@
                             {
                                 foreach (ENSaludAsegurados asegurado in (List<ENSaludAsegurados>)ViewBag.Asegurados)
                                 {
-                                    <tr>
-                                        <td>
-                                            <img src="~/Images/plus.jpg" />
-                                            <div style="display:none">
-                                                @*<div id="tableGoesHere">
+                                <tr>
+                                    <td>
+                                        <img src="~/Images/plus.jpg" />
+                                        <div style="display:none">
+                                            @*<div id="tableGoesHere">
 
-                                                    </div>*@
-                                            </div>
-                                        </td>
-                                        <td class="cellCodigoCliente">@asegurado.CodigoCliente </td>
-                                        <td class="cellCodigoTitular">@asegurado.CodigoTitular </td>
-                                        <td class="cellCodigoTitular">@asegurado.CodigoContrato </td>
-                                        <td>@asegurado.ApellidosNombres </td>
-                                        <td>@asegurado.FechaNacimiento.ToString("dd-MM-yyyy") </td>
-                                        <td class="cellDescripcionTipoAsegurado">@asegurado.Edad </td>
-                                        <td>@asegurado.FechaAlta.ToString("dd-MM-yyyy") </td>
-                                        <td>@asegurado.FechaBaja.ToString("dd-MM-yyyy") </td>
-                                        <td>@asegurado.Estado </td>
-                                        <td class="text-center" width="100px">
-                                            <button type="button" class="botonedit btn btn-info btn-sm W-100" onclick='EditarAsegurado(event);' data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'>
-                                                <i class="fa fa-edit text-warning"></i>&nbsp;Editar
-                                            </button>
-                                        </td>
-                                        <td class="text-center" width="110px">
-                                            <button type="button" class="botoncomi btn btn-primary btn-sm">
-                                                <i class="fa fa-print text-warning"></i>&nbsp;Imprimir
-                                            </button>
-                                        </td>
-                                    </tr>
+                    </div>*@
+                                        </div>
+                                    </td>
+                                    <td class="cellCodigoCliente">@asegurado.CodigoCliente </td>
+                                    <td class="cellCodigoTitular">@asegurado.CodigoTitular </td>
+                                    <td class="cellCodigoTitular">@asegurado.CodigoContrato </td>
+                                    <td>@asegurado.ApellidosNombres </td>
+                                    <td>@asegurado.FechaNacimiento.ToString("dd-MM-yyyy") </td>
+                                    <td class="cellDescripcionTipoAsegurado">@asegurado.Edad </td>
+                                    <td>@asegurado.FechaAlta.ToString("dd-MM-yyyy") </td>
+                                    <td>@asegurado.FechaBaja.ToString("dd-MM-yyyy") </td>
+                                    <td>@asegurado.Estado </td>
+                                    <td class="text-center" width="100px">
+                                        <button type="button" class="botonedit btn btn-info btn-sm W-100" onclick='EditarAsegurado(event);' data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'>
+                                            <i class="fa fa-edit text-warning"></i>&nbsp;Editar
+                                        </button>
+                                    </td>
+                                    <td class="text-center" width="110px">
+                                        <button type="button" class="botoncomi btn btn-primary btn-sm">
+                                            <i class="fa fa-print text-warning"></i>&nbsp;Imprimir
+                                        </button>
+                                    </td>
+                                </tr>
                                 }
                             }
                         </tbody>
@@ -210,7 +210,7 @@
         $("body").on("click", "img[src*='plus.jpg']", function () {
             $("img[src*='minus.jpg']").click();
             //$('table#dglista tr#ad').remove();
-            $(this).attr("src", "../Images/plus.jpg");
+            $(this).attr("src", "Images/plus.jpg");
             $(this).closest("tr").after("<tr id='ad'><td></td><td id='tab' colspan = '999'>" + $(this).next().html() + "</td></tr>");
             var row = $(this).closest("tr");
             var url_method = $('#soloAsegurados_ruta').val();
@@ -219,7 +219,7 @@
             var Codcliente = row.find(".cellCodigoCliente").html();
             var Codtitular = row.find(".cellCodigoTitular").html();
 
-            $(this).attr("src", "../Images/minus.jpg");
+            $(this).attr("src", "Images/minus.jpg");
             $.ajax({
                 type: "GET",
                 url: url_method,
@@ -241,7 +241,7 @@
 
         //Assign Click event to Minus Image.
         $("body").on("click", "img[src*='minus.jpg']", function () {
-            $(this).attr("src", "../Images/plus.jpg");
+            $(this).attr("src", "Images/plus.jpg");
             $(this).closest("tr").next().remove();
         });
 
@@ -255,6 +255,11 @@
             const url_parametros = `?CodigoCLiente=${Cliente.trim()}&CodigoTitular=${Titular.trim()}&CodigoContrato=${Contrato.trim()}&origen=I`
             console.log(url + url_parametros);
             window.location.href = url + url_parametros;
+
+        };
+
+        function EnvioSusalud(e) {
+            alert("Envío a SUSALUD en desarrollo");
 
         };
 

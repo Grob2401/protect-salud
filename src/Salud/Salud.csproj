@@ -64,6 +64,8 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -129,6 +131,12 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SessionExpireAttribute.cs" />
+    <Compile Include="Connected Services\LPService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\BancosProcesadorasController.cs" />
     <Compile Include="Controllers\CanalController.cs" />
     <Compile Include="Controllers\CanalesController.cs" />
     <Compile Include="Controllers\CentroCostosController.cs" />
@@ -153,6 +161,19 @@
     <Compile Include="ViewModels\VMSaludContratos.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Connected Services\LPService\Salud.LPService.Respuesta.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\LPService\Salud.LPService.RespuestaId.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\LPService\SevicioLP.disco" />
+    <None Include="Connected Services\LPService\configuration91.svcinfo" />
+    <None Include="Connected Services\LPService\configuration.svcinfo" />
+    <None Include="Connected Services\LPService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -1837,6 +1858,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\favicon.png" />
     <Content Include="Images\loading.gif" />
+    <Content Include="Images\metodoPago.PNG" />
     <Content Include="Images\minus.jpg" />
     <Content Include="Images\plus.jpg" />
     <Content Include="Images\spinner.gif" />
@@ -1930,6 +1952,7 @@
     <Content Include="Content\plugins\summernote\summernote.min.js.map" />
     <Content Include="Content\plugins\sweetalert2-theme-bootstrap-4\bootstrap-4.scss" />
     <Content Include="Content\plugins\toastr\toastr.js.map" />
+    <None Include="Connected Services\LPService\SevicioLP.wsdl" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\Comandos.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -1998,9 +2021,19 @@
     <Content Include="Views\SaludAsegurados\Index.cshtml" />
     <Content Include="Views\SaludAsegurados\Mantenimiento.cshtml" />
     <Content Include="Views\SaludAsegurados\Independientes.cshtml" />
+    <Content Include="Views\BancosProcesadoras\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="CarpetaCobranzas\Generadas\BBVA\" />
+    <Folder Include="CarpetaCobranzas\Generadas\BCP\" />
+    <Folder Include="CarpetaCobranzas\Generadas\NIUBIZ\" />
+    <Folder Include="CarpetaCobranzas\Log\BBVA\" />
+    <Folder Include="CarpetaCobranzas\Log\BCP\" />
+    <Folder Include="CarpetaCobranzas\Log\NIUBIZ\" />
+    <Folder Include="CarpetaCobranzas\Procesadas\BBVA\" />
+    <Folder Include="CarpetaCobranzas\Procesadas\BCP\" />
+    <Folder Include="CarpetaCobranzas\Procesadas\NIUBIZ\" />
     <Folder Include="Models\" />
     <Folder Include="Views\Default\" />
     <Folder Include="Views\VMClientes\" />
@@ -2041,6 +2074,12 @@
       <Project>{76ad8ff0-5f2b-4700-a016-8308cb033384}</Project>
       <Name>Utilitarios</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\LPService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

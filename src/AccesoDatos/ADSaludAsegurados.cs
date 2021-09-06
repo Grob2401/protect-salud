@@ -924,5 +924,37 @@ namespace AccesoDatos
             }
         }
 
+        public bool WebService_Log(string cliente, string titular, string categoria, string ws_metodo, string ws_request, string ws_response, string response_codigo, string response_descripcion, string usuario)
+        {
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_LogSaludAsegurados_ins");
+                GenericDataAccess.AgregarParametro(oCommand, "@argCodCliente", cliente, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argCodTitula", titular, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argCategoria", categoria, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argWSMetodo", ws_metodo, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argWSRequest", ws_request, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argWSResponse", ws_response, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argResponse_Codigo", response_codigo, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argResponse_Descripcion", response_descripcion, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argUsuario", usuario, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode", 1, TipoParametro.INT, Direccion.OUTPUT);
+
+                if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Excepciones.ManejoExcepciones(ex);
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }            
+        }
+
     }
 }

@@ -38,12 +38,14 @@ namespace AccesoDatos
                     oEnListaVendedores.Direccion = oDataReader["Direccion"].ToString();
                     oEnListaVendedores.Telefono = oDataReader["Telefono"].ToString();
                     oEnListaVendedores.Email = oDataReader["Email"].ToString();
-                    oEnListaVendedores.CodigoUsuario = oDataReader["CodigoUsuario"].ToString();
-                    oEnListaVendedores.CodigoPerfil = oDataReader["CodigoPerfil"].ToString();
-                    oEnListaVendedores.IdPersona = Convert.ToInt32(oDataReader["IdPersona"]);
-                    oEnListaVendedores.IdSociedad = Convert.ToInt32(oDataReader["IdSociedad"]);
-                    oEnListaVendedores.RazonSocial = oDataReader["RazonSocial"].ToString();
-                    oEnListaVendedores.IdPersonaSociedad = Convert.ToInt32(oDataReader["IdPersonaSociedad"]);
+
+                    oEnListaVendedores.CodigoUsuario = oDataReader["CodigoUsuario"] == DBNull.Value ? "" : oDataReader["CodigoUsuario"].ToString();
+                    oEnListaVendedores.CodigoPerfil = oDataReader["CodigoPerfil"] == DBNull.Value ? "" : oDataReader["CodigoPerfil"].ToString();
+                    oEnListaVendedores.IdPersona = oDataReader["IdPersona"] == DBNull.Value ? 0 : Convert.ToInt32(oDataReader["IdPersona"]);
+                    oEnListaVendedores.IdSociedad = oDataReader["IdSociedad"] == DBNull.Value ? 0 : Convert.ToInt32(oDataReader["IdSociedad"]);
+                    
+                    oEnListaVendedores.RazonSocial = oDataReader["RazonSocial"] == DBNull.Value ? "" : oDataReader["RazonSocial"].ToString();
+                    oEnListaVendedores.IdPersonaSociedad = oDataReader["IdPersonaSociedad"] == DBNull.Value ? 0 : Convert.ToInt32(oDataReader["IdPersonaSociedad"]);
                     oEnListaVendedores.DescripcionVendedor = oEnListaVendedores.ApellidoPaterno+ " " + oEnListaVendedores.ApellidoMaterno+ " " + oEnListaVendedores.Nombres;
 
                     oListaVendedores.Add(oEnListaVendedores);

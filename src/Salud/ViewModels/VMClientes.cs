@@ -10,9 +10,10 @@ namespace Salud.ViewModels
     {
         public List<ENClientes> ListaClientes { get; set; }
         public ENClientes Clientes { get; set; }
-
         public List<ENUbigeoCompleto> ListaUbigeo { get; set; }
         public ENUbigeoCompleto Ubigeo { get; set; }
+        public ENTarjeta Tarjeta { get; set; }
+        public List<ENTarjeta> ListaTarjetas { get; set; }
 
     }
 }

@@ -48,7 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ENBanco.cs" />
     <Compile Include="ENCanalesVendedores.cs" />
+    <Compile Include="ENMarcaTarjeta.cs" />
+    <Compile Include="ENRuta.cs" />
+    <Compile Include="ENTarjeta.cs" />
+    <Compile Include="ENLote.cs" />
     <Compile Include="ENTipoDocumentoPago.cs" />
     <Compile Include="ENTipoPais.cs" />
     <Compile Include="ENDatosPreFacBusqueda.cs" />

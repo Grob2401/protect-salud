@@ -420,6 +420,91 @@ namespace Salud.Controllers
             }
         }
 
+
+        [SessionExpire]
+        [HttpGet]
+        public ActionResult Consumir_LPService(string metodo = "", string idcliente = "", string idtitular = "", string idcategoria = "")
+        {
+            LPService.Respuesta[] rptResponse = null;
+            //VARIABLES GLOBALES
+            string USUARIO_WS = ConfigurationManager.AppSettings["USUARIO"];
+            string CONTRASENA_WS = ConfigurationManager.AppSettings["CONTRASENA"];
+            string CLIENTE_WS = ConfigurationManager.AppSettings["COD_CLIENTE"]; 
+            //DATOS DEL ASEGURADO
+            var objAsegurado = LNSaludAsegurados.ObtenerUno(idcliente, idtitular, idcategoria);
+            //DATOS PETICION RESPUESTA
+            var peticion = "";
+            var respuesta = "";
+            var mensaje = "";
+            var resultado = false;
+            var usuario_sistema = "";
+
+            //SI ES VACÍO NO MANDA NADA
+            if (objAsegurado.CodigoCliente == null)
+            {
+                return Json("No existen datos para enviar, intente nuevamente", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                //VALIDACION POR MÉTODOS DE WS LP
+                if (metodo == "WS_Registrar")
+                {
+                    usuario_sistema = Session["NombreUsuario"].ToString();
+                    LPService.ServicioWebLPSoapClient LPS = new LPService.ServicioWebLPSoapClient();
+                    rptResponse = LPS.WS_Registrar(
+                        USUARIO_WS, CONTRASENA_WS, CLIENTE_WS, objAsegurado.CodigoTitular, objAsegurado.Categoria,
+                        objAsegurado.CodigoCentroCosto, objAsegurado.CodigoPlan, objAsegurado.Nombres, objAsegurado.ApellidoPaterno, objAsegurado.ApellidoMaterno,
+                        objAsegurado.CodigoSexo, objAsegurado.FechaNacimiento.ToString("dd/MM/yyyy"), objAsegurado.FechaAlta.ToString("dd/MM/yyyy"), objAsegurado.FechaBaja.ToString("dd/MM/yyyy"), objAsegurado.FechaAlta.ToString("dd/MM/yyyy"),
+                        objAsegurado.Email, objAsegurado.CodigoDocumentoIdentidad, objAsegurado.NumeroDocumentoIdentidad, objAsegurado.Direccion,
+                        objAsegurado.Telefono, objAsegurado.Telefono, objAsegurado.CodigoTipoEstadoCivil, objAsegurado.CodigoContrato, "1", "1", "1"                        
+                        );
+
+                    peticion =  USUARIO_WS + " | " + CONTRASENA_WS + " | " + CLIENTE_WS + " | " + objAsegurado.CodigoTitular + " | " + objAsegurado.Categoria + " | " +
+                                objAsegurado.CodigoCentroCosto + " | " + objAsegurado.CodigoPlan + " | " + objAsegurado.Nombres + " | " + objAsegurado.ApellidoPaterno + " | " + objAsegurado.ApellidoMaterno + " | " +
+                                objAsegurado.CodigoSexo + " | " + objAsegurado.FechaNacimiento.ToString("dd/MM/yyyy") + " | " + objAsegurado.FechaAlta.ToString("dd/MM/yyyy") + " | " + objAsegurado.FechaBaja.ToString("dd/MM/yyyy") + " | " + objAsegurado.FechaAlta.ToString("dd/MM/yyyy") + " | " +
+                                objAsegurado.Email + " | " + objAsegurado.CodigoDocumentoIdentidad + " | " + objAsegurado.NumeroDocumentoIdentidad + " | " + objAsegurado.Direccion + " | " +
+                                objAsegurado.Telefono + " | " + objAsegurado.Telefono + " | " + objAsegurado.CodigoTipoEstadoCivil + " | " + objAsegurado.CodigoContrato + " | " + "1" + " | " + "1" + " | " + "1";
+                    respuesta = String.Join(",", rptResponse.Select(c => c.Codigo + "|" + c.Descripcion).ToArray());
+                    resultado = LNSaludAsegurados.WebService_Log(objAsegurado.CodigoCliente, objAsegurado.CodigoTitular, objAsegurado.Categoria, metodo, peticion, respuesta, rptResponse[0].Codigo.ToString(), rptResponse[0].Descripcion.ToString(), usuario_sistema);
+                    mensaje = respuesta;
+                    return Json(mensaje, JsonRequestBehavior.AllowGet);
+
+                }
+                else if (metodo == "WS_Actualizar")
+                {
+                    LPService.ServicioWebLPSoapClient LPS = new LPService.ServicioWebLPSoapClient();
+                    rptResponse = LPS.WS_Actualizar(
+                        USUARIO_WS, CONTRASENA_WS, CLIENTE_WS, objAsegurado.CodigoTitular, objAsegurado.Categoria,
+                        objAsegurado.FechaAlta.ToString("dd/MM/yyyy"), objAsegurado.FechaBaja.ToString("dd/MM/yyyy"),objAsegurado.FechaAlta.ToString("dd/MM/yyyy"),
+                        objAsegurado.Email,objAsegurado.Direccion,objAsegurado.Telefono,objAsegurado.Telefono,objAsegurado.CodigoTipoEstadoCivil
+                        );
+                    return Json("Datos enviados", JsonRequestBehavior.AllowGet);
+                }
+                else if (metodo == "WS_Actualizar_Estado")
+                {
+                    LPService.ServicioWebLPSoapClient LPS = new LPService.ServicioWebLPSoapClient();
+                    rptResponse = LPS.WS_Actualizar_Estado(
+                        USUARIO_WS, CONTRASENA_WS, CLIENTE_WS, objAsegurado.CodigoTitular, objAsegurado.Categoria,
+                        objAsegurado.Estado,objAsegurado.FechaBaja.ToString("dd/MM/yyyy"),"Causal Baja"
+                        );
+                    return Json("Datos enviados", JsonRequestBehavior.AllowGet);
+                }
+                else if (metodo == "WS_Renovar_contrato")
+                {
+                    LPService.ServicioWebLPSoapClient LPS = new LPService.ServicioWebLPSoapClient();
+                    rptResponse = LPS.WS_Renovar_Contrato(
+                        USUARIO_WS, CONTRASENA_WS, CLIENTE_WS, objAsegurado.CodigoTitular, objAsegurado.Categoria,
+                        objAsegurado.FechaAlta.ToString("dd/MM/yyyy"),                        
+                        objAsegurado.FechaBaja.ToString("dd/MM/yyyy")
+                        );
+                    return Json("Datos enviados", JsonRequestBehavior.AllowGet);
+                }
+
+                return Json("No se cargaron los datos, intente nuevamente", JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
         [SessionExpire]
         [HttpPost]
         [ValidateAntiForgeryToken]
