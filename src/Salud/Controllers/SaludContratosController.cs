@@ -19,6 +19,8 @@ namespace Salud.Controllers
             string sCodigoCliente = "";
             ViewBag.SaludContratos = LNSaludContratos.ObtenerTodos(1, 100, "", "");//LNSaludContratos.ObtenerTodos(sCodigoCliente);
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
+            ViewBag.IdNombreTabla = "01";
+            ViewBag.NombreTabla = "RAZÓN SOCIAL";
             return View();
         }
 
@@ -29,6 +31,7 @@ namespace Salud.Controllers
             string sCodigoCliente = "";
             ViewBag.SaludContratos = LNSaludContratos.ObtenerTodos(1, 100, hdCodigoTipoCliente, txtBusquedaContratos);
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
+            ViewBag.IdNombreTabla = hdCodigoTipoCliente.ToString();
             return View();
         }
 

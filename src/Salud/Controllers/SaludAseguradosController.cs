@@ -27,6 +27,7 @@ namespace Salud.Controllers
             var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, "", "TITULARES", "", "", "", "", "");
             ViewBag.Asegurados = ASEGURADOS;
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
+            ViewBag.IdNombreTabla = "01";
             TempData["ASEGURADOS"] = ASEGURADOS;
             return View();
         }
@@ -39,6 +40,7 @@ namespace Salud.Controllers
             var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, txtBusquedaAsegurados, "TITULARES", hdCodigoTipoCliente, "", "", "", "");
             ViewBag.Asegurados = ASEGURADOS;
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
+            ViewBag.IdNombreTabla = hdCodigoTipoCliente.ToString();
             TempData["ASEGURADOS"] = ASEGURADOS;
             return View();
         }

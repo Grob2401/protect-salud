@@ -2022,6 +2022,7 @@
     <Content Include="Views\SaludAsegurados\Mantenimiento.cshtml" />
     <Content Include="Views\SaludAsegurados\Independientes.cshtml" />
     <Content Include="Views\BancosProcesadoras\Index.cshtml" />
+    <Content Include="Views\BancosProcesadoras\Recepcion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

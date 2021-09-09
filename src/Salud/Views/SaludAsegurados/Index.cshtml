@@ -165,6 +165,9 @@
             });
             const combito = document.getElementById("drpTipoCliente");
             callChangeGetValor(combito);
+            var valor = "@ViewBag.IdNombreTabla";
+            //console.log(valor);
+            $("#drpTipoCliente").val(valor).trigger('change');
         });
 
         function callChangeGetValor(combo) {
@@ -172,7 +175,7 @@
             const idTipoCliente = document.getElementById("hdCodigoTipoCliente");
             idTipoCliente.value = combo.value;
             valor = idTipoCliente.value
-            console.log(valor);
+            //console.log(valor);
         }
 
 
@@ -214,7 +217,7 @@
             $(this).closest("tr").after("<tr id='ad'><td></td><td id='tab' colspan = '999'>" + $(this).next().html() + "</td></tr>");
             var row = $(this).closest("tr");
             var url_method = $('#soloAsegurados_ruta').val();
-            
+
 
             var Codcliente = row.find(".cellCodigoCliente").html();
             var Codtitular = row.find(".cellCodigoTitular").html();

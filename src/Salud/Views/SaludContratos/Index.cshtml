@@ -55,13 +55,13 @@
                             <div class="form-group">
                                 <label for="drpTipoCliente">Tipo Cliente:</label>
                                 <input type="hidden" id="hdCodigoTipoCliente" name="hdCodigoTipoCliente" />
-                                @Html.DropDownList("CodigoTipoCliente", null, new { id = "drpTipoCliente", @class = "form-control-sm js-example-responsive", @style = "width:100%", @onchange = "callChangeGetValor(this)" })
+                                @Html.DropDownList("CodigoTipoCliente", null, new { id = "drpTipoCliente", @class = "form-control-sm js-example-responsive", @style = "width:100%", @onchange = "callChangeGetValor(this);" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="drpTipoCliente">Búsqueda:</label>
-                                <input type="text" id="txtBusquedaContratos" class="form-control form-control-sm" name="txtBusquedaContratos" placeholder="| Razón Social |" />
+                                <input type="text" id="txtBusquedaContratos" class="form-control form-control-sm" name="txtBusquedaContratos" placeholder="RUC | DNI | Nombres y Apellidos | Razón Social" />
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -79,7 +79,19 @@
                         <thead class="bg-gradient-lightblue">
                             <tr>
                                 <th>CLIENTE</th>
-                                <th>RAZON SOCIAL</th>
+                                @if (ViewBag.IdNombreTabla != null)
+                                {
+                                    if (ViewBag.IdNombreTabla == "01")
+                                    {
+                                        <th>RAZON SOCIAL</th>
+                                    }
+                                    else
+                                    {
+                                        <th>PATERNO</th>
+                                        <th>MATERNO</th>
+                                        <th>NOMBRES</th>
+                                    }
+                                }
                                 <th>RUC | DNI</th>
                                 <th>CONTRATO</th>
                                 <th>TIPO CONTRATO</th>
@@ -87,7 +99,8 @@
                                 <th>FIN VIGENCIA</th>
                                 <th hidden>Corredor</th>
                                 <th hidden>Ejecutivo</th>
-                                <th style="width: 15%"></th>
+                                <th style="width: 10%">EDITAR</th>
+                                <th style="width: 10%">ELIMINAR</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -95,25 +108,41 @@
                             {
                                 <tr>
                                     <td>@SaludContratos.CodigoCliente </td>
-                                    <td>@SaludContratos.RazonSocial </td>
-                                    <td>@SaludContratos.RUC </td>
-                                    <td>@SaludContratos.CodigoContrato </td>
-                                    <td>@SaludContratos.CodigoTipoContrato </td>
-                                    <td>@SaludContratos.InicioVigencia.ToString("dd-MM-yyyy")</td>
-                                    <td>@SaludContratos.FinVigencia.ToString("dd-MM-yyyy") </td>
-                                    <td hidden>@SaludContratos.CodigoCorredor </td>
-                                    <td hidden>@SaludContratos.CodigoEjecutivo </td>
+                                    @if (ViewBag.IdNombreTabla != null)
+                                    {
+                                        if (ViewBag.IdNombreTabla == "01")
+                                        {
+                                            <td>@SaludContratos.RazonSocial</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@SaludContratos.Paterno</td>
+                                            <td>@SaludContratos.Materno</td>
+                                            <td>@SaludContratos.Nombres</td>
+                                        }
+                                    }
 
+
+                                    <td>@SaludContratos.RUC</td>
+                                    <td>@SaludContratos.CodigoContrato</td>
+                                    <td>@SaludContratos.CodigoTipoContrato</td>
+                                    <td>@SaludContratos.InicioVigencia.ToString("dd-MM-yyyy")</td>
+                                    <td>@SaludContratos.FinVigencia.ToString("dd-MM-yyyy")</td>
+                                    <td hidden>@SaludContratos.CodigoCorredor</td>
+                                    <td hidden>@SaludContratos.CodigoEjecutivo</td>
+                                    <td class="project-actions text-center">
+                                        <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "SaludContratos",new RouteValueDictionary( new { idcontrato = SaludContratos.CodigoContrato, idcliente = SaludContratos.CodigoCliente }))'>
+                                            <i class="fas fa-pencil-alt text-warning">
+                                            </i>&nbsp;&nbsp;
+                                            Editar
+                                        </a>
+                                    </td>
                                     <td class="project-actions text-center">
                                         <form action='@Url.Action("Eliminar", "SaludContratos", new { id = SaludContratos.CodigoContrato, idcliente = SaludContratos.CodigoCliente })' method="POST"
                                               onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
                                             @Html.AntiForgeryToken()
                                             <div class="text-center" role="group">
-                                                <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "SaludContratos",new RouteValueDictionary( new { idcontrato = SaludContratos.CodigoContrato, idcliente = SaludContratos.CodigoCliente }))'>
-                                                    <i class="fas fa-pencil-alt text-warning">
-                                                    </i>&nbsp;&nbsp;
-                                                    Editar
-                                                </a>
+
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
                                                     <i class="fas fa-times text-warning">
                                                     </i>&nbsp;&nbsp;
@@ -145,24 +174,6 @@
 
     <script>
 
-        $(document).ready(function () {
-            //$('.js-example-basic-single').select2();
-            $(".js-example-responsive").select2({
-                width: 'resolve' // need to override the changed default
-            });
-            const combito = document.getElementById("drpTipoCliente");
-            callChangeGetValor(combito);
-        });
-
-        function callChangeGetValor(combo) {
-            let valor = "";
-            const idTipoCliente = document.getElementById("hdCodigoTipoCliente");
-            idTipoCliente.value = combo.value;
-            valor = idTipoCliente.value
-            console.log(valor);
-        }
-
-
         $(function () {
 
             $('#dglista').DataTable({
@@ -180,6 +191,28 @@
                 }
             });
         });
+
+        $(document).ready(function () {
+            //$('.js-example-basic-single').select2();
+            $(".js-example-responsive").select2({
+                width: 'resolve' // need to override the changed default
+            });
+            const combito = document.getElementById("drpTipoCliente");
+            callChangeGetValor(combito);
+            var valor = "@ViewBag.IdNombreTabla";
+            //console.log(valor);
+            $("#drpTipoCliente").val(valor).trigger('change');
+        });
+
+        function callChangeGetValor(combo) {
+            let valor = "";
+            const idTipoCliente = document.getElementById("hdCodigoTipoCliente");
+            var nomTabla = document.getElementById("nombreTabla");
+            idTipoCliente.value = combo.value;
+            valor = idTipoCliente.value
+            //console.log(valor);
+        }
+
     </script>
 }
 

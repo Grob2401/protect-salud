@@ -27,6 +27,10 @@ public class ENSaludContratos
         [NotMapped]
         [Display(Name = "RazonSocial")]
         public string RazonSocial { get; set; }
+        public string Paterno { get; set; }
+        public string Materno { get; set; }
+        public string Nombres { get; set; }
+        public string CodigoTipoCliente { get; set; }
         [NotMapped]
         [Display(Name = "RUC")]
         public string RUC { get; set; }

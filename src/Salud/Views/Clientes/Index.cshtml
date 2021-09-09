@@ -86,7 +86,8 @@
                                 <th>TipoCliente</th>
                                 @*<th>Corredor</th>
                                     <th>Ejecutivo</th>*@
-                                <th style="width: 15%"></th>
+                                <th style="width: 10%"></th>
+                                <th style="width: 10%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -101,30 +102,22 @@
                                     <td>@Clientes.Nombres </td>
                                     <td>@Clientes.Direccion </td>
                                     <td>@Clientes.Telefono1 </td>
-                                    @*<td>@Clientes.PersonaContacto </td>
-                                        <td>@Clientes.Email </td>*@
                                     <td>@Clientes.CodigoTipoCliente </td>
-                                    @*<td>@Clientes.CorredorAgenciado </td>
-                                        <td>@Clientes.CodigoEjecutivo </td>*@
-
+                                    <td class="project-actions text-center">
+                                        <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "Clientes", new {id = Clientes.CodigoCliente})'>
+                                            <i class="fas fa-pencil-alt text-warning"></i>&nbsp;Editar
+                                        </a>
+                                    </td>
                                     <td class="project-actions text-center">
                                         <form action='@Url.Action("Eliminar", "Clientes", new {id = Clientes.CodigoCliente})' method="POST"
                                               onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
                                             @Html.AntiForgeryToken()
                                             <div class="text-center" role="group">
-                                                <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "Clientes", new {id = Clientes.CodigoCliente})'>
-                                                    <i class="fas fa-pencil-alt text-warning">
-                                                    </i>&nbsp;
-                                                    Editar
-                                                </a>
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
-                                                    <i class="fas fa-times text-warning">
-                                                    </i>&nbsp;
-                                                    Eliminar
+                                                    <i class="fas fa-times text-warning"></i>&nbsp;Eliminar
                                                 </button>
                                             </div>
                                         </form>
-
                                     </td>
                                 </tr>
                             }
@@ -148,7 +141,7 @@
     @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
     @Scripts.Render("~/Scripts/Shared/util.js")
 
-    <script>
+<script>
 
         $(document).ready(function () {
             //$('.js-example-basic-single').select2();
@@ -157,6 +150,9 @@
             });
             const combito = document.getElementById("drpTipoCliente");
             callChangeGetValor(combito);
+            var valor = "@ViewBag.IdNombreTabla";
+            //console.log(valor);
+            $("#drpTipoCliente").val(valor).trigger('change');
         });
 
         function callChangeGetValor(combo) {
@@ -164,7 +160,7 @@
             const idTipoCliente = document.getElementById("hdCodigoTipoCliente");
             idTipoCliente.value = combo.value;
             valor = idTipoCliente.value
-            console.log(valor);
+            //console.log(valor);
         }
 
 
@@ -190,5 +186,5 @@
         var mensaje = "@ViewBag.Message";
         mostrarMensaje(mensaje);
 
-    </script>
+</script>
 }

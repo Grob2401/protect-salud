@@ -23,6 +23,7 @@ namespace Salud.Controllers
         {
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             ViewBag.Clientes = LNClientes.ObtenerTodos(1,100,"","");
+            ViewBag.IdNombreTabla = "01";
             //var VMCliente = new List<ENClientes>();int page, int rows, string type, string Keywords
             //var VMUbigeo = new List<ENUbigeoCompleto>();
             var VMCliente = new ENClientes();
@@ -52,6 +53,7 @@ namespace Salud.Controllers
         {
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             ViewBag.Clientes = LNClientes.ObtenerTodos(1, 100, hdCodigoTipoCliente, txtBusquedaClientes);
+            ViewBag.IdNombreTabla = hdCodigoTipoCliente.ToString();
             //var VMCliente = new List<ENClientes>();int page, int rows, string type, string Keywords
             //var VMUbigeo = new List<ENUbigeoCompleto>();
             var VMCliente = new ENClientes();

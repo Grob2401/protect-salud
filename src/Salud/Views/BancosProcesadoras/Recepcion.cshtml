@@ -1,0 +1,219 @@
+﻿@using Entidades;
+@model Entidades.ENLote
+@{
+    ViewBag.Title = "Recepción de archivos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
+    @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
+}
+<div class="row">
+    <div class="col-md-2" hidden>
+        <div class="card card-info card-outline shadow-lg sticky-top">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-th-list"></i>
+                    Opciones
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row text-center pt-2 pb-2">
+                    <div class="col-md-12">
+                        <div class="form">
+                            <a class="btn btn-app bg-gradient-secondary" href='@Url.Action("Crear", "Clientes")'>
+                                <i class="fas fa-plus-circle text-warning" style="font-size: 14px;"></i> Agregar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card card-primary card-outline shadow-lg">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-table"></i>
+                    Archivos
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body ">
+                @using (Html.BeginForm("LeerTexto", "BancosProcesadoras", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="drpBancos">Banco&nbsp;:</label>
+                                @Html.DropDownList("Bancos", null, new { id = "drpBancos", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="fileArchivo">Seleccionar&nbsp;:</label>
+                                <div class="input-group mb-3">
+                                    @Html.TextBox("NombreArchivo", null, new { @type = "text", @class = "form-control form-control-sm", @placeholder = "Nombre Archivo", @readonly = "true" })
+                                    <div class="input-group-append">
+                                        <label for="fileArchivo" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-folder-open text-warning"></i>&nbsp;Escoger Archivo
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label style="visibility:hidden;">Seleccionar</label>
+                                <div class="input-group mb-3">
+                                    <div hidden>
+                                        @Html.TextBox("fileArchivo", null, new { @type = "file", @class = "form-control form-control-sm", @placeholder = "|Nombre Archivo|", onChange = "readURL(this);" })
+                                    </div>
+                                    <button type="submit" class="btn btn-dark btn-sm W-100" id="btnLeer">
+                                        <i class="fa fa-book text-warning"></i>&nbsp;Leer Archivo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="dglista" class="table table-bordered table-hover W-100">
+                                <thead class="bg-gradient-lightblue W-100">
+                                    <tr>
+                                        <th>Trama Datos</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.tramas != null)
+                                    {
+                                        foreach (ENLote lote in (List<ENLote>)ViewBag.tramas)
+                                        {
+                                            <tr>
+                                                <td>@lote.RegDatos </td>
+                                            </tr>
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </div>
+    <!-- /.col -->
+</div>
+@section Scripts {
+    @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
+    @Scripts.Render("~/Scripts/Shared/util.js")
+
+    <script>
+        $(document).ready(function () {
+            //$('.js-example-basic-single').select2();
+            $(".js-example-responsive").select2({
+                width: 'resolve' // need to override the changed default
+            });
+        });
+
+        $(function () {
+
+            $('#dglista').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                pageLength: 100,
+                "searching": false,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+        });
+
+        function generarTexto(e) {
+            const boton = e.target;
+            const url_method = boton.getAttribute('data-request-url');
+            const bancoValue = document.getElementById("drpBancos").value;
+            const loteValue = document.getElementById("ILote").value;
+            const textAreaTrama = document.getElementById("tramaLote");
+
+            $.ajax({
+                type: "GET",
+                url: url_method,
+                data: {
+                    'banco': bancoValue,
+                    'lote': loteValue,
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    textAreaTrama.innerText = null;
+
+                    var ent1 = dataparseada[0];
+                    var ent2 = dataparseada[1];
+                    var exportarTexto = ent1;
+                    textAreaTrama.innerText = exportarTexto;
+
+                    var nombretext = ent2[0].NombreArchivo;
+                    download(nombretext, exportarTexto);
+                }
+            });
+        }
+
+        function download(filename, text) {
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
+        }
+
+        function readURL(input) {
+            var ext = input.files[0]['name'].substring(input.files[0]['name'].lastIndexOf('.') + 1).toLowerCase();
+            let nombreTXT = document.getElementById("NombreArchivo");
+            if (input.files && input.files[0] && (ext == "txt" || ext == "csv")) {
+                nombreTXT.value = input.files[0]['name'];
+                console.log(input.files[0]['name']);
+            }
+            else
+            {
+                var mensaje = "Debe seleccionar un archivo .txt o .csv";
+                mostrarMensaje(mensaje);
+                nombreTXT.value = "";
+                input.files = null
+
+            }
+
+            console.log(ext);
+            console.log(nombreTXT);
+        }
+
+
+        var mensaje = "@ViewBag.Message";
+        mostrarMensaje(mensaje);
+
+    </script>
+}
+
+

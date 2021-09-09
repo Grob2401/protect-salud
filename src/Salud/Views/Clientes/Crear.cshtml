@@ -27,7 +27,7 @@
                 <div class="card-body">
                     <div class="row justify-content-center pt-2 pb-2">
                         <div class="col col-md-7">
-                            <button type="submit" class="btn btn-app bg-gradient-info" form="Form">
+                            <button type="button" onclick="SubmitForm();" class="btn btn-app bg-gradient-info" >
                                 <i class="fa fa-save text-warning"></i>&nbsp;&nbsp;Guardar
                             </button>
                         </div>
@@ -457,6 +457,12 @@
                 $("#drpTipoDocumento").val("01").change();
             }
         }
+
+
+        function SubmitForm() {
+            document.getElementById("Form").submit();
+        }
+
 
         function PersonaContactoFill(e) {
             const tipoCliente = document.getElementById("drpTipoCliente").value;

@@ -77,6 +77,10 @@ namespace AccesoDatos
                     oEnListaSaludContratos.FlagTmp = oDataReader["FlagTmp"].ToString();
                     oEnListaSaludContratos.InicioVigencia = DateTime.Parse(oDataReader["InicioVigencia"].ToString());
                     oEnListaSaludContratos.RazonSocial = oDataReader["RazonSocial"].ToString();
+                    oEnListaSaludContratos.Paterno = oDataReader["Paterno"].ToString();
+                    oEnListaSaludContratos.Materno = oDataReader["Materno"].ToString();
+                    oEnListaSaludContratos.Nombres = oDataReader["Nombres"].ToString();
+                    oEnListaSaludContratos.CodigoTipoCliente = oDataReader["CodigoTipoCliente"].ToString();
                     oEnListaSaludContratos.RUC = oDataReader["RUC"].ToString();
 
                     oListaSaludContratos.Add(oEnListaSaludContratos);
@@ -153,7 +157,7 @@ namespace AccesoDatos
                 GenericDataAccess.AgregarParametro(oCommand, "@FinalVigencia", oENSaludContratos.FinVigencia, TipoParametro.DT, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodigoCorredor", oENSaludContratos.CodigoCorredor, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodigoEjecutivo", oENSaludContratos.CodigoEjecutivo, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoVendedor", oENSaludContratos.CodigoEjecutivo, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoVendedor", oENSaludContratos.CodigoVendedor, TipoParametro.STR, Direccion.INPUT);
                 if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
                     return true;
                 else
