@@ -79,6 +79,10 @@ namespace Entidades
         public string CodigoPlanOriginal { get; set; }
         public string CodigoTipoEstadoCivil { get; set; }
 
+        public string CodigoTipoCliente { get; set; }
+        public string RazonSocial { get; set; }
+        public string RucDni { get; set; }
+
 
     }
 }

@@ -62,7 +62,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="drpTipoCliente">Búsqueda:</label>
-                                <input type="text" id="txtBusquedaAsegurados" class="form-control form-control-sm" name="txtBusquedaAsegurados" placeholder="| Nombres y Apellidos |" />
+                                <input type="text" id="txtBusquedaAsegurados" class="form-control form-control-sm" name="txtBusquedaAsegurados" placeholder="RUC | DNI | Nombres y Apellidos | Razón Social | Contrato" />
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -89,8 +89,10 @@
                                 <th>FECHA ALTA</th>
                                 <th>FECHA BAJA</th>
                                 <th>ESTADO</th>
+                                <th>TIPOCLIENTE</th>
                                 <th>EDITAR</th>
-                                <th>CARTA</th>
+                                <th>PAGOS</th>
+                                <th>SUSALUD</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -98,35 +100,41 @@
                             {
                                 foreach (ENSaludAsegurados asegurado in (List<ENSaludAsegurados>)ViewBag.Asegurados)
                                 {
-                                <tr>
-                                    <td>
-                                        <img src="~/Images/plus.jpg" />
-                                        <div style="display:none">
-                                            @*<div id="tableGoesHere">
+                                    <tr>
+                                        <td>
+                                            <img src="~/Images/plus.jpg" />
+                                            <div style="display:none">
+                                                @*<div id="tableGoesHere">
 
-                    </div>*@
-                                        </div>
-                                    </td>
-                                    <td class="cellCodigoCliente">@asegurado.CodigoCliente </td>
-                                    <td class="cellCodigoTitular">@asegurado.CodigoTitular </td>
-                                    <td class="cellCodigoTitular">@asegurado.CodigoContrato </td>
-                                    <td>@asegurado.ApellidosNombres </td>
-                                    <td>@asegurado.FechaNacimiento.ToString("dd-MM-yyyy") </td>
-                                    <td class="cellDescripcionTipoAsegurado">@asegurado.Edad </td>
-                                    <td>@asegurado.FechaAlta.ToString("dd-MM-yyyy") </td>
-                                    <td>@asegurado.FechaBaja.ToString("dd-MM-yyyy") </td>
-                                    <td>@asegurado.Estado </td>
-                                    <td class="text-center" width="100px">
-                                        <button type="button" class="botonedit btn btn-info btn-sm W-100" onclick='EditarAsegurado(event);' data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'>
-                                            <i class="fa fa-edit text-warning"></i>&nbsp;Editar
-                                        </button>
-                                    </td>
-                                    <td class="text-center" width="110px">
-                                        <button type="button" class="botoncomi btn btn-primary btn-sm">
-                                            <i class="fa fa-print text-warning"></i>&nbsp;Imprimir
-                                        </button>
-                                    </td>
-                                </tr>
+                                                    </div>*@
+                                            </div>
+                                        </td>
+                                        <td class="cellCodigoCliente">@asegurado.CodigoCliente </td>
+                                        <td class="cellCodigoTitular">@asegurado.CodigoTitular </td>
+                                        <td class="cellCodigoTitular">@asegurado.CodigoContrato </td>
+                                        <td>@asegurado.ApellidosNombres </td>
+                                        <td>@asegurado.FechaNacimiento.ToString("dd-MM-yyyy") </td>
+                                        <td class="cellDescripcionTipoAsegurado">@asegurado.Edad </td>
+                                        <td>@asegurado.FechaAlta.ToString("dd-MM-yyyy") </td>
+                                        <td>@asegurado.FechaBaja.ToString("dd-MM-yyyy") </td>
+                                        <td>@asegurado.Estado </td>
+                                        <td>@asegurado.CodigoTipoCliente </td>
+                                        <td class="text-center">
+                                            <button type="button" class="botonedit btn btn-info btn-sm" onclick='EditarAsegurado(event);' data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'>
+                                                <i class="fa fa-edit text-warning"></i>&nbsp;Editar
+                                            </button>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="botoncomi btn btn-default bg-gradient-primary btn-sm" onclick='modal(event);' data-request-url='@Url.Action("RegularesPagos", "SaludAsegurados")' data-request-url2='@Url.Action("IndependientesPagos", "SaludAsegurados")'>
+                                                <i class="fa fa-coins text-warning"></i>&nbsp;Pagos
+                                            </button>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="botonEnviar btn btn-success btn-sm" onclick='EnvioSusalud(event);' data-request-url='@Url.Action("Consumir_LPService", "SaludAsegurados")'>
+                                                <i class="fa fa-arrow-right text-warning"></i>&nbsp;Enviar
+                                            </button>
+                                        </td>
+                                    </tr>
                                 }
                             }
                         </tbody>
@@ -136,6 +144,88 @@
             <!-- /.card-body -->
         </div>
     </div>
+
+    <div class="modal fade-scale" id="modalNuevoVendedor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-7x fa-money-bill-wave text-warning"></i>&nbsp;&nbsp;Pago de Afiliados</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row justify-content-center">
+                        <input id="hdContrato" type="hidden" name="name" />
+                        <table id="dglista2" class="tabladglista2 table table-bordered table-sm" hidden>
+                            <thead class="bg-gradient-lightblue">
+                                <tr>
+                                    <th>CODIGO CLIENTE</th>
+                                    <th>CODIGO TITULAR</th>
+                                    <th>CATEGORIA</th>
+                                    <th>PARENTESCO</th>
+                                    <th>AFILIADO</th>
+                                    <th>EDAD</th>
+                                    <th>FECHA ALTA</th>
+                                    <th>FECHA BAJA</th>
+                                    <th>SELECCIONAR</th>
+                                    <th>INFO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+                        <table id="dgCuotasNoPagadas" class="tablaCuotasNoPagadas table table-bordered table-sm" hidden>
+                            <thead class="bg-gradient-lightblue">
+                                <tr>
+                                    <th hidden>CODIGO CLIENTE</th>
+                                    <th hidden>CODIGO TITULAR</th>
+                                    <th hidden>CATEGORIA</th>
+                                    <th>NRO</th>
+                                    <th>FECHA INICIO</th>
+                                    <th>FECHA FIN</th>
+                                    <th>MONTO</th>
+                                    <th>TIPO DOC. PAGO</th>
+                                    <th>NRO. DOC. PAGO</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <button id="AgregarCuota" type="button" class="btn btn-dark bg-gradient-secondary btn-sm" onclick="Agregar(event);" data-request-url='@Url.Action("ValidarAgregarCuotas", "SaludAsegurados")' hidden>
+                            <i class="fa fa-plus-square text-warning"></i>&nbsp;Agregar
+                        </button>
+
+                        <table id="dgCuotasTodas" class="tabladgCuotasTodas table table-bordered table-sm" hidden>
+                            <thead class="bg-gradient-lightblue">
+                                <tr>
+                                    <th hidden>CODIGO CLIENTE</th>
+                                    <th hidden>CODIGO TITULAR</th>
+                                    <th hidden>CATEGORIA</th>
+                                    <th>NRO</th>
+                                    <th>FECHA INICIO</th>
+                                    <th>FECHA FIN</th>
+                                    <th>MONTO</th>
+                                    <th>TIPO DOC.</th>
+                                    <th>NRO. PAGO</th>
+                                    <th>FECHA PAGO</th>
+                                    <th>ESTADO</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 @section Scripts {
@@ -177,7 +267,6 @@
             valor = idTipoCliente.value
             //console.log(valor);
         }
-
 
         $(document).ready(function () {
             $('#dglista').DataTable({
@@ -282,6 +371,321 @@
             }
             return value;
         }
+
+        function modal(e) {
+            //console.log(e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling);
+            const boton = e.target;
+            var url_method = "";
+            const url_method_regulares = boton.getAttribute('data-request-url');
+            const url_method_independientes = boton.getAttribute('data-request-url2');
+            const ClienteCli = e.target.parentElement.parentElement.firstElementChild.textContent;
+            const Contrato = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+            const CodigoTipoCliente = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+            console.log(Contrato);
+            console.log(CodigoTipoCliente);
+
+            var tabla1 = document.getElementById("dglista2");
+            var tabla2 = document.getElementById("dgCuotasNoPagadas");
+            var tabla3 = document.getElementById("dgCuotasTodas");
+            var hiden = document.getElementById("hdContrato");
+
+            $("#dglista2").find("tr:not(:first)").remove();
+            $("#dgCuotasNoPagadas").find("tr:not(:first)").remove();
+            $("#dgCuotasTodas").find("tr:not(:first)").remove();
+            tabla1.removeAttribute("hidden");
+            tabla2.setAttribute("hidden", "");
+            tabla3.setAttribute("hidden", "");
+
+            hiden.value = Contrato;
+
+            if (CodigoTipoCliente == "01") {
+                url_method = url_method_regulares;
+                
+                $.ajax({
+                    type: "GET",
+                    url: url_method,
+                    data: {
+                        'cliente': ClienteCli,
+                        'contrato': Contrato,
+                    },
+                    dataType: "text",
+                    success: function (r) {
+                        var dataparseada = JSON.parse(r);
+                        //console.log(dataparseada);
+                        ToTabla(dataparseada, "dglista2", "0");
+                        $('#modalNuevoVendedor').modal('show');
+                    }
+                });
+            }
+            else {
+                url_method = url_method_independientes;
+                $.ajax({
+                    type: "GET",
+                    url: url_method,
+                    data: {
+                        'contrato': Contrato,
+                    },
+                    dataType: "text",
+                    success: function (r) {
+                        var dataparseada = JSON.parse(r);
+                        //console.log(dataparseada);
+                        ToTabla(dataparseada, "dglista2", "0");
+                        $('#modalNuevoVendedor').modal('show');
+                    }
+                });
+            }
+
+
+
+        }
+
+        function seleccionar(e) {
+            const boton = e.target;
+            const url_method = boton.getAttribute('data-request-url');
+            const codigoCliente = e.target.parentElement.parentElement.firstElementChild.textContent;
+            const codigoTitular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
+            const codigoCategoria = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+            const contrato = document.getElementById("hdContrato");
+
+            const botonagregar = document.getElementById("AgregarCuota");
+            botonagregar.removeAttribute("hidden");
+
+
+            $("#dgCuotasNoPagadas").find("tr:not(:first)").remove();
+            var ta = document.getElementById("dgCuotasNoPagadas");
+            ta.removeAttribute("hidden");
+
+            var ta2 = document.getElementById("dgCuotasTodas");
+            ta2.setAttribute("hidden", "");
+
+            $.ajax({
+                type: "GET",
+                url: url_method,
+                data: {
+                    'cliente': codigoCliente,
+                    'titular': codigoTitular,
+                    'categoria': codigoCategoria,
+                    'contrato': contrato.value,
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    console.log(dataparseada);
+                    ToTabla(dataparseada, "dgCuotasNoPagadas", "1");
+                }
+            });
+        }
+
+        function info(e) {
+            const boton = e.target;
+            const url_method = boton.getAttribute('data-request-url');
+            const codigoCliente = e.target.parentElement.parentElement.firstElementChild.textContent;
+            const codigoTitular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
+            const codigoCategoria = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+            const contrato = document.getElementById("hdContrato");
+
+            const botonagregar = document.getElementById("AgregarCuota");
+            botonagregar.setAttribute("hidden", "");
+
+            $("#dgCuotasTodas").find("tr:not(:first)").remove();
+            var ta1 = document.getElementById("dgCuotasNoPagadas");
+            var ta2 = document.getElementById("dgCuotasTodas");
+            ta1.setAttribute("hidden", "");
+            ta2.removeAttribute("hidden");
+            $.ajax({
+                type: "GET",
+                url: url_method,
+                data: {
+                    'cliente': codigoCliente,
+                    'titular': codigoTitular,
+                    'categoria': codigoCategoria,
+                    'contrato': contrato.value.trim(),
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    //console.log(dataparseada);
+                    ToTabla(dataparseada, "dgCuotasTodas", "2");
+                }
+            });
+        }
+
+        function ToTabla(arreglo, tabla, op) {
+            var ta = document.getElementById(tabla);
+            let arregloDatos = [];
+            arregloDatos = arreglo;
+            //console.log(arregloDatos);
+            if (op == '0') {
+                arregloDatos.forEach(dato => {
+                    $(ta).find('tbody').append(`<tr>
+                            <td>${dato.CodigoCliente}</td>
+                            <td>${dato.CodigoTitular}</td>
+                            <td>${dato.Categoria}</td>
+                            <td>${dato.DescripcionParentesco}</td>
+                            <td>${dato.Asegurado}</td>
+                            <td>${dato.Edad}</td>
+                            <td>${(new Date(parseInt(dato.FechaAlta.substr(6)))).toLocaleDateString()}</td>
+                            <td>${(new Date(parseInt(dato.FechaBaja.substr(6)))).toLocaleDateString()}</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-primary btn-sm" onclick='seleccionar(event);' data-request-url='@Url.Action("ObtenerCuotasNoPagadas", "SaludAsegurados")'>
+                                    <i class="fa fa-check text-warning"></i>&nbsp;Seleccionar
+                                </button>
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-success btn-sm" onclick='info(event);' data-request-url='@Url.Action("ObtenerTodasCuotas", "SaludAsegurados")'>
+                                    <i class="fa fa-info text-warning"></i>&nbsp;Info
+                                </button>
+                            </td>
+                        </tr>
+                        `);
+                });
+            }
+            else if (op == '1') {
+                arregloDatos.forEach(dato => {
+                    $(ta).find('tbody').append(`<tr>
+                            <td hidden>${dato.CodigoCliente}</td>
+                            <td hidden>${dato.CodigoTitular}</td>
+                            <td hidden>${dato.Categoria}</td>
+                            <td>${dato.IdCuota}</td>
+                            <td>${(new Date(parseInt(dato.FechaInicioCuota.substr(6)))).toLocaleDateString()}</td>
+                            <td>${(new Date(parseInt(dato.FechaFinCuota.substr(6)))).toLocaleDateString()}</td>
+                            <td><input type="text" value="${dato.Monto}" name="monto"></td>
+                            <td>@Html.DropDownList("TipoDocumentoPago", (IEnumerable<SelectListItem>)ViewBag.TipoDocumentoPago , new { id = "drpTipoDocumentoPago", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                            </td>
+                            <td><input type="text" value="${dato.NumeroDocumentoPago}" name="NumeroDocumentoPago"></td>
+                            <td><input style="border:none;" name=${dato.IdCuota} type="checkbox" name="IdCuota" /></td>
+                        </tr>
+                        `);
+                });
+            }
+            else if (op == '2') {
+                arregloDatos.forEach(dato => {
+                    $(ta).find('tbody').append(`<tr>
+                            <td hidden>${dato.CodigoCliente}</td>
+                            <td hidden>${dato.CodigoTitular}</td>
+                            <td hidden>${dato.Categoria}</td>
+                            <td>${dato.IdCuota}</td>
+                            <td>${(new Date(parseInt(dato.FechaInicioCuota.substr(6)))).toLocaleDateString()}</td>
+                            <td>${(new Date(parseInt(dato.FechaFinCuota.substr(6)))).toLocaleDateString()}</td>
+                            <td>${dato.Monto}</td>
+                            <td>${dato.DescripcionTipoDocumentoPago}</td>
+                            <td>${dato.NumeroDocumentoPago}</td>
+                            <td>${(new Date(parseInt(dato.FechaPago.substr(6)))).toLocaleDateString()}</td>
+                            <td>${dato.Estado}</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-danger btn-sm" onclick='seleccionar(event);'>
+                                    <i class="fa fa-times text-warning"></i>&nbsp;Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                        `);
+                });
+            }
+        }
+
+        function Agregar(e) {
+
+            const boton = e.target;
+            const url_method = boton.getAttribute('data-request-url');
+            var grid = document.getElementById("dgCuotasNoPagadas");
+
+            //Reference the CheckBoxes in Table.
+            var checkBoxes = grid.getElementsByTagName("INPUT");
+            var cCliente = "";
+            var cTitular = "";
+            var cCategoria = "";
+            var idCuota = "";
+            var fechaFin = "";
+            var monto = "";
+            var tipoDocPago = "";
+            var nroDocPago = "";
+
+            //Loop through the CheckBoxes.
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked) {
+                    var row = checkBoxes[i].parentNode.parentNode;
+                    cCliente = row.cells[0].childNodes[0].value;
+                    cTitular = row.cells[1].childNodes[0].value;
+                    cCategoria = row.cells[2].childNodes[0].value;
+                    codigoContrato = document.getElementById("hdContrato");
+                    fechaInicio = row.cells[4].childNodes[0].value;
+                    idCuota = row.cells[3].childNodes[0].value;
+                    fechaFin = row.cells[5].childNodes[0].value;
+                    monto = row.cells[6].childNodes[0].value;
+                    tipoDocPago = row.cells[7].childNodes[0].value;
+                    nroDocPago = row.cells[8].childNodes[0].value;
+
+                    $.ajax({
+                        type: "GET",
+                        url: url_method,
+                        data: {
+                            'cliente': cCliente,
+                            'titular': cTitular,
+                            'categoria': cCategoria,
+                            'idCuota': idCuota,
+                            'codigoContrato': codigoContrato,
+                            'fechaInicio': fechaInicio,
+                            'fechaFin': fechaFin,
+                            'monto': monto,
+                            'tipoDocPago': tipoDocPago,
+                            'nroDocPago': nroDocPago,
+                        },
+                        dataType: "text",
+                        success: function (r) {
+                            var dataparseada = JSON.parse(r);
+                            console.log(dataparseada);
+                            mostrarMensaje(dataparseada);
+                        }
+                    });
+                }
+            }
+
+            //Display selected Row data in Alert Box.
+            alert(monto + " - " + tipoDocPago + " - " + nroDocPago);
+        }
+
+        function EnvioSusalud(e) {
+
+            const boton = e.target;
+            const Ccliente = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
+            const Ctitular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+            const Ccategoria = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+            const url_method = boton.getAttribute('data-request-url');
+
+            if (Ccliente != "" && Ctitular != "" && Ccategoria != "") {
+                $.ajax({
+                    type: "GET",
+                    url: url_method,
+                    data: {
+                        'metodo': 'WS_Registrar',
+                        'idcliente': Ccliente,
+                        'idtitular': Ctitular,
+                        'idcategoria': Ccategoria,
+                    },
+                    dataType: "text",
+                    success: function (r) {
+                        var dataparseada = JSON.parse(r);
+                        console.log(dataparseada);
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Servicio Web (Respuesta)',
+                            html: dataparseada,
+                            showCloseButton: true
+                        });
+                    }
+                });
+            }
+            else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'ADVERTENCIA',
+                    html: 'El registro seleccionado no cuenta con datos, intente nuevamente.',
+                    showCloseButton: true
+                });
+            }
+        };
+
+
 
 
 

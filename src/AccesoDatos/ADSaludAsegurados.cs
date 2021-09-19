@@ -655,6 +655,9 @@ namespace AccesoDatos
                             oEnListaSaludAsegurados.DescripcionCentroCosto = oDataReader["CentroCtoDes"].ToString();
                             oEnListaSaludAsegurados.Talla = oDataReader["Talla"].ToString();
                             oEnListaSaludAsegurados.Peso = oDataReader["Peso"].ToString();
+                            oEnListaSaludAsegurados.CodigoTipoCliente = oDataReader["CodigoTipoCliente"].ToString();
+                            oEnListaSaludAsegurados.RazonSocial = oDataReader["RazonSocial"].ToString();
+                            oEnListaSaludAsegurados.RucDni = oDataReader["RucDni"].ToString();
 
                             oListaSaludAsegurados.Add(oEnListaSaludAsegurados);
                             break;
@@ -711,6 +714,50 @@ namespace AccesoDatos
 
                     oListaSaludAsegurados.Add(oEnListaSaludAsegurados);
 
+                }
+                return oListaSaludAsegurados;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
+
+        public List<ENSaludAsegurados> ObtenerSaludAseguradosRegularesPagos(string codCliente,string codContrato)
+        {
+            DbCommand oCommand = null;
+            List<ENSaludAsegurados> oListaSaludAsegurados = new List<ENSaludAsegurados>();
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_EmpresasObtenerTodasCuotas_V2");
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCliente", codCliente == null ? "" : codCliente, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoContrato", codContrato == null ? "" : codContrato, TipoParametro.STR, Direccion.INPUT);
+                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
+                while (oDataReader.Read())
+                {
+                    ENSaludAsegurados oEnListaSaludAsegurados = new ENSaludAsegurados();
+
+                    oEnListaSaludAsegurados.CodigoCliente = oDataReader["IDCuota"].ToString();
+                    oEnListaSaludAsegurados.FechaAlta = oDataReader["FechaDesde"] == DBNull.Value
+                    ? DateTime.Now
+                    : Convert.ToDateTime(oDataReader["FechaDesde"]);
+                    oEnListaSaludAsegurados.FechaAlta = oDataReader["FechaHasta"] == DBNull.Value
+                    ? DateTime.Now
+                    : Convert.ToDateTime(oDataReader["FechaHasta"]);
+                    oEnListaSaludAsegurados.CodigoTrabajador = oDataReader["Año Proceso"].ToString();
+                    oEnListaSaludAsegurados.CodigoTipoTrabajador = oDataReader["MesProceso"].ToString();
+                    oEnListaSaludAsegurados.CodigoParentesco = oDataReader["NumeroFactura"].ToString();
+                    oEnListaSaludAsegurados.DescripcionParentesco = oDataReader["Estado"].ToString();
+                    oEnListaSaludAsegurados.ApellidoPaterno = oDataReader["AporteAfiliado"].ToString();
+                    oEnListaSaludAsegurados.ApellidoMaterno = oDataReader["AporteEmpresa"].ToString();
+                    
+                    oListaSaludAsegurados.Add(oEnListaSaludAsegurados);
+
 
                 }
                 return oListaSaludAsegurados;
@@ -724,6 +771,7 @@ namespace AccesoDatos
                 GenericDataAccess.CerrarConexion(oCommand, null);
             }
         }
+
 
         //exec sp_Afl_AseguradosObtenerCuotasNoPagadas '00253579','000494','00','0000001239'
         public List<ENSaludAseguradosContratosPagos> ObtenerSaludAseguradosCuotasNoPagadas(string codCliente, string codTitular, string categoria, string codContrato)

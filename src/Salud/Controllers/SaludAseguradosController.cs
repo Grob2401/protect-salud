@@ -28,6 +28,7 @@ namespace Salud.Controllers
             ViewBag.Asegurados = ASEGURADOS;
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             ViewBag.IdNombreTabla = "01";
+            ViewBag.TipoDocumentoPago = new SelectList(LNTipoDocumentoPago.ObtenerTodos().ToList(), "CodigoTipoDocumentoPago", "DescripcionTipoDocumentoPago");
             TempData["ASEGURADOS"] = ASEGURADOS;
             return View();
         }
@@ -41,6 +42,7 @@ namespace Salud.Controllers
             ViewBag.Asegurados = ASEGURADOS;
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             ViewBag.IdNombreTabla = hdCodigoTipoCliente.ToString();
+            ViewBag.TipoDocumentoPago = new SelectList(LNTipoDocumentoPago.ObtenerTodos().ToList(), "CodigoTipoDocumentoPago", "DescripcionTipoDocumentoPago");
             TempData["ASEGURADOS"] = ASEGURADOS;
             return View();
         }
@@ -203,6 +205,8 @@ namespace Salud.Controllers
 
         #region PAGOS
 
+        //INDEPENDIENTES PAGOS
+
         [SessionExpire]
         public ActionResult IndependientesPagos(string contrato)
         {
@@ -223,6 +227,29 @@ namespace Salud.Controllers
             var CUOTASNOPAGADAS = LNSaludAsegurados.ObtenerAseguradosTodasCuotas(cliente, titular, categoria, contrato);
             return Json(CUOTASNOPAGADAS, JsonRequestBehavior.AllowGet);
         }
+
+        //REGULARES PAGOS
+
+        [SessionExpire]
+        public ActionResult RegularesPagos(string cliente,string contrato)
+        {
+            var INDEPENDIENTESXCONTRATO = LNSaludAsegurados.ObtenerSaludAseguradosRegularesPagos(cliente,contrato);
+            return Json(INDEPENDIENTESXCONTRATO, JsonRequestBehavior.AllowGet);
+        }
+
+        //[SessionExpire]
+        //public ActionResult ObtenerCuotasNoPagadas(string cliente, string titular, string categoria, string contrato)
+        //{
+        //    var CUOTASNOPAGADAS = LNSaludAsegurados.ObtenerSaludAseguradosCuotasNoPagadas(cliente, titular, categoria, contrato);
+        //    return Json(CUOTASNOPAGADAS, JsonRequestBehavior.AllowGet);
+        //}
+
+        //[SessionExpire]
+        //public ActionResult ObtenerTodasCuotas(string cliente, string titular, string categoria, string contrato)
+        //{
+        //    var CUOTASNOPAGADAS = LNSaludAsegurados.ObtenerAseguradosTodasCuotas(cliente, titular, categoria, contrato);
+        //    return Json(CUOTASNOPAGADAS, JsonRequestBehavior.AllowGet);
+        //}
 
         #endregion
 

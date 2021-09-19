@@ -49,6 +49,11 @@ namespace LogicaNegocio
             return (new ADSaludAsegurados()).ObtenerSaludAseguradosIndependientesPagos(codContrato);
         }
 
+        public static List<ENSaludAsegurados> ObtenerSaludAseguradosRegularesPagos(string codCliente, string codContrato)
+        {
+            return (new ADSaludAsegurados()).ObtenerSaludAseguradosRegularesPagos(codCliente,codContrato);
+        }
+
         public static List<ENSaludAseguradosContratosPagos> ObtenerSaludAseguradosCuotasNoPagadas(string codCliente, string codTitular, string categoria, string codContrato)
         {
             return (new ADSaludAsegurados()).ObtenerSaludAseguradosCuotasNoPagadas(codCliente,codTitular,categoria,codContrato);
