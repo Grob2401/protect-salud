@@ -150,7 +150,7 @@
         </script>
     }
 
-    <script>
+<script>
         $(function () {
             var tablaLista = $('#dglistaAsegurados').DataTable({
                 destroy: true,
@@ -182,7 +182,7 @@
         function callChangefunc(id) {
             const codContrato = document.getElementById('drpCodigoContrato');
             var url_method = $('#obtener_ruta').val();
-            
+
             let primerValor = 0;
             $.ajax({
                 type: "GET",
@@ -327,10 +327,19 @@
             const valorContrato = document.getElementById('drpCodigoContrato').value;
             const urlBtn = document.getElementById('btnAgregarAfiliado');
 
-            var url = urlBtn.getAttribute('data-request-url');
-            const url_final = `?CodigoCliente=${valorCliente}&CodigoContrato=${valorContrato}&origen=A`
+            if (valorContrato == "") {
+                var mensaje = "El cliente seleccionado no tiene contratos registrados, debe crear un contrato previamente o seleccione otro cliente.";
+                mostrarMensaje(mensaje);
+            }
+            else
+            {
+                var url = urlBtn.getAttribute('data-request-url');
+                const url_final = `?CodigoCliente=${valorCliente}&CodigoContrato=${valorContrato}&origen=A`
 
-            window.location.href = url + url_final;
+                window.location.href = url + url_final;
+            }
+
+            
     }
 
     function EditarAsegurado(e) {
@@ -346,7 +355,7 @@
 
     };
 
-    </script>
+</script>
 
 
 

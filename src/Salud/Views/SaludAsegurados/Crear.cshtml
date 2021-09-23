@@ -12,7 +12,7 @@
     @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
 }
 
-@using (Html.BeginForm("Guardar", "SaludAsegurados", FormMethod.Post, new { id = "Form1", onsubmit = "return validateForm()" }))
+@using (Html.BeginForm("Guardar", "SaludAsegurados", FormMethod.Post, new { id = "Form1", onsubmit = "return validateForm();" }))
 {
     @Html.AntiForgeryToken()
     <input id="hdClienteCodigo" type="hidden" name="name" value='@ViewBag.Cliente' />
@@ -320,38 +320,8 @@
 
         }
 
-
-    </script>
-
-    <script>
-
-
-        $(document).ready(function () {
-            //$('.js-example-basic-single').select2();
-            $(".js-example-responsive").select2({
-                width: 'resolve' // need to override the changed default
-            });
-        });
-
-        function goBackMantenimiento(e) {
-            e.preventDefault();
-            let CTitular = "";
-            CTitular = "@TempData["CodigoTitular"]";
-            const origen = "@ViewBag.Origen"
-
-            const valorCliente = document.getElementById('hdClienteCodigo').value;
-            const valorContrato = document.getElementById('hdContratoCodigo').value;
-            const urlBtn = document.getElementById('btnRegresar');
-
-            var url = urlBtn.getAttribute('data-request-url');
-            const url_final = `?CodigoCliente=${valorCliente}&CodigoTitular=${CTitular}&CodigoContrato=${valorContrato}&origen=${origen}`;
-
-            window.location.href = url + url_final;
-        }
-
         function validateForm() {
             var codTrabajadorVal = document.forms["Form1"]["txtCodigoTrabajador"].value;
-            var codTitularVal = document.forms["Form1"]["txtCodigoTitular"].value.trim();
             var apaternoVal = document.forms["Form1"]["txtApellidoPaterno"].value.trim();
             var amaternoVal = document.forms["Form1"]["txtApellidoMaterno"].value.trim();
             var nombresVal = document.forms["Form1"]["txtNombres"].value.trim();
@@ -374,11 +344,11 @@
                 return false;
             }
             //--
-            if (codTrabajadorVal == "") {
+            if (numeroDocumentoVal == "") {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Mensaje',
-                    html: 'No ha ingresado Código de Trabajador',
+                    html: 'No ha ingresado Número de Documento',
                     showCloseButton: true
                 })
                 return false;
@@ -410,15 +380,7 @@
                 })
                 return false;
             }
-            if (numeroDocumentoVal == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Mensaje',
-                    html: 'No ha ingresado Número de Documento',
-                    showCloseButton: true
-                })
-                return false;
-            }
+
             if (fechaNacimientoVal == "") {
                 Swal.fire({
                     icon: 'warning',
@@ -428,15 +390,7 @@
                 })
                 return false;
             }
-            if (correoVal == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Mensaje',
-                    html: 'No ha ingresado su Correo Electrónico',
-                    showCloseButton: true
-                })
-                return false;
-            }
+
             if (telefonoVal == "") {
                 Swal.fire({
                     icon: 'warning',
@@ -455,6 +409,15 @@
                 })
                 return false;
             }
+            if (correoVal == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado su Correo Electrónico',
+                    showCloseButton: true
+                })
+                return false;
+            }
             if (direccionVal == "") {
                 Swal.fire({
                     icon: 'warning',
@@ -464,7 +427,50 @@
                 })
                 return false;
             }
+            if (codTrabajadorVal == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado Código de Trabajador',
+                    showCloseButton: true
+                })
+                return false;
+            }
         }
+
+
+
+    </script>
+
+
+
+    <script>
+
+
+        $(document).ready(function () {
+            //$('.js-example-basic-single').select2();
+            $(".js-example-responsive").select2({
+                width: 'resolve' // need to override the changed default
+            });
+        });
+
+        function goBackMantenimiento(e) {
+            e.preventDefault();
+            let CTitular = "";
+            CTitular = "@TempData["CodigoTitular"]";
+            const origen = "@ViewBag.Origen"
+
+            const valorCliente = document.getElementById('hdClienteCodigo').value;
+            const valorContrato = document.getElementById('hdContratoCodigo').value;
+            const urlBtn = document.getElementById('btnRegresar');
+
+            var url = urlBtn.getAttribute('data-request-url');
+            const url_final = `?CodigoCliente=${valorCliente}&CodigoTitular=${CTitular}&CodigoContrato=${valorContrato}&origen=${origen}`;
+
+            window.location.href = url + url_final;
+        }
+
+
 
         $(document).ready(function () {
 
@@ -479,10 +485,14 @@
             textoCliente.value = valorCliente;
             textoContrato.value = valorContrato;
 
-            const CodigoTitula = document.getElementById('txtCodigoTitular');
-            CodigoTitula.value = "@TempData["CodigoTitular"]";
+            var CodigoTitula = document.getElementById('txtCodigoTitular');
+            var valorCodigoTitula = "@TempData["CodigoTitular"]";
+            if (valorCodigoTitula != null)
+            {
+                CodigoTitula.value = valorCodigoTitula;
+            }
 
-            callChangeParen('drpParentesco')
+            callChangeParen('drpParentesco');
         });
 
 
@@ -521,7 +531,7 @@
         function callChangeDepartamento(id) {
             const prov = document.getElementById('drpProvincia');
             var url_method = $('#provincias_ruta').val();
-           
+
             //------------------
             $.ajax({
                 type: "GET",

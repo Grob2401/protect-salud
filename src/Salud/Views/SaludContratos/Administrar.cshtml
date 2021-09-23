@@ -25,7 +25,7 @@
             <div class="card-body">
                 <div class="row justify-content-center pt-2 pb-2">
                     <div class="col-md-7">
-                        <button type="button" id="Grabar" class="btn btn-app bg-gradient-info" data-request-url="@Url.Action("Administrar", "SaludContratos")">
+                        <button type="button" id="Grabar" class="btn btn-app bg-gradient-info" data-request-url="@Url.Action("Administrar", "SaludContratos")" data-request-url2="@Url.Action("EliminarLimpiarPlanes", "SaludContratos")">
                             <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;&nbsp;Grabar
                         </button>
                     </div>
@@ -418,6 +418,7 @@
 
         $("#Grabar").click(function () {
             var url = $(this).data('request-url');
+            var url_Eliminar = $(this).data('request-url2');
             var table = $('#dglistaPlanReg').DataTable();
             //console.log('hola')
             if (!table.data().count()) {
@@ -433,7 +434,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "/SaludContratos/EliminarLimpiarPlanes",
+                    url: url_Eliminar,
                     data: {
                         'contrato': codContrato.value,
                     },
@@ -456,7 +457,7 @@
                     //alert(data[rowLoop]);
                     $.ajax({
                         type: "POST",
-                        url: "/SaludContratos/Administrar",
+                        url: url,
                         data: {
                             'contrato': codContrato.value,
                             'plan': data[1],
