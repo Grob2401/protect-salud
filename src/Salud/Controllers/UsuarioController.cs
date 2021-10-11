@@ -17,6 +17,8 @@ namespace Salud.Controllers
         public ActionResult Index()
         {
             ViewBag.Usuarios = LNUsuario.ObtenerTodos();
+            ViewData["Sociedades"] = new SelectList(LNSociedades.ObtenerTodos().ToList(), "IdSociedad", "RazonSocial");
+            ViewData["Perfiles"] = new SelectList(LNPerfiles.ObtenerTodos("").ToList(), "CodigoPerfil", "DescripcionPerfil");
             return View();
         }
         public ActionResult Login()
@@ -40,6 +42,7 @@ namespace Salud.Controllers
                     if (decrypt != password)
                         return View("Login");
                     Session["NombreUsuario"] = string.Concat(usuarioLogin.var_Nombre, " ", usuarioLogin.var_Apellidos);
+                    Session["SociedadUsuario"] = usuarioLogin.IdSociedad;
                     return RedirectToAction("Index","Home");
                 }
             }
@@ -59,6 +62,8 @@ namespace Salud.Controllers
                 oENUsuario = LNUsuario.ObtenerUno(id);
                 var pwd = new Crypto(Crypto.CryptoTypes.encTypeTripleDES);
                 oENUsuario.var_Password = pwd.Decrypt(oENUsuario.var_Password);
+                ViewData["Sociedades"] = new SelectList(LNSociedades.ObtenerTodos().ToList(), "IdSociedad", "RazonSocial", oENUsuario.IdSociedad);
+                ViewData["Perfiles"] = new SelectList(LNPerfiles.ObtenerTodos("").ToList(), "CodigoPerfil", "DescripcionPerfil", oENUsuario.CodigoPerfil);
             }
             else
             {
@@ -79,18 +84,28 @@ namespace Salud.Controllers
                     var pwd = new Crypto(Crypto.CryptoTypes.encTypeTripleDES);
                     usuario.var_Password = pwd.Encrypt(usuario.var_Password);
                 }
-                
-                if (usuario.int_IdUsuario > 0)
+
+                if (usuario.var_DNI != null)
                 {
-                    LNUsuario.Actualizar(usuario);
+                    if (usuario.int_IdUsuario > 0)
+                    {
+                        LNUsuario.Actualizar(usuario);
+                    }
+                    else
+                    {
+
+                        LNUsuario.Insertar(usuario);
+                    }
+
+                    return RedirectToAction("Index", "Usuario");
                 }
+
                 else
                 {
-
-                    LNUsuario.Insertar(usuario);
+                    usuario.bit_Sexo = true;
                 }
+                
 
-                return RedirectToAction("Index", "Usuario");
             }
 
             return View();

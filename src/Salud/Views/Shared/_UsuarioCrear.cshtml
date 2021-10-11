@@ -5,6 +5,8 @@
 @section Styles {
     @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
     @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
+    @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
 }
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -21,9 +23,11 @@
                         <!-- left column -->
                         <div class="col-md-12">
                             <!-- jquery validation -->
-                                <!-- /.card-header -->
-                                <!-- form start -->
-                            <form role="form" id="frmUsuario" method="post" action='@Url.Action("Crear", "Usuario")'>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            @*<form role="form" id="frmUsuario" method="post" action='@Url.Action("Crear", "Usuario")'>*@
+                            @using (Html.BeginForm("Crear", "Usuario", FormMethod.Post, new { id = "Form1Crear", onsubmit = "return validateForm();" }))
+                            {
                                 @Html.HiddenFor(m => m.int_IdUsuario)
                                 @Html.AntiForgeryToken()
                                 <div class="card-body">
@@ -44,7 +48,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Sexo</label>
-                                        <select class="form-control" name="bit_Sexo">
+                                        <select class="form-control" name="bit_Sexo" id="cod_sexo">
                                             <option value="default">Seleccione</option>
                                             <option value="true" @((Model == null || Model.bit_Sexo == true) ? "selected='selected'" : "")>Masculino</option>
                                             <option value="false" @((Model == null || Model.bit_Sexo == false) ? "selected='selected'" : "")>Femenino</option>
@@ -81,6 +85,15 @@
                                             <label class="custom-control-label" for="exampleCheck1">Activo</label>
                                         </div>
                                     </div>
+                                    <hr />
+                                    <div class="form-group">
+                                        <label for="drpSociedad">Sociedad</label>
+                                        @Html.DropDownListFor(m => m.IdSociedad, ViewData["Sociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="drpSociedad">Perfil</label>
+                                        @Html.DropDownListFor(m => m.CodigoPerfil, ViewData["Perfiles"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
+                                    </div>
                                 </div>
                                 <!-- /.card-body -->
                                 <hr />
@@ -90,8 +103,8 @@
                                 <a href='@Url.Action("Index", "Usuario")' class="btn btn-danger btn-sm float-right">
                                     <i class="fa fa-times text-warning"></i>&nbsp;&nbsp;Cancelar
                                 </a>
-                            </form>
-                            
+                                @*</form>*@
+                            }
                             <!-- /.card -->
                         </div>
                     </div>
@@ -102,3 +115,97 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+
+    @Scripts.Render("~/Content/plugins/datatables/jquery.dataTables.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Scripts/Shared/util.js")
+
+    <script>
+@*import { compareByFieldSpec } from "@fullcalendar/core";*@
+
+        function validateForm() {
+            var nombres = document.forms["Form1Crear"]["txtNombre"].value;
+            var apellidos = document.forms["Form1Crear"]["txtApellidos"].value.trim();
+            var dni = document.forms["Form1Crear"]["txtDNI"].value.trim();
+            var nacimiento = document.forms["Form1Crear"]["txtFechaNacimiento"].value.trim();
+            var mail = document.forms["Form1Crear"]["txtMail"].value.trim();
+            var contrase = document.forms["Form1Crear"]["txtPassword"].value.trim();
+            var sexo = document.getElementById("cod_sexo").value;
+            //---
+
+            if (nombres == "" && apellidos == "" && dni == "" && nacimiento == "" && mail == "" && contrase == "" && sexo == "default" ) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado información válida',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            //--
+            if (nombres == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado nombres',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (apellidos == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado apellidos',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (dni == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado DNI',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (nacimiento == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado fecha de nacimiento',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (mail == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado correo electrónico',
+                    showCloseButton: true
+                })
+                return false;
+            }
+            if (contrase == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No ha ingresado contraseña',
+                    showCloseButton: true
+                })
+                return false;
+            }
+
+        }
+    </script>
+}
+
+

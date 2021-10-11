@@ -31,13 +31,13 @@ namespace AccesoDatos
                 while (oDataReader.Read())
                 {
                     ENVendedores oEnListaVendedores = new ENVendedores();
-                    oEnListaVendedores.CodigoVendedor = oDataReader["CodigoVendedor"].ToString();
-                    oEnListaVendedores.ApellidoPaterno = oDataReader["ApellidoPaterno"].ToString();
-                    oEnListaVendedores.ApellidoMaterno = oDataReader["ApellidoMaterno"].ToString();
-                    oEnListaVendedores.Nombres = oDataReader["Nombres"].ToString();
-                    oEnListaVendedores.Direccion = oDataReader["Direccion"].ToString();
-                    oEnListaVendedores.Telefono = oDataReader["Telefono"].ToString();
-                    oEnListaVendedores.Email = oDataReader["Email"].ToString();
+                    oEnListaVendedores.CodigoVendedor = oDataReader["CodigoVendedor"] == DBNull.Value ? "" : oDataReader["CodigoVendedor"].ToString(); 
+                    oEnListaVendedores.ApellidoPaterno = oDataReader["ApellidoPaterno"] == DBNull.Value ? "" : oDataReader["ApellidoPaterno"].ToString();  
+                    oEnListaVendedores.ApellidoMaterno = oDataReader["ApellidoMaterno"] == DBNull.Value ? "" : oDataReader["ApellidoMaterno"].ToString();  
+                    oEnListaVendedores.Nombres = oDataReader["Nombres"] == DBNull.Value ? "" : oDataReader["Nombres"].ToString();  
+                    oEnListaVendedores.Direccion = oDataReader["Direccion"] == DBNull.Value ? "" : oDataReader["Direccion"].ToString();  
+                    oEnListaVendedores.Telefono = oDataReader["Telefono"] == DBNull.Value ? "" : oDataReader["Telefono"].ToString();  
+                    oEnListaVendedores.Email = oDataReader["Email"] == DBNull.Value ? "" : oDataReader["Email"].ToString(); 
 
                     oEnListaVendedores.CodigoUsuario = oDataReader["CodigoUsuario"] == DBNull.Value ? "" : oDataReader["CodigoUsuario"].ToString();
                     oEnListaVendedores.CodigoPerfil = oDataReader["CodigoPerfil"] == DBNull.Value ? "" : oDataReader["CodigoPerfil"].ToString();

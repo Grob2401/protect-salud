@@ -69,6 +69,7 @@
     <Compile Include="LNSaludEstadoCivil.cs" />
     <Compile Include="LNSCTREjecutivos.cs" />
     <Compile Include="LNSCTR_EmisionTemporal.cs" />
+    <Compile Include="LNPerfiles.cs" />
     <Compile Include="LNTipoDocumentoPago.cs" />
     <Compile Include="LNTipoPais.cs" />
     <Compile Include="LNTipoPrima.cs" />

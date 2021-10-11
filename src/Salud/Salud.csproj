@@ -142,6 +142,7 @@
     <Compile Include="Controllers\CentroCostosController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PerfilesController.cs" />
     <Compile Include="Controllers\PreFacturacionController.cs" />
     <Compile Include="Controllers\SaludAseguradosController.cs" />
     <Compile Include="Controllers\SaludContratosController.cs" />
@@ -2023,6 +2024,7 @@
     <Content Include="Views\SaludAsegurados\Independientes.cshtml" />
     <Content Include="Views\BancosProcesadoras\Index.cshtml" />
     <Content Include="Views\BancosProcesadoras\Recepcion.cshtml" />
+    <Content Include="Views\Perfiles\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

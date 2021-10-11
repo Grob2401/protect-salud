@@ -52,6 +52,7 @@
     <Compile Include="ENCanalesVendedores.cs" />
     <Compile Include="ENMarcaTarjeta.cs" />
     <Compile Include="ENRuta.cs" />
+    <Compile Include="ENPerfiles.cs" />
     <Compile Include="ENTarjeta.cs" />
     <Compile Include="ENLote.cs" />
     <Compile Include="ENTipoDocumentoPago.cs" />

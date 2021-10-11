@@ -19,5 +19,7 @@ namespace Entidades
         public string var_DNI { get; set; }
         public DateTime? dtm_FechaRegistro { get; set; }
         public DateTime? dtm_FechaModificacion { get; set; }
+        public string CodigoPerfil { get; set; }
+        public string IdSociedad { get; set; }
     }
 }

@@ -72,6 +72,7 @@
     <Compile Include="ADSCTRCotizacionesDetalle.cs" />
     <Compile Include="ADSCTREjecutivos.cs" />
     <Compile Include="ADSCTR_EmisionTemporal.cs" />
+    <Compile Include="ADPerfiles.cs" />
     <Compile Include="ADSociedades.cs" />
     <Compile Include="ADTipoAsegurado.cs" />
     <Compile Include="ADTipoCliente.cs" />

@@ -19,7 +19,7 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    @using (Html.BeginForm("Crear", "Usuario", FormMethod.Post, new { id = "frmUsuario", onsubmit = "return validateForm()" }))
+                    @using (Html.BeginForm("Crear", "Usuario", FormMethod.Post, new { id = "FormEditar", onsubmit = "return validateForm();" }))
                     {
 
                         @Html.HiddenFor(m => m.int_IdUsuario)
@@ -42,10 +42,10 @@
                             </div>
                             <div class="form-group">
                                 <label>Sexo</label>
-                                <select class="form-control" name="bit_Sexo">
+                                <select class="form-control" name="bit_Sexo" id="cod_sexo">
                                     <option value="default">Seleccione</option>
-                                    <option value="true" @((Model.bit_Sexo == true) ? "selected='selected'" : "")>Masculino</option>
-                                    <option value="false" @((Model.bit_Sexo == false) ? "selected='selected'" : "")>Femenino</option>
+                                    <option value="true" @((Model.bit_Sexo != null ? ((Model.bit_Sexo == true) ? "selected='selected'" : "") : ""))>Masculino</option>
+                                    <option value="false" @((Model.bit_Sexo != null ? ((Model.bit_Sexo == false) ? "selected='selected'" : "") : ""))>Femenino</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -78,6 +78,15 @@
                                     <input type="checkbox" name="int_Estado" class="custom-control-input" id="exampleCheck1" value="1" @((Model.int_Estado == 1) ? "checked='checked'" : "")>
                                     <label class="custom-control-label" for="exampleCheck1">Activo</label>
                                 </div>
+                            </div>
+                            <hr />
+                            <div class="form-group">
+                                <label for="drpSociedad">Sociedad</label>
+                                @Html.DropDownListFor(m => m.IdSociedad, ViewData["Sociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
+                            </div>
+                            <div class="form-group">
+                                <label for="drpSociedad">Perfil</label>
+                                @Html.DropDownListFor(m => m.CodigoPerfil, ViewData["Perfiles"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -116,15 +125,16 @@
 @*import { compareByFieldSpec } from "@fullcalendar/core";*@
 
         function validateForm() {
-            var nombres = document.forms["frmUsuario"]["txtNombre"].value;
-            var apellidos = document.forms["frmUsuario"]["txtApellidos"].value.trim();
-            var dni = document.forms["frmUsuario"]["txtDNI"].value.trim();
-            var nacimiento = document.forms["frmUsuario"]["txtFechaNacimiento"].value.trim();
-            var mail = document.forms["frmUsuario"]["txtMail"].value.trim();
-            var contrase = document.forms["frmUsuario"]["txtPassword"].value.trim();
+            var nombres = document.forms["FormEditar"]["txtNombre"].value;
+            var apellidos = document.forms["FormEditar"]["txtApellidos"].value.trim();
+            var dni = document.forms["FormEditar"]["txtDNI"].value.trim();
+            var nacimiento = document.forms["FormEditar"]["txtFechaNacimiento"].value.trim();
+            var mail = document.forms["FormEditar"]["txtMail"].value.trim();
+            var contrase = document.forms["FormEditar"]["txtPassword"].value.trim();
+            var sexo = document.getElementById("cod_sexo").value;
             //---
 
-            if (nombres == "" && apellidos == "" && dni == "" && nacimiento == "" && mail == "" && contrase == "" ) {
+            if (nombres == "" && apellidos == "" && dni == "" && nacimiento == "" && mail == "" && contrase == "" && sexo == "default" ) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Mensaje',

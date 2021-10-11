@@ -37,6 +37,8 @@ namespace AccesoDatos
                     oEnListaUsuario.var_Password = oDataReader["var_Password"].ToString();
                     oEnListaUsuario.dtm_FechaNacimiento = Convert.ToDateTime(oDataReader["dtm_FechaNacimiento"]);
                     oEnListaUsuario.var_DNI = oDataReader["var_DNI"].ToString();
+                    oEnListaUsuario.IdSociedad = oDataReader["IdSociedad"] == DBNull.Value ? "" : oDataReader["IdSociedad"].ToString();
+                    oEnListaUsuario.CodigoPerfil = oDataReader["CodigoPerfil"] == DBNull.Value ? "" : oDataReader["CodigoPerfil"].ToString();
 
                     oListaUsuario.Add(oEnListaUsuario);
                 }
@@ -74,7 +76,8 @@ namespace AccesoDatos
                     oENUsuario.var_Password = oDataReader["var_Password"].ToString();
                     oENUsuario.dtm_FechaNacimiento = Convert.ToDateTime(oDataReader["dtm_FechaNacimiento"]);
                     oENUsuario.var_DNI = oDataReader["var_DNI"].ToString();
-
+                    oENUsuario.IdSociedad = oDataReader["IdSociedad"] == DBNull.Value ? "" : oDataReader["IdSociedad"].ToString();
+                    oENUsuario.CodigoPerfil = oDataReader["CodigoPerfil"] == DBNull.Value ? "" : oDataReader["CodigoPerfil"].ToString();
 
                 }
                 return oENUsuario;
@@ -111,7 +114,9 @@ namespace AccesoDatos
                     oENUsuario.var_Password = oDataReader["var_Password"].ToString();
                     oENUsuario.dtm_FechaNacimiento = Convert.ToDateTime(oDataReader["dtm_FechaNacimiento"]);
                     oENUsuario.var_DNI = oDataReader["var_DNI"].ToString();
-  
+                    oENUsuario.IdSociedad = oDataReader["IdSociedad"] == DBNull.Value ? "" : oDataReader["IdSociedad"].ToString();
+                    oENUsuario.CodigoPerfil = oDataReader["CodigoPerfil"] == DBNull.Value ? "" : oDataReader["CodigoPerfil"].ToString();
+
                 }
                 return oENUsuario;
             }
@@ -140,6 +145,8 @@ namespace AccesoDatos
                 GenericDataAccess.AgregarParametro(oCommand, "@var_Password", oENSociedad.var_Password, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@dtm_FechaNacimiento", oENSociedad.dtm_FechaNacimiento, TipoParametro.DT, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@var_DNI", oENSociedad.var_DNI, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@var_Sociedad", oENSociedad.IdSociedad, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@var_Perfil", oENSociedad.CodigoPerfil, TipoParametro.STR, Direccion.INPUT);
                 if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
                     return true;
                 else
@@ -170,6 +177,8 @@ namespace AccesoDatos
                 GenericDataAccess.AgregarParametro(oCommand, "@var_Password", oENSociedad.var_Password, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@dtm_FechaNacimiento", oENSociedad.dtm_FechaNacimiento, TipoParametro.DT, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@var_DNI", oENSociedad.var_DNI, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@var_Sociedad", oENSociedad.IdSociedad, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@var_Perfil", oENSociedad.CodigoPerfil, TipoParametro.STR, Direccion.INPUT);
                 if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
                     return true;
                 else
