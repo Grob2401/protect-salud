@@ -78,7 +78,8 @@ namespace AccesoDatos
                     oENUsuario.var_DNI = oDataReader["var_DNI"].ToString();
                     oENUsuario.IdSociedad = oDataReader["IdSociedad"] == DBNull.Value ? "" : oDataReader["IdSociedad"].ToString();
                     oENUsuario.CodigoPerfil = oDataReader["CodigoPerfil"] == DBNull.Value ? "" : oDataReader["CodigoPerfil"].ToString();
-
+                    oENUsuario.DescripcionSociedad = oDataReader["DescripcionSociedad"] == DBNull.Value ? "" : oDataReader["DescripcionSociedad"].ToString();
+                    oENUsuario.DescripcionPerfil = oDataReader["DescripcionPerfil"] == DBNull.Value ? "" : oDataReader["DescripcionPerfil"].ToString();
                 }
                 return oENUsuario;
             }

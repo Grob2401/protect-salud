@@ -21,6 +21,10 @@ namespace Salud.Controllers
             {
                 ViewData["Seleccion"] = TempData["Seleccion"];
             }
+            else
+            {
+                ViewData["Seleccion"] = Session["SociedadUsuario"];
+            }
 
             if (TempData["mensaje"] != null)
             {

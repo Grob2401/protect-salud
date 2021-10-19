@@ -21,5 +21,7 @@ namespace Entidades
         public DateTime? dtm_FechaModificacion { get; set; }
         public string CodigoPerfil { get; set; }
         public string IdSociedad { get; set; }
+        public string DescripcionPerfil { get; set; }
+        public string DescripcionSociedad { get; set; }
     }
 }

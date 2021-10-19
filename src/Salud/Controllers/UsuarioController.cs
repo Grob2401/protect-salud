@@ -17,7 +17,7 @@ namespace Salud.Controllers
         public ActionResult Index()
         {
             ViewBag.Usuarios = LNUsuario.ObtenerTodos();
-            ViewData["Sociedades"] = new SelectList(LNSociedades.ObtenerTodos().ToList(), "IdSociedad", "RazonSocial");
+            ViewData["Sociedades"] = new SelectList(LNSociedades.ObtenerTodos().ToList(), "IdSociedad", "RazonSocial", Session["SociedadUsuario"]);
             ViewData["Perfiles"] = new SelectList(LNPerfiles.ObtenerTodos("").ToList(), "CodigoPerfil", "DescripcionPerfil");
             return View();
         }
@@ -43,6 +43,7 @@ namespace Salud.Controllers
                         return View("Login");
                     Session["NombreUsuario"] = string.Concat(usuarioLogin.var_Nombre, " ", usuarioLogin.var_Apellidos);
                     Session["SociedadUsuario"] = usuarioLogin.IdSociedad;
+                    Session["DescripcionSociedadUsuario"] = usuarioLogin.DescripcionSociedad;
                     return RedirectToAction("Index","Home");
                 }
             }
