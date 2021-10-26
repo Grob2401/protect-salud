@@ -45,8 +45,18 @@ namespace Salud.Controllers
             }
             else
             {
-                var lstCanales = LNCanal.ObtenerTodos("0");
-                ViewData["Canales"] = lstCanales;
+                if (Session["SociedadUsuario"] != null)
+                {
+                    var sociedadSesion = Session["SociedadUsuario"];
+                    var lstCanales = LNCanal.ObtenerTodos(sociedadSesion.ToString());
+                    ViewData["Canales"] = lstCanales;
+                }
+                else
+                {
+                    var lstCanales = LNCanal.ObtenerTodos("0");
+                    ViewData["Canales"] = lstCanales;
+                }
+                
             }
 
             return View();

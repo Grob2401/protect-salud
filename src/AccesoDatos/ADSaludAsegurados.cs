@@ -780,7 +780,7 @@ namespace AccesoDatos
             List<ENSaludAseguradosContratosPagos> oListaSaludAsegurados = new List<ENSaludAseguradosContratosPagos>();
             try
             {
-                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_AseguradosObtenerCuotasNoPagadas");
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_AseguradosObtenerCuotasNoPagadas_V2");
                 GenericDataAccess.AgregarParametro(oCommand, "@CodigoTitular", codTitular == null ? "" : codTitular, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodigoCliente", codCliente == null ? "" : codCliente, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@Categoria", categoria == null ? "" : categoria, TipoParametro.STR, Direccion.INPUT);
@@ -842,7 +842,7 @@ namespace AccesoDatos
             List<ENSaludAseguradosContratosPagos> oListaSaludAsegurados = new List<ENSaludAseguradosContratosPagos>();
             try
             {
-                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_AseguradosObtenerTodasCuotas");
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_AseguradosObtenerTodasCuotas_V2");
                 GenericDataAccess.AgregarParametro(oCommand, "@CodigoTitular", codTitular == null ? "" : codTitular, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodigoCliente", codCliente == null ? "" : codCliente, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@Categoria", categoria == null ? "" : categoria, TipoParametro.STR, Direccion.INPUT);

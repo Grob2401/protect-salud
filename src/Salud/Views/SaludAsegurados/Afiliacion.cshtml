@@ -250,7 +250,7 @@
                     const aseguradosTodos = asegurados.forEach(asegurado => {
                         //console.log(asegurado.CodigoCliente);
                         table.row.add([
-                            `<img src='~/Images/plus.jpg' />`,
+                            `<img src='../Images/plus.jpg' />`,
                             asegurado.CodigoCliente,
                             asegurado.CodigoTitular,
                             asegurado.ApellidosNombres,
@@ -287,7 +287,7 @@
         $("body").on("click", "img[src*='plus.jpg']", function () {
             $("img[src*='minus.jpg']").click();
             //$('table#dglista tr#ad').remove();
-            $(this).attr("src", "Images/plus.jpg");
+            $(this).attr("src", "../Images/plus.jpg");
             $(this).closest("tr").after("<tr id='ad'><td></td><td id='tab' colspan = '999'>" + $(this).next().html() + "</td></tr>");
             var row = $(this).closest("tr");
             var url_method = $('#soloAsegurados_ruta').val();
@@ -295,7 +295,7 @@
             var Codcliente = row.find("td:eq(1)").text();
             var Codtitular = row.find("td:eq(2)").text();
 
-            $(this).attr("src", "Images/minus.jpg");
+            $(this).attr("src", "../Images/minus.jpg");
             $.ajax({
                 type: "GET",
                 url: url_method,
@@ -318,7 +318,7 @@
 
         //Assign Click event to Minus Image.
         $("body").on("click", "img[src*='minus.jpg']", function () {
-            $(this).attr("src", "Images/plus.jpg");
+            $(this).attr("src", "../Images/plus.jpg");
             $(this).closest("tr").next().remove();
         });
 

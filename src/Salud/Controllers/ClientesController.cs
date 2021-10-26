@@ -126,7 +126,7 @@ namespace Salud.Controllers
                 ViewBag.CodigoEjecutivo = new SelectList(LNSCTREjecutivos.ObtenerTodos().ToList(), "CodigoEjecutivo", "NombreEjecutivo", VMCliente.CodigoEjecutivo);
                 ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente", VMCliente.CodigoTipoCliente);
                 ViewBag.CodigoDocumentoIdentidad = new SelectList(LNTipoDocumentoIdentidad.ObtenerTodos().ToList(), "CodigoDocumentoIdentidad", "DescripcionDocumentoIdentidad", VMCliente.CodigoDocumentoIdentidad);
-                ViewBag.Tarjetas = LNClientes.ObtenerTarjetas(id);
+                ViewBag.Tarjetas = LNClientes.ObtenerTarjetas(id).OrderByDescending(x => x.IdClienteTarjetas).ToList();
                 ViewBag.MarcaTarjetas = new SelectList(LNMarcaTarjeta.ObtenerTodos().ToList(), "CodigoMarcaTarjeta", "DescripcionMarcaTarjeta");
                 ViewBag.CodigoClienteID = id;
                 //ViewBag.CodigoVendedor = new SelectList(LNTipoDocumentoIdentidad.ObtenerTodos().ToList(), "CodigoDocumentoIdentidad", "DescripcionDocumentoIdentidad");

@@ -88,7 +88,8 @@
                                     <hr />
                                     <div class="form-group">
                                         <label for="drpSociedad">Sociedad</label>
-                                        @Html.DropDownListFor(m => m.IdSociedad, ViewData["Sociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single" })
+                                        @Html.DropDownList("Sociedad", ViewData["Sociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single", @style = "width:100%", @disabled = "disabled" })
+                                        @Html.HiddenFor(m => m.IdSociedad, new { id = "SociedadID", Value = @Session["SociedadUsuario"] })
                                     </div>
                                     <div class="form-group">
                                         <label for="drpSociedad">Perfil</label>

@@ -1857,13 +1857,16 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\01.png" />
+    <Content Include="Images\02.PNG" />
+    <Content Include="Images\03.PNG" />
+    <Content Include="Images\04.PNG" />
     <Content Include="Images\favicon.png" />
     <Content Include="Images\loading.gif" />
     <Content Include="Images\metodoPago.PNG" />
     <Content Include="Images\minus.jpg" />
     <Content Include="Images\plus.jpg" />
     <Content Include="Images\spinner.gif" />
-    <Content Include="Images\visa.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\dist\css\adminlte.css.map" />

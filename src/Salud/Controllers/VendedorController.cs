@@ -46,13 +46,25 @@ namespace Salud.Controllers
             }
             else
             {
-                var lstVendedores = LNVendedor.ObtenerTodos("0");
-                ViewData["Vendedores"] = lstVendedores;
+                
+                if (Session["SociedadUsuario"] != null)
+                {
+                    var sociedadSesion = Session["SociedadUsuario"];
+                    var lstVendedores = LNVendedor.ObtenerTodos(sociedadSesion.ToString());
+                    ViewData["Vendedores"] = lstVendedores;
+                }
+                else
+                {
+                    var lstVendedores = LNVendedor.ObtenerTodos("0");
+                    ViewData["Vendedores"] = lstVendedores;
+                }
+
             }
 
             return View();
         }
 
+        [SessionExpire]
         [HttpGet]
         public ActionResult GetLista(string slcSociedad, string mensaje)
         {
@@ -75,7 +87,7 @@ namespace Salud.Controllers
                 {
                     valor = pla.IdSociedad;
                     ModelState.Clear();
-                    TempData["Seleccion"] = valor;
+                    TempData["Seleccion"] = Session["SociedadUsuario"].ToString();
                     TempData["mensaje"] = "Vendedor registrado";
                 }
                 return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Vendedor registrado" });
@@ -87,7 +99,7 @@ namespace Salud.Controllers
                 {
                     valor = pla.IdSociedad;
                     ModelState.Clear();
-                    TempData["Seleccion"] = valor;
+                    TempData["Seleccion"] = Session["SociedadUsuario"].ToString();
                     TempData["mensaje"] = "Vendedor modificado";
                 }
                 return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Vendedor modificado" });
@@ -148,8 +160,20 @@ namespace Salud.Controllers
             }
             else
             {
-                var lstVendedores = LNVendedor.ObtenerTodos("0");
-                ViewData["Vendedores"] = lstVendedores;
+
+
+                if (Session["SociedadUsuario"] != null)
+                {
+                    var sociedadSesion = Session["SociedadUsuario"];
+                    var lstVendedores = LNVendedor.ObtenerTodos(sociedadSesion.ToString());
+                    ViewData["Vendedores"] = lstVendedores;
+                }
+                else
+                {
+                    var lstVendedores = LNVendedor.ObtenerTodos("0");
+                    ViewData["Vendedores"] = lstVendedores;
+                }
+
             }
 
             if (TempData["Asignados"] != null)
@@ -158,8 +182,21 @@ namespace Salud.Controllers
             }
             else
             {
-                var lstVendedoresAsignados = LNVendedor.ObtenerAsignados("0");
-                ViewData["Asignados"] = lstVendedoresAsignados;
+
+                if (Session["SociedadUsuario"] != null)
+                {
+                    var sociedadSesion = Session["SociedadUsuario"];
+                    var lstVendedoresAsignados = LNVendedor.ObtenerAsignados(sociedadSesion.ToString());
+                    ViewData["Asignados"] = lstVendedoresAsignados;
+                }
+                else
+                {
+                    var lstVendedoresAsignados = LNVendedor.ObtenerAsignados("0");
+                    ViewData["Asignados"] = lstVendedoresAsignados;
+                }
+
+
+                
             }
 
             return View();
