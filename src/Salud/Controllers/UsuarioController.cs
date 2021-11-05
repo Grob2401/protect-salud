@@ -41,6 +41,7 @@ namespace Salud.Controllers
                     string decrypt = pwd.Decrypt(usuarioLogin.var_Password);
                     if (decrypt != password)
                         return View("Login");
+                    Session["IdUsuario"] = usuarioLogin.int_IdUsuario;
                     Session["NombreUsuario"] = string.Concat(usuarioLogin.var_Nombre, " ", usuarioLogin.var_Apellidos);
                     Session["SociedadUsuario"] = usuarioLogin.IdSociedad;
                     Session["DescripcionSociedadUsuario"] = usuarioLogin.DescripcionSociedad;

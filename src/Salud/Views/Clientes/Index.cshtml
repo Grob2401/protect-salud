@@ -69,6 +69,8 @@
                             </div>
                         </div>
                     </div>
+                    <hr />
+                    <label class="text-primary" style="font-size:9pt">Cantidad de registros disponibles @Convert.ToInt32(ViewData["todos"])</label>
 
                     <table id="dglista" class="table table-bordered table-hover">
                         <thead class="bg-gradient-lightblue">
@@ -82,12 +84,12 @@
                                 <th>Dirección</th>
                                 <th>Teléfono</th>
                                 @*<th>Contacto</th>
-                                    <th>Email</th>*@
+                        <th>Email</th>*@
                                 <th>TipoCliente</th>
                                 @*<th>Corredor</th>
-                                    <th>Ejecutivo</th>*@
-                                <th style="width: 10%"></th>
-                                <th style="width: 10%"></th>
+                        <th>Ejecutivo</th>*@
+                                <th style="width: 10%">Editar</th>
+                                <th style="width: 10%">Eliminar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -124,6 +126,22 @@
                         </tbody>
 
                     </table>
+                    <hr />
+                    <ul class="pagination">
+                        <li class="page-item success">
+                            <a class="page-link" href="@Url.Action("Index", new { page = 1 })">Primero</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["pageCount"]) - 1 })"><i class="fa fa-arrow-left text-primary"></i></a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["pageCount"]) + 1 })"><i class="fa fa-arrow-right text-primary"></i></a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["ultimo"]) + 1 })">Último</a>
+                        </li>
+                    </ul>
+
                 }
             </div>
             <!-- /.card-body -->
@@ -163,17 +181,18 @@
             //console.log(valor);
         }
 
-
         $(function () {
 
             $('#dglista').DataTable({
-                "paging": true,
+                "scrollY": "450px",
+                "scrollCollapse": true,
+                "paging": false,
                 "lengthChange": false,
                 "ordering": true,
-                "info": true,
+                "info": false,
                 "autoWidth": false,
                 "responsive": true,
-                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                //"lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
                 pageLength: 10,
                 "searching": false,
                 "language": {

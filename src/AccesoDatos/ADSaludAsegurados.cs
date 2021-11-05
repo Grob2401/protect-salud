@@ -1004,5 +1004,38 @@ namespace AccesoDatos
             }            
         }
 
+        public bool DarBaja(string fechaBaja, string codigoCliente, string codigoTitular, string codigoCategoria, string codigoContrato, string usuario,string motivo, string motivoOtro)
+        {
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Afl_AseguradosMantenimientoBaja_V3");
+                GenericDataAccess.AgregarParametro(oCommand, "@FchBaja", fechaBaja, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodCliente", codigoCliente, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodTitular", codigoTitular, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodCategoria", codigoCategoria, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodContrato", codigoContrato, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodPlanSalud", "", TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@TipoMov", "B", TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@xSql", "", TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@sWhere", "", TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@AppUserCodigo", usuario, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoMotivoBaja", motivo, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@OtroMotivoBaja", motivoOtro, TipoParametro.STR, Direccion.INPUT);
+                if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Excepciones.ManejoExcepciones(ex);
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
     }
 }

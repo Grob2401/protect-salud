@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ADMotivoBaja.cs" />
     <Compile Include="ADCanal.cs" />
     <Compile Include="ADCanales.cs" />
     <Compile Include="ADCIUU.cs" />

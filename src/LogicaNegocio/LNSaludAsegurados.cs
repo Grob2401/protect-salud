@@ -78,6 +78,11 @@ namespace LogicaNegocio
         {
             return (new ADSaludAsegurados()).WebService_Log(cliente, titular, categoria, ws_metodo, ws_request, ws_response, response_codigo, response_descripcion, usuario);
         }
+
+        public static bool DarBaja(string fechaBaja, string codigoCliente, string codigoTitular, string codigoCategoria, string codigoContrato, string usuario, string motivo, string motivoOtro)
+        {
+            return (new ADSaludAsegurados()).DarBaja(fechaBaja, codigoCliente, codigoTitular, codigoCategoria, codigoContrato, usuario, motivo, motivoOtro);
+        }
     }
 }
 

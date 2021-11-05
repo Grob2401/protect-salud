@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ENBanco.cs" />
+    <Compile Include="ENMotivoBaja.cs" />
     <Compile Include="ENCanalesVendedores.cs" />
     <Compile Include="ENMarcaTarjeta.cs" />
     <Compile Include="ENRuta.cs" />

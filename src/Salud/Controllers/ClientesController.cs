@@ -19,10 +19,25 @@ namespace Salud.Controllers
 
         // GET: Clientes
         [SessionExpire]
-        public ActionResult Index()
+        public ActionResult Index(int page = 0)
         {
+
+            if (page != 0)
+            {
+                ViewData["pageCount"] = page;
+            }
+
+            if (ViewData["pageCount"]  == null && page == 0)
+            {
+                ViewData["pageCount"] = 1;
+                page = 1;
+            }
+
+            var contador = LNClientes.ObtenerTodos(1, 0, "", "").Count;
+            ViewData["todos"] = contador;
+            ViewData["ultimo"] = contador / 100;
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
-            ViewBag.Clientes = LNClientes.ObtenerTodos(1,100,"","");
+            ViewBag.Clientes = LNClientes.ObtenerTodos(page,100,"","");
             ViewBag.IdNombreTabla = "01";
             //var VMCliente = new List<ENClientes>();int page, int rows, string type, string Keywords
             //var VMUbigeo = new List<ENUbigeoCompleto>();

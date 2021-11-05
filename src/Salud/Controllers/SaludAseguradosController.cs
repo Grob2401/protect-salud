@@ -29,6 +29,8 @@ namespace Salud.Controllers
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             ViewBag.IdNombreTabla = "01";
             ViewBag.TipoDocumentoPago = new SelectList(LNTipoDocumentoPago.ObtenerTodos().ToList(), "CodigoTipoDocumentoPago", "DescripcionTipoDocumentoPago");
+            ViewBag.MotivosBaja = new SelectList(LNMotivoBaja.ObtenerTodos().ToList(), "CodigoMotivoBaja", "Descripcion");
+
             TempData["ASEGURADOS"] = ASEGURADOS;
             return View();
         }
@@ -190,6 +192,7 @@ namespace Salud.Controllers
 
             oENClientes = LNClientes.ObtenerTodos().Find(smodel => smodel.CodigoCliente == CodigoCLiente);
             oENSaludContratos = LNSaludContratos.ObtenerTodos(CodigoCLiente).Find(smodel => smodel.CodigoContrato == CodigoContrato);
+            ViewBag.MotivosBaja = new SelectList(LNMotivoBaja.ObtenerTodos().ToList(), "CodigoMotivoBaja", "Descripcion");
             ViewBag.CodigoContrato = new SelectList(LNSaludContratos.ObtenerTodos(CodigoCLiente).ToList(), "CodigoContrato", "CodigoContrato", oENSaludContratos.CodigoContrato);
             oContratoViewModel.VMCliente.CodigoCliente = oENClientes.CodigoCliente;
             oContratoViewModel.VMCliente.RazonSocial = oENClientes.RazonSocial;
@@ -447,6 +450,47 @@ namespace Salud.Controllers
                 TempData["MensajeAgregarAFiliado"] = "AVISO : " + resultados[0].ToString();
                 return RedirectToAction("Crear", new { idcliente = obj.CodigoCliente, idtitular = obj.CodigoTitular, idcategoria = obj.Categoria, idcontrato = obj.CodigoContrato });
             }
+        }
+
+        [SessionExpire]
+        [HttpPost]
+        public ActionResult Baja(string fechaBaja, string codigoCliente, string codigoTitular, string codigoCategoria, string codigoContrato, string motivo, string motivoOtro)
+        {
+            var format = "yyyy-MM-dd";
+            //------------------------
+            var fecbaja = fechaBaja.Split('-');
+            var anio = Convert.ToInt32(fecbaja[0]);
+            var mes = Convert.ToInt32(fecbaja[1]);
+            var dia = Convert.ToInt32(fecbaja[2]);
+            DateTime fecbajaFormat = new DateTime(anio, mes, dia);
+            var fechaformateada = fecbajaFormat.ToString("yyyy-MM-dd");
+            var fechaBajaUlt = DateTime.ParseExact(fechaformateada, format, CultureInfo.InvariantCulture);
+            //------------------------
+
+            string usuario = "";
+
+            if (Session["IdUsuario"] != null)
+            {
+               usuario = Session["IdUsuario"].ToString();
+            }
+            
+
+            //Session["IdUsuario"]
+            bool resultado = LNSaludAsegurados.DarBaja(fechaformateada, codigoCliente,codigoTitular,codigoCategoria,codigoContrato, usuario, motivo, motivoOtro);
+
+            if (resultado == true)
+            {
+                TempData["MensajeAgregarAFiliado"] = "El asegurado fue dado de baja.";
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+                //return RedirectToAction("Mantenimiento", new { CodigoCLiente = codigoCliente, CodigoTitular = codigoTitular, CodigoContrato = codigoContrato });
+            }
+            else
+            {
+                TempData["MensajeAgregarAFiliado"] = "Ocurrió un error, intente nuevamente.";
+                return Json(resultado, JsonRequestBehavior.AllowGet);
+                //return RedirectToAction("Mantenimiento", new { CodigoCLiente = codigoCliente, CodigoTitular = codigoTitular, CodigoContrato = codigoContrato });
+            }
+
         }
 
 
