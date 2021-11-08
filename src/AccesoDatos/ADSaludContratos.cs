@@ -12,6 +12,29 @@ namespace AccesoDatos
         public String dataProviderName = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ProviderName;
         public String connectionString = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ConnectionString;
 
+
+        public int Cantidad()
+        {
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenSaludContratos_count");
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
+                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
+                int cantidadAsegurados = -1;
+                if (oDataReader.Read() && !int.TryParse(oDataReader["Contratos"].ToString(), out cantidadAsegurados)) cantidadAsegurados = -1;
+                return cantidadAsegurados;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
         public List<ENSaludContratos> ObtenerTodos(string CodigoCliente)
         {
             DbCommand oCommand = null;
@@ -67,6 +90,7 @@ namespace AccesoDatos
                 while (oDataReader.Read())
                 {
                     ENSaludContratos oEnListaSaludContratos = new ENSaludContratos();
+                    oEnListaSaludContratos.RowNumber = Convert.ToInt32(oDataReader["RowNumber"]);
                     oEnListaSaludContratos.CodigoCliente = oDataReader["CodigoCliente"].ToString();
                     oEnListaSaludContratos.CodigoContrato = oDataReader["CodigoContrato"].ToString();
                     oEnListaSaludContratos.CodigoCorredor = oDataReader["CodigoCorredor"].ToString();

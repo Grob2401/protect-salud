@@ -165,17 +165,16 @@ namespace AccesoDatos
             }
         }
 
-        public int Cantidad(string keywords)
+        public int Cantidad()
         {
             DbCommand oCommand = null;
             try
             {
                 oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenSaludAsegurados_count");
-                if (keywords != null) GenericDataAccess.AgregarParametro(oCommand, "@keywords", keywords, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
                 DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
                 int cantidadAsegurados = -1;
-                if (oDataReader.Read() && !int.TryParse(oDataReader["Cantidad"].ToString(), out cantidadAsegurados)) cantidadAsegurados = -1;
+                if (oDataReader.Read() && !int.TryParse(oDataReader["SaludAsegurados"].ToString(), out cantidadAsegurados)) cantidadAsegurados = -1;
                 return cantidadAsegurados;
             }
             catch (Exception ex)
@@ -624,6 +623,7 @@ namespace AccesoDatos
                             break;
 
                         default:
+                            oEnListaSaludAsegurados.RowNumber = Convert.ToInt32(oDataReader["RowNumber"]);
                             oEnListaSaludAsegurados.CodigoCliente = oDataReader["CodCliente"].ToString();
                             oEnListaSaludAsegurados.CodigoTitular = oDataReader["CodTitular"].ToString();
                             oEnListaSaludAsegurados.Categoria = oDataReader["CodCategoria"].ToString();

@@ -10,6 +10,7 @@ namespace Entidades
 
     public class ENClientes
     {
+        public int RowNumber { get; set; }
         public string CodigoCliente { get; set; }
         public string CodigoCorredor { get; set; }
         public string DescripcionCorredor { get; set; }

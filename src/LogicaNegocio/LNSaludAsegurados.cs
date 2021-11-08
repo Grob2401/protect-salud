@@ -14,9 +14,9 @@ namespace LogicaNegocio
             return (new ADSaludAsegurados()).ObtenerTodos(page, rowsPerPage, keywords);
         }
 
-        public static int Cantidad(string keywords)
+        public static int Cantidad()
         {
-            return (new ADSaludAsegurados()).Cantidad(keywords ?? string.Empty);
+            return (new ADSaludAsegurados()).Cantidad();
         }
 
         public static string Insertar(ENSaludAsegurados oENSaludAsegurados,string ope)

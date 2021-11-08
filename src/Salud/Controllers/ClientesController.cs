@@ -33,9 +33,10 @@ namespace Salud.Controllers
                 page = 1;
             }
 
-            var contador = LNClientes.ObtenerTodos(1, 0, "", "").Count;
+            var contador = LNClientes.Cantidad();
             ViewData["todos"] = contador;
             ViewData["ultimo"] = contador / 100;
+
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             ViewBag.Clientes = LNClientes.ObtenerTodos(page,100,"","");
             ViewBag.IdNombreTabla = "01";

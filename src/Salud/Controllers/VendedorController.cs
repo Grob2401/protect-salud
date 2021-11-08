@@ -114,7 +114,16 @@ namespace Salud.Controllers
             var valor = "";
             if (LNVendedor.InsertarComision(vcomision))
             {
-                valor = Session["Seleccion"].ToString();
+
+                if (ViewData["Seleccion"] != null)
+                {
+                    valor = ViewData["Seleccion"].ToString();
+                }
+                else
+                {
+                    valor = Session["SociedadUsuario"].ToString();
+                }
+                
                 ModelState.Clear();
             }
             return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Comisión Asignada" });

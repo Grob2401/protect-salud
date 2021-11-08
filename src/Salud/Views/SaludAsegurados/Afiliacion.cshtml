@@ -1,7 +1,7 @@
 ﻿@using Entidades;
 @model Salud.ViewModels.VMAfiliacion
 @{
-    ViewBag.Title = "Afiliaciones Regulares";
+    ViewBag.Title = "Afiliaciones";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Styles {
@@ -22,7 +22,7 @@
                 <div class="card-header">
                     <div class="col">
                         <div class="text-center">
-                            <h5 class="card-title"><i class="fas fa-building text-primary"></i>&nbsp;&nbsp;Cliente Contrato</h5>
+                            <h5 class="card-title"><i class="fas fa-building text-primary"></i>&nbsp;&nbsp;Cliente</h5>
                         </div>
                     </div>
                     <div class="card-tools">
@@ -57,16 +57,16 @@
                         <div Class="col-md-2">
                             <div Class="form-group">
                                 <Label for="txtInicioVigencia">InicioVigencia</Label>
-                                @*@Html.TextBoxFor(model => model.InicioVigencia, new { id = "txtInicioVigencia", @class = "form-control form-control-sm", @placeholder = "" })*@
-                                @Html.TextBox("InicioVigencia", "", new { type = "date", id = "txtInicioVigencia", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+                                @Html.TextBoxFor(model => model.VMContrato.InicioVigencia, new { type = "date", id = "txtInicioVigencia", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                                @*@Html.TextBox("InicioVigencia", "", new { type = "date", id = "txtInicioVigencia", @class = "form-control form-control-sm float-right", @readonly = "readonly" })*@
 
                             </div>
                         </div>
                         <div Class="col-md-2">
                             <div Class="form-group">
                                 <Label for="txtFinVigencia">FinVigencia</Label>
-                                @*@Html.TextBoxFor(model => model.FinVigencia, new { id = "txtFinVigencia", @class = "form-control form-control-sm", @placeholder = "" })*@
-                                @Html.TextBox("FinVigencia", "", new { type = "date", id = "txtFinVigencia", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+                                @Html.TextBoxFor(model => model.VMContrato.FinVigencia, new { type = "date", id = "txtFinVigencia", @class = "form-control form-control-sm", @placeholder = "", @readonly = "readonly" })
+                                @*@Html.TextBox("FinVigencia", "", new { type = "date", id = "txtFinVigencia", @class = "form-control form-control-sm float-right", @readonly = "readonly" })*@
                             </div>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
                             <button id="btnAgregarAfiliado" onclick="goMantenimiento();" class="btn btn-default btn-sm bg-gradient-primary" data-request-url="@Url.Action("Mantenimiento", "SaludAsegurados")">
                                 <i class="fas fa-user-plus text-warning"></i>&nbsp;&nbsp; Nuevo Titular
                             </button>
-                            <button onclick="getSAsegurados();" class="btn btn-default btn-sm bg-gradient-success">
+                            <button onclick="getSAsegurados();" class="btn btn-default btn-sm bg-gradient-success" hidden>
                                 <i class="fas fa-file-excel text-warning"></i>&nbsp;&nbsp;Carga Masiva
                             </button>
                         </div>
@@ -150,7 +150,7 @@
         </script>
     }
 
-<script>
+    <script>
         $(function () {
             var tablaLista = $('#dglistaAsegurados').DataTable({
                 destroy: true,
@@ -236,14 +236,15 @@
                 success: function (r) {
                     var dataparseada = JSON.parse(r);
                     var datos = [...dataparseada];
-                    console.log(datos);
+                    //console.log(datos);
 
-                    var IniVigFormato = $.datepicker.formatDate('yy-mm-dd', new Date(Date(dataparseada[0])));
-                    var FinVigFormato = $.datepicker.formatDate('yy-mm-dd', new Date(Date(dataparseada[1])));
+                    var IniVigFormato = transformaFecha(dataparseada[0]);
+                    var FinVigFormato = transformaFecha(dataparseada[1]);
+
+                    console.log(IniVigFormato);
 
                     IniVigencia.value = IniVigFormato;
                     FinVigencia.value = FinVigFormato;
-
 
                     const asegurados = dataparseada[2];
 
@@ -282,7 +283,29 @@
                 //console.log(a);
             }
             return value;
+    }
+
+    function transformaFecha(fec)
+    {
+        var dateString = fec.substr(6);
+        var currentTime = new Date(parseInt(dateString));
+        var month = (currentTime.getMonth() + 1).toString();
+        var day = currentTime.getDate().toString();
+        var cero = "0";
+
+        if (day.length == 1)
+        {
+            day = cero.concat(day);
         }
+
+        if (month.length == 1) {
+            month = cero.concat(month);
+        }
+
+        var year = currentTime.getFullYear();
+        var date = year + "-" + month + "-" + day //  day + "/" + month + "/" + year;
+        return date;
+    }
 
         $("body").on("click", "img[src*='plus.jpg']", function () {
             $("img[src*='minus.jpg']").click();
@@ -339,7 +362,7 @@
                 window.location.href = url + url_final;
             }
 
-            
+
     }
 
     function EditarAsegurado(e) {
@@ -355,7 +378,7 @@
 
     };
 
-</script>
+    </script>
 
 
 

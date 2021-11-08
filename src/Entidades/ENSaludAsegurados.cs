@@ -10,6 +10,8 @@ namespace Entidades
 
     public class ENSaludAsegurados
     {
+
+        public int RowNumber { get; set; }
         public string ApellidoMaterno { get; set; }
         public string ApellidoPaterno { get; set; }
         public string ApellidosNombres { get; set; }

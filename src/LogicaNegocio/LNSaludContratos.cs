@@ -9,7 +9,13 @@ namespace LogicaNegocio
 
     public class LNSaludContratos
     {
-         public static List<ENSaludContratos> ObtenerTodos(string CodigoCliente)
+
+        public static int Cantidad()
+        {
+            return new ADSaludContratos().Cantidad();
+        }
+
+        public static List<ENSaludContratos> ObtenerTodos(string CodigoCliente)
         {
                    return new ADSaludContratos().ObtenerTodos(CodigoCliente); 
         }

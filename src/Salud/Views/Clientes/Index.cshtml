@@ -96,6 +96,7 @@
                     <table id="dglista" class="table table-bordered table-hover">
                         <thead class="bg-gradient-lightblue">
                             <tr>
+                                <th>N°</th>
                                 <th>Codigo</th>
                                 <th>RUC</th>
                                 <th>Razón Social</th>
@@ -117,6 +118,7 @@
                             @foreach (ENClientes Clientes in (List<ENClientes>)ViewBag.Clientes)
                             {
                                 <tr>
+                                    <td>@Clientes.RowNumber</td>
                                     <td>@Clientes.CodigoCliente </td>
                                     <td>@Clientes.RucDni </td>
                                     <td>@Clientes.RazonSocial </td>

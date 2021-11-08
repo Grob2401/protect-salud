@@ -12,6 +12,27 @@ namespace AccesoDatos
         public String dataProviderName = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ProviderName;
         public String connectionString = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ConnectionString;
 
+        public int Cantidad()
+        {
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenClientes_count");
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
+                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
+                int cantidadAsegurados = -1;
+                if (oDataReader.Read() && !int.TryParse(oDataReader["Clientes"].ToString(), out cantidadAsegurados)) cantidadAsegurados = -1;
+                return cantidadAsegurados;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
 
         public List<ENClientes> ObtenerTodos()
         {
@@ -80,6 +101,7 @@ namespace AccesoDatos
                 while (oDataReader.Read())
                 {
                     ENClientes oEnListaClientes = new ENClientes();
+                    oEnListaClientes.RowNumber = Convert.ToInt32(oDataReader["RowNumber"]);
                     oEnListaClientes.CodigoCliente = oDataReader["CodigoCliente"] == DBNull.Value ? "" : oDataReader["CodigoCliente"].ToString();
                     oEnListaClientes.CodigoCorredor = oDataReader["CodigoCorredor"] == DBNull.Value ? "" : oDataReader["CodigoCorredor"].ToString();
                     oEnListaClientes.CodigoEjecutivo = oDataReader["CodigoEjecutivo"] == DBNull.Value ? "" : oDataReader["CodigoEjecutivo"].ToString();

@@ -14,10 +14,25 @@ namespace Salud.Controllers
     public class SaludContratosController : Controller
     {
         // GET: SaludContratos
-        public ActionResult Index()
+        public ActionResult Index(int page = 0)
         {
-            string sCodigoCliente = "";
-            ViewBag.SaludContratos = LNSaludContratos.ObtenerTodos(1, 100, "", "");//LNSaludContratos.ObtenerTodos(sCodigoCliente);
+
+            if (page != 0)
+            {
+                ViewData["pageCount"] = page;
+            }
+
+            if (ViewData["pageCount"] == null && page == 0)
+            {
+                ViewData["pageCount"] = 1;
+                page = 1;
+            }
+
+            var contador = LNSaludContratos.Cantidad();
+            ViewData["todos"] = contador;
+            ViewData["ultimo"] = contador / 100;
+
+            ViewBag.SaludContratos = LNSaludContratos.ObtenerTodos(page, 100, "", "");//LNSaludContratos.ObtenerTodos(sCodigoCliente);
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             ViewBag.IdNombreTabla = "01";
             ViewBag.NombreTabla = "RAZÓN SOCIAL";

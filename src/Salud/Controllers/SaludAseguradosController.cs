@@ -22,9 +22,24 @@ namespace Salud.Controllers
         //####################ASEGURADOS
         //##############################
         [SessionExpire]
-        public ActionResult Index()
+        public ActionResult Index(int page = 0)
         {
-            var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados(1, 100, "", "TITULARES", "", "", "", "", "");
+            if (page != 0)
+            {
+                ViewData["pageCount"] = page;
+            }
+
+            if (ViewData["pageCount"] == null && page == 0)
+            {
+                ViewData["pageCount"] = 1;
+                page = 1;
+            }            
+            
+            var contador = LNSaludAsegurados.Cantidad();
+            ViewData["todos"] = contador;
+            ViewData["ultimo"] = contador / 100;
+
+            var ASEGURADOS = LNSaludAsegurados.ObtenerSaludAsegurados(page, 100, "", "TITULARES", "", "", "", "", "").OrderBy(x => x.RowNumber).ToList();
             ViewBag.Asegurados = ASEGURADOS;
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             ViewBag.IdNombreTabla = "01";
@@ -637,19 +652,19 @@ namespace Salud.Controllers
             return Json(null, JsonRequestBehavior.AllowGet);
         }
 
-        [SessionExpire]
-        [HttpGet]
-        public ActionResult GetCantidad(AseguradoRequest aseguradoRequest = null)
-        {
-            if (aseguradoRequest != null && aseguradoRequest.IsValidForList)
-            {
-                if (!int.TryParse(ConfigurationManager.AppSettings["RowsPerPage"], out int rowsPerPage)) rowsPerPage = 0;
-                if (!int.TryParse(ConfigurationManager.AppSettings["PagesPerCatalog"], out int pagesPerCatalog)) pagesPerCatalog = 0;
-                int totalRows = LNSaludAsegurados.Cantidad(aseguradoRequest.Keywords);
-                return Json(new { totalRows, rowsPerPage, pagesPerCatalog }, JsonRequestBehavior.AllowGet);
-            }
-            return Json(null, JsonRequestBehavior.AllowGet);
-        }
+        //[SessionExpire]
+        //[HttpGet]
+        //public ActionResult GetCantidad(AseguradoRequest aseguradoRequest = null)
+        //{
+        //    if (aseguradoRequest != null && aseguradoRequest.IsValidForList)
+        //    {
+        //        if (!int.TryParse(ConfigurationManager.AppSettings["RowsPerPage"], out int rowsPerPage)) rowsPerPage = 0;
+        //        if (!int.TryParse(ConfigurationManager.AppSettings["PagesPerCatalog"], out int pagesPerCatalog)) pagesPerCatalog = 0;
+        //        int totalRows = LNSaludAsegurados.Cantidad(aseguradoRequest.Keywords);
+        //        return Json(new { totalRows, rowsPerPage, pagesPerCatalog }, JsonRequestBehavior.AllowGet);
+        //    }
+        //    return Json(null, JsonRequestBehavior.AllowGet);
+        //}
 
         [SessionExpire]
         [HttpGet]
