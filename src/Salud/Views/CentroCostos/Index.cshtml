@@ -9,57 +9,70 @@
 }
 <div class="row">
     <div class="col-12">
-        <div class="card card-primary card-outline">
+        <div class="card card-gray">
             <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-table"></i>
-                    Mantenimiento de Centro de Costos
-                </h3>
+                <div class="col text-left">
+                    <h5 class="card-title">
+                        <i class="fas fa-table"></i>
+                        Centro de Costos
+                    </h5>
+                </div>
+                <div class="col text-right">
+                    <a class="btn btn-flat bg-primary btn-sm" href='@Url.Action("Crear", "CentroCostos")'>
+                        <i class="fas fa-plus-circle text-warning"></i> Agregar
+                    </a>
+                </div>
+
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <a class="btn btn-app bg-gradient-secondary" href='@Url.Action("Crear", "CentroCostos")'>
-                    <i class="fas fa-plus-circle text-warning"></i> Agregar
-                </a>
 
-                <table id="dglista" class="table table-bordered table-hover">
-                    <thead class="bg-gradient-lightblue">
-                        <tr>
-                            <th>CodigoCliente</th>
-                            <th>RUC</th>
-                            <th>Descripcion Centro Costo</th>
-                            <th>RazonSocial</th>
-                            <th style="width: 15%"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (ENSaludCentroCostos centrocostos in (List<ENSaludCentroCostos>)ViewBag.CentroCostos)
-                        {
-                        <tr>
-                            <td>@centrocostos.CodigoCliente</td>
-                            <td>@centrocostos.RUC</td>
-                            <td>@centrocostos.DescripcionCentroCosto </td>
-                            <td>@centrocostos.RazonSocial</td>
-                            <td class="project-actions text-center">
-                                <form action='@Url.Action("Eliminar", "CentroCostos", new {id = centrocostos.CodigoCentroCosto,idcliente=centrocostos.CodigoCliente})' method="POST"
-                                      onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
-                                    @Html.AntiForgeryToken()
-                                    <div class="text-center" role="group">
-                                        <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "CentroCostos", new {id = centrocostos.CodigoCentroCosto,idcliente=centrocostos.CodigoCliente})'>
-                                            <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;Editar
-                                        </a>
+                <div class="table-responsive">
+
+                    <table id="dglista" class="table table-bordered table-hover">
+                        <thead class="bg-primary">
+                            <tr>
+                                <th>Cliente</th>
+                                <th>RUC</th>
+                                <th>Centro Costo</th>
+                                <th>Razon Social</th>
+                                <th style="width: 100px">EDITAR</th>
+                                <th style="width: 100px">ELIMINAR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (ENSaludCentroCostos centrocostos in (List<ENSaludCentroCostos>)ViewBag.CentroCostos)
+                            {
+                                <tr>
+                                    <td>@centrocostos.CodigoCliente</td>
+                                    <td>@centrocostos.RUC</td>
+                                    <td>@centrocostos.DescripcionCentroCosto </td>
+                                    <td>@centrocostos.RazonSocial</td>
+                                    <td class="project-actions text-center"  width="100px">
+                                        <form action='@Url.Action("Eliminar", "CentroCostos", new {id = centrocostos.CodigoCentroCosto,idcliente=centrocostos.CodigoCliente})' method="POST"
+                                              onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
+                                            @Html.AntiForgeryToken()
+                                            <div class="text-center" role="group">
+                                                <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "CentroCostos", new {id = centrocostos.CodigoCentroCosto,idcliente=centrocostos.CodigoCliente})'>
+                                                    <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;Editar
+                                                </a>
+                                                
+                                            </div>
+                                        </form>
+                                    </td>
+                                    <td class="project-actions text-center" width="100px">
                                         <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
                                             <i class="fas fa-times text-warning"></i>&nbsp;&nbsp;Eliminar
                                         </button>
-                                    </div>
-                                </form>
+                                    </td>  
+                                </tr>
+                            }
+                        </tbody>
 
-                            </td>
-                        </tr>
-                        }
-                    </tbody>
+                    </table>
 
-                </table>
+                </div>
+
             </div>
             <!-- /.card-body -->
         </div>
@@ -82,8 +95,8 @@
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
-                "responsive": true,
-                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                "responsive": false,
+                "lengthMenu": [[10, 50, -1], [10, 50, "Todos"]],
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }

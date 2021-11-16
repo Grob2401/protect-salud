@@ -41,96 +41,88 @@
     @using (Html.BeginForm("GetLista", "Canal", FormMethod.Get, new { id = "Form1", name = "Form1" }))
     {
 
-    <div class="row">
-        <div class="col col-md-2">
-            <div class="col-md-12">
-                <div class="card card-info card-outline shadow-lg">
+        <div class="row">
+            <div class="col col-md-12">
+                <div class="card card-gray shadow-lg">
                     <div class="card-header">
-                        <h3 class="card-title">
-                            <i class="fas fa-mouse-pointer"></i>
-                            Opciones
-                        </h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row  text-center">
-                            <div class="col-md-12">
-                                <div class="btn-group-justified">
-                                    <button type="button" id="btnCanal" class="btn btn-info btn-sm">
-                                        <i class="fa fa-plus text-warning"></i>&nbsp;&nbsp;Agregar Canal
-                                    </button>
-                                    <button type="button" id="btnCanal" class="btn btn-success btn-sm disabled" hidden>
-                                        <i class="fa fa-search text-warning"></i>&nbsp;&nbsp;Historial Comisiones por Canal
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="col text-left">
+                            <h5 class="card-title">
+                                <i class="fas fa-shopping-basket"></i>
+                                Canales
+                            </h5>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="col col-md-10">
-            <div class="card card-info card-outline shadow-lg">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-shopping-basket"></i>
-                        Lista de Canales
-                    </h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body ">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label class="text-uppercase" for="txtdesde">SOCIEDAD :&nbsp;&nbsp;</label>
-                            @Html.DropDownList("slcSociedad", ViewData["ListaSociedades"] as SelectList, new { @class = "form-control-sm js-example-basic-single", @style = "width:100%", @disabled = "disabled" })
-                            <button id="btnbuscar" type="submit" class="btn btn-dark btn-sm" disabled hidden>
-                                <i class="fa fa-search text-warning"></i>&nbsp;&nbsp;Buscar
+                        <div class="col text-right">
+                            <button type="button" id="btnCanal" class="btn btn-flat bg-info btn-sm">
+                                <i class="fa fa-plus text-warning"></i>&nbsp;&nbsp; Canal
+                            </button>
+                            <button type="button" id="btnCanal" class="btn btn-success btn-sm disabled" hidden>
+                                <i class="fa fa-search text-warning"></i>&nbsp;&nbsp;Historial Comisiones por Canal
                             </button>
                         </div>
                     </div>
-                    <table id="dglista" class="table table-bordered text-uppercase">
-                        <thead class="bg-gradient-lightblue">
-                            <tr>
-                                <th>CODIGO</th>
-                                <th>DESCRIPCION</th>
-                                <th>TIPO COMISIÓN</th>
-                                <th>COMISIÓN</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (ViewData["Canales"] != null)
-                            {
-                                foreach (ENCanales can in (List<ENCanales>)ViewData["Canales"])
-                                {
+                    <!-- /.card-header -->
+                    <div class="card-body ">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="text-uppercase" for="txtdesde">SOCIEDAD :&nbsp;&nbsp;</label>
+                                @Html.DropDownList("slcSociedad", ViewData["ListaSociedades"] as SelectList, new { @class = "form-control-sm js-example-basic-single", @style = "width:100%", @disabled = "disabled" })
+                                <button id="btnbuscar" type="submit" class="btn btn-dark btn-sm" disabled hidden>
+                                    <i class="fa fa-search text-warning"></i>&nbsp;&nbsp;Buscar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="dglista" class="table table-bordered text-uppercase">
+                                <thead class="bg-primary">
                                     <tr>
-                                        <td>@can.IDCanal </td>
-                                        <td>@can.DescripcionCanal </td>
-                                        <td>@((can.Comision_Tipo_Descripcion == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @can.Comision_Tipo_Descripcion + "</span>"))</td>
-                                        <td>@((can.Comision_Cantidad == 0) ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>" + @can.Comision_Cantidad + "</span>"))</td>
-                                        <td width="400" class="text-center">
-                                            <button type="button" class="botonedit btn btn-info btn-sm mr-3">
-                                                <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
-                                            </button>
-                                            <button type="button" class="botoncomi btn btn-primary btn-sm mr-3">
-                                                <i class="fa fa-coins text-warning"></i>&nbsp;&nbsp;Comisión
-                                            </button>
-                                            <button type="button" class="botondel btn btn-danger btn-sm">
-                                                <i class="fa fa-times text-warning"></i>&nbsp;&nbsp;Eliminar
-                                            </button>
-                                        </td>
+                                        <th>CODIGO</th>
+                                        <th>DESCRIPCION</th>
+                                        <th>TIPO COMISIÓN</th>
+                                        <th>COMISIÓN</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
                                     </tr>
-                                }
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.card-body -->
-            </div>
+                                </thead>
+                                <tbody>
+                                    @if (ViewData["Canales"] != null)
+                                    {
+                                        foreach (ENCanales can in (List<ENCanales>)ViewData["Canales"])
+                                        {
+                                            <tr>
+                                                <td>@can.IDCanal </td>
+                                                <td>@can.DescripcionCanal </td>
+                                                <td>@((can.Comision_Tipo_Descripcion == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @can.Comision_Tipo_Descripcion + "</span>"))</td>
+                                                <td>@((can.Comision_Cantidad == 0) ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>" + @can.Comision_Cantidad + "</span>"))</td>
+                                                <td width="100px" class="text-center">
+                                                    <button type="button" class="botonedit btn btn-info btn-sm">
+                                                        <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
+                                                    </button>
+                                                </td>
+                                                <td width="100px" class="text-center">
+                                                    <button type="button" class="botoncomi btn btn-primary btn-sm">
+                                                        <i class="fa fa-coins text-warning"></i>&nbsp;&nbsp;Comisión
+                                                    </button>
+                                                </td>
+                                                <td width="100px" class="text-center">
+                                                    <button type="button" class="botondel btn btn-danger btn-sm">
+                                                        <i class="fa fa-times text-warning"></i>&nbsp;&nbsp;Eliminar
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
 
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+            </div>
+            <!-- /.col -->
         </div>
-        <!-- /.col -->
-    </div>
 
     }
 </section>
@@ -153,8 +145,8 @@
                             <div class="col">
                                 <div class="form-group">
                                     <h6>Sociedad :</h6>
-                                    @Html.DropDownList("Sociedad", ViewData["ListaSociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single", @style = "width:100%", @disabled="disabled" })
-                                    @Html.HiddenFor(model => model.IdSociedad, new { id = "SociedadID", Value = @Session["SociedadUsuario"]})
+                                    @Html.DropDownList("Sociedad", ViewData["ListaSociedades"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single", @style = "width:100%", @disabled = "disabled" })
+                                    @Html.HiddenFor(model => model.IdSociedad, new { id = "SociedadID", Value = @Session["SociedadUsuario"] })
                                 </div>
                             </div>
                         </div>
@@ -167,7 +159,7 @@
                                 </div>
                                 <div class="form-group">
                                     <h6>Nombre Canal :</h6>
-                                    @Html.TextBoxFor(model => model.DescripcionCanal, new { @class = "form-control form-control-sm" , @placeholder = "Descripción de Canal" })
+                                    @Html.TextBoxFor(model => model.DescripcionCanal, new { @class = "form-control form-control-sm", @placeholder = "Descripción de Canal" })
                                     @Html.ValidationMessageFor(model => model.DescripcionCanal, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -285,7 +277,7 @@
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
-                "responsive": true,
+                "responsive": false,
                 "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
                 "pageLength": 50,
                 "language": {

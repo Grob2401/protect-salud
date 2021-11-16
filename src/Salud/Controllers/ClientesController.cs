@@ -259,11 +259,12 @@ namespace Salud.Controllers
 
         [SessionExpire]
         [HttpPost]
-        public ActionResult EliminarTarjeta(VMClientes obj)
+        public ActionResult EliminarTarjeta(string id, string codigoCliente)
         {
-            LNClientes.EliminarTarjeta(obj.Tarjeta.IdClienteTarjetas.ToString());
+            LNClientes.EliminarTarjeta(id);
             TempData["Tarjeta_Remove"] = "Tarjeta Eliminada";
-            return RedirectToAction("Crear", "Clientes", new { id = obj.Tarjeta.CodigoCliente });
+            //return RedirectToAction("Crear", "Clientes", new { id = codigoCliente });
+            return Json(codigoCliente, JsonRequestBehavior.AllowGet);
         }
 
 

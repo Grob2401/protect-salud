@@ -12,31 +12,31 @@
                     <h4 class="modal-title" id="myModalLabel">Búsqueda de Clientes</h4>
                 </div>
                 <div class="modal-body">
-                    <table id="dglista" class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Codigo</th>
-                                <th>RUC</th>
-                                <th>Razón Social</th>
-                                <th style="width: 15%"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (ENClientes Clientes in (List<ENClientes>)ViewBag.Clientes)
-                            {
+                    <div class="table-responsive">
+                        <table id="dglista" class="table table-bordered table-hover">
+                            <thead>
                                 <tr>
-                                    <td>@Clientes.CodigoCliente </td>
-                                    <td>@Clientes.RucDni </td>
-                                    <td>@Clientes.RazonSocial </td>
-                                    <td class="project-actions text-center">
-                                        <button name="BotonSeleccionar" id="Seleccionar" value="Seleccionar" class="btn btn-primary">Cotizar</button>
-                                    </td>
+                                    <th>Codigo</th>
+                                    <th>RUC</th>
+                                    <th>Razón Social</th>
+                                    <th style="width: 15%"></th>
                                 </tr>
-                            }
-                        </tbody>
-
-                    </table>
-
+                            </thead>
+                            <tbody>
+                                @foreach (ENClientes Clientes in (List<ENClientes>)ViewBag.Clientes)
+                                {
+                                    <tr>
+                                        <td>@Clientes.CodigoCliente </td>
+                                        <td>@Clientes.RucDni </td>
+                                        <td>@Clientes.RazonSocial </td>
+                                        <td class="project-actions text-center">
+                                            <button name="BotonSeleccionar" id="Seleccionar" value="Seleccionar" class="btn btn-primary">Cotizar</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -61,7 +61,7 @@
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
-                "responsive": true,
+                "responsive": false,
                 "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"

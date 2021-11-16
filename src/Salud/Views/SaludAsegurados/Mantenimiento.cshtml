@@ -138,61 +138,64 @@
                 <hr />
                 <div class="row">
                     <div Class="col-md-12">
-                        <table id="dglistaGrupoFamiliar" class="table table-bordered">
-                            <thead class="bg-gradient-lightblue">
-                                <tr>
-                                    <th hidden>CLIENTE</th>
-                                    <th hidden>TITULAR</th>
-                                    <th hidden>CATEGORIA</th>
-                                    <th>Parentesco</th>
-                                    <th>Afiliado</th>
-                                    <th>Edad</th>
-                                    <th>Fecha Alta</th>
-                                    <th>Fecha Baja</th>
-                                    <th>Estado</th>
-                                    <th>Editar</th>
-                                    <th>Baja</th>
-                                    <th hidden>Imprimir</th>
-                                    <th>SUSALUD</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (ENSaludAsegurados SaludASegurados in (List<ENSaludAsegurados>)ViewBag.Asegurados)
-                                {
+                        <div class="table-responsive">
+                            <table id="dglistaGrupoFamiliar" class="table table-bordered">
+                                <thead class="bg-primary">
                                     <tr>
-                                        <td hidden>@SaludASegurados.CodigoCliente</td>
-                                        <td hidden>@SaludASegurados.CodigoTitular</td>
-                                        <td hidden>@SaludASegurados.Categoria</td>
-                                        <td>@SaludASegurados.DescripcionParentesco</td>
-                                        <td>@SaludASegurados.ApellidosNombres</td>
-                                        <td>@SaludASegurados.Edad</td>
-                                        <td>@SaludASegurados.FechaAlta</td>
-                                        <td>@SaludASegurados.FechaBaja</td>
-                                        <td>@SaludASegurados.Estado</td>
-                                        <td class="project-actions text-center">
-                                            <button type="button" class="botonedit btn btn-info btn-sm mr-3" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
-                                                <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
-                                            </button>
-                                        </td>
-                                        <td class="project-actions text-center">
-                                            <button type="button" class="btn btn-danger btn-sm mr-3" onclick='modalBajaBoton(event);'>
-                                                <i class="fa fa-arrow-down text-warning"></i>&nbsp;&nbsp;Baja
-                                            </button>
-                                        </td>
-                                        <td class="project-actions text-center" hidden>
-                                            <button type="button" class="botoncomi btn btn-primary btn-sm mr-3">
-                                                <i class="fa fa-print text-warning"></i>&nbsp;&nbsp;Imprimir
-                                            </button>
-                                        </td>
-                                        <td class="project-actions text-center">
-                                            <button type="button" class="botonEnviar btn btn-success btn-sm mr-3" onclick='EnvioSusalud(event);' data-request-url='@Url.Action("Consumir_LPService", "SaludAsegurados")'>
-                                                <i class="fa fa-envelope text-warning"></i>&nbsp;&nbsp;Registrar
-                                            </button>
-                                        </td>
+                                        <th hidden>CLIENTE</th>
+                                        <th hidden>TITULAR</th>
+                                        <th hidden>CATEGORIA</th>
+                                        <th>Parentesco</th>
+                                        <th>Afiliado</th>
+                                        <th>Edad</th>
+                                        <th>Fecha Alta</th>
+                                        <th>Fecha Baja</th>
+                                        <th>Estado</th>
+                                        <th>Editar</th>
+                                        <th>Baja</th>
+                                        <th hidden>Imprimir</th>
+                                        <th>SUSALUD</th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach (ENSaludAsegurados SaludASegurados in (List<ENSaludAsegurados>)ViewBag.Asegurados)
+                                    {
+                                        <tr>
+                                            <td hidden>@SaludASegurados.CodigoCliente</td>
+                                            <td hidden>@SaludASegurados.CodigoTitular</td>
+                                            <td hidden>@SaludASegurados.Categoria</td>
+                                            <td>@SaludASegurados.DescripcionParentesco</td>
+                                            <td>@SaludASegurados.ApellidosNombres</td>
+                                            <td>@SaludASegurados.Edad</td>
+                                            <td>@SaludASegurados.FechaAlta</td>
+                                            <td>@SaludASegurados.FechaBaja</td>
+                                            <td>@SaludASegurados.Estado</td>
+                                            <td class="project-actions text-center">
+                                                <button type="button" class="botonedit btn btn-info btn-sm mr-3" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
+                                                    <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
+                                                </button>
+                                            </td>
+                                            <td class="project-actions text-center">
+                                                <button type="button" class="btn btn-danger btn-sm mr-3" onclick='modalBajaBoton(event);'>
+                                                    <i class="fa fa-arrow-down text-warning"></i>&nbsp;&nbsp;Baja
+                                                </button>
+                                            </td>
+                                            <td class="project-actions text-center" hidden>
+                                                <button type="button" class="botoncomi btn btn-primary btn-sm mr-3">
+                                                    <i class="fa fa-print text-warning"></i>&nbsp;&nbsp;Imprimir
+                                                </button>
+                                            </td>
+                                            <td class="project-actions text-center">
+                                                <button type="button" class="botonEnviar btn btn-success btn-sm mr-3" onclick='EnvioSusalud(event);' data-request-url='@Url.Action("Consumir_LPService", "SaludAsegurados")'>
+                                                    <i class="fa fa-envelope text-warning"></i>&nbsp;&nbsp;Registrar
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
                         <input type="hidden" name="hdClienteCod" id="hdClienteCod" />
                         <input type="hidden" name="hdTitularCod" id="hdTitularCod" />
                         <input type="hidden" name="hdCategoriaCod" id="hdCategoriaCod" />
@@ -280,7 +283,7 @@
         $(document).ready(function () {
             callChangefunc("00");
         });
-       
+
 
         $(function () {
             var tablaLista = $('#dglistaGrupoFamiliar').DataTable({
@@ -403,11 +406,11 @@
                 document.getElementById('txtMotivoTexto').value = "";
                 var sel = document.getElementById("drpMotivoBaja");
                 var text = sel.options[sel.selectedIndex].text;
-                document.getElementById('txtMotivoTexto').value = text; 
+                document.getElementById('txtMotivoTexto').value = text;
                 document.getElementById('txtMotivoTexto').readOnly = true;
             }
 
-           
+
         };
 
         function modalBajaBoton(e) {
@@ -438,16 +441,16 @@
                     console.log(TitularCod);
                     console.log(CategoriaCod);
 
-                } 
+                }
             });
-           
+
         }
 
         function Baja(e) {
             //console.log(e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling);
 
             const boton = e.target;
-            var url_method = boton.getAttribute('data-request-url');   
+            var url_method = boton.getAttribute('data-request-url');
             var CCFecha = document.getElementById('txtFechaBaja').value;
             var CCcliente = document.getElementById('hdClienteCod').value;
             var CCtitular = document.getElementById('hdTitularCod').value;
@@ -489,10 +492,10 @@
                                 title: 'ADVERTENCIA',
                                 html: "Ocurrió un error no se dió de baja al asegurado.",
                                 showCloseButton: true
-                            });           
+                            });
                             //$('#modalNuevoVendedor').modal('show');
                         }
-                        
+
                     }
                 });
             }
@@ -503,9 +506,9 @@
                     title: 'ADVERTENCIA',
                     html: "Ingrese una breve descripción del motivo de baja.",
                     showCloseButton: true
-                });                 
+                });
             }
-                                    
+
         }
 
     </script>

@@ -165,7 +165,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="txtFechaNacimiento">Fecha Nacimiento</label>
-                                @Html.TextBoxFor(model => model.FechaNacimiento, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaNacimiento", @class = "form-control form-control-sm float-right", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
+                                @Html.TextBoxFor(model => model.FechaNacimiento, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaNacimiento", @class = "form-control form-control-sm float-right" })
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -244,7 +244,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="txtFechaAlta">FechaAlta</label>
-                                @Html.TextBoxFor(model => model.FechaAlta, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaAlta", @class = "form-control form-control-sm float-right", @readonly = "readonly", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
+                                @Html.TextBoxFor(model => model.FechaAlta, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaAlta", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
 
                             </div>
                         </div>

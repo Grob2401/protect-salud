@@ -1,7 +1,7 @@
 ﻿@using Entidades;
 @model Entidades.ENClientes
 @{
-    ViewBag.Title = "Clientes";
+    //ViewBag.Title = "Clientes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Styles {
@@ -11,34 +11,20 @@
     @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
 }
 <div class="row">
-    <div class="col-md-2">
-        <div class="card card-info card-outline shadow-lg sticky-top">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-th-list"></i>
-                    Opciones
-                </h3>
-            </div>
-            <div class="card-body">
-                <div class="row text-center pt-2 pb-2">
-                    <div class="col-md-12">
-                        <div class="form">
-                            <a class="btn btn-app bg-gradient-secondary" href='@Url.Action("Crear", "Clientes")'>
-                                <i class="fas fa-plus-circle text-warning" style="font-size: 14px;"></i> Agregar
-                            </a>
-                        </div>
-                    </div>
+    <div class="col-md-12">
+        <div class="card card-gray shadow-lg">
+            <div class="card-header sticky-top">
+                <div class="col text-left">
+                    <h5 class="card-title">
+                        <i class="fa fa-user-check"></i>
+                        Contratantes
+                    </h5>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-10">
-        <div class="card card-primary card-outline shadow-lg">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-table"></i>
-                    Lista de Clientes
-                </h3>
+                <div class="col text-right">
+                    <a class="btn btn-flat bg-primary btn-sm" href='@Url.Action("Crear", "Clientes")'>
+                        <i class="fa fa-user-plus fa-4x text-warning" style="font-size: 14px;"></i>&nbsp;Agregar
+                    </a>
+                </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body ">
@@ -63,7 +49,7 @@
                                 <label style="visibility:hidden;">Búsqueda:</label>
                                 <div>
                                     <button type="submit" class="btn btn-dark btn-sm">
-                                        <i class="fa fa-search-plus text-warning"></i>&nbsp;&nbsp;Buscar Cliente
+                                        <i class="fa fa-search-plus text-warning"></i>&nbsp;&nbsp;Buscar
                                     </button>
                                 </div>
                             </div>
@@ -72,7 +58,7 @@
                     <hr />
                     <div class="row  justify-content-end">
                         <div class="col text-left">
-                            <label class="text-primary" style="font-size:9pt">Cantidad de registros disponibles @Convert.ToInt32(ViewData["todos"])</label>
+                            <label class="text-bold">CLIENTES DISPONIBLES</label>&nbsp;&nbsp;<i class="fa fa-angle-double-right text-warning"></i>&nbsp;&nbsp;<label class="text-bold" style="font-size:9pt"> @Convert.ToInt32(ViewData["todos"])</label>
                         </div>
                         <div class="col d-flex justify-content-end">
                             <ul class="pagination">
@@ -91,64 +77,66 @@
                             </ul>
                         </div>
                     </div>
-                    
 
-                    <table id="dglista" class="table table-bordered table-hover">
-                        <thead class="bg-gradient-lightblue">
-                            <tr>
-                                <th>N°</th>
-                                <th>Codigo</th>
-                                <th>RUC</th>
-                                <th>Razón Social</th>
-                                <th>Paterno</th>
-                                <th>Materno</th>
-                                <th>Nombres</th>
-                                <th>Dirección</th>
-                                <th>Teléfono</th>
-                                @*<th>Contacto</th>
-                        <th>Email</th>*@
-                                <th>TipoCliente</th>
-                                @*<th>Corredor</th>
-                        <th>Ejecutivo</th>*@
-                                <th style="width: 10%">Editar</th>
-                                <th style="width: 10%">Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (ENClientes Clientes in (List<ENClientes>)ViewBag.Clientes)
-                            {
+                    <div class="table-responsive">
+                        <table id="dglista" class="table table-bordered table-hover">
+                            <thead class="bg-gradient-primary">
                                 <tr>
-                                    <td>@Clientes.RowNumber</td>
-                                    <td>@Clientes.CodigoCliente </td>
-                                    <td>@Clientes.RucDni </td>
-                                    <td>@Clientes.RazonSocial </td>
-                                    <td>@Clientes.Paterno </td>
-                                    <td>@Clientes.Materno </td>
-                                    <td>@Clientes.Nombres </td>
-                                    <td>@Clientes.Direccion </td>
-                                    <td>@Clientes.Telefono1 </td>
-                                    <td>@Clientes.CodigoTipoCliente </td>
-                                    <td class="project-actions text-center">
-                                        <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "Clientes", new {id = Clientes.CodigoCliente})'>
-                                            <i class="fas fa-pencil-alt text-warning"></i>&nbsp;Editar
-                                        </a>
-                                    </td>
-                                    <td class="project-actions text-center">
-                                        <form action='@Url.Action("Eliminar", "Clientes", new {id = Clientes.CodigoCliente})' method="POST"
-                                              onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
-                                            @Html.AntiForgeryToken()
-                                            <div class="text-center" role="group">
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
-                                                    <i class="fas fa-times text-warning"></i>&nbsp;Eliminar
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </td>
+                                    <th>N°</th>
+                                    <th>Codigo</th>
+                                    <th>RUC</th>
+                                    <th>Razón Social</th>
+                                    <th>Paterno</th>
+                                    <th>Materno</th>
+                                    <th>Nombres</th>
+                                    <th>Dirección</th>
+                                    <th>Teléfono</th>
+                                    @*<th>Contacto</th>
+                                        <th>Email</th>*@
+                                    <th>TipoCliente</th>
+                                    @*<th>Corredor</th>
+                                        <th>Ejecutivo</th>*@
+                                    <th style="width: 10%">Editar</th>
+                                    <th style="width: 10%">Eliminar</th>
                                 </tr>
-                            }
-                        </tbody>
+                            </thead>
+                            <tbody>
+                                @foreach (ENClientes Clientes in (List<ENClientes>)ViewBag.Clientes)
+                                {
+                                    <tr>
+                                        <td>@Clientes.RowNumber</td>
+                                        <td>@Clientes.CodigoCliente </td>
+                                        <td>@Clientes.RucDni </td>
+                                        <td>@Clientes.RazonSocial </td>
+                                        <td>@Clientes.Paterno </td>
+                                        <td>@Clientes.Materno </td>
+                                        <td>@Clientes.Nombres </td>
+                                        <td>@Clientes.Direccion </td>
+                                        <td>@Clientes.Telefono1 </td>
+                                        <td>@Clientes.CodigoTipoCliente </td>
+                                        <td class="project-actions text-center" width="70px">
+                                            <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "Clientes", new {id = Clientes.CodigoCliente})'>
+                                                <i class="fas fa-pencil-alt text-warning"></i>&nbsp;Editar
+                                            </a>
+                                        </td>
+                                        <td class="project-actions text-center" width="100px">
+                                            <form action='@Url.Action("Eliminar", "Clientes", new {id = Clientes.CodigoCliente})' method="POST"
+                                                  onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
+                                                @Html.AntiForgeryToken()
+                                                <div class="text-center" role="group">
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                                        <i class="fas fa-times text-warning"></i>&nbsp;Eliminar
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
 
-                    </table>
+                        </table>
+                    </div>
+
                     <hr />
 
 
@@ -169,7 +157,7 @@
     @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
     @Scripts.Render("~/Scripts/Shared/util.js")
 
-<script>
+    <script>
 
         $(document).ready(function () {
             //$('.js-example-basic-single').select2();
@@ -201,7 +189,7 @@
                 "ordering": true,
                 "info": false,
                 "autoWidth": false,
-                "responsive": true,
+                "responsive": false,
                 //"lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
                 pageLength: 10,
                 "searching": false,
@@ -215,5 +203,5 @@
         var mensaje = "@ViewBag.Message";
         mostrarMensaje(mensaje);
 
-</script>
+    </script>
 }

@@ -18,7 +18,7 @@
     @using (Html.BeginForm("GetVendedoresSinAsignar", "Vendedor", FormMethod.Get, new { id = "Form1", name = "Form1", autocomplete = "off" }))
     {
         <div class="row">
-            <div class="col col-md-2">
+            <div class="col col-md-2" hidden>
                 <div class="card card-primary card-outline shadow-lg">
                     <div class="card-header">
                         <h3 class="card-title">
@@ -41,8 +41,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col col-md-10">
-                <div class="card card-primary card-outline shadow-lg">
+            <div class="col col-md-12">
+                <div class="card card-gray shadow-lg">
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-users"></i>
@@ -62,79 +62,84 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <table id="dglista" class="table table-bordered text-uppercase">
-                                    <thead class="bg-gradient-lightblue">
-                                        <tr>
-                                            <th>CODIGO</th>
-                                            <th>SOCIEDAD</th>
-                                            <th>APELLIDO PATERNO</th>
-                                            <th>APELLIDO MATERNO</th>
-                                            <th>NOMBRES</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (ViewData["Vendedores"] != null)
-                                        {
-                                            foreach (ENVendedores ven in (List<ENVendedores>)ViewData["Vendedores"])
+                                <div class="table-responsive">
+                                    <table id="dglista" class="table table-bordered text-uppercase">
+                                        <thead class="bg-primary">
+                                            <tr>
+                                                <th>CODIGO</th>
+                                                <th>SOCIEDAD</th>
+                                                <th>APELLIDO PATERNO</th>
+                                                <th>APELLIDO MATERNO</th>
+                                                <th>NOMBRES</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (ViewData["Vendedores"] != null)
                                             {
-                                                <tr>
-                                                    <td>@ven.CodigoVendedor </td>
-                                                    <td>@ven.RazonSocial </td>
-                                                    <td>@ven.ApellidoPaterno </td>
-                                                    <td>@ven.ApellidoMaterno </td>
-                                                    <td>@ven.Nombres </td>
-                                                    <td class="text-center">
-                                                        <button type="button" class="botonedit btn btn-info btn-sm">
-                                                            <i class="fas fa-cart-plus text-warning"></i>&nbsp;&nbsp;Asignar Canal
-                                                        </button>
-                                                    </td>
-                                                </tr>
+                                                foreach (ENVendedores ven in (List<ENVendedores>)ViewData["Vendedores"])
+                                                {
+                                                    <tr>
+                                                        <td>@ven.CodigoVendedor </td>
+                                                        <td>@ven.RazonSocial </td>
+                                                        <td>@ven.ApellidoPaterno </td>
+                                                        <td>@ven.ApellidoMaterno </td>
+                                                        <td>@ven.Nombres </td>
+                                                        <td class="text-center">
+                                                            <button type="button" class="botonedit btn btn-info btn-sm">
+                                                                <i class="fas fa-cart-plus text-warning"></i>&nbsp;&nbsp;Asignar Canal
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                }
                                             }
-                                        }
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+
                             </div>
                         </div>
                         <hr class="border border-dark" />
                         <div class="row">
                             <div class="col-md-12">
-                                <table id="dglista1" class="table table-bordered text-uppercase">
-                                    <thead class="bg-gradient-lightblue">
-                                        <tr>
-                                            <th hidden>CODIGO CANAL</th>
-                                            <th hidden>CODIGO VENDEDOR</th>
-                                            <th>CANAL</th>
-                                            <th>VENDEDOR</th>
-                                            <th>FECHA INICIO</th>
-                                            <th>FECHA FIN</th>
-                                            <th>T.COMISION VENDEDOR</th>
-                                            <th>C.COMISION VENDEDOR</th>
-                                            <th>T.COMISION CANAL</th>
-                                            <th>C.COMISION CANAL</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (ViewData["Asignados"] != null)
-                                        {
-                                            foreach (ENCanalesVendedores ven in (List<ENCanalesVendedores>)ViewData["Asignados"])
+                                <div class="table-responsive">
+                                    <table id="dglista1" class="table table-bordered text-uppercase">
+                                        <thead class="bg-info">
+                                            <tr>
+                                                <th hidden>CODIGO CANAL</th>
+                                                <th hidden>CODIGO VENDEDOR</th>
+                                                <th>CANAL</th>
+                                                <th>VENDEDOR</th>
+                                                <th>FECHA INICIO</th>
+                                                <th>FECHA FIN</th>
+                                                <th>T.COMISION VENDEDOR</th>
+                                                <th>C.COMISION VENDEDOR</th>
+                                                <th>T.COMISION CANAL</th>
+                                                <th>C.COMISION CANAL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (ViewData["Asignados"] != null)
                                             {
-                                                <tr>
-                                                    <td hidden>@ven.CV_IDCanal </td>
-                                                    <td hidden>@ven.CV_CodigoVendedor </td>
-                                                    <td>@ven.CV_DescripcionCanal </td>
-                                                    <td>@ven.CV_Vendedor </td>
-                                                    <td>@ven.CV_FechaInicioCanalVendedor </td>
-                                                    <td>@ven.CV_FechaFinCanalVendedor </td>
-                                                    <td>@((@ven.Vendedor_TipoComi == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Vendedor_TipoComi + "</span>"))</td>
-                                                    <td>@((@ven.Vendedor_CantComi == "0") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Vendedor_CantComi + "</span>"))</td>
-                                                    <td>@((@ven.Canal_TipoComi == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Canal_TipoComi + "</span>"))</td>
-                                                    <td>@((@ven.Canal_CantComi == "0") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Canal_CantComi + "</span>"))</td>
-                                                </tr>
+                                                foreach (ENCanalesVendedores ven in (List<ENCanalesVendedores>)ViewData["Asignados"])
+                                                {
+                                                    <tr>
+                                                        <td hidden>@ven.CV_IDCanal </td>
+                                                        <td hidden>@ven.CV_CodigoVendedor </td>
+                                                        <td>@ven.CV_DescripcionCanal </td>
+                                                        <td>@ven.CV_Vendedor </td>
+                                                        <td>@ven.CV_FechaInicioCanalVendedor </td>
+                                                        <td>@ven.CV_FechaFinCanalVendedor </td>
+                                                        <td>@((@ven.Vendedor_TipoComi == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Vendedor_TipoComi + "</span>"))</td>
+                                                        <td>@((@ven.Vendedor_CantComi == "0") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Vendedor_CantComi + "</span>"))</td>
+                                                        <td>@((@ven.Canal_TipoComi == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Canal_TipoComi + "</span>"))</td>
+                                                        <td>@((@ven.Canal_CantComi == "0") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Canal_CantComi + "</span>"))</td>
+                                                    </tr>
+                                                }
                                             }
-                                        }
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -233,7 +238,7 @@
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
-                "responsive": true,
+                "responsive": false,
                 "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
                 "pageLength": 5,
                 "searching": false,
@@ -248,7 +253,7 @@
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
-                "responsive": true,
+                "responsive": false,
                 "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
                 "pageLength": 5,
                 "searching": false,

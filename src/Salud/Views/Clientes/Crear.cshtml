@@ -224,7 +224,8 @@
                                                     <td hidden>@tarjeta.CodigoMarcaTarjeta</td>
                                                     <td hidden>@tarjeta.Estado</td>
                                                     <td>
-                                                        <img src="@("/devSalud/Images/"+tarjeta.CodigoMarcaTarjeta+".PNG")" />&nbsp;&nbsp;@tarjeta.NumeroTarjeta.Substring(tarjeta.NumeroTarjeta.Length - 4).PadLeft(tarjeta.NumeroTarjeta.Length, '#')
+                                                        <img src="@("/devSalud/Images/"+tarjeta.CodigoMarcaTarjeta+".PNG")" />&nbsp;&nbsp;@tarjeta.NumeroTarjeta.Substring(tarjeta.NumeroTarjeta.Length - 4).PadLeft(tarjeta.NumeroTarjeta.Length, '*')
+                                                        @*<img src="@("/devSalud/Images/"+tarjeta.CodigoMarcaTarjeta+".PNG")" />&nbsp;&nbsp;@tarjeta.NumeroTarjeta*@
                                                     </td>
                                                     <td class="project-actions text-center">
                                                         <b style="text-transform:capitalize">@tarjeta.titularTarjeta</b>
@@ -238,7 +239,7 @@
                                                         </button>
                                                     </td>
                                                     <td>
-                                                        <button type="submit" class="btn btn-danger btn-sm" disabled>
+                                                        <button type="button" onclick="eliminarT(event);" class="btn btn-danger btn-sm" disabled>
                                                             <i class="fas fa-trash text-warning"></i>&nbsp;&nbsp;Eliminar
                                                         </button>
                                                     </td>
@@ -254,7 +255,8 @@
                                                 <td hidden>@tarjeta.CodigoMarcaTarjeta</td>
                                                 <td hidden>@tarjeta.Estado</td>
                                                 <td>
-                                                    <img src="@("/devSalud/Images/"+tarjeta.CodigoMarcaTarjeta+".PNG")" />&nbsp;&nbsp;@tarjeta.NumeroTarjeta.Substring(tarjeta.NumeroTarjeta.Length - 4).PadLeft(tarjeta.NumeroTarjeta.Length, '#')
+                                                    <img src="@("/devSalud/Images/"+tarjeta.CodigoMarcaTarjeta+".PNG")" />&nbsp;&nbsp;@tarjeta.NumeroTarjeta.Substring(tarjeta.NumeroTarjeta.Length - 4).PadLeft(tarjeta.NumeroTarjeta.Length, '*')
+                                                    @*<img src="@("/devSalud/Images/"+tarjeta.CodigoMarcaTarjeta+".PNG")" />&nbsp;&nbsp;@tarjeta.NumeroTarjeta*@
                                                 </td>
                                                 <td class="project-actions text-center">
                                                     <b style="text-transform:capitalize">@tarjeta.titularTarjeta</b>
@@ -263,12 +265,12 @@
                                                     <b style="text-transform:capitalize">@tarjeta.mesFinVigencia/@tarjeta.anioFinVigencia</b>
                                                 </td>
                                                 <td>
-                                                    <button type="button" onclick="editarT(event);" class="btn btn-success btn-sm">
+                                                    <button type="button" onclick="editarT(event);" class="botonEditarT btn btn-success btn-sm">
                                                         <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;Editar
                                                     </button>
                                                 </td>
                                                 <td>
-                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                    <button type="button"  onclick="eliminarT(event);" class="botonEliminarT btn btn-danger btn-sm" data-request-url='@Url.Action("EliminarTarjeta", "Clientes")'>
                                                         <i class="fas fa-trash text-warning"></i>&nbsp;&nbsp;Eliminar
                                                     </button>
                                                 </td>
@@ -333,6 +335,8 @@
                                 </div>
                                 <div class="form-group">
                                     <h6>Número de Tarjeta :</h6>
+                                    @*@Html.TextBox("txtNumeroTarjeta1", "", new { id = "txtNumeroTarjeta1", @class = "form-control form-control-sm" , @placeholder = "xxxxxxxxxxxxxxxx", @type = "text"})
+                                    @Html.HiddenFor(model => model.Tarjeta.NumeroTarjeta, new { id = "txtNumeroTarjeta" })*@
                                     @Html.TextBoxFor(model => model.Tarjeta.NumeroTarjeta, new { id = "txtNumeroTarjeta", @class = "form-control form-control-sm", @placeholder = "xxxxxxxxxxxxxxxx", @type = "text", @maxlength = 16, @autocomplete = "off", @onkeypress = "return isNumberKey(event)" })
                                     @Html.ValidationMessageFor(model => model.Tarjeta.NumeroTarjeta, "", new { @class = "text-danger" })
                                 </div>
@@ -443,7 +447,7 @@
         </script>
     }
 
-    <script>
+<script>
         var arregloTarjetas = [];
 
         $(document).ready(function () {
@@ -586,6 +590,7 @@
             const clienteCli = document.getElementById("txtCodigoCliente").value;
             const clienteTarjeta = document.getElementById("txtCodigoClienteTarjeta");
             clienteTarjeta.value = clienteCli.toString();
+            document.getElementById('txtNumeroTarjeta1').readOnly = false;
         }
 
         function cancelar() {
@@ -594,32 +599,38 @@
         }
 
         function editarT(e) {
-            $('#modalTarjeta').modal('show');
-            var fechaVencimiento = e.target.parentElement.previousElementSibling.textContent.trim();
-            var titularTarjeta = e.target.parentElement.previousElementSibling.previousElementSibling.textContent.trim();
-            var estado = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent.trim();
-            var marca = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent.trim();
-            var idTarjeta = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent.trim();
-            var numeroTarjeta = e.target.parentElement.parentElement.firstElementChild.textContent.trim();
-            var codCliente = document.getElementById("txtCodigoCliente").value;
+            if (e.target.classList.contains('botonEditarT'))
+            {
+                $('#modalTarjeta').modal('show');
+                var fechaVencimiento = e.target.parentElement.previousElementSibling.textContent.trim();
+                var titularTarjeta = e.target.parentElement.previousElementSibling.previousElementSibling.textContent.trim();
+                var estado = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent.trim();
+                var marca = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent.trim();
+                var idTarjeta = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent.trim();
+                var numeroTarjeta = e.target.parentElement.parentElement.firstElementChild.textContent.trim();
+                var codCliente = document.getElementById("txtCodigoCliente").value;
 
-            const txtCodigoCliente = document.getElementById("txtCodigoClienteTarjeta");
-            const txtMarcaTarjeta = document.getElementById("drpMarcaTarjeta");
-            const txtNumeroTarjeta = document.getElementById("txtNumeroTarjeta");
-            const txtTitularTarjeta = document.getElementById("txtTitular");
-            const txtMes = document.getElementById("dlMes");
-            const txtAnio = document.getElementById("dlAnio");
-            const txtIdTarjeta = document.getElementById("txtIDClienteTarjeta");
+                const txtCodigoCliente = document.getElementById("txtCodigoClienteTarjeta");
+                const txtMarcaTarjeta = document.getElementById("drpMarcaTarjeta");
+                const txtNumeroTarjeta = document.getElementById("txtNumeroTarjeta");
+                const txtTitularTarjeta = document.getElementById("txtTitular");
+                const txtMes = document.getElementById("dlMes");
+                const txtAnio = document.getElementById("dlAnio");
+                const txtIdTarjeta = document.getElementById("txtIDClienteTarjeta");
 
-            txtCodigoCliente.value = codCliente;
-            txtMarcaTarjeta.value = marca;
-            txtNumeroTarjeta.value = numeroTarjeta;
-            txtTitularTarjeta.value = titularTarjeta;
-            txtMes.value = fechaVencimiento.split("/")[0].trim();
-            txtAnio.value = fechaVencimiento.split("/")[1].trim();
-            txtIdTarjeta.value = idTarjeta;
+                txtCodigoCliente.value = codCliente;
+                txtMarcaTarjeta.value = marca;
+                txtNumeroTarjeta.value = numeroTarjeta;
+                //txtNumeroTarjeta1.value = numeroTarjeta.replace(/[0-9](?=([0-9]{4}))/g, '*');
+                txtTitularTarjeta.value = titularTarjeta;
+                txtMes.value = fechaVencimiento.split("/")[0].trim();
+                txtAnio.value = fechaVencimiento.split("/")[1].trim();
+                txtIdTarjeta.value = idTarjeta;
 
-            console.log(`
+                document.getElementById('txtNumeroTarjeta').readOnly = true;
+                txtNumeroTarjeta.value = numeroTarjeta.replace(/[0-9](?=([0-9]{4}))/g, '*');
+
+                console.log(`
                             ${fechaVencimiento}
                             ${titularTarjeta}
                             ${numeroTarjeta}
@@ -628,34 +639,59 @@
                             ${idTarjeta}
                             ${codCliente}
                             `);
+            }
+
         }
 
         function eliminarT(e) {
-            var idTarjeta = e.target.parentElement.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.value.trim();
-            var codCliente = document.getElementById("txtCodigoCliente").value;
-            var url_method = e.target.getAttribute('data-request-url');
+            if (e.target.classList.contains('botonEliminarT'))
+            {
+                Swal.fire({
+                    title: '¿Esta seguro(a) que desea eliminar la tarjeta seleccionada?',
+                    text: "La tarjeta será deshabilitada",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'No'
+                }).then(function (result) {
 
-            console.log(`
-                    ${idTarjeta}
-                    ${codCliente}
-                    ${url_method}
-                    `);
+                    if (result.value) {
 
-            $.ajax({
-                type: "POST",
-                url: url_method,
-                data: {
-                    'id': idTarjeta,
-                    'codigoCliente': codCliente
-                },
-                dataType: "text",
-                success: function (r) {
-                    location.reload;
-                }
-            });
+                        var idTarjeta = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
+                        var codCliente = document.getElementById("txtCodigoCliente").value;
+                        var url_method = e.target.getAttribute('data-request-url');
+
+                        console.log(`
+                            ${idTarjeta}
+                            ${codCliente}
+                            ${url_method}
+                            `);
+
+                        $.ajax({
+                            type: "POST",
+                            url: url_method,
+                            data: {
+                                'id': idTarjeta,
+                                'codigoCliente': codCliente
+                            },
+                            dataType: "text",
+                            success: function (r) {
+                                window.location.href = '@Url.Action("Crear", "Clientes")' + '?id=' + codCliente;
+                            }
+                        });
+
+                    } else {
+                        //swal("Cancelado", "Acción Cancelada", "info");
+                    }
+
+                })
+            }
+
         }
 
-    </script>
+</script>
 
 
 }

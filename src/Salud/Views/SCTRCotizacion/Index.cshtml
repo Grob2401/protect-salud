@@ -9,75 +9,82 @@
 }
 <div class="row">
     <div class="col-12">
-        <div class="card card-primary card-outline shadow-lg">
+        <div class="card card-gray shadow-lg">
             <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-table"></i>
-                    Lista de Cotizaciones SCTR
-                </h3>
+                <div class="col text-left">
+                    <h5 class="card-title">
+                        <i class="fas fa-table"></i>
+                        Cotizaciones SCTR
+                    </h5>
+                </div>
+                <div class="col text-right">
+                    <a class="btn btn-flat bg-primary btn-sm" href="@Url.Action("Crear", "SCTRCotizacion")">
+                        <i class="fas fa-plus-circle text-warning" style="font-size: 14px;"></i>Agregar
+                    </a>
+                </div>                
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <a class="btn btn-app bg-gradient-secondary" href="@Url.Action("Crear", "SCTRCotizacion")">
-                    <i class="fas fa-plus-circle text-warning" style="font-size: 14px;"></i>Agregar
-                </a>
-
-                <table id="dglista" class="table table-bordered table-hover">
-                    <thead class="bg-gradient-lightblue">
-                        <tr>
-                            <th>Cotizacion</th>
-                            <th>RUC</th>
-                            <th>Cliente</th>
-                            <th>CIIU</th>
-                            <th>Corredor</th>
-                            <th>F.Inicio</th>
-                            <th>F.Fin</th>
-                            <th>Estado</th>
-                            <th>Fecha</th>
-                            @*<th>ImportePrimaNeta</th>
+                
+                <div class="table-responsive">
+                    <table id="dglista" class="table table-bordered table-hover">
+                        <thead class="bg-primary">
+                            <tr>
+                                <th>Cotizacion</th>
+                                <th>RUC</th>
+                                <th>Cliente</th>
+                                <th>CIIU</th>
+                                <th>Corredor</th>
+                                <th>F.Inicio</th>
+                                <th>F.Fin</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                @*<th>ImportePrimaNeta</th>
                     <th>ImporteDerechoEmision</th>
                     <th>ImporteIGV</th>
                     <th>ImportePrimaTotal</th>*@
-                            <th style="width: 15%"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (ENSCTRCotizaciones SCTRCotizacion in (List<ENSCTRCotizaciones>)ViewBag.SCTRCotizacion)
-                        {
-                            <tr>
-                                <td>@SCTRCotizacion.CodigoCotizacion </td>
-                                <td>@SCTRCotizacion.EmpresaRUC </td>
-                                <td>@SCTRCotizacion.EmpresaNombre </td>
-                                <td>@SCTRCotizacion.DescripcionCIIU </td>
-                                <td>@SCTRCotizacion.DescripcionCorredor </td>
-                                <td>@SCTRCotizacion.FechaInicio </td>
-                                <td>@SCTRCotizacion.FechaFin </td>
-                                <td>@SCTRCotizacion.DescripcionEstado </td>
-                                <td>@SCTRCotizacion.FechaCotizacion </td>
-                                @*<td>@SCTRCotizacion.ImportePrimaNeta </td>
+                                <th style="width: 15%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (ENSCTRCotizaciones SCTRCotizacion in (List<ENSCTRCotizaciones>)ViewBag.SCTRCotizacion)
+                            {
+                                <tr>
+                                    <td>@SCTRCotizacion.CodigoCotizacion </td>
+                                    <td>@SCTRCotizacion.EmpresaRUC </td>
+                                    <td>@SCTRCotizacion.EmpresaNombre </td>
+                                    <td>@SCTRCotizacion.DescripcionCIIU </td>
+                                    <td>@SCTRCotizacion.DescripcionCorredor </td>
+                                    <td>@SCTRCotizacion.FechaInicio </td>
+                                    <td>@SCTRCotizacion.FechaFin </td>
+                                    <td>@SCTRCotizacion.DescripcionEstado </td>
+                                    <td>@SCTRCotizacion.FechaCotizacion </td>
+                                    @*<td>@SCTRCotizacion.ImportePrimaNeta </td>
                         <td>@SCTRCotizacion.ImporteDerechoEmision </td>
                         <td>@SCTRCotizacion.ImporteIGV </td>
                         <td>@SCTRCotizacion.ImportePrimaTotal </td>*@
-                                <td class="project-actions text-center">
-                                    <form action='@Url.Action("Eliminar", "SCTRCotizacion", new {id = SCTRCotizacion.CodigoCotizacion})' method="POST"
-                                          onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
-                                        @Html.AntiForgeryToken()
-                                        <div class="text-center" role="group">
-                                            <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "SCTRCotizacion", new {id = SCTRCotizacion.CodigoCotizacion})'>
-                                                <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;Editar
-                                            </a>
-                                            <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
-                                                <i class="fas fa-times text-warning"></i>&nbsp;&nbsp;Eliminar
-                                            </button>
-                                        </div>
-                                    </form>
+                                    <td class="project-actions text-center">
+                                        <form action='@Url.Action("Eliminar", "SCTRCotizacion", new {id = SCTRCotizacion.CodigoCotizacion})' method="POST"
+                                              onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
+                                            @Html.AntiForgeryToken()
+                                            <div class="text-center" role="group">
+                                                <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "SCTRCotizacion", new {id = SCTRCotizacion.CodigoCotizacion})'>
+                                                    <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;Editar
+                                                </a>
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                                    <i class="fas fa-times text-warning"></i>&nbsp;&nbsp;Eliminar
+                                                </button>
+                                            </div>
+                                        </form>
 
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
 
-                </table>
+                    </table>
+                </div>
+                
             </div>
             <!-- /.card-body -->
         </div>
@@ -99,8 +106,8 @@
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
-                "responsive": true,
-                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                "responsive": false,
+                "lengthMenu": [[10, 50, -1], [5, 10, 50, "Todos"]],
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }

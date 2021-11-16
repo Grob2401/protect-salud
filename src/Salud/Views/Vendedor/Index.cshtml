@@ -40,122 +40,106 @@
     @using (Html.BeginForm("GetLista", "Vendedor", FormMethod.Get, new { id = "Form1", name = "Form1", autocomplete = "off" }))
     {
 
-        <div class="row">
-            <div class="col col-md-2">
-                @Html.AntiForgeryToken()
-                <div class="col-md-12">
-                    <div class="card card-info  card-outline shadow-lg">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <i class="fas fa-mouse-pointer"></i>
-                                Opciones
-                            </h3>
-                        </div>
-                        <div class="card-body ">
-                            <div class="row text-center pt-2 pb-2">
-                                <div class="col-md-12">
-                                    <div class="btn-group-justified">
-                                        <button type="button" id="btnVendedor" class="btn btn-info btn-sm" data-dismiss="modal" data-toggle="modal">
-                                            <i class="fa fa-plus-circle text-warning"></i>
-                                            Agregar Vendedor
-                                        </button>
-                                        <button type="button" id="btnCanal" class="btn btn-success btn-sm disabled" hidden>
-                                            <i class="fa fa-search text-warning"></i>Comisiones por Vendedor
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <div class="row">
+        @Html.AntiForgeryToken()
+        <div class="col col-md-12">
+            <div class="card card-gray shadow-lg">
+                <div class="card-header">
+                    <div class="col text-left">
+                        <h5 class="card-title">
+                            <i class="fas fa-store"></i>
+                            Vendedores
+                        </h5>
+                    </div>
+                    <div class="col text-right">
+                        <button type="button" id="btnVendedor" class="btn btn-flat bg-info btn-sm" data-dismiss="modal" data-toggle="modal">
+                            <i class="fa fa-user-plus text-warning"></i>
+                            Agregar
+                        </button>
+                        <button type="button" id="btnCanal" class="btn btn-success btn-sm disabled" hidden>
+                            <i class="fa fa-search text-warning"></i>Comisiones por Vendedor
+                        </button>
                     </div>
                 </div>
-            </div>
-            <div class="col col-md-10">
-                <div class="card card-light card-outline shadow-lg">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            <i class="fas fa-users"></i>
-                            Listado de Vendedores
-                        </h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body ">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="text-uppercase" for="txtdesde">SOCIEDAD :&nbsp;&nbsp;</label>
-                                    @Html.DropDownList("slcSociedad", ViewData["ListaSociedades"] as SelectList, new { @class = "form-control-sm js-example-basic-single", name = "slcSociedad", @style = "width:100%", @disabled = "disabled" })
-                                    &nbsp;&nbsp;
-                                    <button id="btnbuscar" type="submit" class="btn btn-dark btn-sm" disabled hidden>
-                                        <i class="fa fa-search text-warning"></i>&nbsp;&nbsp;Buscar
-                                    </button>
-                                </div>
+                <!-- /.card-header -->
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="text-uppercase" for="txtdesde">SOCIEDAD :&nbsp;&nbsp;</label>
+                                @Html.DropDownList("slcSociedad", ViewData["ListaSociedades"] as SelectList, new { @class = "form-control-sm js-example-basic-single", name = "slcSociedad", @style = "width:100%", @disabled = "disabled" })
+                                &nbsp;&nbsp;
+                                <button id="btnbuscar" type="submit" class="btn btn-dark btn-sm" disabled hidden>
+                                    <i class="fa fa-search text-warning"></i>&nbsp;&nbsp;Buscar
+                                </button>
                             </div>
-                            <div class="col-12 table-responsive">
-                                <table id="dglista" class="table table-bordered text-uppercase">
-                                    <thead class="bg-gradient-lightblue" style="width:100%">
-                                        <tr>
-                                            <th>CODIGO</th>
-                                            <th>DNI</th>
-                                            <th>APELLIDO PATERNO</th>
-                                            <th>APELLIDO MATERNO</th>
-                                            <th>NOMBRES</th>
-                                            <th>DIRECCION</th>
-                                            <th>TELEFONO</th>
-                                            <th>EMAIL</th>
-                                            <th>TIPO COMISIÓN</th>
-                                            <th>COMISIÓN</th>
-                                            <th>EDITAR</th>
-                                            <th>COMISIÓN</th>
-                                            <th>ELIMINAR</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (ViewData["Vendedores"] != null)
+                        </div>
+                        <div class="col-12 table-responsive">
+                            <table id="dglista" class="table table-bordered text-uppercase">
+                                <thead class="bg-primary">
+                                    <tr>
+                                        <th>CODIGO</th>
+                                        <th>DNI</th>
+                                        <th>APELLIDO PATERNO</th>
+                                        <th>APELLIDO MATERNO</th>
+                                        <th>NOMBRES</th>
+                                        <th hidden>DIRECCION</th>
+                                        <th>TELEFONO</th>
+                                        <th>EMAIL</th>
+                                        <th hidden>TIPO COMISIÓN</th>
+                                        <th>COMISIÓN</th>
+                                        <th>EDITAR</th>
+                                        <th>COMISIÓN</th>
+                                        <th>ELIMINAR</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewData["Vendedores"] != null)
+                                    {
+                                        foreach (ENVendedores ven in (List<ENVendedores>)ViewData["Vendedores"])
                                         {
-                                            foreach (ENVendedores ven in (List<ENVendedores>)ViewData["Vendedores"])
-                                            {
-                                                <tr>
-                                                    <td>@ven.CodigoVendedor </td>
-                                                    <td>@ven.DNI </td>
-                                                    <td>@ven.ApellidoPaterno </td>
-                                                    <td>@ven.ApellidoMaterno </td>
-                                                    <td>@ven.Nombres </td>
-                                                    <td>@ven.Direccion </td>
-                                                    <td>@ven.Telefono </td>
-                                                    <td>@ven.Email </td>
-                                                    <td>@((@ven.Comision_Tipo_Descripcion == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Comision_Tipo_Descripcion + "</span>"))</td>
-                                                    <td>@((@ven.Comision_Cantidad == 0) ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>" + @ven.Comision_Cantidad + "</span>"))</td>
-                                                    @*<td>@((@ven.Comision_fechaInicio.ToString() == "1/01/0001 00:00:00") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='badge badge-pill badge-warning'>Sin Asignar</span>")) : @Html.Raw(@ven.Comision_Idtipo))</td>
-                                    <td>@((@ven.Comision_FechaFin.ToString() == "1/01/0001 00:00:00") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='badge badge-pill badge-warning'>Sin Asignar</span>")) : @Html.Raw(@ven.Comision_Idtipo))</td>*@
-                                                    <td class="text-center">
-                                                        <button type="button" class="botonedit btn btn-info btn-sm">
-                                                            <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
-                                                        </button>                                                        
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <button type="button" class="botoncomi btn btn-primary btn-sm">
-                                                            <i class="fa fa-coins text-warning"></i>&nbsp;&nbsp;Comisión
-                                                        </button>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <button type="button" class="botondel btn btn-danger btn-sm">
-                                                            <i class="fa fa-times text-warning"></i>&nbsp;&nbsp;Eliminar
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            }
+                                            <tr>
+                                                <td>@ven.CodigoVendedor </td>
+                                                <td>@ven.DNI </td>
+                                                <td>@ven.ApellidoPaterno </td>
+                                                <td>@ven.ApellidoMaterno </td>
+                                                <td>@ven.Nombres </td>
+                                                <td hidden>@ven.Direccion </td>
+                                                <td>@ven.Telefono </td>
+                                                <td>@ven.Email </td>
+                                                <td hidden>@((@ven.Comision_Tipo_Descripcion == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @ven.Comision_Tipo_Descripcion + "</span>"))</td>
+                                                <td>@((@ven.Comision_Cantidad == 0) ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>" + @ven.Comision_Cantidad + "</span>"))</td>
+                                                @*<td>@((@ven.Comision_fechaInicio.ToString() == "1/01/0001 00:00:00") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='badge badge-pill badge-warning'>Sin Asignar</span>")) : @Html.Raw(@ven.Comision_Idtipo))</td>
+                                                <td>@((@ven.Comision_FechaFin.ToString() == "1/01/0001 00:00:00") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='badge badge-pill badge-warning'>Sin Asignar</span>")) : @Html.Raw(@ven.Comision_Idtipo))</td>*@
+                                                <td class="text-center" width="100px">
+                                                    <button type="button" class="botonedit btn btn-info btn-sm">
+                                                        <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
+                                                    </button>
+                                                </td>
+                                                <td class="text-center" width="100px">
+                                                    <button type="button" class="botoncomi btn btn-primary btn-sm">
+                                                        <i class="fa fa-coins text-warning"></i>&nbsp;&nbsp;Comisión
+                                                    </button>
+                                                </td>
+                                                <td class="text-center" width="100px">
+                                                    <button type="button" class="botondel btn btn-danger btn-sm">
+                                                        <i class="fa fa-times text-warning"></i>&nbsp;&nbsp;Eliminar
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         }
-                                    </tbody>
-                                </table>
-                            </div>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
-
                     </div>
-                    <!-- /.card-body -->
+
                 </div>
+                <!-- /.card-body -->
             </div>
-            <!-- /.col -->
         </div>
+        <!-- /.col -->
+    </div>
     }
 </section>
 
@@ -182,7 +166,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group" hidden>
                                     <h6>DNI :</h6>
                                     @Html.TextBoxFor(model => model.CodigoVendedor, new { @class = "form-control form-control-sm" })
@@ -203,8 +187,6 @@
                                     @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control form-control-sm" })
                                     @Html.ValidationMessageFor(model => model.ApellidoPaterno, "", new { @class = "text-danger" })
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
                                 <div class="form-group">
                                     <h6>Apellido Materno :</h6>
                                     @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control form-control-sm" })

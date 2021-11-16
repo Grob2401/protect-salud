@@ -33,7 +33,7 @@
         </div>
     </div>
     <div class="col-md-12">
-        <div class="card card-primary card-outline shadow-lg">
+        <div class="card card-gray shadow-lg">
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-table"></i>
@@ -82,25 +82,27 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <table id="dglista" class="table table-bordered table-hover W-100">
-                                <thead class="bg-gradient-lightblue W-100">
-                                    <tr>
-                                        <th>Trama Datos</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="small">
-                                    @if (ViewBag.tramas != null)
-                                    {
-                                        foreach (ENLote lote in (List<ENLote>)ViewBag.tramas)
+                            <div class="table-responsive">
+                                <table id="dglista" class="table table-bordered table-hover W-100">
+                                    <thead class="bg-gradient-lightblue W-100">
+                                        <tr>
+                                            <th>Trama Datos</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="small">
+                                        @if (ViewBag.tramas != null)
                                         {
-                                            <tr>
-                                                <td>@lote.RegDatos </td>
-                                            </tr>
+                                            foreach (ENLote lote in (List<ENLote>)ViewBag.tramas)
+                                            {
+                                                <tr>
+                                                    <td>@lote.RegDatos </td>
+                                                </tr>
+                                            }
                                         }
-                                    }
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 }
@@ -136,7 +138,7 @@
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
-                "responsive": true,
+                "responsive": false,
                 "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
                 pageLength: 100,
                 "searching": false,

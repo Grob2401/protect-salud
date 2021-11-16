@@ -10,41 +10,23 @@
     @Styles.Render("~/Content/plugins/select2/css/select2.min.css")
 }
 <div class="row">
-    <div class="col-md-2">
-        <div class="card card-info card-outline shadow-lg sticky-top">
+    <div class="col-md-12">
+        <div class="card card-gray">
             <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-th-list"></i>
-                    Opciones
-                </h3>
-            </div>
-            <div class="card-body">
-                <div class="row justify-content-center pt-2 pb-2">
-                    <div class="col-md-7">
-                        <div class="form">
-                            <a class="btn btn-app bg-gradient-secondary" href='@Url.Action("Crear", "SaludContratos")'>
-                                <i class="fas fa-plus-circle text-warning" style="font-size: 14px;"></i> Agregar
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-md-7">
-                        <div class="form">
-                            <a class="btn btn-app bg-gradient-primary" href='@Url.Action("Administrar", "SaludContratos")'>
-                                <i class="fas fa-folder-plus text-warning" style="font-size: 14px;"></i> Administrar
-                            </a>
-                        </div>
-                    </div>
+                <div class="col text-left">
+                    <h5 class="card-title">
+                        <i class="fas fa-user-check"></i>
+                        Contratos
+                    </h5>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-10">
-        <div class="card card-primary card-outline">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-table"></i>
-                    Lista de Contratos
-                </h3>
+                <div class="col text-right">
+                    <a class="btn btn-flat bg-primary btn-sm" href='@Url.Action("Crear", "SaludContratos")'>
+                        <i class="fas fa-user-plus text-warning" style="font-size: 14px;"></i>&nbsp;Agregar
+                    </a>
+                    <a class="btn btn-flat bg-info btn-sm" href='@Url.Action("Administrar", "SaludContratos")'>
+                        <i class="fas fa-user-shield text-warning" style="font-size: 14px;"></i>&nbsp;Administrar
+                    </a>
+                </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body ">
@@ -78,7 +60,7 @@
                     <hr />
                     <div class="row  justify-content-end">
                         <div class="col text-left">
-                            <label class="text-primary" style="font-size:9pt">Cantidad de registros disponibles @Convert.ToInt32(ViewData["todos"])</label>
+                            <label class="text-bold">CONTRATOS DISPONIBLES</label>&nbsp;&nbsp;<i class="fa fa-angle-double-right text-warning"></i>&nbsp;&nbsp;<label class="text-bold" style="font-size:9pt"> @Convert.ToInt32(ViewData["todos"])</label>
                         </div>
                         <div class="col d-flex justify-content-end">
                             <ul class="pagination">
@@ -97,90 +79,92 @@
                             </ul>
                         </div>
                     </div>
-                    <table id="dglista" class="table table-bordered table-hover">
-                        <thead class="bg-gradient-lightblue">
-                            <tr>
-                                <th>N°</th>
-                                <th>CLIENTE</th>
-                                @if (ViewBag.IdNombreTabla != null)
-                                {
-                                    if (ViewBag.IdNombreTabla == "01")
-                                    {
-                                        <th>RAZON SOCIAL</th>
-                                    }
-                                    else
-                                    {
-                                        <th>PATERNO</th>
-                                        <th>MATERNO</th>
-                                        <th>NOMBRES</th>
-                                    }
-                                }
-                                <th>RUC | DNI</th>
-                                <th>CONTRATO</th>
-                                <th>TIPO CONTRATO</th>
-                                <th>INICIO VIGENCIA</th>
-                                <th>FIN VIGENCIA</th>
-                                <th hidden>Corredor</th>
-                                <th hidden>Ejecutivo</th>
-                                <th style="width: 10%">EDITAR</th>
-                                <th style="width: 10%">ELIMINAR</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (ENSaludContratos SaludContratos in (List<ENSaludContratos>)ViewBag.SaludContratos)
-                            {
+                    <div class="table-responsive">
+                        <table id="dglista" class="table table-bordered table-hover">
+                            <thead class="bg-gradient-primary">
                                 <tr>
-                                    <td>@SaludContratos.RowNumber</td>
-                                    <td>@SaludContratos.CodigoCliente </td>
+                                    <th>N°</th>
+                                    <th>CLIENTE</th>
                                     @if (ViewBag.IdNombreTabla != null)
                                     {
                                         if (ViewBag.IdNombreTabla == "01")
                                         {
-                                            <td>@SaludContratos.RazonSocial</td>
+                                            <th>RAZON SOCIAL</th>
                                         }
                                         else
                                         {
-                                            <td>@SaludContratos.Paterno</td>
-                                            <td>@SaludContratos.Materno</td>
-                                            <td>@SaludContratos.Nombres</td>
+                                            <th>PATERNO</th>
+                                            <th>MATERNO</th>
+                                            <th>NOMBRES</th>
                                         }
                                     }
-
-
-                                    <td>@SaludContratos.RUC</td>
-                                    <td>@SaludContratos.CodigoContrato</td>
-                                    <td>@SaludContratos.CodigoTipoContrato</td>
-                                    <td>@SaludContratos.InicioVigencia.ToString("dd-MM-yyyy")</td>
-                                    <td>@SaludContratos.FinVigencia.ToString("dd-MM-yyyy")</td>
-                                    <td hidden>@SaludContratos.CodigoCorredor</td>
-                                    <td hidden>@SaludContratos.CodigoEjecutivo</td>
-                                    <td class="project-actions text-center">
-                                        <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "SaludContratos",new RouteValueDictionary( new { idcontrato = SaludContratos.CodigoContrato, idcliente = SaludContratos.CodigoCliente }))'>
-                                            <i class="fas fa-pencil-alt text-warning">
-                                            </i>&nbsp;&nbsp;
-                                            Editar
-                                        </a>
-                                    </td>
-                                    <td class="project-actions text-center">
-                                        <form action='@Url.Action("Eliminar", "SaludContratos", new { id = SaludContratos.CodigoContrato, idcliente = SaludContratos.CodigoCliente })' method="POST"
-                                              onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
-                                            @Html.AntiForgeryToken()
-                                            <div class="text-center" role="group">
-
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
-                                                    <i class="fas fa-times text-warning">
-                                                    </i>&nbsp;&nbsp;
-                                                    Eliminar
-                                                </button>
-                                            </div>
-                                        </form>
-
-                                    </td>
+                                    <th>RUC | DNI</th>
+                                    <th>CONTRATO</th>
+                                    <th>TIPO CONTRATO</th>
+                                    <th>INICIO VIGENCIA</th>
+                                    <th>FIN VIGENCIA</th>
+                                    <th hidden>Corredor</th>
+                                    <th hidden>Ejecutivo</th>
+                                    <th style="width: 10%">EDITAR</th>
+                                    <th style="width: 10%">ELIMINAR</th>
                                 </tr>
-                            }
-                        </tbody>
+                            </thead>
+                            <tbody>
+                                @foreach (ENSaludContratos SaludContratos in (List<ENSaludContratos>)ViewBag.SaludContratos)
+                                {
+                                    <tr>
+                                        <td>@SaludContratos.RowNumber</td>
+                                        <td>@SaludContratos.CodigoCliente </td>
+                                        @if (ViewBag.IdNombreTabla != null)
+                                        {
+                                            if (ViewBag.IdNombreTabla == "01")
+                                            {
+                                                <td>@SaludContratos.RazonSocial</td>
+                                            }
+                                            else
+                                            {
+                                                <td>@SaludContratos.Paterno</td>
+                                                <td>@SaludContratos.Materno</td>
+                                                <td>@SaludContratos.Nombres</td>
+                                            }
+                                        }
 
-                    </table>
+
+                                        <td>@SaludContratos.RUC</td>
+                                        <td>@SaludContratos.CodigoContrato</td>
+                                        <td>@SaludContratos.CodigoTipoContrato</td>
+                                        <td>@SaludContratos.InicioVigencia.ToString("dd-MM-yyyy")</td>
+                                        <td>@SaludContratos.FinVigencia.ToString("dd-MM-yyyy")</td>
+                                        <td hidden>@SaludContratos.CodigoCorredor</td>
+                                        <td hidden>@SaludContratos.CodigoEjecutivo</td>
+                                        <td class="project-actions text-center" width="100px">
+                                            <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "SaludContratos",new RouteValueDictionary( new { idcontrato = SaludContratos.CodigoContrato, idcliente = SaludContratos.CodigoCliente }))'>
+                                                <i class="fas fa-pencil-alt text-warning">
+                                                </i>&nbsp;&nbsp;
+                                                Editar
+                                            </a>
+                                        </td>
+                                        <td class="project-actions text-center" width="100px">
+                                            <form action='@Url.Action("Eliminar", "SaludContratos", new { id = SaludContratos.CodigoContrato, idcliente = SaludContratos.CodigoCliente })' method="POST"
+                                                  onsubmit="return confirm('¿Está seguro de eliminar el registro?');">
+                                                @Html.AntiForgeryToken()
+                                                <div class="text-center" role="group">
+
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                                        <i class="fas fa-times text-warning">
+                                                        </i>&nbsp;&nbsp;
+                                                        Eliminar
+                                                    </button>
+                                                </div>
+                                            </form>
+
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
                 }
             </div>
             <!-- /.card-body -->
@@ -208,7 +192,7 @@
                 "ordering": true,
                 "info": false,
                 "autoWidth": false,
-                "responsive": true,
+                "responsive": false,
                 pageLength: 10,
                 "searching": false,
                 "language": {

@@ -27,7 +27,7 @@ $(document).ready(function () {
         ordering: false,
         info: true,
         autoWidth: false,
-        responsive: true,
+        responsive: false,
         lengthMenu: [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
         pageLength: 50,
         language: {

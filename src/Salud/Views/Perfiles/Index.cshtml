@@ -13,32 +13,22 @@
 
 <div class="row">
     <input type="hidden" id="soloAsegurados_ruta" name="name" value='@Url.Action("getPerfiles", "Perfiles")' />
-    <div class="col col-md-2">
-        <div class="card card-info card-outline shadow-lg sticky-top">
+    <div class="col col-md-12">
+        <div class="card card-gray">
             <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-th-list"></i>
-                    Opciones
-                </h3>
-            </div>
-            <div class="card-body">
-                <div class="row justify-content-center pt-2 pb-2">
-                    <button type="button" id="btnPerfilNuevo" class="btn btn-info btn-sm" data-dismiss="modal" data-toggle="modal">
+                <div class="col text-left">
+                    <h5 class="card-title">
+                        <i class="fas fa-table"></i>
+                        Perfiles
+                    </h5>
+                </div>
+                <div class="col text-right">
+                    <button type="button" id="btnPerfilNuevo" class="btn btn-flat btn-primary btn-sm" data-dismiss="modal" data-toggle="modal">
                         <i class="fa fa-plus-circle text-warning"></i>
                         Agregar Perfil
                     </button>
-                </div>
+                </div>                
             </div>
-        </div>
-    </div>
-    <div class="col col-md-10">
-        <div class="card card-primary card-outline">
-            @*<div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-table"></i>
-                        Listado
-                    </h3>
-                </div>*@
             <!-- /.card-header -->
             <div class="card-body ">
                 @using (Html.BeginForm("Index", "Perfiles", FormMethod.Post))
@@ -63,52 +53,53 @@
                         <div class="col-md-4"></div>
                     </div>
                     <div class="row">
-                        <table id="dglista" class="table table-bordered table-responsive w-100">
-                            <thead class="bg-gradient-lightblue">
-                                <tr>
-                                    <th>CODIGO PERFIL</th>
-                                    <th>DESCRIPCION</th>
-                                    <th>DESCRIPCION CORTA</th>
-                                    <th>TIPO CLIENTE</th>
-                                    <th>FECHA INICIO</th>
-                                    <th>FECHA FIN</th>
-                                    <th>GENERA ORDEN</th>
-                                    <th>NIVEL ATENCIÓN</th>
-                                    <th>EDITAR</th>
-                                    <th>ELIMINAR</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (ViewBag.Perfiles != null)
-                                {
-                                    foreach (ENPerfiles perfil in (List<ENPerfiles>)ViewBag.Perfiles)
+                        <div class="table-responsive">
+                            <table id="dglista" class="table table-bordered">
+                                <thead class="bg-primary">
+                                    <tr>
+                                        <th>CODIGO PERFIL</th>
+                                        <th>DESCRIPCION</th>
+                                        <th>DESCRIPCION CORTA</th>
+                                        <th>TIPO CLIENTE</th>
+                                        <th>FECHA INICIO</th>
+                                        <th>FECHA FIN</th>
+                                        <th>GENERA ORDEN</th>
+                                        <th>NIVEL ATENCIÓN</th>
+                                        <th>EDITAR</th>
+                                        <th>ELIMINAR</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.Perfiles != null)
                                     {
-                                        <tr>
-                                            <td class="cellCodigoCliente">@perfil.CodigoPerfil </td>
-                                            <td class="cellCodigoTitular">@perfil.DescripcionPerfil </td>
-                                            <td class="cellCodigoTitular">@perfil.DescripcionCorta </td>
-                                            <td>@perfil.CodigoTipoCliente </td>
-                                            <td>@perfil.FechaInicio.ToString("yyyy-MM-dd") </td>
-                                            <td>@perfil.FechaFin.ToString("yyyy-MM-dd") </td>
-                                            <td>@perfil.GeneraOrden </td>
-                                            <td>@perfil.NivelAtencion </td>
-                                            <td class="text-center">
-                                                <button type="button" class="botonedit btn btn-success btn-sm" onclick='EditarPerfil(event);' data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'>
-                                                    <i class="fa fa-edit text-warning"></i>&nbsp;Editar
-                                                </button>
-                                            </td>
-                                            <td class="text-center">
-                                                <button type="button" class="botonedit btn btn-danger btn-sm" onclick='EliminarPerfil(event);' data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'>
-                                                    <i class="fa fa-edit text-warning"></i>&nbsp;Eliminar
-                                                </button>
-                                            </td>
-                                        </tr>
+                                        foreach (ENPerfiles perfil in (List<ENPerfiles>)ViewBag.Perfiles)
+                                        {
+                                            <tr>
+                                                <td class="cellCodigoCliente">@perfil.CodigoPerfil </td>
+                                                <td class="cellCodigoTitular">@perfil.DescripcionPerfil </td>
+                                                <td class="cellCodigoTitular">@perfil.DescripcionCorta </td>
+                                                <td>@perfil.CodigoTipoCliente </td>
+                                                <td>@perfil.FechaInicio.ToString("yyyy-MM-dd") </td>
+                                                <td>@perfil.FechaFin.ToString("yyyy-MM-dd") </td>
+                                                <td>@perfil.GeneraOrden </td>
+                                                <td>@perfil.NivelAtencion </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="botonedit btn btn-success btn-sm" onclick='EditarPerfil(event);' data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'>
+                                                        <i class="fa fa-edit text-warning"></i>&nbsp;Editar
+                                                    </button>
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="botonedit btn btn-danger btn-sm" onclick='EliminarPerfil(event);' data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'>
+                                                        <i class="fa fa-times text-warning"></i>&nbsp;Eliminar
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
                                     }
-                                }
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>                        
                     </div>
-
                 }
             </div>
             <!-- /.card-body -->
