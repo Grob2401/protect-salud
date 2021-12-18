@@ -14,8 +14,31 @@ namespace Salud.Controllers
         private LNVendedores LNVendedores = new LNVendedores();
         private LNSociedades LNSociedades = new LNSociedades();
         // GET: Vendedor
-        public ActionResult Index()
+        [SessionExpire]
+        public ActionResult Index(int page = 0)
         {
+
+            var contador = LNVendedor.Cantidad(Session["SociedadUsuario"].ToString());
+            ViewData["todos"] = contador;
+            ViewData["ultimo"] = contador / 100;
+
+            if (page != 0)
+            {
+                if (page < (contador / 100))
+                {
+                    ViewData["pageCount"] = page;
+                }
+                else
+                {
+                    ViewData["pageCount"] = contador / 100;
+                }
+            }
+
+            if (ViewData["pageCount"] == null && page == 0)
+            {
+                ViewData["pageCount"] = 1;
+                page = 1;
+            }
 
             if (TempData["Seleccion"] != null)
             {
@@ -40,44 +63,88 @@ namespace Salud.Controllers
             var lstTiposComision_ = new SelectList(lstTiposComision.ToList(), "IdTipoComision", "DescripcionTipoComision");
             ViewData["ListaTipoComision"] = lstTiposComision_;
 
-            if (TempData["Vendedores"] != null)
+
+            if (Session["SociedadUsuario"] != null)
             {
-                ViewData["Vendedores"] = TempData["Vendedores"];
+                var sociedadSesion = Session["SociedadUsuario"];
+                var lstVendedores = LNVendedor.ObtenerTodos(page, 100, "", "", sociedadSesion.ToString());
+                ViewData["Vendedores"] = lstVendedores;
             }
             else
             {
-                
-                if (Session["SociedadUsuario"] != null)
-                {
-                    var sociedadSesion = Session["SociedadUsuario"];
-                    var lstVendedores = LNVendedor.ObtenerTodos(sociedadSesion.ToString());
-                    ViewData["Vendedores"] = lstVendedores;
-                }
-                else
-                {
-                    var lstVendedores = LNVendedor.ObtenerTodos("0");
-                    ViewData["Vendedores"] = lstVendedores;
-                }
-
+                var lstVendedores = LNVendedor.ObtenerTodos(page, 100, "", "", "0");
+                ViewData["Vendedores"] = lstVendedores;
             }
+
+            //if (TempData["Vendedores"] != null)
+            //{
+            //    ViewData["Vendedores"] = TempData["Vendedores"];
+            //}
+            //else
+            //{
+                
+                
+
+            //}
 
             return View();
         }
 
         [SessionExpire]
-        [HttpGet]
-        public ActionResult GetLista(string slcSociedad, string mensaje)
+        [HttpPost]
+        public ActionResult Index(int page = 0, string txtBusquedaVendedor = "", string mensaje = "")
         {
-            var lstVendedores = LNVendedor.ObtenerTodos(slcSociedad);
-            TempData["Vendedores"] = lstVendedores;
-            TempData["Seleccion"] = slcSociedad;
+            var contador = LNVendedor.Cantidad(Session["SociedadUsuario"].ToString());
+            ViewData["todos"] = contador;
+            ViewData["ultimo"] = contador / 100;
+
+            if (page != 0)
+            {
+                if (page < (contador / 100))
+                {
+                    ViewData["pageCount"] = page;
+                }
+                else
+                {
+                    ViewData["pageCount"] = contador / 100;
+                }
+            }
+
+            if (ViewData["pageCount"] == null && page == 0)
+            {
+                ViewData["pageCount"] = 1;
+                page = 1;
+            }
+
+            var lstSociedades = LNSociedades.ObtenerTodos();
+            var lstSociedades_ = new SelectList(lstSociedades.ToList(), "IdSociedad", "RazonSocial", Session["SociedadUsuario"].ToString());
+            ViewData["ListaSociedades"] = lstSociedades_;
+
+            var lstTiposComision = LNTipoComision.ObtenerTodos();
+            var lstTiposComision_ = new SelectList(lstTiposComision.ToList(), "IdTipoComision", "DescripcionTipoComision", Session["SociedadUsuario"].ToString());
+            ViewData["ListaTipoComision"] = lstTiposComision_;
+
+            if (Session["SociedadUsuario"] != null)
+            {
+                var sociedadSesion = Session["SociedadUsuario"];
+                var lstVendedores = LNVendedor.ObtenerTodos(1, 100, "", txtBusquedaVendedor, sociedadSesion.ToString());
+                ViewData["Vendedores"] = lstVendedores;
+                //TempData["Vendedores"] = lstVendedores;
+            }
+            else
+            {
+                var lstVendedores = LNVendedor.ObtenerTodos(1, 100, "", txtBusquedaVendedor, "0");
+                ViewData["Vendedores"] = lstVendedores;
+                //TempData["Vendedores"] = lstVendedores;
+            }
+
+            TempData["Seleccion"] = Session["SociedadUsuario"];
             TempData["mensaje"] = mensaje;
-            return RedirectToAction("Index");
-            //return Json(new { data = lstVendedores.ToList() }, JsonRequestBehavior.AllowGet);
+            return View();
+
         }
 
-        [HttpPost]
-
+        [HttpGet]
         public ActionResult Mantenimiento(ENVendedores pla)
         {
             var valor = 0;
@@ -90,7 +157,8 @@ namespace Salud.Controllers
                     TempData["Seleccion"] = Session["SociedadUsuario"].ToString();
                     TempData["mensaje"] = "Vendedor registrado";
                 }
-                return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Vendedor registrado" });
+                return RedirectToAction("Index", new { mensaje = "Vendedor registrado" });
+                //return RedirectToAction("GetLista", new { mensaje = "Vendedor registrado" });
                 //return Json(new { pla, message = "Vendedor registrado" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -102,7 +170,8 @@ namespace Salud.Controllers
                     TempData["Seleccion"] = Session["SociedadUsuario"].ToString();
                     TempData["mensaje"] = "Vendedor modificado";
                 }
-                return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Vendedor modificado" });
+                return RedirectToAction("Index", new { mensaje = "Vendedor modificado" });
+                //return RedirectToAction("GetLista", new { mensaje = "Vendedor modificado" });
                 //return Json(new { pla, message = "Vendedor modificado" }, JsonRequestBehavior.AllowGet);
 
             }
@@ -126,7 +195,8 @@ namespace Salud.Controllers
                 
                 ModelState.Clear();
             }
-            return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Comisión Asignada" });
+            return RedirectToAction("Index", new { mensaje = "Comisión Asignada" });
+            //return RedirectToAction("GetLista", new {mensaje = "Comisión Asignada" });
         }
 
         [HttpPost]
@@ -136,19 +206,38 @@ namespace Salud.Controllers
             {
                 if (LNVendedor.Eliminar(id))
                 {
-                    return Json(new { success = true, message = "Eliminado Correctamente" }, JsonRequestBehavior.AllowGet);
+                    var mensaje = "Excelente, Vendedor eliminado.";
+                    return Json(mensaje, JsonRequestBehavior.AllowGet);
                 }
-                return Json(new { success = true, message = "Eliminado Correctamente" }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
+                else
+                {
+                    var mensaje = "Error";
+                    return Json(mensaje, JsonRequestBehavior.AllowGet);
+                }
                 return View();
+            }
+            catch (Exception ex)
+            {
+                var mensaje = "Error, el vendedor tiene asignado un canal o pertenece a un contrato vigente.";
+                return Json(mensaje, JsonRequestBehavior.AllowGet);
             }
         }
 
         [HttpGet]
-        public ActionResult Asignacion(string slcSociedad)
+        public ActionResult Asignacion(int page = 0)
         {
+
+
+            if (page != 0)
+            {
+                ViewData["pageCount"] = page;
+            }
+
+            if (ViewData["pageCount"] == null && page == 0)
+            {
+                ViewData["pageCount"] = 1;
+                page = 1;
+            }
 
             if (TempData["Seleccion"] != null)
             {
@@ -173,13 +262,12 @@ namespace Salud.Controllers
 
                 if (Session["SociedadUsuario"] != null)
                 {
-                    var sociedadSesion = Session["SociedadUsuario"];
-                    var lstVendedores = LNVendedor.ObtenerTodos(sociedadSesion.ToString());
+                    var lstVendedores = LNVendedor.ObtenerTodos(page, 100, "", "", Session["SociedadUsuario"].ToString());
                     ViewData["Vendedores"] = lstVendedores;
                 }
                 else
                 {
-                    var lstVendedores = LNVendedor.ObtenerTodos("0");
+                    var lstVendedores = LNVendedor.ObtenerTodos(page, 100, "", "", "0");
                     ViewData["Vendedores"] = lstVendedores;
                 }
 
@@ -214,7 +302,7 @@ namespace Salud.Controllers
         [HttpGet]
         public ActionResult GetVendedoresSinAsignar(string slcSociedad)
         {
-            var lstVendedores = LNVendedor.ObtenerTodos(slcSociedad);
+            var lstVendedores = LNVendedor.ObtenerTodos(Session["SociedadUsuario"].ToString());
             var lstVendedoresAsignados = LNVendedor.ObtenerAsignados(slcSociedad);
             TempData["Vendedores"] = lstVendedores;
             TempData["Asignados"] = lstVendedoresAsignados;

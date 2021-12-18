@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="~/Content/dist/css/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!--Sweet Alert-->
+    <link rel="stylesheet" href="~/Content/plugins/sweetalert2/sweetalert2.min.css">
 </head>
 <body class="hold-transition login-page">
     <div class="login-box">
@@ -36,7 +38,7 @@
                 <form action="@Url.Action("Login", "Usuario")" method="post">
                     @Html.AntiForgeryToken()
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Usuario" name="usuario">
+                        <input type="email" class="form-control" placeholder="Usuario" name="usuario" value="@ViewBag.Usuario">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -44,7 +46,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Contraseña" name="password">
+                        <input type="password" class="form-control" placeholder="Contraseña" name="password" value="@ViewBag.Clave">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -54,7 +56,7 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="icheck-primary">
-                                <input type="checkbox" id="remember">
+                                <input type="checkbox" id="remember" name="remember" value="true">
                                 <label for="remember">
                                     Recordarme
                                 </label>
@@ -68,14 +70,17 @@
                     </div>
                 </form>
 
-            
+
 
                 <p class="mb-1">
-                    <a href="forgot-password.html">Olvidé mi contraseña</a>
+                    <a href="#">Olvidé mi contraseña</a>
                 </p>
-              
+
             </div>
             <!-- /.login-card-body -->
+            <div class="card-footer text-center" @ViewBag.Estado>
+                <label style="font-size: 10pt;" class="text-danger"><i class="fa fa-times fa-4x text-danger" style="font-size: 10pt;"></i>&nbsp;&nbsp;@ViewBag.Error</label>
+            </div>
         </div>
     </div>
     <!-- /.login-box -->
@@ -85,6 +90,9 @@
     <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="~/Content/dist/js/adminlte.min.js"></script>
+    <!--Sweet Alert JS-->
+    <script src="~/Content/plugins/sweetalert2/sweetalert2.min.js"></script>
 
+    
 </body>
 </html>

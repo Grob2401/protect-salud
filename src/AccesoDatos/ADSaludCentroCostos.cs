@@ -12,13 +12,13 @@ namespace AccesoDatos
         public String dataProviderName = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ProviderName;
         public String connectionString = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ConnectionString;
 
-        public List<ENSaludCentroCostos> ObtenerTodos(string CodigoCliente)
+        public List<ENSaludCentroCostos> ObtenerTodos1(string CodigoCliente)
         {
             DbCommand oCommand = null;
             List<ENSaludCentroCostos> oListaSaludCentroCostos = new List<ENSaludCentroCostos>();
             try
             {
-                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenSaludCentroCostos_sel");
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenSaludCentroCostos1_sel");
                 GenericDataAccess.AgregarParametro(oCommand, "@argCodigoCliente", CodigoCliente, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
                 DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
@@ -44,6 +44,69 @@ namespace AccesoDatos
                 GenericDataAccess.CerrarConexion(oCommand, null);
             }
         }
+
+        public int Cantidad(string CodigoCliente)
+        {
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenSaludCentroCostos_count");
+                GenericDataAccess.AgregarParametro(oCommand, "@argCodigoCliente", CodigoCliente, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
+                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
+                int cantidadCentroCostos = -1;
+                if (oDataReader.Read() && !int.TryParse(oDataReader["SaludCentroCostos"].ToString(), out cantidadCentroCostos)) cantidadCentroCostos = -1;
+                return cantidadCentroCostos;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
+        public List<ENSaludCentroCostos> ObtenerTodos(int page, int rows, string type, string Keywords, string CodigoCliente)
+        {
+            DbCommand oCommand = null;
+            List<ENSaludCentroCostos> oListaSaludCentroCostos = new List<ENSaludCentroCostos>();
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenSaludCentroCostos_sel");
+                GenericDataAccess.AgregarParametro(oCommand, "@page", page, TipoParametro.INT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@rowsPerPage", rows, TipoParametro.INT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@type", type, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@keywords", Keywords, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argCodigoCliente", CodigoCliente, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
+                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
+
+                while (oDataReader.Read())
+                {
+                    ENSaludCentroCostos oEnListaSaludCentroCostos = new ENSaludCentroCostos();
+                    oEnListaSaludCentroCostos.RowNumber = Convert.ToInt32(oDataReader["RowNumber"]);
+                    oEnListaSaludCentroCostos.CodigoCentroCosto = oDataReader["CodigoCentroCosto"].ToString();
+                    oEnListaSaludCentroCostos.CodigoCliente = oDataReader["CodigoCliente"].ToString();
+                    oEnListaSaludCentroCostos.DescripcionCentroCosto = oDataReader["DescripcionCentroCosto"].ToString();
+                    oEnListaSaludCentroCostos.RazonSocial = oDataReader["RazonSocial"].ToString();
+                    oEnListaSaludCentroCostos.RUC = oDataReader["RUC"].ToString();
+
+                    oListaSaludCentroCostos.Add(oEnListaSaludCentroCostos);
+                }
+                return oListaSaludCentroCostos;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
         public ENSaludCentroCostos ObtenerUno(string CodigoCliente,string CodigoCentroCosto)
         {
             DbCommand oCommand = null;

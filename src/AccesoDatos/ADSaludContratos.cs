@@ -146,6 +146,7 @@ namespace AccesoDatos
                     oENSaludContratos.InicioVigencia = DateTime.Parse(oDataReader["InicioVigencia"].ToString());
                     oENSaludContratos.RazonSocial = oDataReader["RazonSocial"].ToString();
                     oENSaludContratos.RUC = oDataReader["RUC"].ToString();
+                    oENSaludContratos.CodigoVendedor = oDataReader["CodigoVendedor"].ToString();
 
                 }
                 return oENSaludContratos;
@@ -205,15 +206,17 @@ namespace AccesoDatos
             try
             {
                 oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "sp_Cli_ContratoGrabarContrato");
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCliente", oENSaludContratos.CodigoCliente, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoContrato", oENSaludContratos.CodigoContrato, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCotizacion", oENSaludContratos.CodigoCotizacion, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoTipoContrato", oENSaludContratos.CodigoTipoContrato, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoTipoPrima", oENSaludContratos.CodigoTipoPrima, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@InicioVigencia", oENSaludContratos.InicioVigencia, TipoParametro.DT, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@FinalVigencia", oENSaludContratos.FinVigencia, TipoParametro.DT, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCorredor", oENSaludContratos.CodigoCorredor, TipoParametro.STR, Direccion.INPUT);
-                GenericDataAccess.AgregarParametro(oCommand, "@CodigoEjecutivo", oENSaludContratos.CodigoEjecutivo, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCliente", oENSaludContratos.CodigoCliente == null ? "" : oENSaludContratos.CodigoCliente, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoContrato", oENSaludContratos.CodigoContrato == null ? "" : oENSaludContratos.CodigoContrato, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCotizacion", oENSaludContratos.CodigoCotizacion == null ? "" : oENSaludContratos.CodigoCotizacion, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoTipoContrato", oENSaludContratos.CodigoTipoContrato == null ? "" : oENSaludContratos.CodigoTipoContrato, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoTipoPrima", oENSaludContratos.CodigoTipoPrima == null ? "" : oENSaludContratos.CodigoTipoPrima, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@InicioVigencia", oENSaludContratos.InicioVigencia == null ? DateTime.Now : oENSaludContratos.InicioVigencia, TipoParametro.DT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@FinalVigencia", oENSaludContratos.FinVigencia == null ? DateTime.Now : oENSaludContratos.FinVigencia, TipoParametro.DT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoCorredor", oENSaludContratos.CodigoCorredor == null ? "" : oENSaludContratos.CodigoCorredor, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoEjecutivo", oENSaludContratos.CodigoEjecutivo == null ? "" : oENSaludContratos.CodigoEjecutivo, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoVendedor", oENSaludContratos.CodigoVendedor == null ? "" : oENSaludContratos.CodigoVendedor, TipoParametro.STR, Direccion.INPUT);
+                
                 //GenericDataAccess.AgregarParametro(oCommand,"@argErrorCode", 1, TipoParametro.INT, Direccion.OUTPUT);
                 if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
                     return true;
@@ -230,7 +233,7 @@ namespace AccesoDatos
             }
         }
 
-        public bool Eliminar(string CodigoCliente, string CodigoContrato)
+        public bool Eliminar(string CodigoContrato,string CodigoCliente)
         {
 
             DbCommand oCommand = null;

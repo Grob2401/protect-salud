@@ -12,10 +12,32 @@ namespace Salud.Controllers
     public class PerfilesController : Controller
     {
         // GET: Perfiles
-        public ActionResult Index()
+        public ActionResult Index(int page = 0)
         {
+            var contador = LNPerfiles.Cantidad();
+            ViewData["todos"] = contador;
+            ViewData["ultimo"] = contador / 100;
+
+            if (page != 0)
+            {
+                if (page < (contador / 100))
+                {
+                    ViewData["pageCount"] = page;
+                }
+                else
+                {
+                    ViewData["pageCount"] = contador / 100;
+                }
+            }
+
+            if (ViewData["pageCount"] == null && page == 0)
+            {
+                ViewData["pageCount"] = 1;
+                page = 1;
+            }
+
             ViewBag.Perfiles = LNPerfiles.ObtenerTodos("");
-            ViewData["TiposCliente"] = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente","09");
+            ViewData["TiposCliente"] = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
 
             if (TempData["MensajeAgregarPerfil"] != null)
             {
@@ -29,10 +51,33 @@ namespace Salud.Controllers
         //####################BUSQUEDA
         [SessionExpire]
         [HttpPost]
-        public ActionResult Index(string txtBusquedaPerfiles = "")
+        public ActionResult Index(int page = 0, string txtBusquedaPerfiles = "")
         {
+
+            var contador = LNPerfiles.Cantidad();
+            ViewData["todos"] = contador;
+            ViewData["ultimo"] = contador / 100;
+
+            if (page != 0)
+            {
+                if (page < (contador / 100))
+                {
+                    ViewData["pageCount"] = page;
+                }
+                else
+                {
+                    ViewData["pageCount"] = contador / 100;
+                }
+            }
+
+            if (ViewData["pageCount"] == null && page == 0)
+            {
+                ViewData["pageCount"] = 1;
+                page = 1;
+            }
+
             ViewBag.Perfiles = LNPerfiles.ObtenerTodos(txtBusquedaPerfiles);
-            ViewData["TiposCliente"] = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente", "09");
+            ViewData["TiposCliente"] = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             return View();
         }
 
@@ -43,7 +88,7 @@ namespace Salud.Controllers
         {
             if (ModelState.IsValid)
             {
-                perfil.CodigoTipoCliente = "04";
+                //perfil.CodigoTipoCliente = "04";
                 perfil.GeneraOrden = "0";
                 if (perfil.CodigoPerfil != "" && perfil.CodigoPerfil != null)
                 {

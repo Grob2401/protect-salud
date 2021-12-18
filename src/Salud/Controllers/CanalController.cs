@@ -14,8 +14,31 @@ namespace Salud.Controllers
     {
         private LNCanales LNCanales = new LNCanales();
         private LNSociedades LNSociedades = new LNSociedades();
-        public ActionResult Index()
+        public ActionResult Index(int page = 0)
         {
+
+            var contador = LNCanal.Cantidad(Session["SociedadUsuario"].ToString());
+            ViewData["todos"] = contador;
+            ViewData["ultimo"] = contador / 100;
+
+            if (page != 0)
+            {
+                if (page < (contador / 100))
+                {
+                    ViewData["pageCount"] = page;
+                }
+                else
+                {
+                    ViewData["pageCount"] = contador / 100;
+                }
+            }
+
+            if (ViewData["pageCount"] == null && page == 0)
+            {
+                ViewData["pageCount"] = 1;
+                page = 1;
+            }
+
 
             if (TempData["Seleccion"] != null)
             {
@@ -48,12 +71,12 @@ namespace Salud.Controllers
                 if (Session["SociedadUsuario"] != null)
                 {
                     var sociedadSesion = Session["SociedadUsuario"];
-                    var lstCanales = LNCanal.ObtenerTodos(sociedadSesion.ToString());
+                    var lstCanales = LNCanal.ObtenerTodos(page,100,"","",sociedadSesion.ToString());
                     ViewData["Canales"] = lstCanales;
                 }
                 else
                 {
-                    var lstCanales = LNCanal.ObtenerTodos("0");
+                    var lstCanales = LNCanal.ObtenerTodos(page, 100, "", "","0");
                     ViewData["Canales"] = lstCanales;
                 }
                 
@@ -62,15 +85,69 @@ namespace Salud.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ActionResult GetLista(string slcSociedad, string mensaje)
+        [SessionExpire]
+        [HttpPost]
+        public ActionResult Index(int page = 0,string txtBusquedaCanal = "", string mensaje = "")
         {
-            var lstCanales = LNCanal.ObtenerTodos(slcSociedad);
-            TempData["Canales"] = lstCanales;
-            TempData["Seleccion"] = slcSociedad;
+
+            var contador = LNCanal.Cantidad(Session["SociedadUsuario"].ToString());
+            ViewData["todos"] = contador;
+            ViewData["ultimo"] = contador / 100;
+
+            if (page != 0)
+            {
+                if (page < (contador / 100))
+                {
+                    ViewData["pageCount"] = page;
+                }
+                else
+                {
+                    ViewData["pageCount"] = contador / 100;
+                }
+            }
+
+            if (ViewData["pageCount"] == null && page == 0)
+            {
+                ViewData["pageCount"] = 1;
+                page = 1;
+            }
+
+            var lstSociedades = LNSociedades.ObtenerTodos();
+            var lstSociedades_ = new SelectList(lstSociedades.ToList(), "IdSociedad", "RazonSocial", Session["SociedadUsuario"].ToString());
+            ViewData["ListaSociedades"] = lstSociedades_;
+
+            var lstTiposComision = LNTipoComision.ObtenerTodos();
+            var lstTiposComision_ = new SelectList(lstTiposComision.ToList(), "IdTipoComision", "DescripcionTipoComision", Session["SociedadUsuario"].ToString());
+            ViewData["ListaTipoComision"] = lstTiposComision_;
+
+            if (Session["SociedadUsuario"] != null)
+            {
+                var sociedadSesion = Session["SociedadUsuario"];
+                var lstCanales = LNCanal.ObtenerTodos(1, 100, "", txtBusquedaCanal, sociedadSesion.ToString());
+                ViewData["Canales"] = lstCanales;
+                //TempData["Vendedores"] = lstVendedores;
+            }
+            else
+            {
+                var lstCanales = LNCanal.ObtenerTodos(1, 100, "", txtBusquedaCanal, "0");
+                ViewData["Canales"] = lstCanales;
+                //TempData["Vendedores"] = lstVendedores;
+            }
+
+            TempData["Seleccion"] = Session["SociedadUsuario"];
             TempData["mensaje"] = mensaje;
-            return RedirectToAction("Index");
+            return View();
         }
+
+        //[HttpGet]
+        //public ActionResult GetLista(string slcSociedad, string mensaje)
+        //{
+        //    var lstCanales = LNCanal.ObtenerTodos(slcSociedad);
+        //    TempData["Canales"] = lstCanales;
+        //    TempData["Seleccion"] = slcSociedad;
+        //    TempData["mensaje"] = mensaje;
+        //    return RedirectToAction("Index");
+        //}
 
         [HttpGet]
         public JsonResult GetListaJSON(string slcSociedad)
@@ -91,7 +168,7 @@ namespace Salud.Controllers
                     valor = canal.IdSociedad;
                     ModelState.Clear();
                 }
-                return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Canal modificado" });
+                return RedirectToAction("Index", new { mensaje = "Canal modificado" });
             }
             else
             {
@@ -100,7 +177,7 @@ namespace Salud.Controllers
                     valor = canal.IdSociedad;
                     ModelState.Clear();
                 }
-                return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Canal registrado" });
+                return RedirectToAction("Index", new { mensaje = "Canal registrado" });
 
             }
         }
@@ -108,13 +185,13 @@ namespace Salud.Controllers
         [HttpGet]
         public ActionResult MantenimientoComision(ENCanales vcomision,string slcSociedad)
         {
-            var valor = "";
+            var valor = ""; 
             if (LNCanal.InsertarComision(vcomision))
             {
-                valor = slcSociedad;
+                valor = Session["SociedadUsuario"].ToString();
                 ModelState.Clear();
             }
-            return RedirectToAction("GetLista", new { slcSociedad = valor, mensaje = "Comisión Asignada" });
+            return RedirectToAction("Index", new { mensaje = "Comisión Asignada" });
         }
 
         [SessionExpire]
@@ -125,13 +202,20 @@ namespace Salud.Controllers
             {
                 if (LNCanal.Eliminar(Id))
                 {
-                    return Json(new { success = true, message = "Eliminado Correctamente" }, JsonRequestBehavior.AllowGet);
+                    var mensaje = "Excelente, Canal eliminado.";
+                    return Json(mensaje, JsonRequestBehavior.AllowGet);
                 }
-                return Json(new { success = true, message = "Eliminado Correctamente" }, JsonRequestBehavior.AllowGet);
+                else
+                {
+                    var mensaje = "Error";
+                    return Json(mensaje, JsonRequestBehavior.AllowGet);
+                }
+                
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                var mensaje = "Error, El Canal asignado tiene comisiones vigentes.";
+                return Json(mensaje, JsonRequestBehavior.AllowGet);
             }           
             
         }

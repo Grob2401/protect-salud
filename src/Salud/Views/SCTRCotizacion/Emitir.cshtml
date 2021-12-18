@@ -13,6 +13,9 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
+
+        <input type="hidden" id="ruta_ValidaRuc" name="name" value='@Url.Action("ValidaRuc", "SCTRCotizacion")' />
+
         <div class="row no-gutters">
             <div class="col-md-12">
                 <div class="card">
@@ -108,12 +111,15 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#drpCentroCosto').change(function (e) {
+
+                var url_method = $('#ruta_ValidaRuc').val();
+
                 var centrocosto = $('#drpCentroCosto').val();
                 e.preventDefault();
                 alert("Handler for .click() drpCCosto called.");
                 $.ajax({
                     type: "post",
-                    url: "/SCTRCotizacion/ValidaRuc",
+                    url: url_method,
                     data: { empresaruc },
                     datatype: "json",
                     traditional: true,

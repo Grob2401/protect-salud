@@ -18,9 +18,11 @@
     <input id="hdClienteCodigo" type="hidden" name="name" value='@ViewBag.Cliente' />
     <input id="hdContratoCodigo" type="hidden" name="name" value='@ViewBag.Contrato' />
     <input id="hdPlan" type="hidden" name="name" value='0000000008' />
+    <input type="hidden" id="ruta_provincia" name="name" value='@Url.Action("GetProvincia", "SCTRCotizacion")' />
+    <input type="hidden" id="ruta_distrito" name="name" value='@Url.Action("GetDistrito", "SCTRCotizacion")' />
 
-    <input type="hidden" id="provincias_ruta" name="name" value='@Url.Action("GetProvincias", "SaludAsegurados")' />
-    <input type="hidden" id="distritos_ruta" name="name" value='@Url.Action("GetDistritos", "SaludAsegurados")' />
+    @*<input type="hidden" id="provincias_ruta" name="name" value='@Url.Action("GetProvincias", "SaludAsegurados")' />
+        <input type="hidden" id="distritos_ruta" name="name" value='@Url.Action("GetDistritos", "SaludAsegurados")' />*@
 
     <div class="row">
         <div class="col-md-2">
@@ -45,7 +47,7 @@
                                 else
                                 {
                                     <button type="submit" class="btn btn-app bg-gradient-info" name="editar" value="editar">
-                                        <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
+                                        <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Grabar
                                     </button>
                                 }
                             }
@@ -214,15 +216,17 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                @Html.LabelFor(model => model.Pais, "País", htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownList("CodigoPais", null, new { id = "drpPais", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
-                                @Html.ValidationMessageFor(model => model.Pais)
+                                <label for="txtDireccion">Pais :</label>
+                                @*@Html.LabelFor(model => model.Pais, "País", htmlAttributes: new { @class = "control-label" })*@
+                                @Html.DropDownListFor(model => model.Pais, ViewBag.CodigoPais as SelectList, new { id = "drpPais", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                @*@Html.ValidationMessageFor(model => model.Pais)*@
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.CodigoDpto, "Departamento", htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownList("CodigoDpto", null, new { id = "drpDepartamento", @class = "form-control-sm js-example-responsive", @style = "width:100%", @onchange = "callChangeDepartamento(this.value)" })
+                                @*<label for="txtDireccion">Departamento:</label>*@
+                                @Html.DropDownList("CodigoDpto", null, new { id = "drpDepartamento", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                 @Html.ValidationMessageFor(model => model.CodigoDpto)
                             </div>
                         </div>
@@ -244,7 +248,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="txtFechaAlta">FechaAlta</label>
-                                @Html.TextBoxFor(model => model.FechaAlta, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaAlta", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+                                @Html.TextBoxFor(model => model.FechaAlta, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaAlta", @class = "form-control form-control-sm float-right", @readonly = "readonly", value = DateTime.Now })
 
                             </div>
                         </div>
@@ -331,6 +335,7 @@
             var telefonoVal = document.forms["Form1"]["txtTelefono"].value.trim();
             var celularVal = document.forms["Form1"]["txtCelular"].value.trim();
             var direccionVal = document.forms["Form1"]["txtDireccion"].value.trim();
+            var planes = document.getElementById("drpPlanes");
             //---
 
             if (codTrabajadorVal == "" && apaternoVal == "" && amaternoVal == "" && nombresVal == "" && numeroDocumentoVal == "" &&
@@ -381,11 +386,11 @@
                 return false;
             }
 
-            if (fechaNacimientoVal == "") {
+            if ((fechaNacimientoVal == "") || (fechaNacimientoVal == "0001-01-01")) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Mensaje',
-                    html: 'No ha ingresado Fecha de Nacimiento',
+                    html: 'Fecha de Nacimiento incorrecta',
                     showCloseButton: true
                 })
                 return false;
@@ -436,17 +441,24 @@
                 })
                 return false;
             }
+            if (planes.options.length == 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Mensaje',
+                    html: 'No tiene planes disponibles. Recuerde los contratos deben tener asignados planes para crear una afiliaciòn.',
+                    showCloseButton: true
+                })
+                return false;
+            }
+
+
         }
-
-
 
     </script>
 
 
 
     <script>
-
-
         $(document).ready(function () {
             //$('.js-example-basic-single').select2();
             $(".js-example-responsive").select2({
@@ -474,7 +486,6 @@
 
         $(document).ready(function () {
 
-            callChangeDepartamento(document.getElementById('drpDepartamento').value);
 
             const valorCliente = document.getElementById('hdClienteCodigo').value;
             const valorContrato = document.getElementById('hdContratoCodigo').value;
@@ -485,9 +496,9 @@
             textoCliente.value = valorCliente;
             textoContrato.value = valorContrato;
 
-            var CodigoTitula = document.getElementById('txtCodigoTitular');
             var valorCodigoTitula = "@TempData["CodigoTitular"]";
-            if (valorCodigoTitula != null)
+            var CodigoTitula = document.getElementById('txtCodigoTitular');
+            if (valorCodigoTitula != null && CodigoTitula != null)
             {
                 CodigoTitula.value = valorCodigoTitula;
             }
@@ -524,62 +535,57 @@
                 default:
             }
         }
+    </script>
 
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#drpDepartamento').change(function () {
 
+                var url_method = $('#ruta_provincia').val();
 
-
-        function callChangeDepartamento(id) {
-            const prov = document.getElementById('drpProvincia');
-            var url_method = $('#provincias_ruta').val();
-
-            //------------------
-            $.ajax({
-                type: "GET",
-                url: url_method,
-                data: {
-                    'dptoid': id,
-                },
-                dataType: "text",
-                success: function (r) {
-                    var dataparseada = JSON.parse(r);
-                    prov.innerText = null;
-                    for (var i = 0; i < dataparseada.length; i++) {
-                        var opt = dataparseada[i].CodigoProv;
-                        var tx = dataparseada[i].DescripcionProv;
-                        prov.innerHTML += "<option value=\"" + opt + "\">" + tx + "</option>";
+                $.ajax({
+                    type: "post",
+                    url: url_method,
+                    data: { dptoid: $('#drpDepartamento').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        var provincia = "<select id='CodigoProv'>";
+                        provincia = provincia + '<option value="">--Seleccionar--</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            provincia = provincia + '<option value=' + data[i].CodigoProv + '>' + data[i].DescripcionProv + '</option>';
+                        }
+                        provincia = provincia + '</select>';
+                        $('#drpProvincia').html(provincia);
                     }
-
-                }
+                });
             });
-            callChangeProvincia(prov.value);
-        }
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#drpProvincia').change(function () {
 
-        function callChangeProvincia(id) {
-            const dep = document.getElementById('drpDepartamento').value;
-            const dis = document.getElementById('drpDistrito');
-            var url_method = $('#distritos_ruta').val();
-            //------------------
-            $.ajax({
-                type: "GET",
-                url: url_method,
-                data: {
-                    'dptoid': dep,
-                    'provid': id
-                },
-                dataType: "text",
-                success: function (r) {
-                    var dataparseada = JSON.parse(r);
-                    dis.innerText = null;
-                    //console.log(dataparseada);
-                    for (var i = 0; i < dataparseada.length; i++) {
-                        var opt = dataparseada[i].CodigoDist;
-                        var tx = dataparseada[i].DescripcionDist;
-                        dis.innerHTML += "<option value=\"" + opt + "\">" + tx + "</option>";
+                var url_method = $('#ruta_distrito').val();
+
+                $.ajax({
+                    type: "post",
+                    url: url_method,
+                    data: { dptoid: $('#drpDepartamento').val(), provid: $('#drpProvincia').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        var district = "<select id='CodigoDist'>";
+                        district = district + '<option value="">--Seleccionar--</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            district = district + '<option value=' + data[i].CodigoDist + '>' + data[i].DescripcionDist + '</option>';
+                        }
+                        district = district + '</select>';
+                        $('#drpDistrito').html(district);
                     }
-
-                }
+                });
             });
-        }
+        });
     </script>
 }
 

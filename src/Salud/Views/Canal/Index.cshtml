@@ -38,7 +38,7 @@
 </style>
 <section>
 
-    @using (Html.BeginForm("GetLista", "Canal", FormMethod.Get, new { id = "Form1", name = "Form1" }))
+    @using (Html.BeginForm("Index", "Canal", FormMethod.Post, new { id = "Form1", name = "Form1" }))
     {
 
         <div class="row">
@@ -62,59 +62,108 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body ">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="text-uppercase" for="txtdesde">SOCIEDAD :&nbsp;&nbsp;</label>
-                                @Html.DropDownList("slcSociedad", ViewData["ListaSociedades"] as SelectList, new { @class = "form-control-sm js-example-basic-single", @style = "width:100%", @disabled = "disabled" })
-                                <button id="btnbuscar" type="submit" class="btn btn-dark btn-sm" disabled hidden>
-                                    <i class="fa fa-search text-warning"></i>&nbsp;&nbsp;Buscar
-                                </button>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="text-uppercase" for="txtdesde">SOCIEDAD :&nbsp;&nbsp;</label>
+                                    @Html.DropDownList("slcSociedad", ViewData["ListaSociedades"] as SelectList, new { @class = "form-control-sm js-example-basic-single", @style = "width:100%", @disabled = "disabled" })
+                                    <button id="btnbuscar" type="submit" class="btn btn-dark btn-sm" disabled hidden>
+                                        <i class="fa fa-search text-warning"></i>&nbsp;&nbsp;Buscar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="drpTipoCliente">Búsqueda:</label>
+                                    <input type="text" id="txtBusquedaCanal" class="form-control form-control-sm" name="txtBusquedaCanal" placeholder="Descripción Canal" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label style="visibility:hidden;">Búsqueda:</label>
+                                    <div>
+                                        <button type="submit" class="btn btn-dark btn-sm">
+                                            <i class="fa fa-search-plus text-warning"></i>&nbsp;&nbsp;Buscar
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="table-responsive">
-                            <table id="dglista" class="table table-bordered text-uppercase">
-                                <thead class="bg-primary">
-                                    <tr>
-                                        <th>CODIGO</th>
-                                        <th>DESCRIPCION</th>
-                                        <th>TIPO COMISIÓN</th>
-                                        <th>COMISIÓN</th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (ViewData["Canales"] != null)
-                                    {
-                                        foreach (ENCanales can in (List<ENCanales>)ViewData["Canales"])
-                                        {
-                                            <tr>
-                                                <td>@can.IDCanal </td>
-                                                <td>@can.DescripcionCanal </td>
-                                                <td>@((can.Comision_Tipo_Descripcion == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @can.Comision_Tipo_Descripcion + "</span>"))</td>
-                                                <td>@((can.Comision_Cantidad == 0) ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>" + @can.Comision_Cantidad + "</span>"))</td>
-                                                <td width="100px" class="text-center">
-                                                    <button type="button" class="botonedit btn btn-info btn-sm">
-                                                        <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
-                                                    </button>
-                                                </td>
-                                                <td width="100px" class="text-center">
-                                                    <button type="button" class="botoncomi btn btn-primary btn-sm">
-                                                        <i class="fa fa-coins text-warning"></i>&nbsp;&nbsp;Comisión
-                                                    </button>
-                                                </td>
-                                                <td width="100px" class="text-center">
-                                                    <button type="button" class="botondel btn btn-danger btn-sm">
-                                                        <i class="fa fa-times text-warning"></i>&nbsp;&nbsp;Eliminar
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
+                        <hr />
+                        <div class="row">
+                            <div class="col d-flex justify-content-start">
+                                <div class="col text-left">
+                                    <label class="text-bold text-primary">PÁGINA </label>&nbsp;
+                                    <label class="text-bold" style="font-size:9pt">(@Convert.ToInt32(ViewData["pageCount"]) DE @(Convert.ToInt32(ViewData["ultimo"])+1))</label>&nbsp;&nbsp;
+                                    <i class="fa fa-angle-double-right text-warning"></i>
+                                    <label class="text-bold text-success" style="font-size:9pt">Canales disponibles</label>&nbsp;
+                                    <label class="text-bold" style="font-size:9pt">(@Convert.ToInt32(ViewData["todos"]))</label>
+                                </div>
+                            </div>
+                            <div class="col d-flex justify-content-end">
+                                <ul class="pagination">
+                                    <li class="page-item success">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = 1 })">&nbsp;&nbsp;Pág. 1</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["pageCount"]) - 1 })">&nbsp;&nbsp;<i class="fa fa-angle-left text-primary"></i>&nbsp;&nbsp;Anterior</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["pageCount"]) + 1 })">Siguiente&nbsp;&nbsp;<i class="fa fa-angle-right text-primary"></i></a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["ultimo"]) + 1 })">Pág. @(Convert.ToInt32(ViewData["ultimo"])+1)&nbsp;&nbsp;</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
+                        <div class="row">
+                            <div class="table-responsive">
+                                <table id="dglista" class="table table-bordered text-uppercase">
+                                    <thead class="bg-primary">
+                                        <tr>
+                                            <th>CODIGO</th>
+                                            <th>DESCRIPCION</th>
+                                            <th>TIPO COMISIÓN</th>
+                                            <th>COMISIÓN</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (ViewData["Canales"] != null)
+                                        {
+                                            foreach (ENCanales can in (List<ENCanales>)ViewData["Canales"])
+                                            {
+                                                <tr>
+                                                    <td>@can.IDCanal </td>
+                                                    <td>@can.DescripcionCanal </td>
+                                                    <td>@((can.Comision_Tipo_Descripcion == "") ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>"+ @can.Comision_Tipo_Descripcion + "</span>"))</td>
+                                                    <td>@((can.Comision_Cantidad == 0) ? @Html.Raw(HttpUtility.HtmlDecode("<span class='text-danger'>Sin Asignar</span>")) : @Html.Raw("<span class='text-primary'>" + @can.Comision_Cantidad + "</span>"))</td>
+                                                    <td width="100px" class="text-center">
+                                                        <button type="button" class="botonedit btn btn-info btn-sm">
+                                                            <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
+                                                        </button>
+                                                    </td>
+                                                    <td width="100px" class="text-center">
+                                                        <button type="button" class="botoncomi btn btn-primary btn-sm">
+                                                            <i class="fa fa-coins text-warning"></i>&nbsp;&nbsp;Comisión
+                                                        </button>
+                                                    </td>
+                                                    <td width="100px" class="text-center">
+                                                        <button type="button" class="botondel btn btn-danger btn-sm">
+                                                            <i class="fa fa-times text-warning"></i>&nbsp;&nbsp;Eliminar
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
 
                     </div>
                     <!-- /.card-body -->
@@ -230,9 +279,9 @@
                     </div>
                     <hr />
                     <div class="form-group">
-                        @*<button type="submit" class="btn btn-dark btn-sm">
-                                <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Guardar Datos
-                            </button>*@
+                        <button type="submit" class="btn btn-dark btn-sm">
+                            <i class="fa fa-building text-warning"></i>&nbsp;&nbsp;Guardar Datos
+                        </button>
                     </div>
 
                 }
@@ -248,6 +297,7 @@
     @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
     @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
     @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
+    @Scripts.Render("~/Content/Util/util.js")
 
     <script>
         $(document).ready(function () {
@@ -279,7 +329,8 @@
                 "autoWidth": false,
                 "responsive": false,
                 "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
-                "pageLength": 50,
+                "pageLength": 8,
+                "searching": false,
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }
@@ -321,8 +372,9 @@
 
         $(".botoncomi").click(function () {
             txt1 = $(this).parents('tr').find("td:eq(0)").text().trim();
+            txt2 = $(this).parents('tr').find("td:eq(3)").text().trim();
             document.getElementById("Comision_IDCanal").value = txt1;
-            document.getElementById("Comision_Cantidad").value = "";
+            document.getElementById("Comision_Cantidad").value = txt2;
 
             $('#modalComision').modal('show');
 
@@ -351,10 +403,9 @@
                             'id': txt
                         },
                         success: function (data) {
-                            if (data.success) {
-                                var idso = document.getElementById("slcSociedad").value;
-                                window.location = '@Url.Action("GetLista", "Canal")' + '?slcSociedad=' + idso +'&mensaje=Canal removido';
-                            }
+                            var sms = data;
+                            var ruta = "@Url.Action("Index", "Canal")";
+                            mensajeRedirect(sms, ruta);
                         }
 
                     });

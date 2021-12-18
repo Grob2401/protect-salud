@@ -8,11 +8,13 @@ namespace Entidades
 {
     public class ENUsuario
     {
+        public int RowNumber { get; set; }
         public int int_IdUsuario { get; set; }
         public string var_Nombre { get; set; }
         public string var_Apellidos { get; set; }
         public string var_Mail { get; set; }
         public bool? bit_Sexo { get; set; }
+        public string CodigoSexo { get; set; }
         public int int_Estado { get; set; }
         public string var_Password { get; set; }
         public DateTime? dtm_FechaNacimiento { get; set; }

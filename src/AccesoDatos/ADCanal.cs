@@ -15,6 +15,29 @@ namespace AccesoDatos
         public String dataProviderName = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ProviderName;
         public String connectionString = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ConnectionString;
 
+        public int Cantidad(string sociedad)
+        {
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenCanales_count");
+                GenericDataAccess.AgregarParametro(oCommand, "@IdSociedad", sociedad, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
+                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
+                int cantidadCanales = -1;
+                if (oDataReader.Read() && !int.TryParse(oDataReader["Canales"].ToString(), out cantidadCanales)) cantidadCanales = -1;
+                return cantidadCanales;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
         public List<ENCanales> ObtenerTodos(string sociedad)
         {
             DbCommand oCommand = null;
@@ -22,7 +45,8 @@ namespace AccesoDatos
             try
             {
                 oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "VENTAS.USP_SEL_MANTENIMIENTO_CANALES");
-                GenericDataAccess.AgregarParametro(oCommand, "@IdSociedad ", sociedad, TipoParametro.INT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@IdSociedad ", sociedad == null ? "" : sociedad, TipoParametro.INT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode", 1, TipoParametro.INT, Direccion.OUTPUT);
                 DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
                 while (oDataReader.Read())
                 {
@@ -45,6 +69,42 @@ namespace AccesoDatos
                 GenericDataAccess.CerrarConexion(oCommand, null);
             }
         }
+
+        public List<ENCanales> ObtenerTodos(int page, int rows, string type, string Keywords, string sociedad)
+        {
+            DbCommand oCommand = null;
+            List<ENCanales> oListaCanales = new List<ENCanales>();
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "VENTAS.USP_SEL_MANTENIMIENTO_CANALES");
+                GenericDataAccess.AgregarParametro(oCommand, "@page", page, TipoParametro.INT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@rowsPerPage", rows, TipoParametro.INT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@type", type, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@keywords", Keywords, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@IdSociedad", sociedad == null ? "" : sociedad, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode", 1, TipoParametro.INT, Direccion.OUTPUT);
+                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
+                while (oDataReader.Read())
+                {
+                    ENCanales oEnListaCanales = new ENCanales();
+                    oEnListaCanales.IDCanal = Convert.ToInt32(oDataReader["IDCanal"]);
+                    oEnListaCanales.DescripcionCanal = oDataReader["DescripcionCanal"].ToString();
+                    oEnListaCanales.Comision_Tipo_Descripcion = oDataReader["Comision_Tipo"].ToString();
+                    oEnListaCanales.Comision_Cantidad = Convert.ToInt32(oDataReader["Comision_Cantidad"]);
+                    oListaCanales.Add(oEnListaCanales);
+
+                }
+                return oListaCanales;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }        
 
         public bool Insertar(ENCanales oENCanal)
         {

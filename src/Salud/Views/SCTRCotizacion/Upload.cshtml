@@ -16,6 +16,10 @@
     @Html.ValidationSummary()
 
     <div class="form-horizontal">
+
+        <input type="hidden" id="ruta_GetCentroCosto" name="name" value='@Url.Action("GetCentroCosto", "SCTRCotizacion")' />
+        <input type="hidden" id="ruta_SetSession" name="name" value='@Url.Action("SetSession", "SCTRCotizacion")' />
+
         <div class="row no-gutters">
             <div class="col-md-12">
                 <div class="card">
@@ -219,9 +223,12 @@
             $('#txtCodigoCliente').change(function (e) {
                 var codigocliente = $('#txtCodigoCliente').val();
                 //var codigocotizacion = $('#txtCodigoCotizacion').val();
+
+                var url_method = $('#ruta_GetCentroCosto').val();
+
                 $.ajax({
                     type: "post",
-                    url: "/SCTRCotizacion/GetCentroCosto",
+                    url: url_method,
                     //data: { codigocliente,codigocotizacion },
                     data: { codigocliente },
                     datatype: "json",
@@ -254,12 +261,15 @@
             $('#Cargar').click(function (e) {
                 var codigocentrocosto = $('#drpCentroCosto').val();
                 var descripcioncentrocosto = $('#drpCentroCosto option:selected').text();
+
+                var url_method = $('#ruta_SetSession').val();
+                
                 //e.preventDefault();
                 //alert("Handler for .click() drpCCosto called.");
                 //alert(codigocentrocosto);
                 $.ajax({
                     type: "post",
-                    url: "/SCTRCotizacion/SetSession",
+                    url: url_method,
                     data: { codigocentrocosto, descripcioncentrocosto },
                     datatype: "json",
                     traditional: true,

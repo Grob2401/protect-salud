@@ -35,9 +35,9 @@ namespace LogicaNegocio
         return (new ADSaludContratos()).Actualizar(oENSaludContratos);
         }
 
-        public static bool  Eliminar(string CodigoCliente, string CodigoContrato)
+        public static bool  Eliminar(string CodigoContrato, string CodigoCliente)
         {
-        return (new ADSaludContratos()).Eliminar(CodigoCliente,CodigoContrato);
+        return (new ADSaludContratos()).Eliminar(CodigoContrato,CodigoCliente);
 
         }
 

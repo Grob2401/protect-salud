@@ -52,6 +52,35 @@
                         </div>
                         <div class="col-md-4"></div>
                     </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col d-flex justify-content-start">
+                            <div class="col text-left">
+                                <label class="text-bold text-primary">PÁGINA </label>&nbsp;
+                                <label class="text-bold" style="font-size:9pt">(@Convert.ToInt32(ViewData["pageCount"]) DE @(Convert.ToInt32(ViewData["ultimo"])+1))</label>&nbsp;&nbsp;
+                                <i class="fa fa-angle-double-right text-warning"></i>
+                                <label class="text-bold text-success" style="font-size:9pt">Perfiles disponibles</label>&nbsp;
+                                <label class="text-bold" style="font-size:9pt">(@Convert.ToInt32(ViewData["todos"]))</label>
+                            </div>
+                        </div>
+                        <div class="col d-flex justify-content-end">
+                            <ul class="pagination">
+                                <li class="page-item success">
+                                    <a class="page-link" href="@Url.Action("Index", new { page = 1 })">&nbsp;&nbsp;Pág. 1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["pageCount"]) - 1 })">&nbsp;&nbsp;<i class="fa fa-angle-left text-primary"></i>&nbsp;&nbsp;Anterior</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["pageCount"]) + 1 })">Siguiente&nbsp;&nbsp;<i class="fa fa-angle-right text-primary"></i></a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["ultimo"]) + 1 })">Pág. @(Convert.ToInt32(ViewData["ultimo"])+1)&nbsp;&nbsp;</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="table-responsive">
                             <table id="dglista" class="table table-bordered">
@@ -98,7 +127,7 @@
                                     }
                                 </tbody>
                             </table>
-                        </div>                        
+                        </div>
                     </div>
                 }
             </div>
@@ -131,7 +160,7 @@
                                 </div>
                                 <div class="form-group">
                                     <h6>Tipo Cliente :</h6>
-                                    @Html.DropDownListFor(m => m.CodigoTipoCliente, ViewData["TiposCliente"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single", id = "ddlCodigoTipoCliente", @style = "width:100%", @readonly= true })
+                                    @Html.DropDownListFor(model => model.CodigoTipoCliente, ViewData["TiposCliente"] as SelectList, new { @class = "form-control form-control-sm js-example-basic-single", id = "ddlCodigoTipoCliente", @style = "width:100%", @readonly= true })
                                     @Html.ValidationMessageFor(model => model.CodigoTipoCliente, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="form-group">
@@ -144,7 +173,7 @@
                                     @Html.TextBoxFor(model => model.FechaFin, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFechaFin", @class = "form-control form-control-sm float-right", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
                                     @Html.ValidationMessageFor(model => model.FechaFin, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" hidden>
                                     <h6>Genera Orden :</h6>
                                     @Html.DropDownListFor(m => m.GeneraOrden, new List<SelectListItem>
                                     {
@@ -200,7 +229,7 @@
                 "autoWidth": false,
                 "responsive": false,
                 "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
-                "pageLength": 10,
+                "pageLength": 8,
                 "searching": false,
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
@@ -236,23 +265,30 @@
         }
 
         function EditarPerfil(e) {
+            e.preventDefault();
             document.getElementById("txtDescripcionPerfil").value = "";
             if (e.target.classList.contains('botonedit'))
             {
                 const scodigoPerfil = e.target.parentElement.parentElement.firstElementChild.textContent;
                 const sdescripcion = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
-                const stipoCliente = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+                const stipoCliente = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent.trim();
                 const sfechaInicio = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.textContent.trim();
                 const sfechaFin = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.textContent.trim();
                 const sGeneraOrden = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
-                console.log(sfechaInicio);
+                //console.log(stipoCliente);
                 $('#modalNuevoPerfil').modal('show');
                 document.getElementById("hfCodigoPerfil").value = scodigoPerfil;
                 document.getElementById("txtDescripcionPerfil").value = sdescripcion;
+
+                //$("#ddlCodigoTipoCliente").val(stipoCliente);
                 document.getElementById("ddlCodigoTipoCliente").value = stipoCliente;
+                //document.getElementById("ddlCodigoTipoCliente").value = ;
                 document.getElementById("txtFechaInicio").value = sfechaInicio;
                 document.getElementById("txtFechaFin").value = sfechaFin;
                 document.getElementById("ddlGeneraOrden").value = sGeneraOrden;
+
+                $("#ddlCodigoTipoCliente").val(stipoCliente).change();
+
             }
 
         };

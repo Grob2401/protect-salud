@@ -10,6 +10,7 @@ namespace Entidades
 
     public class ENSaludCentroCostos
     {
+        public int RowNumber { get; set; }
         public string CodigoCentroCosto { get; set; }
 
         public string CodigoCliente { get; set; }

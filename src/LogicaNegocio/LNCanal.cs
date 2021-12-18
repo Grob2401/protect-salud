@@ -15,6 +15,16 @@ namespace LogicaNegocio
             return new ADCanal().ObtenerTodos(sociedad);
         }
 
+        public static int Cantidad(string sociedad)
+        {
+            return new ADCanal().Cantidad(sociedad);
+        }
+
+        public static List<ENCanales> ObtenerTodos(int page, int rows, string type, string Keywords, string sociedad)
+        {
+            return new ADCanal().ObtenerTodos(page, rows, type, Keywords, sociedad);
+        }
+
         public static bool Insertar(ENCanales oENCanales)
         {
             return (new ADCanal()).Insertar(oENCanales);

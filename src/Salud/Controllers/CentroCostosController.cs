@@ -14,10 +14,74 @@ namespace Salud.Controllers
     {
         // GET: CentroCostos
         [SessionExpire]
-        public ActionResult Index()
+        public ActionResult Index(int page = 0)
+         {
+
+            if (TempData["MensajeCentroCosto"] != null)
+            {
+                ViewBag.MensajeCentroCosto = TempData["MensajeCentroCosto"];
+                ViewData["MensajeCentroCosto"] = TempData["MensajeCentroCosto"];
+                //TempData["MensajeCentroCosto"] = null;
+
+            }
+
+            var contador = LNSaludCentroCostos.Cantidad("");
+            ViewData["todos"] = contador;
+            ViewData["ultimo"] = contador / 100;
+
+            if (page != 0)
+            {
+                if (page < (contador / 100))
+                {
+                    ViewData["pageCount"] = page;
+                }
+                else
+                {
+                    ViewData["pageCount"] = contador / 100;
+                }
+            }
+
+            if (ViewData["pageCount"] == null && page == 0)
+            {
+                ViewData["pageCount"] = 1;
+                page = 1;
+            }
+
+            //ViewBag.CentroCostos = LNSaludCentroCostos.ObtenerTodos(sCodigoCliente);
+            ViewBag.CentroCostos = LNSaludCentroCostos.ObtenerTodos(page, 100, "", "","").OrderBy(x => x.RowNumber).ToList();
+            return View();
+        }
+
+        [SessionExpire]
+        [HttpPost]
+        public ActionResult Index(int page = 0, string txtBusquedaAsegurados = "")
         {
-            string sCodigoCliente = "";
-            ViewBag.CentroCostos = LNSaludCentroCostos.ObtenerTodos(sCodigoCliente);
+
+            var contador = LNSaludCentroCostos.Cantidad("");
+            ViewData["todos"] = contador;
+            ViewData["ultimo"] = contador / 100;
+
+            if (page != 0)
+            {
+                if (page < (contador / 100))
+                {
+                    ViewData["pageCount"] = page;
+                }
+                else
+                {
+                    ViewData["pageCount"] = contador / 100;
+                }
+            }
+
+            if (ViewData["pageCount"] == null && page == 0)
+            {
+                ViewData["pageCount"] = 1;
+                page = 1;
+            }
+
+            var CENTROCOSTOS = LNSaludCentroCostos.ObtenerTodos(1, 100, "", txtBusquedaAsegurados,"");
+            ViewBag.CentroCostos = CENTROCOSTOS;
+            TempData["CENTROCOSTOS"] = CENTROCOSTOS;
             return View();
         }
 
@@ -51,11 +115,14 @@ namespace Salud.Controllers
             {
                 if (centrocosto.CodigoCentroCosto != null)
                 {
+
                     LNSaludCentroCostos.Actualizar(centrocosto);
+                    TempData["MensajeCentroCosto"] = "Excelente, El centro de costo fue actualizado.";
                 }
                 else
                 {
                     LNSaludCentroCostos.Insertar(centrocosto);
+                    TempData["MensajeCentroCosto"] = "Excelente, El centro de costo fue agregado.";
                 }
                 return RedirectToAction("Index", "CentroCostos");
             }
@@ -63,17 +130,20 @@ namespace Salud.Controllers
         }
 
         [SessionExpire]
-        //[HttpPost]
+        [HttpPost]
         //[ValidateAntiForgeryToken]
 
-        public ActionResult Eliminar(string id = "", string idcliente = "")
+        public ActionResult Eliminar( string idcliente = "", string idCentro = "")
         {
             //string idcliente = "";
 
             if (ModelState.IsValid)
             {
-                LNSaludCentroCostos.Eliminar(idcliente, id);
-                return RedirectToAction("Index", "CentroCostos");
+                LNSaludCentroCostos.Eliminar(idcliente, idCentro);
+                string mensaje  = "Excelente, El centro de costo fue eliminado.";
+                //return RedirectToAction("Index", "CentroCostos");
+                //return RedirectToAction("Index", "CentroCostos");
+                return Json(mensaje, JsonRequestBehavior.AllowGet);
             }
             return View();
         }

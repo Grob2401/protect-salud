@@ -1861,6 +1861,7 @@
     <Content Include="Content\plugins\toastr\toastr.css" />
     <Content Include="Content\plugins\toastr\toastr.min.css" />
     <Content Include="Content\plugins\toastr\toastr.min.js" />
+    <Content Include="Content\Util\util.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -2036,6 +2037,7 @@
     <Content Include="Views\BancosProcesadoras\Index.cshtml" />
     <Content Include="Views\BancosProcesadoras\Recepcion.cshtml" />
     <Content Include="Views\Perfiles\Index.cshtml" />
+    <Content Include="Views\Usuario\Editar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -60,27 +60,36 @@
                         </div>
                     </div>
                     <hr />
-                    <div class="row  justify-content-end">
-                        <div class="col text-left">
-                            <label class="text-bold">ASEGURADOS DISPONIBLES</label>&nbsp;&nbsp;<i class="fa fa-angle-double-right text-warning"></i>&nbsp;&nbsp;<label class="text-bold" style="font-size:9pt"> @Convert.ToInt32(ViewData["todos"])</label>
+                    <div class="row">
+                        <div class="col d-flex justify-content-start">
+                            <div class="col text-left">
+                                <label class="text-bold text-primary">PÁGINA </label>&nbsp;
+                                <label class="text-bold" style="font-size:9pt">(@Convert.ToInt32(ViewData["pageCount"]) DE @(Convert.ToInt32(ViewData["ultimo"])+1))</label>&nbsp;&nbsp;
+                                <i class="fa fa-angle-double-right text-warning"></i>
+                                <label class="text-bold text-success" style="font-size:9pt">Asegurados disponibles</label>&nbsp;
+                                <label class="text-bold" style="font-size:9pt">(@Convert.ToInt32(ViewData["todos"]))</label>
+                            </div>
                         </div>
-                        <div class="col d-flex justify-content-end">
-                            <ul class="pagination">
-                                <li class="page-item success">
-                                    <a class="page-link" href="@Url.Action("Index", new { page = 1 })">Primero</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["pageCount"]) - 1 })"><i class="fa fa-arrow-left text-primary"></i></a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["pageCount"]) + 1 })"><i class="fa fa-arrow-right text-primary"></i></a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["ultimo"]) + 1 })">Último</a>
-                                </li>
-                            </ul>
+                        <div class="row  justify-content-end">
+                            <div class="col d-flex justify-content-end">
+                                <ul class="pagination">
+                                    <li class="page-item success">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = 1 })">Pág. 1</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["pageCount"]) - 1 })">&nbsp;&nbsp;<i class="fa fa-angle-left text-primary"></i>&nbsp;&nbsp;Anterior</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["pageCount"]) + 1 })">Siguiente&nbsp;&nbsp;<i class="fa fa-angle-right text-primary"></i></a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["ultimo"]) + 1 })">Pág. @(Convert.ToInt32(ViewData["ultimo"])+1)&nbsp;&nbsp;</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
+                    
                     <div class="table-responsive">
                         <table id="dglista" class="table table-bordered">
                             <thead class="bg-primary">
@@ -127,7 +136,17 @@
                                             <td class="cellDescripcionTipoAsegurado">@asegurado.Edad </td>
                                             <td>@asegurado.FechaAlta.ToString("dd-MM-yyyy") </td>
                                             <td>@asegurado.FechaBaja.ToString("dd-MM-yyyy") </td>
-                                            <td>@asegurado.Estado </td>
+                                            <td>
+                                                
+                                                @if (asegurado.Estado == "Activo")
+                                                {
+                                                    <span class="badge bg-success badge-btn">Activo</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger badge-btn">De Baja</span>
+                                                }
+                                            </td>
                                             <td hidden>@asegurado.CodigoTipoCliente </td>
                                             <td hidden>@asegurado.Categoria </td>
                                             <td class="text-center" width="70px">
@@ -226,7 +245,7 @@
                                         <th>NRO. PAGO</th>
                                         <th>FECHA PAGO</th>
                                         <th>ESTADO</th>
-                                        <th></th>
+                                        <th hidden>Eliminar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -284,15 +303,16 @@
 
         $(document).ready(function () {
             $('#dglista').DataTable({
-                "scrollY": "450px",
+                "scrollY": "600px",
                 "scrollCollapse": true,
-                "paging": false,
+                "paging": true,
                 "lengthChange": false,
                 "ordering": true,
-                "info": false,
+                "info": true,
                 "autoWidth": false,
                 "responsive": false,
-                //"lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                pageLength: 8,
+                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
                 "searching": false,
                 language: {
                     url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
@@ -468,7 +488,7 @@
                 const contrato = document.getElementById("hdContrato");
 
                 const botonagregar = document.getElementById("AgregarCuota");
-                botonagregar.removeAttribute("hidden");
+                //botonagregar.removeAttribute("hidden");
 
 
                 $("#dgCuotasNoPagadas").find("tr:not(:first)").remove();
@@ -597,7 +617,7 @@
                             <td>${dato.NumeroDocumentoPago}</td>
                             <td>${(new Date(parseInt(dato.FechaPago.substr(6)))).toLocaleDateString()}</td>
                             <td>${dato.Estado}</td>
-                            <td class="text-center">
+                            <td class="text-center" hidden>
                                 <button type="button" class="botonSeleccionar btn btn-danger btn-sm" onclick='seleccionar(event);'>
                                     <i class="fa fa-times text-warning"></i>&nbsp;Eliminar
                                 </button>

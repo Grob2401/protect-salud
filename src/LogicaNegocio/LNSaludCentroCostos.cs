@@ -9,9 +9,19 @@ namespace LogicaNegocio
 
     public class LNSaludCentroCostos
     {
-        public static List<ENSaludCentroCostos> ObtenerTodos(string CodigoCliente)
+        public static List<ENSaludCentroCostos> ObtenerTodos1(string CodigoCliente)
         {
-            return new ADSaludCentroCostos().ObtenerTodos(CodigoCliente);
+            return new ADSaludCentroCostos().ObtenerTodos1(CodigoCliente);
+        }
+
+        public static int Cantidad(string CodigoCliente)
+        {
+            return new ADSaludCentroCostos().Cantidad(CodigoCliente);
+        }
+
+        public static List<ENSaludCentroCostos> ObtenerTodos(int page, int rows, string type, string Keywords, string CodigoCliente)
+        {
+            return new ADSaludCentroCostos().ObtenerTodos( page, rows, type,  Keywords, CodigoCliente);
         }
 
         public static bool Insertar(ENSaludCentroCostos oENSaludCentroCostos)

@@ -134,6 +134,41 @@
         }
 
         function Delete(id) {
+
+            @*Swal.fire({
+                title: '¿Desea eliminar el registro?',
+                text: "Se eliminará el vendedor.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, continuar',
+                cancelButtonText: 'No'
+            }).then(function (result) {
+                if (result.value == true) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Delete","Vendedores")/' + id,
+                        success: function (data) {
+                            if (data.success)
+                            {
+                                dataTable.ajax.reload();
+                                $.notify(data.message, {
+                                    globalPosition: "top center",
+                                    className: "success"
+                                })
+
+                            }
+                        }
+
+                    });
+
+                }
+            });*@
+
+
+
             if(confirm('Desea Eliminar el Registro?'))
             {
                 $.ajax({

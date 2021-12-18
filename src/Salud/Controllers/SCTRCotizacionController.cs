@@ -45,7 +45,7 @@ namespace Salud.Controllers
         [SessionExpire]
         public ActionResult Crear(string id = "")
         {
-            ENSCTRCotizaciones oENSCTRCotizaciones = null;
+            ENSCTRCotizaciones oENSCTRCotizaciones = new ENSCTRCotizaciones();
             if (id != "")
             {
                 oENSCTRCotizaciones = LNSCTRCotizaciones.ObtenerUnoConDetalle(id);
@@ -352,7 +352,7 @@ namespace Salud.Controllers
         //[ValidateAntiForgeryToken] Se quitó porque da error
         public ActionResult GetCentroCosto(string codigocliente)
         {
-            var lista = LNSaludCentroCostos.ObtenerTodos(codigocliente).ToList();
+            var lista = LNSaludCentroCostos.ObtenerTodos1(codigocliente).ToList();
             if (ModelState.IsValid)
             {
                 return Json(lista, JsonRequestBehavior.AllowGet);
@@ -449,7 +449,7 @@ namespace Salud.Controllers
                 ViewData["txtCodigoCotizacion"] = v_codigocotizacion;
                 ViewData["txtCodigoCliente"] = v_codigocliente;
                 ViewData["txtPlanillaMensual"] = v_detmontoplanillaadm + v_detmontoplanillaope;
-                ViewBag.CodigoCentroCosto = new SelectList(LNSaludCentroCostos.ObtenerTodos(v_codigocliente).ToList(), "CodigoCentroCosto", "DescripcionCentroCosto", v_codigocentrocosto);
+                ViewBag.CodigoCentroCosto = new SelectList(LNSaludCentroCostos.ObtenerTodos1(v_codigocliente).ToList(), "CodigoCentroCosto", "DescripcionCentroCosto", v_codigocentrocosto);
            
                 if (upload != null && upload.ContentLength > 0)
                 {
@@ -571,7 +571,7 @@ namespace Salud.Controllers
         public ActionResult Upload(string empresaruc, string empresanombre, string codigocotizacion,string codigocliente,double detmontoplanillaadm, double detmontoplanillaope)
         {
             v_codigocliente = System.Web.HttpContext.Current.Session["codigocliente"].ToString();
-            var lista = LNSaludCentroCostos.ObtenerTodos(v_codigocliente).ToList();
+            var lista = LNSaludCentroCostos.ObtenerTodos1(v_codigocliente).ToList();
             ViewData["drpCentroCosto"] = new SelectList(lista, "CodigoCentroCosto", "DescripcionCentroCosto");
            
             ViewData["txtEmpresaRUC"] = empresaruc;
@@ -687,7 +687,7 @@ namespace Salud.Controllers
             ViewData["txtCodigoCotizacion"] = v_codigocotizacion;
             ViewData["txtCodigoCliente"] = v_codigocliente;
             ViewData["txtPlanillaMensual"] = v_detmontoplanillaadm + v_detmontoplanillaope;
-            ViewBag.CodigoCentroCosto = new SelectList(LNSaludCentroCostos.ObtenerTodos(v_codigocliente).ToList(), "CodigoCentroCosto", "DescripcionCentroCosto", v_codigocentrocosto);
+            ViewBag.CodigoCentroCosto = new SelectList(LNSaludCentroCostos.ObtenerTodos1(v_codigocliente).ToList(), "CodigoCentroCosto", "DescripcionCentroCosto", v_codigocentrocosto);
             ViewBag.Message = "Registros Procesados Correctamente";
             //return Json(new { success = true, message = "Grabado Correctamente" }, JsonRequestBehavior.AllowGet);
             return PartialView("Upload");
@@ -735,7 +735,7 @@ namespace Salud.Controllers
         public ActionResult Emitir(string empresaruc, string empresanombre, string codigocotizacion, string codigocliente, double detmontoplanillaadm, double detmontoplanillaope)
         {
             v_codigocliente = System.Web.HttpContext.Current.Session["codigocliente"].ToString();
-            var lista = LNSaludCentroCostos.ObtenerTodos(v_codigocliente).ToList();
+            var lista = LNSaludCentroCostos.ObtenerTodos1(v_codigocliente).ToList();
             ViewData["drpCentroCosto"] = new SelectList(lista, "CodigoCentroCosto", "DescripcionCentroCosto");
 
             ViewData["txtEmpresaRUC"] = empresaruc;

@@ -308,6 +308,7 @@ namespace AccesoDatos
                     oENSaludAsegurados.SCTRTipoTrabajador = oDataReader["SCTRTipoTrabajador"].ToString();
                     oENSaludAsegurados.Talla = oDataReader["Talla"].ToString();
                     oENSaludAsegurados.Telefono = oDataReader["Telefono"].ToString();
+                    oENSaludAsegurados.Pais = oDataReader["CodigoTipoPais"].ToString();
 
                 }
                 return oENSaludAsegurados;
@@ -402,6 +403,8 @@ namespace AccesoDatos
                 GenericDataAccess.AgregarParametro(oCommand, "@FchIniLatencia", oENSaludAsegurados.FechaInicioLatencia == null ? DateTime.Now : oENSaludAsegurados.FechaInicioLatencia, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@FchFinLatencia", oENSaludAsegurados.FechaFinLatencia == null ? DateTime.Now : oENSaludAsegurados.FechaFinLatencia, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@CodigoTipoEstadoCivil", oENSaludAsegurados.CodigoTipoEstadoCivil == null ? "" : oENSaludAsegurados.CodigoTipoEstadoCivil, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@CodigoPais", oENSaludAsegurados.Pais == null ? "" : oENSaludAsegurados.Pais, TipoParametro.STR, Direccion.INPUT);
+                
 
 
                 var query = oCommand.CommandText;

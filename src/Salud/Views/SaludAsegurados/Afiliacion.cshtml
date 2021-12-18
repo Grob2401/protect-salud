@@ -13,16 +13,17 @@
 
 <div class="row">
     <input type="hidden" id="obtener_ruta" name="name" value='@Url.Action("Obtener", "SaludContratos")' />
+    <input type="hidden" id="ValidarPlanes_ruta" name="name" value='@Url.Action("ValidarPlanes", "SaludAsegurados")' />
     <input type="hidden" id="saludAsegurados_ruta" name="name" value='@Url.Action("getSaludAsegurados", "SaludAsegurados")' />
     <input type="hidden" id="soloAsegurados_ruta" name="name" value='@Url.Action("getSoloAsegurados", "SaludAsegurados")' />
 
     <div class="col-md-12">
         <div class="col-md-12">
-            <div class="card card-primary card-outline shadow-lg">
+            <div class="card card-gray card-gray shadow-lg">
                 <div class="card-header">
                     <div class="col">
                         <div class="text-center">
-                            <h5 class="card-title"><i class="fas fa-building text-primary"></i>&nbsp;&nbsp;Cliente</h5>
+                            <h5 class="card-title"><i class="fas fa-file-signature text-white text-bold"></i>&nbsp;&nbsp;CONTRATOS DISPONIBLES</h5>
                         </div>
                     </div>
                     <div class="card-tools">
@@ -36,8 +37,8 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div Class="form-group">
-                                @Html.LabelFor(model => model.VMCliente.CodigoCliente, "Cliente :", htmlAttributes: new { @class = "control-label" })
-                                @Html.DropDownList("CodigoCliente", null, new { id = "drpCodigoCliente", @class = "form-control-sm js-example-responsive", @style = "width:100%", @onchange = "callChangefunc(this.value)" })
+                                @Html.LabelFor(model => model.VMCliente.CodigoCliente, "CONTRATANTE :", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoCliente", null, new { id = "drpCodigoCliente", @class = "js-example-responsive", @style = "width:100%", @onchange = "callChangefunc(this.value)" })
                                 @Html.ValidationMessageFor(model => model.VMCliente.CodigoCliente)
                             </div>
                         </div>
@@ -49,9 +50,12 @@
                         </div>
                         <div class="col-md-4">
                             <div Class="form-group">
-                                <Label for="txtCodigoContrato">Contratos :</Label>
-                                <select id="drpCodigoContrato" class="form-control-sm js-example-responsive" style="width:100%" onchange="callChangeContrato(this.value)">
-                                </select>
+                                @*<Label for="txtCodigoContrato">CONTRATOS DISPONIBLES :</Label>*@
+                                @Html.LabelFor(model => model.VMContrato.CodigoContrato, "CONTRATOS DISPONIBLES :", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownList("CodigoCliente", null, new { id = "drpCodigoContrato", @class = "form-control js-example-responsive", @style = "width:100%", @onchange = "callChangeContrato(this.value)" })
+                                @Html.ValidationMessageFor(model => model.VMContrato.CodigoContrato)
+                                @*<select id="drpCodigoContrato" class="form-control js-example-responsive" style="width:100%" onchange="callChangeContrato(this.value)">
+                                    </select>*@
                             </div>
                         </div>
                         <div Class="col-md-2">
@@ -72,43 +76,35 @@
                     </div>
                     <hr />
                     <div class="row">
-                        <a href='@Url.Action("Index", "SaludAsegurados")' class="btn btn-default btn-sm bg-gradient-danger pull-right">
-                            <i class="fas fa-arrow-left text-warning"></i>&nbsp;&nbsp;Regresar
-                        </a>
+                        <div class="col">
+                            <a href='@Url.Action("Index", "SaludAsegurados")' class="btn btn-flat btn-sm bg-gradient-danger">
+                                <i class="fas fa-arrow-left text-warning"></i>&nbsp;&nbsp;Regresar
+                            </a>
+                        </div>
+                        <div class="col text-right">
+                            <button id="btnAgregarAfiliado" onclick="ValidarPlanes();" class="btn btn-flat btn-sm bg-gradient-success" data-request-url="@Url.Action("Mantenimiento", "SaludAsegurados")">
+                                <i class="fas fa-cart-plus text-warning"></i>&nbsp;&nbsp; Afiliar Grupo Familiar
+                            </button>
+                            <button onclick="getSAsegurados();" class="btn btn-flat btn-sm bg-gradient-success" hidden>
+                                <i class="fas fa-file-excel text-warning"></i>&nbsp;&nbsp;Carga Masiva
+                            </button>
+                        </div>
                     </div>
                     <!-- /.row -->
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="card card-primary card-outline shadow-lg">
-                <div class="card-header">
-                    <h5 class="card-title"><i class="fas fa-file text-primary"></i>&nbsp;&nbsp;Asegurados por Contrato&nbsp;&nbsp;<i class="fas fa-arrow-right text-danger"></i>&nbsp;&nbsp;<label id="contratoLabel" class="text-primary"></label> </h5>
+                    <hr />
+                    <h5 class="card-title"><i class="fas fa-file text-primary text-bold text-sm"></i>&nbsp;&nbsp;Asegurados disponibles&nbsp;&nbsp;<i class="fas fa-arrow-right text-danger"></i>&nbsp;&nbsp;<label id="contratoLabel" class="text-primary"></label> </h5>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
                         </button>
                     </div>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <button id="btnAgregarAfiliado" onclick="goMantenimiento();" class="btn btn-default btn-sm bg-gradient-primary" data-request-url="@Url.Action("Mantenimiento", "SaludAsegurados")">
-                                <i class="fas fa-user-plus text-warning"></i>&nbsp;&nbsp; Nuevo Titular
-                            </button>
-                            <button onclick="getSAsegurados();" class="btn btn-default btn-sm bg-gradient-success" hidden>
-                                <i class="fas fa-file-excel text-warning"></i>&nbsp;&nbsp;Carga Masiva
-                            </button>
-                        </div>
-                    </div>
+                    <hr />
                     <div class="row">
                         <div Class="col-md-12">
                             <div class="table-responsive">
                                 <table id="dglistaAsegurados" class="table table-bordered">
                                     <thead class="bg-gradient-lightblue">
                                         <tr>
-                                            <th></th>
                                             <th>CODIGO CLIENTE</th>
                                             <th>CODIGO TITULAR</th>
                                             <th>AFILIADOS (APELLIDOS Y NOMBRES)</th>
@@ -125,6 +121,28 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" hidden>
+            <div class="card card-primary card-outline shadow-lg">
+                <div class="card-header">
+                    <h5 class="card-title"><i class="fas fa-file text-primary"></i>&nbsp;&nbsp;Asegurados por Contrato&nbsp;&nbsp;<i class="fas fa-arrow-right text-danger"></i>&nbsp;&nbsp;<label id="contratoLabel" class="text-primary"></label> </h5>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+
+
+                        </div>
+                    </div>
+
                 </div>
                 <!-- ./card-body -->
             </div>
@@ -175,6 +193,8 @@
         $(document).ready(function () {
             //$('.js-example-basic-single').select2();
             $(".js-example-responsive").select2({
+                theme: "classic",
+                placeholder: 'Selecciona una opción',
                 width: 'resolve' // need to override the changed default
             });
             callChangefunc(document.getElementById('drpCodigoCliente').value);
@@ -198,16 +218,32 @@
                     var datos = [...dataparseada];
                     var contratos = [];
                     contratos = dataparseada[6];
-                    //console.log(primerValor);
-                    codContrato.innerText = null;
-                    for (var i = 0; i < contratos.length; i++) {
-                        var opt = contratos[i].Text;
-                        var tx = contratos[i].Text;
-                        codContrato.innerHTML += "<option value=\"" + opt + "\">" + tx + "</option>";
+                    if (contratos != null && contratos.length > 0) {
+                       
+                        console.log(dataparseada);
+                        codContrato.innerText = null;
+                        for (var i = 0; i < contratos.length; i++) {
+                            var opt = contratos[i].Text;
+                            var tx = contratos[i].Text;
+                            codContrato.innerHTML += "<option value=\"" + opt + "\">" + tx + "</option>";
+                        }
+                        primerValor = contratos[0].Text;
+                        console.log(primerValor);
+                        callChangeContrato(primerValor);
+                        document.getElementById("btnAgregarAfiliado").removeAttribute("disabled");
+
                     }
-                    primerValor = contratos[0].Text;
-                    console.log(primerValor);
-                    callChangeContrato(primerValor);
+                    else
+                    {
+                        document.getElementById("btnAgregarAfiliado").setAttribute("disabled", "");
+                        var all = document.querySelectorAll(".btnEdit");
+                        for (var i = 0, len = all.length; i < len; i++) {
+                            all[i].disabled = true;
+                        }
+                        mostrarMensaje("Error, El cliente no tiene contratos vigentes, intente con otro.");
+                        //$("#drpCodigoCliente").val($("#drpCodigoCliente option:first").val()).change();
+                    }
+                    
                 }
             });
             console.log(primerValor);
@@ -230,7 +266,7 @@
                 type: "GET",
                 url: url_method,
                 data: {
-                    'tipoConsulta': 'TITULARES',
+                    'tipoConsulta': 'GRUPOFAMILIAR',
                     'Codcliente': clienteActual,
                     'codContrato': id,
                 },
@@ -250,10 +286,18 @@
 
                     const asegurados = dataparseada[2];
 
+                    //if (asegurados.length === 0) {
+                    //    document.getElementById('btnAgregarAfiliado').removeAttribute("hidden");
+                    //}
+                    //else
+                    //{
+                    //    document.getElementById('btnAgregarAfiliado').setAttribute("hidden", '');
+                    //}
+
+
                     const aseguradosTodos = asegurados.forEach(asegurado => {
                         //console.log(asegurado.CodigoCliente);
                         table.row.add([
-                            `<img src='../Images/plus.jpg' />`,
                             asegurado.CodigoCliente,
                             asegurado.CodigoTitular,
                             asegurado.ApellidosNombres,
@@ -261,8 +305,8 @@
                             asegurado.Edad,
                             (new Date(parseInt(asegurado.FechaAlta.substr(6)))).toLocaleDateString(),
                             (new Date(parseInt(asegurado.FechaBaja.substr(6)))).toLocaleDateString(),
-                            asegurado.Estado,
-                            `<button type='button' class='btn btn-info btn-sm' onclick='EditarAsegurado(event);'  data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'><i class='fa fa-users text-warning'></i>&nbsp;&nbsp;Grupo Familiar</button>`,
+                            asegurado.Estado == "Activo" ? '<span class="badge bg-success badge-btn">Activo</span>' : '<span class="badge bg-danger badge-btn">De Baja</span>',
+                            `<button type='button' class='btnEdit btn btn-info btn-sm' onclick='EditarAsegurado(event);'  data-request-url='@Url.Action("Mantenimiento", "SaludAsegurados")'><i class='fa fa-users text-warning'></i>&nbsp;&nbsp;Grupo Familiar</button>`,
                         ]).draw(false);
                     });
 
@@ -356,21 +400,29 @@
                 var mensaje = "El cliente seleccionado no tiene contratos registrados, debe crear un contrato previamente o seleccione otro cliente.";
                 mostrarMensaje(mensaje);
             }
-            else
-            {
+            else {
                 var url = urlBtn.getAttribute('data-request-url');
                 const url_final = `?CodigoCliente=${valorCliente}&CodigoContrato=${valorContrato}&origen=A`
-
                 window.location.href = url + url_final;
             }
 
+            //var planes = VerPlanes();
 
+            //console.log(planes);
+
+            //if (planes == 0) {
+  
+            //}
+            //else
+            //{
+                
+            //}
     }
 
     function EditarAsegurado(e) {
         const boton = e.target;
-        const Codcliente = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
-        const Codtitular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+        const Codcliente = e.target.parentElement.parentElement.firstElementChild.textContent;
+        const Codtitular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
         const valorContrato = document.getElementById('drpCodigoContrato').value;
         const url = boton.getAttribute('data-request-url');
 
@@ -378,7 +430,44 @@
         console.log(url + url_parametros);
         window.location.href = url + url_parametros;
 
-    };
+        };
+
+
+        //function VerPlanes(`¡`
+
+        function ValidarPlanes()
+        {
+            const valorCliente = document.getElementById('drpCodigoCliente').value;
+            const valorContrato = document.getElementById('drpCodigoContrato').value;
+            const url_method = document.getElementById('ValidarPlanes_ruta').value;
+            var retorna;
+
+            $.ajax({
+                type: "GET",
+                url: url_method,
+                data: {
+                    'idcliente': valorCliente,
+                    'idcontrato': valorContrato
+                },
+                dataType: "text",
+                success: function (r) {                    
+                    retorna = JSON.parse(r);
+                    if (retorna.length == 0) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Mensaje',
+                                html: 'El contrato seleccionado no tiene planes, ingrese a la opción "Administrar Contratos" para poder asignarlos',
+                                showCloseButton: true
+                            })
+                    }
+                    else
+                    {
+                        goMantenimiento();
+                    }
+                }
+            });
+        }
+
 
     </script>
 

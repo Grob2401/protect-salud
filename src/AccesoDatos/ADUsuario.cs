@@ -17,17 +17,23 @@ namespace AccesoDatos
     {
         public String dataProviderName = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ProviderName;
         public String connectionString = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ConnectionString;
-        public List<ENUsuario> ObtenerTodos()
+        public List<ENUsuario> ObtenerTodos(int page, int rows, string type, string Keywords)
         {
             DbCommand oCommand = null;
             List<ENUsuario> oListaUsuario = new List<ENUsuario>();
             try
             {
                 oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "USP_Usuario_ObtenerTodos");
+                GenericDataAccess.AgregarParametro(oCommand, "@page", page, TipoParametro.INT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@rowsPerPage", rows, TipoParametro.INT, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@type", type, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@keywords", Keywords, TipoParametro.STR, Direccion.INPUT);
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
                 DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
                 while (oDataReader.Read())
                 {
                     ENUsuario oEnListaUsuario = new ENUsuario();
+                    oEnListaUsuario.RowNumber = Convert.ToInt32(oDataReader["RowNumber"]);
                     oEnListaUsuario.int_IdUsuario = Convert.ToInt32(oDataReader["int_IdUsuario"]);
                     oEnListaUsuario.var_Nombre = oDataReader["var_Nombre"].ToString();
                     oEnListaUsuario.var_Apellidos = oDataReader["var_Apellidos"].ToString();
@@ -53,6 +59,29 @@ namespace AccesoDatos
                 GenericDataAccess.CerrarConexion(oCommand, null);
             }
         }
+
+        public int Cantidad()
+        {
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenSaludUsuarios_count");
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
+                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
+                int cantidadUsuarios = -1;
+                if (oDataReader.Read() && !int.TryParse(oDataReader["Usuarios"].ToString(), out cantidadUsuarios)) cantidadUsuarios = -1;
+                return cantidadUsuarios;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
 
         public ENUsuario ObtenerPorCorreoElectronico(string usuario)
         {

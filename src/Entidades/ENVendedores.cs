@@ -9,6 +9,7 @@ namespace Entidades
 {
     public class ENVendedores
     {
+        public int RowNumber { get; set; }
         public string CodigoVendedor { get; set; }
         public string DNI { get; set; }
         public string Nombres { get; set; }

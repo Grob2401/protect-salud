@@ -21,10 +21,20 @@ namespace Salud.Controllers
         [SessionExpire]
         public ActionResult Index(int page = 0)
         {
+            var contador = LNClientes.Cantidad();
+            ViewData["todos"] = contador;
+            ViewData["ultimo"] = contador / 100;
 
             if (page != 0)
             {
-                ViewData["pageCount"] = page;
+                if (page < (contador / 100))
+                {
+                    ViewData["pageCount"] = page;
+                }
+                else
+                {
+                    ViewData["pageCount"] = contador / 100;
+                }
             }
 
             if (ViewData["pageCount"]  == null && page == 0)
@@ -33,9 +43,7 @@ namespace Salud.Controllers
                 page = 1;
             }
 
-            var contador = LNClientes.Cantidad();
-            ViewData["todos"] = contador;
-            ViewData["ultimo"] = contador / 100;
+
 
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             ViewBag.Clientes = LNClientes.ObtenerTodos(page,100,"","");
@@ -65,8 +73,33 @@ namespace Salud.Controllers
         // GET: Clientes
         [SessionExpire]
         [HttpPost]
-        public ActionResult Index(string hdCodigoTipoCliente = "", string txtBusquedaClientes = "")
+        public ActionResult Index(int page = 0,string hdCodigoTipoCliente = "", string txtBusquedaClientes = "")
         {
+
+            var contador = LNClientes.Cantidad();
+            ViewData["todos"] = contador;
+            ViewData["ultimo"] = contador / 100;
+
+            if (page != 0)
+            {
+                if (page < (contador / 100))
+                {
+                    ViewData["pageCount"] = page;
+                }
+                else
+                {
+                    ViewData["pageCount"] = contador / 100;
+                }
+            }
+
+            if (ViewData["pageCount"] == null && page == 0)
+            {
+                ViewData["pageCount"] = 1;
+                page = 1;
+            }
+
+           
+
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             ViewBag.Clientes = LNClientes.ObtenerTodos(1, 100, hdCodigoTipoCliente, txtBusquedaClientes);
             ViewBag.IdNombreTabla = hdCodigoTipoCliente.ToString();
@@ -209,12 +242,25 @@ namespace Salud.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult Eliminar(string id = "")
         {
-            if (ModelState.IsValid)
+            try
             {
-                LNClientes.Eliminar(id);
-                return RedirectToAction("Index", "Clientes");
+                if (LNClientes.Eliminar(id))
+                {
+                    var mensaje = "Excelente, contratante eliminado.";
+                    return Json(mensaje, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var mensaje = "Error, el contratante tiene contratos vigentes.";
+                    return Json(mensaje, JsonRequestBehavior.AllowGet);
+                }
             }
-            return View();
+            catch (Exception ex)
+            {
+                var mensaje = "Error, el contratante tiene contratos vigentes.";
+                return Json(mensaje, JsonRequestBehavior.AllowGet);
+            }
+            
         }
 
 

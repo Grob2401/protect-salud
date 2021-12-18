@@ -10,10 +10,16 @@ namespace LogicaNegocio
 {
     public class LNUsuario
     {
-        public static List<ENUsuario> ObtenerTodos()
+        public static List<ENUsuario> ObtenerTodos(int page, int rows, string type, string Keywords)
         {
-            return new ADUsuario().ObtenerTodos();
+            return new ADUsuario().ObtenerTodos(page, rows, type, Keywords);
         }
+
+        public static int Cantidad()
+        {
+            return new ADUsuario().Cantidad();
+        }
+
         public static ENUsuario ObtenerUno(int Id)
         {
             return new ADUsuario().ObtenerUno(Id);

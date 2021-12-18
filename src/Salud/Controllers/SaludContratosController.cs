@@ -28,6 +28,11 @@ namespace Salud.Controllers
                 page = 1;
             }
 
+            if (TempData["mensaje"] != null)
+            {
+                ViewBag.mensaje = TempData["mensaje"];
+            }
+
             var contador = LNSaludContratos.Cantidad();
             ViewData["todos"] = contador;
             ViewData["ultimo"] = contador / 100;
@@ -41,9 +46,24 @@ namespace Salud.Controllers
 
         [SessionExpire]
         [HttpPost]
-        public ActionResult Index(string hdCodigoTipoCliente, string txtBusquedaContratos = "")
+        public ActionResult Index(int page = 0,string hdCodigoTipoCliente ="", string txtBusquedaContratos = "")
         {
-            string sCodigoCliente = "";
+
+            if (page != 0)
+            {
+                ViewData["pageCount"] = page;
+            }
+
+            if (ViewData["pageCount"] == null && page == 0)
+            {
+                ViewData["pageCount"] = 1;
+                page = 1;
+            }
+
+            var contador = LNSaludContratos.Cantidad();
+            ViewData["todos"] = contador;
+            ViewData["ultimo"] = contador / 100;
+
             ViewBag.SaludContratos = LNSaludContratos.ObtenerTodos(1, 100, hdCodigoTipoCliente, txtBusquedaContratos);
             ViewBag.CodigoTipoCliente = new SelectList(LNTipoCliente.ObtenerTodos().ToList(), "CodigoTipoCliente", "DescripcionTipoCliente");
             ViewBag.IdNombreTabla = hdCodigoTipoCliente.ToString();
@@ -207,11 +227,21 @@ namespace Salud.Controllers
                 ViewBag.CodigoTipoPrima = new SelectList(LNTipoPrima.ObtenerTodos().ToList(), "CodigoTipoPrima", "DescripcionTipoPrima", oENSaludContratos.CodigoTipoPrima);
                 ViewBag.CodigoCorredor = new SelectList(LNSCTRCorredor.ObtenerTodos().ToList(), "CodigoCorredor", "DescripcionCorredor", oENSaludContratos.CodigoCorredor);
                 ViewBag.CodigoEjecutivo = new SelectList(LNSCTREjecutivos.ObtenerTodos().ToList(), "CodigoEjecutivo", "NombreEjecutivo", oENSaludContratos.CodigoEjecutivo);
-                ViewBag.InicioVigencia = oENSaludContratos.InicioVigencia;
-                ViewBag.FinVigencia = oENSaludContratos.FinVigencia;
-                ViewBag.CodigoContrato = oENSaludContratos.CodigoContrato;
+                ViewBag.InicioVigencia = oENSaludContratos.InicioVigencia.ToString("yyyy-MM-dd");
+                ViewBag.FinVigencia = oENSaludContratos.FinVigencia.ToString("yyyy-MM-dd");
                 ViewBag.CodigoCotizacion = oENSaludContratos.CodigoCotizacion;
-                ViewBag.CodigoVendedor = new SelectList(LNVendedor.ObtenerTodos("0").ToList(), "CodigoVendedor", "Vendedor", oENSaludContratos.CodigoVendedor);
+                ViewBag.CodigoVendedor = new SelectList(LNVendedor.ObtenerTodos(Session["SociedadUsuario"].ToString()).ToList(), "CodigoVendedor", "Vendedor", oENSaludContratos.CodigoVendedor);
+
+                oContratoViewModel.SaludContratosVM.CodigoCliente = oENSaludContratos.CodigoCliente;
+                oContratoViewModel.SaludContratosVM.CodigoContrato = oENSaludContratos.CodigoContrato;
+                oContratoViewModel.SaludContratosVM.CodigoTipoContrato = oENSaludContratos.CodigoTipoContrato;
+                oContratoViewModel.SaludContratosVM.CodigoTipoPrima = oENSaludContratos.CodigoTipoPrima;
+                oContratoViewModel.SaludContratosVM.CodigoCorredor = oENSaludContratos.CodigoCorredor;
+                oContratoViewModel.SaludContratosVM.CodigoEjecutivo = oENSaludContratos.CodigoEjecutivo;
+                oContratoViewModel.SaludContratosVM.InicioVigencia = oENSaludContratos.InicioVigencia;
+                oContratoViewModel.SaludContratosVM.FinVigencia = oENSaludContratos.FinVigencia;
+                oContratoViewModel.SaludContratosVM.CodigoCotizacion = oENSaludContratos.CodigoCotizacion;
+                oContratoViewModel.SaludContratosVM.CodigoVendedor = oENSaludContratos.CodigoVendedor;
             }
             else
             {
@@ -223,7 +253,7 @@ namespace Salud.Controllers
 
                 //oVMSaludContratos.SaludContratosVM.InicioVigencia= DateTime.Now;
                 //oVMSaludContratos.SaludContratosVM.FinVigencia = oVMSaludContratos.SaludContratosVM.InicioVigencia.AddYears(1);
-
+                oContratoViewModel.SaludContratosVM.CodigoCotizacion = "000";
                 oENSaludContratos.InicioVigencia = DateTime.Now; // valores default para nuevos
                 oENSaludContratos.FinVigencia = oENSaludContratos.InicioVigencia.AddYears(1); // valores default para nuevos
                 //oENSaludContratos.FinVigencia = DateTime.Parse("31/12/2100"); // valores default para nuevos
@@ -234,10 +264,11 @@ namespace Salud.Controllers
                 ViewBag.CodigoTipoPrima = new SelectList(LNTipoPrima.ObtenerTodos().ToList(), "CodigoTipoPrima", "DescripcionTipoPrima");
                 ViewBag.CodigoCorredor = new SelectList(LNSCTRCorredor.ObtenerTodos().ToList(), "CodigoCorredor", "DescripcionCorredor");
                 ViewBag.CodigoEjecutivo = new SelectList(LNSCTREjecutivos.ObtenerTodos().ToList(), "CodigoEjecutivo", "NombreEjecutivo");
-                ViewBag.CodigoVendedor = new SelectList(LNVendedor.ObtenerTodos("0").ToList(), "CodigoVendedor", "Vendedor");
+                ViewBag.CodigoVendedor = new SelectList(LNVendedor.ObtenerTodos(Session["SociedadUsuario"].ToString()).ToList(), "CodigoVendedor", "Vendedor");
                 //ViewBag.CodigoPlan = new SelectList(LNSaludPlanes.ObtenerTodos().ToList(), "CodigoPlan", "Descripcion");
 
             }
+            ModelState.Clear();
             //return View(oENSaludContratos);
             return View(oContratoViewModel);
             //return View(oVMSaludContratos);
@@ -247,22 +278,24 @@ namespace Salud.Controllers
 
         [SessionExpire]
         [HttpPost]
-        public ActionResult Crear(ENSaludContratos contrato)
+        public ActionResult Crear(VMSaludContratos contrato)
         {
             if (ModelState.IsValid)
             {
-                if (contrato.CodigoContrato != null)
+                if (contrato.SaludContratosVM.CodigoContrato != null)
                 {
-                    LNSaludContratos.Actualizar(contrato);
+                    LNSaludContratos.Actualizar(contrato.SaludContratosVM);
                     TempData["mensaje"] = "Contrato Actualizado";
                 }
                 else
                 {
-                    LNSaludContratos.Insertar(contrato);
+                    LNSaludContratos.Insertar(contrato.SaludContratosVM);
                     TempData["mensaje"] = "Contrato Registrado";
                 }
-                return RedirectToAction("Crear", "SaludContratos");
+                //return RedirectToAction("Crear", "SaludContratos");
+                return RedirectToAction("Crear", new { idcontrato = contrato.SaludContratosVM.CodigoContrato, idcliente = contrato.SaludContratosVM.CodigoCliente });
             }
+
             return View();
         }
 
@@ -321,14 +354,26 @@ namespace Salud.Controllers
         }
 
         [SessionExpire]
-        public ActionResult Eliminar(string id = "", string idcliente = "")
+        public ActionResult Eliminar(string idcontrato = "", string idcliente = "")
         {
-            if (ModelState.IsValid)
+            try
             {
-                LNSaludContratos.Eliminar(idcliente, id);
-                return RedirectToAction("Index", "SaludContratos");
+                if (LNSaludContratos.Eliminar(idcontrato,idcliente))
+                {
+                    var mensaje = "Excelente, contrato eliminado.";
+                    return Json(mensaje, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var mensaje = "Error, el contrato aún esta vigente.";
+                    return Json(mensaje, JsonRequestBehavior.AllowGet);
+                }
             }
-            return View();
+            catch (Exception ex)
+            {
+                var mensaje = "Error, el contrato aún esta vigente";
+                return Json(mensaje, JsonRequestBehavior.AllowGet);
+            }
         }
 
     }

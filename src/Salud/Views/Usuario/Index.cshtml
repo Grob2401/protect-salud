@@ -6,41 +6,9 @@
 @section Styles {
     @Styles.Render("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
     @Styles.Render("~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/plugins/sweetalert2/sweetalert2.min.css")
 }
-<div class="row">
-    <div class="col" hidden>
-        <div class="card card-primary card-outline shadow-lg">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-table"></i>
-                    Búsqueda:
-                </h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="form-group">
-                            <label for="drpTipoCliente">Usuario:</label>
-                            <input type="text" id="txtBusquedaAsegurados" class="form-control form-control-sm" name="txtBusquedaAsegurados" placeholder="| Nombres y Apellidos | Correo Electrónico | DNI |" />
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label style="visibility:hidden;">Búsqueda:</label>
-                            <div>
-                                <button type="submit" class="btn btn-dark btn-sm">
-                                    <i class="fa fa-search-plus text-warning"></i>&nbsp;&nbsp;Buscar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /.card-body -->
-        </div>
-    </div>
-</div>
+
 <div class="row">
     <div class="col-12">
         <div class="card card-gray shadow-lg">
@@ -52,88 +20,132 @@
                     </h5>
                 </div>
                 <div class="col text-right">
-                    <a class="btn btn-flat bg-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+                    <a class="btn btn-flat bg-primary btn-sm" href='@Url.Action("Crear", "Usuario")'>
                         <i class="fas fa-user-plus text-warning" style="font-size: 14px;"></i> Agregar
                     </a>
                 </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <div class="text-white" hidden>
-                    <a class="btn btn-flat bg-primary" data-toggle="modal" data-target="#exampleModal">
-                        <i class="fas fa-user-plus text-warning" style="font-size: 14px;"></i> Agregar
-                    </a>
-                </div>
-                <div class="table-responsive">
-                    <table id="example2" class="table table-bordered">
-                        <thead class="bg-primary">
-                            <tr>
-                                <th>USUARIO</th>
-                                <th>DNI</th>
-                                <th>CORREO ELECTRÓNICO</th>
-                                <th style="width: 8%">SEXO</th>
-                                <th style="width: 8%">ESTADO</th>
-                                <th style="width: 8%"> EDITAR</th>
-                                <th style="width: 8%">ELIMINAR</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (ENUsuario usuario in (List<ENUsuario>)ViewBag.Usuarios)
-                            {
+                @using (Html.BeginForm("Index", "Usuario", FormMethod.Post))
+                {
+                    <div class="row justify-content-end">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="drpTipoCliente">Búsqueda :</label>
+                                <input type="text" id="txtBusquedaUsuarios" class="form-control form-control-sm" name="txtBusquedaUsuarios" placeholder="| Nombres y Apellidos | Correo Electrónico | DNI |" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label style="visibility:hidden;">Búsqueda:</label>
+                                <div>
+                                    <button type="submit" class="btn btn-dark btn-sm">
+                                        <i class="fa fa-search-plus text-warning"></i>&nbsp;&nbsp;Buscar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col d-flex justify-content-start">
+                            <div class="col text-left">
+                                <label class="text-bold text-primary">PÁGINA </label>&nbsp;
+                                <label class="text-bold" style="font-size:9pt">(@Convert.ToInt32(ViewData["pageCount"]) DE @(Convert.ToInt32(ViewData["ultimo"])+1))</label>&nbsp;&nbsp;
+                                <i class="fa fa-angle-double-right text-warning"></i>
+                                <label class="text-bold text-success" style="font-size:9pt">Usuarios disponibles</label>&nbsp;
+                                <label class="text-bold" style="font-size:9pt">(@Convert.ToInt32(ViewData["todos"]))</label>
+                            </div>
+                        </div>
+                        <div class="col d-flex justify-content-end">
+                            <ul class="pagination">
+                                <li class="page-item success">
+                                    <a class="page-link" href="@Url.Action("Index", new { page = 1 })">&nbsp;&nbsp;Pág. 1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["pageCount"]) - 1 })">&nbsp;&nbsp;<i class="fa fa-angle-left text-primary"></i>&nbsp;&nbsp;Anterior</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["pageCount"]) + 1 })">Siguiente&nbsp;&nbsp;<i class="fa fa-angle-right text-primary"></i></a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="@Url.Action("Index", new { page = Convert.ToInt32(ViewData["ultimo"]) + 1 })">Pág. @(Convert.ToInt32(ViewData["ultimo"])+1)&nbsp;&nbsp;</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+
+                        <table id="example2" class="table table-bordered">
+                            <thead class="bg-primary">
                                 <tr>
-                                    <td>@usuario.var_Nombre @usuario.var_Apellidos</td>
-                                    <td>
-                                        @usuario.var_DNI
-                                    </td>
-                                    <td>
-                                        @usuario.var_Mail
-                                    </td>
-                                    <td>
-                                        @if (usuario.bit_Sexo == true)
-                                        {
-                                            <span class="badge bg-primary badge-btn">Masculino</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-warning badge-btn">Femenino</span>
-                                        }
+                                    <th>N°</th>
+                                    <th>USUARIO</th>
+                                    <th>DNI</th>
+                                    <th>CORREO ELECTRÓNICO</th>
+                                    <th style="width: 8%">SEXO</th>
+                                    <th style="width: 8%">ESTADO</th>
+                                    <th style="width: 8%"> EDITAR</th>
+                                    <th style="width: 8%">ELIMINAR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ENUsuario usuario in (List<ENUsuario>)ViewBag.Usuarios)
+                                {
+                                    <tr>
+                                        <td>@usuario.RowNumber </td>
+                                        <td>@usuario.var_Nombre @usuario.var_Apellidos</td>
+                                        <td>
+                                            @usuario.var_DNI
+                                        </td>
+                                        <td>
+                                            @usuario.var_Mail
+                                        </td>
+                                        <td>
+                                            @if (usuario.bit_Sexo == true)
+                                            {
+                                                <span class="badge bg-primary badge-btn">Masculino</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning badge-btn">Femenino</span>
+                                            }
 
-                                    </td>
+                                        </td>
 
-                                    <td>
-                                        @if (usuario.int_Estado == 1)
-                                        {
-                                            <span class="badge bg-success badge-btn">Activo</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-danger badge-btn">Inactivo</span>
-                                        }
-                                    </td>
-                                    <td class="project-actions text-center">
-                                        <a class="btn btn-info btn-sm" href='@Url.Action("Crear", "Usuario", new {id = usuario.int_IdUsuario})'>
-                                            <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;Editar
-                                        </a>
-                                    </td>
-                                    <td class="project-actions text-center">
-                                        <form action='@Url.Action("Eliminar", "Usuario", new {id = usuario.int_IdUsuario})' method="POST"
-                                              onsubmit="return confirm('¿Está seguro de eliminar el usuario?');">
-                                            @Html.AntiForgeryToken()
+                                        <td>
+                                            @if (usuario.int_Estado == 1)
+                                            {
+                                                <span class="badge bg-success badge-btn">Activo</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger badge-btn">Inactivo</span>
+                                            }
+                                        </td>
+                                        <td class="project-actions text-center">
+                                            <a class="btn btn-info btn-sm" href='@Url.Action("Editar", "Usuario", new { id = usuario.int_IdUsuario })'>
+                                                <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;Editar
+                                            </a>
+                                        </td>
+                                        <td class="project-actions text-center">
                                             <div class="text-center">
-
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="Delete(@usuario.int_IdUsuario);" title="Eliminar">
                                                     <i class="fas fa-times text-warning"></i>&nbsp;&nbsp;Eliminar
                                                 </button>
                                             </div>
-                                        </form>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
 
-                    </table>
-                </div>
-
+                        </table>
+                    </div>
+                }
             </div>
             <!-- /.card-body -->
         </div>
@@ -142,7 +154,7 @@
     <!-- /.col -->
 </div>
 
-<!-- Modal -->
+@*Modal*@
 @Html.Partial("_UsuarioCrear", new ENUsuario() { int_Estado = 1 })
 
 @section Scripts {
@@ -150,11 +162,16 @@
     @Scripts.Render("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
     @Scripts.Render("~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js")
     @Scripts.Render("~/Content//plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+    @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
+    @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
+    @Scripts.Render("~/Content/Util/util.js")
 
     <script>
         $(function () {
 
             $('#example2').DataTable({
+                "scrollY": "600px",
+                "scrollCollapse": true,
                 "paging": true,
                 "lengthChange": false,
                 "ordering": true,
@@ -162,10 +179,71 @@
                 "autoWidth": false,
                 "responsive": false,
                 "searching": false,
+                "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                "pageLength": 8,
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }
             });
         });
+
+
+    var mensaje = "@ViewBag.Message";
+    if (mensaje != "")
+    {
+        var ic = "success";
+
+        Swal.fire({
+            icon: ic,
+            title: 'Mensaje',
+            text: mensaje,
+            showCloseButton: true
+        });
+    }
+
+    var mensaje = "@ViewBag.Message1";
+    if (mensaje != "") {
+        var ic = "error";
+
+        Swal.fire({
+            icon: ic,
+            title: 'Mensaje',
+            text: mensaje,
+            showCloseButton: true
+        });
+    }
+
+    function Delete(id) {
+
+            Swal.fire({
+                title: '¿Desea eliminar el usuario?',
+                text: "Se eliminará el usuario.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, continuar',
+                cancelButtonText: 'No'
+            }).then(function (result) {
+                if (result.value == true) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Eliminar", "Usuario")/' + id,
+                        success: function (data) {
+                            var sms = data;
+                            var ruta = "@Url.Action("Index","Usuario")";
+                            mensajeRedirect(sms, ruta);
+                        }
+
+                    });
+
+                }
+            });
+
+        }
+
+
+
     </script>
 }

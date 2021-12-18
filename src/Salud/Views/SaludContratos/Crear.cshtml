@@ -52,8 +52,9 @@
                         <div class="row pb-4">
                             <div class="col-md-8">
                                 <div Class="form-group">
-                                    @Html.LabelFor(model => model.SaludContratosVM.CodigoCliente, "Cliente :", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoCliente", null, new { id = "drpCodigoCliente", @class = "form-control-sm js-example-responsive", @style = "width:100%", @onchange = "callChangefunc(this.value)" })
+                                    <Label for="drpCodigoCliente">Cliente :</Label>
+                                    @*@Html.LabelFor(model => model.SaludContratosVM.CodigoCliente, "Cliente :", htmlAttributes: new { @class = "control-label" })*@
+                                    @Html.DropDownListFor(model => model.SaludContratosVM.CodigoCliente, ViewBag.CodigoCliente as SelectList, new { id = "drpCodigoCliente", @class = "form-control-sm js-example-responsive", @style = "width:100%", @onchange = "callChangefunc(this.value)" })
                                     @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoCliente)
                                 </div>
                             </div>
@@ -77,65 +78,74 @@
                         <div class="row">
                             <div class="col-md-4" hidden>
                                 <div Class="form-group">
-                                    @Html.LabelFor(model => model.SaludContratosVM.CodigoContrato, "CodigoContrato", htmlAttributes: new { @class = "control-label" })
-                                    @Html.TextBox("CodigoContrato", null, new { id = "txtCodigoContrato", @class = "form-control form-control-sm", @placeholder = "" })
-                                    @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoContrato)
+                                    <Label for="txtCodigoContrato">Tipo Plan :</Label>
+                                    @*@Html.LabelFor(model => model.SaludContratosVM.CodigoContrato, "CodigoContrato", htmlAttributes: new { @class = "control-label" })*@
+                                    @Html.TextBoxFor(model => model.SaludContratosVM.CodigoContrato, new { id = "txtCodigoContrato", @class = "form-control form-control-sm", @placeholder = "" })
+                                    @*@Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoContrato)*@
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div Class="form-group">
-                                    @Html.LabelFor(model => model.SaludContratosVM.CodigoTipoContrato, "Tipo Plan", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoTipoContrato", null, new { id = "drpCodigoTipoContrato", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
-                                    @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoTipoContrato)
+                                    <Label for="drpCodigoTipoContrato">Tipo Plan :</Label>
+                                    @*@Html.LabelFor(model => model.SaludContratosVM.CodigoTipoContrato, "Tipo Plan", htmlAttributes: new { @class = "control-label" })*@
+                                    @Html.DropDownListFor(model => model.SaludContratosVM.CodigoTipoContrato, ViewBag.CodigoTipoContrato as SelectList, new { id = "drpCodigoTipoContrato", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                    @*@Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoTipoContrato)*@
                                 </div>
                             </div>
                             <div Class="col-md-4">
                                 <div Class="form-group">
-                                    @Html.LabelFor(model => model.SaludContratosVM.CodigoCotizacion, "Cotizacion :", htmlAttributes: new { @class = "control-label" })
-                                    @Html.TextBox("CodigoCotizacion", "000", new { id = "txtCotizacion", @class = "form-control form-control-sm", @placeholder = "" })
+                                    <Label for="txtCotizacion">Cotizacion :</Label>
+                                    @*@Html.LabelFor(model => model.SaludContratosVM.CodigoCotizacion, "Cotizacion :", htmlAttributes: new { @class = "control-label" })*@
+                                    @Html.TextBoxFor(model => model.SaludContratosVM.CodigoCotizacion, new { id = "txtCotizacion", @class = "form-control form-control-sm", @placeholder = "" })
                                 </div>
                             </div>
                             <div Class="col-md-4">
                                 <div Class="form-group">
-                                    @Html.LabelFor(model => model.SaludContratosVM.CodigoTipoPrima, "Tipo de Modalidad", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoTipoPrima", null, new { id = "drpCodigoTipoPrima", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                    <Label for="drpCodigoTipoPrima">Inicio Vigencia :</Label>
+                                    @*@Html.LabelFor(model => model.SaludContratosVM.CodigoTipoPrima, "Tipo de Modalidad", htmlAttributes: new { @class = "control-label" })*@
+                                    @Html.DropDownListFor(model => model.SaludContratosVM.CodigoTipoPrima, ViewBag.CodigoTipoPrima as SelectList, new { id = "drpCodigoTipoPrima", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                 </div>
                             </div>
                             <div Class="col-md-6">
                                 <div Class="form-group">
-                                    @Html.LabelFor(model => model.SaludContratosVM.InicioVigencia, "Inicio Vigencia", htmlAttributes: new { @class = "control-label" })
-                                    @*@Html.TextBoxFor(model => model.InicioVigencia, new { id = "txtInicioVigencia", @class = "form-control form-control-sm", @placeholder = "" })*@
-                                    @Html.TextBox("InicioVigencia", "{0:yyyy-MM-dd}", new { type = "date", id = "txtInicioVigencia", @class = "form-control form-control-sm float-right", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
+                                    <Label for="txtInicioVigencia">Inicio Vigencia :</Label>
+                                    @*@Html.LabelFor(model => model.SaludContratosVM.InicioVigencia, "Inicio Vigencia :", htmlAttributes: new { @class = "control-label" })*@
+                                    @Html.TextBoxFor(model => model.SaludContratosVM.InicioVigencia, "{0:yyyy-MM-dd}", new { type = "date", id = "txtInicioVigencia", @class = "form-control form-control-sm", @placeholder = "", @onchange = "fechas();" })
+                                    @*@Html.TextBox("InicioVigencia", "{0:yyyy-MM-dd}", new { type = "date", id = "txtInicioVigencia", @class = "form-control form-control-sm float-right" })*@
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div Class="form-group">
-                                    @Html.LabelFor(model => model.SaludContratosVM.FinVigencia, "Fin Vigencia", htmlAttributes: new { @class = "control-label" })
-                                    @*@Html.TextBoxFor(model => model.FinVigencia, new { id = "txtFinVigencia", @class = "form-control form-control-sm", @placeholder = "" })*@
-                                    @Html.TextBox("FinVigencia", "{0:yyyy-MM-dd}", new { type = "date", id = "txtFinVigencia", @class = "form-control form-control-sm float-right", @Value = System.DateTime.Now.ToString("yyyy-MM-dd") })
+                                    <Label for="txtFinVigencia">Fin Vigencia :</Label>
+                                    @*@Html.LabelFor(model => model.SaludContratosVM.FinVigencia, "Fin Vigencia :", htmlAttributes: new { @class = "control-label" })*@
+                                    @Html.TextBoxFor(model => model.SaludContratosVM.FinVigencia, "{0:yyyy-MM-dd}", new { type = "date", id = "txtFinVigencia", @class = "form-control form-control-sm", @placeholder = "" })
+                                    @*@Html.TextBox("FinVigencia", "{0:yyyy-MM-dd}", new { type = "date", id = "txtFinVigencia", @class = "form-control form-control-sm float-right" })*@
 
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.SaludContratosVM.CodigoEjecutivo, "Ejecutivo", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoEjecutivo", null, new { id = "drpEjecutivo", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
-                                    @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoEjecutivo)
+                                    <Label for="drpEjecutivo">Ejecutivo :</Label>
+                                    @*@Html.LabelFor(model => model.SaludContratosVM.CodigoEjecutivo, "Ejecutivo", htmlAttributes: new { @class = "control-label" })*@
+                                    @Html.DropDownListFor(model => model.SaludContratosVM.CodigoEjecutivo, ViewBag.CodigoEjecutivo as SelectList, new { id = "drpEjecutivo", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                    @*@Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoEjecutivo)*@
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.SaludContratosVM.CodigoCorredor, "Corredor", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoCorredor", null, new { id = "drpCorredor", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
-                                    @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoCorredor)
+                                    <Label for="drpCorredor">Corredor :</Label>
+                                    @*@Html.LabelFor(model => model.SaludContratosVM.CodigoCorredor, "Corredor", htmlAttributes: new { @class = "control-label" })*@
+                                    @Html.DropDownListFor(model => model.SaludContratosVM.CodigoCorredor, ViewBag.CodigoCorredor as SelectList, new { id = "drpCorredor", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                    @*@Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoCorredor)*@
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.SaludContratosVM.CodigoVendedor, "Vendedor", htmlAttributes: new { @class = "control-label" })
-                                    @Html.DropDownList("CodigoVendedor", null, new { id = "drpVendedor", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
-                                    @Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoVendedor)
+                                    <Label for="drpVendedor">Vendedor :</Label>
+                                    @*@Html.LabelFor(model => model.SaludContratosVM.CodigoVendedor, "Vendedor", htmlAttributes: new { @class = "control-label" })*@
+                                    @Html.DropDownListFor(model => model.SaludContratosVM.CodigoVendedor, ViewBag.CodigoVendedor as SelectList, new { id = "drpVendedor", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                    @*@Html.ValidationMessageFor(model => model.SaludContratosVM.CodigoVendedor)*@
                                 </div>
                             </div>
                         </div>
@@ -148,8 +158,8 @@
 }
 @section Scripts {
 
-    @Scripts.Render("~/Content/plugins/jquery-validation/jquery.validate.min.js")
-    @Scripts.Render("~/Content/plugins/jquery-validation/additional-methods.min.js")
+    @*@Scripts.Render("~/Content/plugins/jquery-validation/jquery.validate.min.js")
+    @Scripts.Render("~/Content/plugins/jquery-validation/additional-methods.min.js")*@
     @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
     @Scripts.Render("~/Content/plugins/sweetalert2/sweetalert2.min.js")
     @Scripts.Render("~/Scripts/Shared/util.js")
@@ -179,6 +189,28 @@
             fechas(); 
 
         });
+
+        function fechas() {
+
+            const fechaInicio = document.getElementById("txtInicioVigencia");
+            const fechaFinal = document.getElementById("txtFinVigencia");
+
+            if (fechaInicio.value != null) {
+                var actual = new Date(fechaInicio.value);
+                var inicio = new Date(actual.getFullYear(), actual.getMonth() + 1, 1);
+                var fin = new Date(inicio.getFullYear() + 1, inicio.getMonth(), 1);
+
+                var fecini = inicio.toISOString().slice(0, 10);
+                var fecfin = fin.toISOString().slice(0, 10);
+
+                $('#txtInicioVigencia').val(fecini.trim());
+                $('#txtFinVigencia').val(fecfin.trim());
+
+                console.log(fechaInicio.value);
+                console.log(fechaFinal.value);
+            }
+
+        }
 
 
 
@@ -242,25 +274,6 @@
                 return false;
             }
         }
-
-        function fechas(){
-            const fechaInicio = document.getElementById("txtInicioVigencia");
-            const fechaFinal = document.getElementById("txtFinVigencia");
-
-            var actual = new Date(fechaInicio.value);
-            var inicio = new Date(actual.getFullYear(), actual.getMonth() + 1, 1);
-            var fin = new Date(inicio.getFullYear() + 1, inicio.getMonth(), 1);
-
-            fechaInicio.value = inicio.toISOString().slice(0, 10);
-            fechaFinal.value = fin.toISOString().slice(0, 10);
-
-            console.log(inicio);
-            console.log(fin);
-        }
-
-        const txtInicio = document.getElementById("txtInicioVigencia");
-        txtInicio.addEventListener('change', fechas);
-
     </script>
     <script src="~/Scripts/Comandos.js"></script>
 

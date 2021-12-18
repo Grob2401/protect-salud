@@ -16,6 +16,12 @@ namespace LogicaNegocio
         {
             return new ADPerfiles().ObtenerTodos(busqueda);
         }
+
+        public static int Cantidad()
+        {
+            return new ADPerfiles().Cantidad();
+        }
+
         public static bool Insertar(ENPerfiles oENPerfiles)
         {
             return (new ADPerfiles()).Insertar(oENPerfiles);

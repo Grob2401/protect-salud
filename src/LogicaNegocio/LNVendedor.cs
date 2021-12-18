@@ -10,9 +10,19 @@ namespace LogicaNegocio
 {
     public class LNVendedor
     {
+        public static int Cantidad(string sociedad)
+        {
+            return new ADVendedor().Cantidad(sociedad);
+        }
+        
         public static List<ENVendedores> ObtenerTodos(string sociedad)
         {
             return new ADVendedor().ObtenerTodos(sociedad);
+        }
+
+        public static List<ENVendedores> ObtenerTodos(int page, int rows, string type, string Keywords, string sociedad)
+        {
+            return new ADVendedor().ObtenerTodos(page,rows,type, Keywords, sociedad);
         }
 
         public static bool Insertar(ENVendedores oENVendedores)

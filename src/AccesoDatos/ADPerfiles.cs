@@ -17,6 +17,29 @@ namespace AccesoDatos
     {
         public String dataProviderName = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ProviderName;
         public String connectionString = ConfigurationManager.ConnectionStrings["PROVEEDOR_ADONET"].ConnectionString;
+
+        public int Cantidad()
+        {
+            DbCommand oCommand = null;
+            try
+            {
+                oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "usp_GenPerfiles_count");
+                GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode ", 1, TipoParametro.INT, Direccion.OUTPUT);
+                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
+                int cantidadPerfiles = -1;
+                if (oDataReader.Read() && !int.TryParse(oDataReader["Perfiles"].ToString(), out cantidadPerfiles)) cantidadPerfiles = -1;
+                return cantidadPerfiles;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            finally
+            {
+                GenericDataAccess.CerrarConexion(oCommand, null);
+            }
+        }
+
         public List<ENPerfiles> ObtenerTodos(string busqueda)
         {
             DbCommand oCommand = null;

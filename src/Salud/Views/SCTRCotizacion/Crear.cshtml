@@ -14,24 +14,29 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
+        <input type="hidden" id="ruta_provincia" name="name" value='@Url.Action("GetProvincia", "SCTRCotizacion")' />
+        <input type="hidden" id="ruta_distrito" name="name" value='@Url.Action("GetDistrito", "SCTRCotizacion")' />
+        <input type="hidden" id="ruta_CIIUEspecifica" name="name" value='@Url.Action("GetCIIUEspecifica", "SCTRCotizacion")' />
+        <input type="hidden" id="ruta_Cotizar1" name="name" value='@Url.Action("Cotizar1", "SCTRCotizacion")' />
+        <input type="hidden" id="ruta_ValidaRuc" name="name" value='@Url.Action("ValidaRuc", "SCTRCotizacion")' />
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="card-footer">
-        <button name="BotonCotizar" id="Cotizar" value="Cotizar" class="btn btn-primary">Cotizar</button>
-        <button type="submit" id="btnGrabar" name="BotonGrabar" value="Grabar" class="btn btn-primary">Grabar</button>
-        <a href='@Url.Action("Upload", "SCTRCotizacion",new { empresaruc = Model.EmpresaRUC, empresanombre= Model.EmpresaNombre,codigocotizacion=Model.CodigoCotizacion,Model.CodigoCliente,Model.DetMontoPlanillaAdm,Model.DetMontoPlanillaOpe })' id="Upload" class="btn btn-primary">Cargar XLS</a>
-        @*<a href='@Url.Action("Emitir", "SCTRCotizacion",new { empresaruc = Model.EmpresaRUC, empresanombre= Model.EmpresaNombre,codigocotizacion=Model.CodigoCotizacion,Model.CodigoCliente,Model.DetMontoPlanillaAdm,Model.DetMontoPlanillaOpe })' id="Emitir" class="btn btn-primary">Emitir XLS</a>
-        <button name="btnEmitir" id="btnEmitir" value="Emitir" class="btn btn-primary">Emitir Contrato</button>*@
-     
-        
-        @*<a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Emitir</a>*@
-        @*<a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Constancia</a>
-        <a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Contrato</a>
-        <a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Imprimir</a>
-        <a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Aprobar</a>
-        <a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Liquidar</a>
-        <a href='@Url.Action("Index", "SCTRCotizacion")' class="btn btn-default float-right">Cancelar</a>*@
-    </div>
+        <div class="card-footer">
+            <button name="BotonCotizar" id="Cotizar" value="Cotizar" class="btn btn-primary">Cotizar</button>
+            <button type="submit" id="btnGrabar" name="BotonGrabar" value="Grabar" class="btn btn-primary">Grabar</button>
+            <a href='@Url.Action("Upload", "SCTRCotizacion",new { empresaruc = Model.EmpresaRUC, empresanombre= Model.EmpresaNombre,codigocotizacion=Model.CodigoCotizacion,Model.CodigoCliente,Model.DetMontoPlanillaAdm,Model.DetMontoPlanillaOpe })' id="Upload" class="btn btn-primary">Cargar XLS</a>
+            @*<a href='@Url.Action("Emitir", "SCTRCotizacion",new { empresaruc = Model.EmpresaRUC, empresanombre= Model.EmpresaNombre,codigocotizacion=Model.CodigoCotizacion,Model.CodigoCliente,Model.DetMontoPlanillaAdm,Model.DetMontoPlanillaOpe })' id="Emitir" class="btn btn-primary">Emitir XLS</a>
+                <button name="btnEmitir" id="btnEmitir" value="Emitir" class="btn btn-primary">Emitir Contrato</button>*@
+
+
+            @*<a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Emitir</a>*@
+            @*<a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Constancia</a>
+                <a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Contrato</a>
+                <a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Imprimir</a>
+                <a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Aprobar</a>
+                <a href='@Url.Action("Emitir", "SCTRCotizacion")' class="btn btn-primary">Liquidar</a>
+                <a href='@Url.Action("Index", "SCTRCotizacion")' class="btn btn-default float-right">Cancelar</a>*@
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -870,9 +875,12 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#drpDepartamento').change(function () {
+
+                var url_method = $('#ruta_provincia').val();
+
                 $.ajax({
                     type: "post",
-                    url: "/SCTRCotizacion/GetProvincia",
+                    url: url_method,
                     data: { dptoid: $('#drpDepartamento').val() },
                     datatype: "json",
                     traditional: true,
@@ -892,9 +900,12 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#drpProvincia').change(function () {
+
+                var url_method = $('#ruta_distrito').val();
+
                 $.ajax({
                     type: "post",
-                    url: "/SCTRCotizacion/GetDistrito",
+                    url: url_method,
                     data: { dptoid: $('#drpDepartamento').val(), provid: $('#drpProvincia').val() },
                     datatype: "json",
                     traditional: true,
@@ -915,9 +926,12 @@
         $(document).ready(function () {
             //alert("Handler for .click() drpDepartamentoR");
             $('#drpDepartamentoR').change(function () {
+
+                var url_method = $('#ruta_provincia').val();
+
                 $.ajax({
                     type: "post",
-                    url: "/SCTRCotizacion/GetProvincia",
+                    url: url_method,
                     data: { dptoid: $('#drpDepartamentoR').val() },
                     datatype: "json",
                     traditional: true,
@@ -937,9 +951,12 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#drpProvinciaR').change(function () {
+
+                var url_method = $('#ruta_distrito').val();
+
                 $.ajax({
                     type: "post",
-                    url: "/SCTRCotizacion/GetDistrito",
+                    url: url_method,
                     data: { dptoid: $('#drpDepartamentoR').val(), provid: $('#drpProvinciaR').val() },
                     datatype: "json",
                     traditional: true,
@@ -959,9 +976,12 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#drpActividadP').change(function () {
+
+                var url_method = $('#ruta_CIIUEspecifica').val();
+
                 $.ajax({
                     type: "post",
-                    url: "/SCTRCotizacion/GetCIIUEspecifica",
+                    url: url_method, 
                     data: { grupoid: $('#drpActividadP').val() },
                     datatype: "json",
                     traditional: true,
@@ -981,6 +1001,9 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#Cotizar').click(function (e) {
+
+                var url_method = $('#ruta_Cotizar1').val();
+
                 //alert("Handler for .click() Cotizar called.");
                 var empresaruc = $('#txtEmpresaRUC').val();
                 var empresanombre = $('#txtEmpresaNombre').val();
@@ -1010,7 +1033,7 @@
                 //alert("Handler for .click() Cotizar called.");
                 $.ajax({
                     type: "post",
-                    url: "/SCTRCotizacion/Cotizar1",
+                    url: url_method,
                     data: { empresaruc, empresanombre, codigocorredor, codigociiu, montooperativos, numerooperativos, montoadministrativos, numeroadministrativos, codigomoneda, fechainicio, fechafin, tiempocobertura, porcentajetasa, porcentajecorredor, numerocotizacion, usuario, ubigeoriesgo, codigodpto, codigoprov, codigodist, codigodptor, codigoprovr, codigodistr, grupociiu },
                     datatype: "json",
                     traditional: true,
@@ -1036,12 +1059,15 @@
         $(document).ready(function () {
             $('#txtEmpresaRUC').change(function (e) {
                 //alert("Handler for .click() Cotizar called.");
+
+                var url_method = $('#ruta_ValidaRuc').val();
+
                 var empresaruc = $('#txtEmpresaRUC').val();
                 e.preventDefault();
                 //alert("Handler for .click() Cotizar called.");
                 $.ajax({
                     type: "post",
-                    url: "/SCTRCotizacion/ValidaRuc",
+                    url: url_method,
                     data: { empresaruc },
                     datatype: "json",
                     traditional: true,

@@ -357,14 +357,18 @@ namespace AccesoDatos
                     //Detalle Operativos
                     oENSCTRCotizaciones.DetCodigoCotizacionOpe = oDataReader["DetCodigoCotizacionOpe"].ToString();
                     oENSCTRCotizaciones.DetCodigoTipoEmpleadoOpe = oDataReader["DetCodigoTipoEmpleadoOpe"].ToString();
-                    oENSCTRCotizaciones.DetImporteDerechoEmisionOpe = Convert.ToDouble(oDataReader["DetImporteDerechoEmisionOpe"]);
+                    oENSCTRCotizaciones.DetImporteDerechoEmisionOpe = oDataReader["DetImporteDerechoEmisionOpe"] == DBNull.Value
+                                                    ? 0.00
+                                                    : Convert.ToDouble(oDataReader["DetImporteDerechoEmisionOpe"]);
                     //oENSCTRCotizaciones.DetImporteDerechoEmisionPensionOpe = Convert.ToDouble(oDataReader["DetImporteDerechoEmisionPensionOpe"]);
 
                     oENSCTRCotizaciones.DetImporteDerechoEmisionPensionOpe = oDataReader["DetImporteDerechoEmisionPensionOpe"] == DBNull.Value 
                                                     ? 0.00
                                                     : Convert.ToDouble(oDataReader["DetImporteDerechoEmisionPensionOpe"]);
 
-                    oENSCTRCotizaciones.DetImporteIGVOpe = Convert.ToDouble(oDataReader["DetImporteIGVOpe"]);
+                    oENSCTRCotizaciones.DetImporteIGVOpe = oDataReader["DetImporteIGVOpe"] == DBNull.Value
+                                                    ? 0.00
+                                                    : Convert.ToDouble(oDataReader["DetImporteIGVOpe"]);
                     //oENSCTRCotizaciones.DetImporteIGVPensionOpe = Convert.ToDouble(oDataReader["DetImporteIGVPensionOpe"]);
 
 
@@ -385,38 +389,42 @@ namespace AccesoDatos
                             ?  0.00
                             :  Convert.ToDouble(oDataReader["DetImportePrimaNetaPensionOpe"]);
 
-                    oENSCTRCotizaciones.DetImportePrimaTotalOpe = Convert.ToDouble(oDataReader["DetImportePrimaTotalOpe"]);
+                    oENSCTRCotizaciones.DetImportePrimaTotalOpe = oDataReader["DetImportePrimaTotalOpe"] == DBNull.Value
+                            ? 0.00
+                            : Convert.ToDouble(oDataReader["DetImportePrimaTotalOpe"]);
                     
                     //oENSCTRCotizaciones.DetImportePrimaTotalPensionOpe = Convert.ToDouble(oDataReader["DetImportePrimaTotalPensionOpe"]);
                     
                     
                     oENSCTRCotizaciones.DetItemOpe = oDataReader["DetItemOpe"].ToString();
-                    oENSCTRCotizaciones.DetMontoPlanillaOpe = Convert.ToDouble(oDataReader["DetMontoPlanillaOpe"].ToString());
+                    oENSCTRCotizaciones.DetMontoPlanillaOpe = oDataReader["DetMontoPlanillaOpe"] == DBNull.Value
+                            ? 0.00
+                            : Convert.ToDouble(oDataReader["DetMontoPlanillaOpe"]);
                     
-                    oENSCTRCotizaciones.DetNumeroTrabajadoresOpe = Convert.ToInt32(oDataReader["DetNumeroTrabajadoresOpe"]);
-                    oENSCTRCotizaciones.DetPorcentajeCorredorOpe = Convert.ToDouble(oDataReader["DetPorcentajeCorredorOpe"]);
-                    oENSCTRCotizaciones.DetPorcentajeTasaOpe = Convert.ToDouble(oDataReader["DetPorcentajeTasaOpe"]);
-                    oENSCTRCotizaciones.DetPorcentajeTasaPensionOpe = Convert.ToDouble(oDataReader["DetPorcentajeTasaPensionOpe"]);
-                    oENSCTRCotizaciones.DetPorcentajeCorredorPensionOpe = Convert.ToDouble(oDataReader["DetPorcentajeCorredorPensionOpe"]);
+                    oENSCTRCotizaciones.DetNumeroTrabajadoresOpe = oDataReader["DetNumeroTrabajadoresOpe"] == DBNull.Value ? 0 : Convert.ToInt32(oDataReader["DetNumeroTrabajadoresOpe"]);
+                    oENSCTRCotizaciones.DetPorcentajeCorredorOpe = oDataReader["DetPorcentajeCorredorOpe"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetPorcentajeCorredorOpe"]);
+                    oENSCTRCotizaciones.DetPorcentajeTasaOpe = oDataReader["DetPorcentajeTasaOpe"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetPorcentajeTasaOpe"]);
+                    oENSCTRCotizaciones.DetPorcentajeTasaPensionOpe = oDataReader["DetPorcentajeTasaPensionOpe"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetPorcentajeTasaPensionOpe"]);
+                    oENSCTRCotizaciones.DetPorcentajeCorredorPensionOpe = oDataReader["DetPorcentajeCorredorPensionOpe"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetPorcentajeCorredorPensionOpe"]);
                     //Detalle Administrativos
 
                     oENSCTRCotizaciones.DetCodigoCotizacionAdm = oDataReader["DetCodigoCotizacionAdm"].ToString();
                     oENSCTRCotizaciones.DetCodigoTipoEmpleadoAdm = oDataReader["DetCodigoTipoEmpleadoAdm"].ToString();
-                    oENSCTRCotizaciones.DetImporteDerechoEmisionAdm = Convert.ToDouble(oDataReader["DetImporteDerechoEmisionAdm"]);
-                    oENSCTRCotizaciones.DetImporteDerechoEmisionPensionAdm = Convert.ToDouble(oDataReader["DetImporteDerechoEmisionPensionAdm"]);
-                    oENSCTRCotizaciones.DetImporteIGVAdm = Convert.ToDouble(oDataReader["DetImporteIGVAdm"]);
-                    oENSCTRCotizaciones.DetImporteIGVPensionAdm = Convert.ToDouble(oDataReader["DetImporteIGVPensionAdm"]);
-                    oENSCTRCotizaciones.DetImportePrimaNetaAdm = Convert.ToDouble(oDataReader["DetImportePrimaNetaAdm"]);
-                    oENSCTRCotizaciones.DetImportePrimaNetaPensionAdm = Convert.ToDouble(oDataReader["DetImportePrimaNetaPensionAdm"]);
-                    oENSCTRCotizaciones.DetImportePrimaTotalAdm = Convert.ToDouble(oDataReader["DetImportePrimaTotalAdm"]);
-                    oENSCTRCotizaciones.DetImportePrimaTotalPensionAdm = Convert.ToDouble(oDataReader["DetImportePrimaTotalPensionAdm"]);
+                    oENSCTRCotizaciones.DetImporteDerechoEmisionAdm = oDataReader["DetImporteDerechoEmisionAdm"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetImporteDerechoEmisionAdm"]);
+                    oENSCTRCotizaciones.DetImporteDerechoEmisionPensionAdm = oDataReader["DetImporteDerechoEmisionPensionAdm"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetImporteDerechoEmisionPensionAdm"]);
+                    oENSCTRCotizaciones.DetImporteIGVAdm = oDataReader["DetImporteIGVAdm"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetImporteIGVAdm"]);
+                    oENSCTRCotizaciones.DetImporteIGVPensionAdm = oDataReader["DetImporteIGVPensionAdm"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetImporteIGVPensionAdm"]);
+                    oENSCTRCotizaciones.DetImportePrimaNetaAdm = oDataReader["DetImportePrimaNetaAdm"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetImportePrimaNetaAdm"]);
+                    oENSCTRCotizaciones.DetImportePrimaNetaPensionAdm = oDataReader["DetImportePrimaNetaPensionAdm"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetImportePrimaNetaPensionAdm"]);
+                    oENSCTRCotizaciones.DetImportePrimaTotalAdm = oDataReader["DetImportePrimaTotalAdm"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetImportePrimaTotalAdm"]);
+                    oENSCTRCotizaciones.DetImportePrimaTotalPensionAdm = oDataReader["DetImportePrimaTotalPensionAdm"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetImportePrimaTotalPensionAdm"]);
                     oENSCTRCotizaciones.DetItemAdm = oDataReader["DetItemAdm"].ToString();
-                    oENSCTRCotizaciones.DetMontoPlanillaAdm = Convert.ToDouble(oDataReader["DetMontoPlanillaAdm"].ToString());
-                    oENSCTRCotizaciones.DetNumeroTrabajadoresAdm = Convert.ToInt32(oDataReader["DetNumeroTrabajadoresAdm"]);
-                    oENSCTRCotizaciones.DetPorcentajeCorredorAdm = Convert.ToDouble(oDataReader["DetPorcentajeCorredorAdm"]);
-                    oENSCTRCotizaciones.DetPorcentajeTasaAdm = Convert.ToDouble(oDataReader["DetPorcentajeTasaAdm"]);
-                    oENSCTRCotizaciones.DetPorcentajeTasaPensionAdm = Convert.ToDouble(oDataReader["DetPorcentajeTasaPensionAdm"]);
-                    oENSCTRCotizaciones.DetPorcentajeCorredorPensionAdm = Convert.ToDouble(oDataReader["DetPorcentajeCorredorPensionAdm"]);
+                    oENSCTRCotizaciones.DetMontoPlanillaAdm = oDataReader["DetMontoPlanillaAdm"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetMontoPlanillaAdm"].ToString());
+                    oENSCTRCotizaciones.DetNumeroTrabajadoresAdm = oDataReader["DetNumeroTrabajadoresAdm"] == DBNull.Value ? 0 : Convert.ToInt32(oDataReader["DetNumeroTrabajadoresAdm"]);
+                    oENSCTRCotizaciones.DetPorcentajeCorredorAdm = oDataReader["DetPorcentajeCorredorAdm"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetPorcentajeCorredorAdm"]);
+                    oENSCTRCotizaciones.DetPorcentajeTasaAdm = oDataReader["DetPorcentajeTasaAdm"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetPorcentajeTasaAdm"]);
+                    oENSCTRCotizaciones.DetPorcentajeTasaPensionAdm = oDataReader["DetPorcentajeTasaPensionAdm"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetPorcentajeTasaPensionAdm"]);
+                    oENSCTRCotizaciones.DetPorcentajeCorredorPensionAdm = oDataReader["DetPorcentajeCorredorPensionAdm"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["DetPorcentajeCorredorPensionAdm"]);
                     //Nuevos
                     oENSCTRCotizaciones.Direccion= oDataReader["Direccion"].ToString();
                     oENSCTRCotizaciones.Ubigeo = oDataReader["Ubigeo"].ToString();
@@ -428,21 +436,21 @@ namespace AccesoDatos
                     oENSCTRCotizaciones.CodigoProvR = oDataReader["CodProvR"].ToString();
                     oENSCTRCotizaciones.CodigoDistR = oDataReader["CodDistR"].ToString();
 
-                    oENSCTRCotizaciones.ImportePrimaNeta = Convert.ToDouble(oDataReader["ImportePrimaNeta"]);
-                    oENSCTRCotizaciones.ImporteIGV = Convert.ToDouble(oDataReader["ImporteIGV"]);
-                    oENSCTRCotizaciones.ImportePrimaTotal = Convert.ToDouble(oDataReader["ImportePrimaTotal"]);
-                    oENSCTRCotizaciones.ImporteDerechoEmision = Convert.ToDouble(oDataReader["ImporteDerechoEmision"]);
+                    oENSCTRCotizaciones.ImportePrimaNeta = oDataReader["ImportePrimaNeta"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["ImportePrimaNeta"]);
+                    oENSCTRCotizaciones.ImporteIGV = oDataReader["ImporteIGV"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["ImporteIGV"]);
+                    oENSCTRCotizaciones.ImportePrimaTotal = oDataReader["ImportePrimaTotal"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["ImportePrimaTotal"]);
+                    oENSCTRCotizaciones.ImporteDerechoEmision = oDataReader["ImporteDerechoEmision"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["ImporteDerechoEmision"]);
 
-                    oENSCTRCotizaciones.ImportePrimaNetaPension = Convert.ToDouble(oDataReader["ImportePrimaNetaPension"]);
-                    oENSCTRCotizaciones.ImporteIGVPension = Convert.ToDouble(oDataReader["ImporteIGVPension"]);
-                    oENSCTRCotizaciones.ImportePrimaTotalPension = Convert.ToDouble(oDataReader["ImportePrimaTotalPension"]);
-                    oENSCTRCotizaciones.ImporteDerechoEmisionPension = Convert.ToDouble(oDataReader["ImporteDerechoEmisionPension"]);
+                    oENSCTRCotizaciones.ImportePrimaNetaPension = oDataReader["ImportePrimaNetaPension"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["ImportePrimaNetaPension"]);
+                    oENSCTRCotizaciones.ImporteIGVPension = oDataReader["ImporteIGVPension"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["ImporteIGVPension"]);
+                    oENSCTRCotizaciones.ImportePrimaTotalPension = oDataReader["ImportePrimaTotalPension"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["ImportePrimaTotalPension"]);
+                    oENSCTRCotizaciones.ImporteDerechoEmisionPension = oDataReader["ImporteDerechoEmisionPension"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["ImporteDerechoEmisionPension"]);
 
-                    oENSCTRCotizaciones.PorcentajeTasaPension = Convert.ToDouble(oDataReader["PorcentajeTasaPension"]);
-                    oENSCTRCotizaciones.PorcentajeCorredorPension = Convert.ToDouble(oDataReader["PorcentajeCorredorPension"]);
+                    oENSCTRCotizaciones.PorcentajeTasaPension = oDataReader["PorcentajeTasaPension"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["PorcentajeTasaPension"]);
+                    oENSCTRCotizaciones.PorcentajeCorredorPension = oDataReader["PorcentajeCorredorPension"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["PorcentajeCorredorPension"]);
 
-                    oENSCTRCotizaciones.PorcentajeTasa = Convert.ToDouble(oDataReader["PorcentajeTasa"]);
-                    oENSCTRCotizaciones.PorcentajeCorredor = Convert.ToDouble(oDataReader["PorcentajeCorredor"]);
+                    oENSCTRCotizaciones.PorcentajeTasa = oDataReader["PorcentajeTasa"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["PorcentajeTasa"]);
+                    oENSCTRCotizaciones.PorcentajeCorredor = oDataReader["PorcentajeCorredor"] == DBNull.Value ? 0 : Convert.ToDouble(oDataReader["PorcentajeCorredor"]);
 
                     oENSCTRCotizaciones.dtm_FechaInicio = DateTime.Parse(oDataReader["FechaInicio"].ToString()); 
                     oENSCTRCotizaciones.dtm_FechaFin = DateTime.Parse(oDataReader["FechaFin"].ToString());

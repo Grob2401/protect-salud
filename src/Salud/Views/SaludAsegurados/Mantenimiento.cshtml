@@ -16,6 +16,7 @@
 
 @Html.AntiForgeryToken()
 <div class="row">
+    <input type="hidden" id="soloAsegurados_ruta" name="name" value='@Url.Action("getSoloAsegurados", "SaludAsegurados")' />
     <div class="col-md-2">
         <div class="card card-info card-outline shadow-lg sticky-top">
             <div class="card-header">
@@ -34,14 +35,14 @@
                         {
                             if (ViewBag.Origen != "IN")
                             {
-                                <button id="btnCrearDependiente" onclick="goCrearDependiente(this.id);" class="btn btn-app bg-gradient-success" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
+                                <button id="btnCrearDependiente" onclick="goCrearDependiente(this.id);" @ViewBag.Estado class="btn btn-app bg-gradient-success" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
                                     <i class="fa fa-user-plus text-warning"></i>&nbsp;&nbsp;Dependiente
                                 </button>
                             }
                         }
                         else
                         {
-                            <button id="btnCrearTitular" onclick="goCrearTitular(this.id);" class="btn btn-app bg-gradient-primary" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
+                            <button id="btnCrearTitular" onclick="goCrearTitular(this.id);" class="btn btn-app bg-gradient-primary" @ViewBag.Estado data-request-url="@Url.Action("Crear", "SaludAsegurados")">
                                 <i class="fa fa-user-plus text-warning"></i>&nbsp;&nbsp;Titular
                             </button>
                         }
@@ -97,17 +98,17 @@
                     <div class="col-md-4">
                         <div class="form-group" hidden>
                             @Html.LabelFor(model => model.VMCliente.CodigoCliente, "Identificador RUC o DNI:", htmlAttributes: new { @class = "control-label" })
-                            @Html.TextBoxFor(model => model.VMCliente.CodigoCliente, "", new { type = "text", id = "txtCodigoCli", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+                            @Html.TextBoxFor(model => model.VMCliente.CodigoCliente, new { type = "text", id = "txtCodigoCli", @class = "form-control form-control-sm float-right", name = "drpCodigoCliente", @readonly = "readonly" })
                         </div>
                         <div class="form-group">
                             @Html.LabelFor(model => model.VMCliente.RucDni, "Identificador RUC o DNI:", htmlAttributes: new { @class = "control-label" })
-                            @Html.TextBoxFor(model => model.VMCliente.RucDni, "", new { type = "text", id = "txtRUCDNI", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+                            @Html.TextBoxFor(model => model.VMCliente.RucDni, new { type = "text", id = "txtRUCDNI", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.VMContrato.CodigoContrato, "Codigo Contrato", htmlAttributes: new { @class = "control-label" })
-                            @Html.DropDownList("CodigoContrato", null, new { id = "drpContrato", @class = "form-control form-control-sm", disabled = "true" })
+                            @Html.DropDownList("CodigoContrato", null, new { id = "drpContrato", @class = "form-control form-control-sm", name = "drpCodigoContrato", disabled = "true" })
                             @Html.ValidationMessageFor(model => model.VMContrato.CodigoContrato)
                         </div>
                     </div>
@@ -129,12 +130,12 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             @Html.LabelFor(model => model.VMCliente.RazonSocial, "Nombre o Razon Social:", htmlAttributes: new { @class = "control-label" })
-                            @Html.TextBoxFor(model => model.VMCliente.RazonSocial, "", new { type = "text", id = "txtRazonSocial", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
+                            @Html.TextBoxFor(model => model.VMCliente.RazonSocial, new { type = "text", id = "txtRazonSocial", @class = "form-control form-control-sm float-right", @readonly = "readonly" })
                         </div>
                     </div>
                 </div>
                 <hr />
-                <h3 class="text-lg font-weight-bold text-primary">Grupo Familiar</h3>
+                <h3 class="text-lg font-weight-bold text-primary">Asegurados por Contrato</h3>
                 <hr />
                 <div class="row">
                     <div Class="col-md-12">
@@ -161,24 +162,44 @@
                                     @foreach (ENSaludAsegurados SaludASegurados in (List<ENSaludAsegurados>)ViewBag.Asegurados)
                                     {
                                         <tr>
-                                            <td hidden>@SaludASegurados.CodigoCliente</td>
-                                            <td hidden>@SaludASegurados.CodigoTitular</td>
+                                            <td  class="cellCodigoCliente" hidden>@SaludASegurados.CodigoCliente</td>
+                                            <td class="cellCodigoTitular" hidden>@SaludASegurados.CodigoTitular</td>
                                             <td hidden>@SaludASegurados.Categoria</td>
                                             <td>@SaludASegurados.DescripcionParentesco</td>
                                             <td>@SaludASegurados.ApellidosNombres</td>
                                             <td>@SaludASegurados.Edad</td>
                                             <td>@SaludASegurados.FechaAlta</td>
                                             <td>@SaludASegurados.FechaBaja</td>
-                                            <td>@SaludASegurados.Estado</td>
+                                            <td>
+
+                                                @if (SaludASegurados.Estado == "Activo")
+                                                {
+                                                    <span class="badge bg-success badge-btn">Activo</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger badge-btn">De Baja</span>
+                                                }
+                                            </td>
                                             <td class="project-actions text-center">
-                                                <button type="button" class="botonedit btn btn-info btn-sm mr-3" data-request-url="@Url.Action("Crear", "SaludAsegurados")">
+                                                <button type="button" class="botonedit btn btn-info btn-sm mr-3" @ViewBag.Estado data-request-url="@Url.Action("Crear", "SaludAsegurados")">
                                                     <i class="fa fa-edit text-warning"></i>&nbsp;&nbsp;Editar
                                                 </button>
                                             </td>
                                             <td class="project-actions text-center">
-                                                <button type="button" class="btn btn-danger btn-sm mr-3" onclick='modalBajaBoton(event);'>
-                                                    <i class="fa fa-arrow-down text-warning"></i>&nbsp;&nbsp;Baja
-                                                </button>
+                                                @if (SaludASegurados.Estado == "Activo")
+                                                {
+                                                    <button type="button" class="btn btn-danger btn-sm mr-3" @ViewBag.Estado onclick='modalBajaBoton(event);'>
+                                                        <i class="fa fa-arrow-down text-warning"></i>&nbsp;&nbsp;Baja
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" disabled class="btn btn-danger btn-sm mr-3" @ViewBag.Estado onclick='modalBajaBoton(event);'>
+                                                        <i class="fa fa-arrow-down text-warning"></i>&nbsp;&nbsp;Baja
+                                                    </button>
+                                                }
+
                                             </td>
                                             <td class="project-actions text-center" hidden>
                                                 <button type="button" class="botoncomi btn btn-primary btn-sm mr-3">
@@ -186,7 +207,7 @@
                                                 </button>
                                             </td>
                                             <td class="project-actions text-center">
-                                                <button type="button" class="botonEnviar btn btn-success btn-sm mr-3" onclick='EnvioSusalud(event);' data-request-url='@Url.Action("Consumir_LPService", "SaludAsegurados")'>
+                                                <button type="button" class="botonEnviar btn btn-success btn-sm mr-3" @ViewBag.Estado onclick='EnvioSusalud(event);' data-request-url='@Url.Action("Consumir_LPService", "SaludAsegurados")'>
                                                     <i class="fa fa-envelope text-warning"></i>&nbsp;&nbsp;Registrar
                                                 </button>
                                             </td>
@@ -255,26 +276,34 @@
     @Scripts.Render("~/Scripts/Shared/util.js")
 
     <script>
-         var mensaje = "@ViewBag.MensajeAddAfiliado";
+         var mensaje = "@ViewBag.MensajeAgregarAFiliado";
         if (mensaje != "") {
 
-            if (mensaje.includes("CORRECTO")) {
+            if (mensaje.includes("Excelente")) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'DATOS GUARDADOS',
+                    title: 'Mensaje',
                     html: mensaje,
                     showCloseButton: true
                 });
             }
-            else {
+            else if (mensaje.includes("Advertencia")) {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'ADVERTENCIA',
+                    icon: 'info',
+                    title: 'Mensaje',
                     html: mensaje,
                     showCloseButton: true
                 });
             }
-
+            else
+            {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Mensaje',
+                    html: mensaje,
+                    showCloseButton: true
+                });
+            }
         }
     </script>
 
@@ -304,9 +333,10 @@
         });
 
         $(".botonedit").click(function () {
+            txtitular = $(this).parents('tr').find("td:eq(1)").text().trim();
             txt1 = $(this).parents('tr').find("td:eq(2)").text().trim();
             const clienteCod = '@ViewBag.CodigoCliente';
-            const titularCod = '@ViewBag.CodigoTitular';
+            const titularCod = txtitular;
             const contratoCod = '@ViewBag.CodigoContratoID';
             const origen = '@ViewBag.Origen';
 
@@ -489,7 +519,7 @@
                         {
                             Swal.fire({
                                 icon: 'warning',
-                                title: 'ADVERTENCIA',
+                                title: 'Mensaje',
                                 html: "Ocurrió un error no se dió de baja al asegurado.",
                                 showCloseButton: true
                             });
@@ -503,13 +533,85 @@
             {
                 Swal.fire({
                     icon: 'warning',
-                    title: 'ADVERTENCIA',
+                    title: 'Mensaje',
                     html: "Ingrese una breve descripción del motivo de baja.",
                     showCloseButton: true
                 });
             }
 
         }
+
+        $("body").on("click", "img[src*='plus.jpg']", function () {
+            $("img[src*='minus.jpg']").click();
+            //$('table#dglista tr#ad').remove();
+            $(this).attr("src", "Images/plus.jpg");
+            $(this).closest("tr").after("<tr id='ad'><td></td><td id='tab' colspan = '999'>" + $(this).next().html() + "</td></tr>");
+            var row = $(this).closest("tr");
+            var url_method = $('#soloAsegurados_ruta').val();
+
+
+            var Codcliente = row.find(".cellCodigoCliente").html();
+            var Codtitular = row.find(".cellCodigoTitular").html();
+            console.log(Codcliente);
+            console.log(Codtitular);
+
+            $(this).attr("src", "Images/minus.jpg");
+            $.ajax({
+                type: "GET",
+                url: url_method,
+                data: {
+                    'tipoConsulta': 'GRUPOFAMILIAR',
+                    'codCliente': Codcliente,
+                    'codTitular': Codtitular,
+                    'codDependiente': '',
+                    'codContrato': ''
+                },
+                dataType: "text",
+                success: function (r) {
+                    var dataparseada = JSON.parse(r);
+                    document.getElementById('tab').innerHTML = json2table(dataparseada, 'table');
+                }
+            });
+
+        });
+
+        //Assign Click event to Minus Image.
+        $("body").on("click", "img[src*='minus.jpg']", function () {
+            $(this).attr("src", "Images/plus.jpg");
+            $(this).closest("tr").next().remove();
+        });
+
+        dateTimeReviver = function (key, value) {
+            var a;
+            if (typeof value === 'string') {
+                a = /\/Date\((\d*)\)\//.exec(value);
+                if (a) {
+
+                    var dt = new Date(+a[1]);
+
+                    var dateString = moment(dt).format('YYYY-MM-DD');
+
+                    return dateString;
+                }
+                //console.log(a);
+            }
+            return value;
+        }
+
+        //function EditarAsegurado(e) {
+        //    if (e.target.classList.contains('botonEditarAsegurado')) {
+        //        const boton = e.target;
+        //        const Cliente = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+        //        const Contrato = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+        //        const Titular = e.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+        //        const url = boton.getAttribute('data-request-url');
+        //        console.log(`${Cliente}-${Contrato}-${Titular}-${url}`);
+        //        const url_parametros = `?CodigoCLiente=${Cliente.trim()}&CodigoTitular=${Titular.trim()}&CodigoContrato=${Contrato.trim()}&origen=I`
+        //        console.log(url + url_parametros);
+        //        //window.location.href = url + url_parametros;
+        //    }
+        //};
+
 
     </script>
 }

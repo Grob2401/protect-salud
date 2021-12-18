@@ -16,6 +16,8 @@
 @Html.AntiForgeryToken()
 
 <div class="row">
+    <input type="hidden" id="ruta_provincia" name="name" value='@Url.Action("GetProvincia", "SCTRCotizacion")' />
+    <input type="hidden" id="ruta_distrito" name="name" value='@Url.Action("GetDistrito", "SCTRCotizacion")' />
     <div class="col-md-2">
         <div class="card card-info card-outline shadow-lg sticky-top">
             <div class="card-header">
@@ -86,7 +88,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.Clientes.CodigoDocumentoIdentidad, "Tipo Documento", htmlAttributes: new { @class = "control-label" })
-                                        @Html.DropDownList("CodigoDocumentoIdentidad", null, new { id = "drpTipoDocumento", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                        @Html.DropDownListFor(model => model.Clientes.CodigoDocumentoIdentidad, ViewBag.CodigoDocumentoIdentidad as SelectList, new { id = "drpTipoDocumento", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                         @Html.ValidationMessageFor(model => model.Clientes.CodigoDocumentoIdentidad)
                                     </div>
                                 </div>
@@ -129,21 +131,21 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.Clientes.CodigoDpto, "Departamento", htmlAttributes: new { @class = "control-label" })
-                                        @Html.DropDownList("CodigoDpto", null, new { id = "drpDepartamento", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                        @Html.DropDownListFor(model => model.Clientes.CodigoDpto, ViewBag.CodigoDpto as SelectList, new { id = "drpDepartamento", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                         @Html.ValidationMessageFor(model => model.Clientes.CodigoDpto)
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.Clientes.CodigoProv, "Provincia", htmlAttributes: new { @class = "control-label" })
-                                        @Html.DropDownList("CodigoProv", null, new { id = "drpProvincia", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                        @Html.DropDownListFor(model => model.Clientes.CodigoProv, ViewBag.CodigoProv as SelectList, new { id = "drpProvincia", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                         @Html.ValidationMessageFor(model => model.Clientes.CodigoProv)
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.Clientes.CodigoDist, "Distrito", htmlAttributes: new { @class = "control-label" })
-                                        @Html.DropDownList("CodigoDist", null, new { id = "drpDistrito", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
+                                        @Html.DropDownListFor(model => model.Clientes.CodigoDist, ViewBag.CodigoDist as SelectList, new { id = "drpDistrito", @class = "form-control-sm js-example-responsive", @style = "width:100%" })
                                         @Html.ValidationMessageFor(model => model.Clientes.CodigoDist)
                                     </div>
                                 </div>
@@ -216,34 +218,34 @@
                                         if (tarjeta.Estado == "0")
                                         {
 
-                                                @Html.HiddenFor(model => model.Tarjeta.CodigoCliente, new { id = "CodigoClienteTarjeta", @class = "form-control form-control-sm", Value = @tarjeta.CodigoCliente })
-                                                @Html.HiddenFor(model => model.Tarjeta.IdClienteTarjetas, new { id = "idTarjeta", @class = "form-control form-control-sm", Value = @tarjeta.IdClienteTarjetas })
-                                                <tr>
-                                                    <td hidden>@tarjeta.NumeroTarjeta</td>
-                                                    <td hidden>@tarjeta.IdClienteTarjetas</td>
-                                                    <td hidden>@tarjeta.CodigoMarcaTarjeta</td>
-                                                    <td hidden>@tarjeta.Estado</td>
-                                                    <td>
-                                                        <img src="@("/devSalud/Images/"+tarjeta.CodigoMarcaTarjeta+".PNG")" />&nbsp;&nbsp;@tarjeta.NumeroTarjeta.Substring(tarjeta.NumeroTarjeta.Length - 4).PadLeft(tarjeta.NumeroTarjeta.Length, '*')
-                                                        @*<img src="@("/devSalud/Images/"+tarjeta.CodigoMarcaTarjeta+".PNG")" />&nbsp;&nbsp;@tarjeta.NumeroTarjeta*@
-                                                    </td>
-                                                    <td class="project-actions text-center">
-                                                        <b style="text-transform:capitalize">@tarjeta.titularTarjeta</b>
-                                                    </td>
-                                                    <td class="project-actions text-center">
-                                                        <b style="text-transform:capitalize">@tarjeta.mesFinVigencia/@tarjeta.anioFinVigencia</b>
-                                                    </td>
-                                                    <td>
-                                                        <button type="button" onclick="editarT(event);" class="btn btn-success btn-sm" disabled>
-                                                            <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;Editar
-                                                        </button>
-                                                    </td>
-                                                    <td>
-                                                        <button type="button" onclick="eliminarT(event);" class="btn btn-danger btn-sm" disabled>
-                                                            <i class="fas fa-trash text-warning"></i>&nbsp;&nbsp;Eliminar
-                                                        </button>
-                                                    </td>
-                                                </tr>
+                                            @Html.HiddenFor(model => model.Tarjeta.CodigoCliente, new { id = "CodigoClienteTarjeta", @class = "form-control form-control-sm", Value = @tarjeta.CodigoCliente })
+                                            @Html.HiddenFor(model => model.Tarjeta.IdClienteTarjetas, new { id = "idTarjeta", @class = "form-control form-control-sm", Value = @tarjeta.IdClienteTarjetas })
+                                            <tr>
+                                                <td hidden>@tarjeta.NumeroTarjeta</td>
+                                                <td hidden>@tarjeta.IdClienteTarjetas</td>
+                                                <td hidden>@tarjeta.CodigoMarcaTarjeta</td>
+                                                <td hidden>@tarjeta.Estado</td>
+                                                <td>
+                                                    <img src="@("/devSalud/Images/"+tarjeta.CodigoMarcaTarjeta+".PNG")" />&nbsp;&nbsp;@tarjeta.NumeroTarjeta.Substring(tarjeta.NumeroTarjeta.Length - 4).PadLeft(tarjeta.NumeroTarjeta.Length, '*')
+                                                    @*<img src="@("/devSalud/Images/"+tarjeta.CodigoMarcaTarjeta+".PNG")" />&nbsp;&nbsp;@tarjeta.NumeroTarjeta*@
+                                                </td>
+                                                <td class="project-actions text-center">
+                                                    <b style="text-transform:capitalize">@tarjeta.titularTarjeta</b>
+                                                </td>
+                                                <td class="project-actions text-center">
+                                                    <b style="text-transform:capitalize">@tarjeta.mesFinVigencia/@tarjeta.anioFinVigencia</b>
+                                                </td>
+                                                <td>
+                                                    <button type="button" onclick="editarT(event);" class="btn btn-success btn-sm" disabled>
+                                                        <i class="fas fa-pencil-alt text-warning"></i>&nbsp;&nbsp;Editar
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <button type="button" onclick="eliminarT(event);" class="btn btn-danger btn-sm" disabled>
+                                                        <i class="fas fa-trash text-warning"></i>&nbsp;&nbsp;Eliminar
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         }
                                         else
                                         {
@@ -270,7 +272,7 @@
                                                     </button>
                                                 </td>
                                                 <td>
-                                                    <button type="button"  onclick="eliminarT(event);" class="botonEliminarT btn btn-danger btn-sm" data-request-url='@Url.Action("EliminarTarjeta", "Clientes")'>
+                                                    <button type="button" onclick="eliminarT(event);" class="botonEliminarT btn btn-danger btn-sm" data-request-url='@Url.Action("EliminarTarjeta", "Clientes")'>
                                                         <i class="fas fa-trash text-warning"></i>&nbsp;&nbsp;Eliminar
                                                     </button>
                                                 </td>
@@ -336,7 +338,7 @@
                                 <div class="form-group">
                                     <h6>Número de Tarjeta :</h6>
                                     @*@Html.TextBox("txtNumeroTarjeta1", "", new { id = "txtNumeroTarjeta1", @class = "form-control form-control-sm" , @placeholder = "xxxxxxxxxxxxxxxx", @type = "text"})
-                                    @Html.HiddenFor(model => model.Tarjeta.NumeroTarjeta, new { id = "txtNumeroTarjeta" })*@
+                                        @Html.HiddenFor(model => model.Tarjeta.NumeroTarjeta, new { id = "txtNumeroTarjeta" })*@
                                     @Html.TextBoxFor(model => model.Tarjeta.NumeroTarjeta, new { id = "txtNumeroTarjeta", @class = "form-control form-control-sm", @placeholder = "xxxxxxxxxxxxxxxx", @type = "text", @maxlength = 16, @autocomplete = "off", @onkeypress = "return isNumberKey(event)" })
                                     @Html.ValidationMessageFor(model => model.Tarjeta.NumeroTarjeta, "", new { @class = "text-danger" })
                                 </div>
@@ -447,7 +449,7 @@
         </script>
     }
 
-<script>
+    <script>
         var arregloTarjetas = [];
 
         $(document).ready(function () {
@@ -691,7 +693,58 @@
 
         }
 
-</script>
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#drpDepartamento').change(function () {
+
+                var url_method = $('#ruta_provincia').val();
+
+                $.ajax({
+                    type: "post",
+                    url: url_method,
+                    data: { dptoid: $('#drpDepartamento').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        var provincia = "<select id='CodigoProv'>";
+                        provincia = provincia + '<option value="">--Seleccionar--</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            provincia = provincia + '<option value=' + data[i].CodigoProv + '>' + data[i].DescripcionProv + '</option>';
+                        }
+                        provincia = provincia + '</select>';
+                        $('#drpProvincia').html(provincia);
+                    }
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#drpProvincia').change(function () {
+
+                var url_method = $('#ruta_distrito').val();
+
+                $.ajax({
+                    type: "post",
+                    url: url_method,
+                    data: { dptoid: $('#drpDepartamento').val(), provid: $('#drpProvincia').val() },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (data) {
+                        var district = "<select id='CodigoDist'>";
+                        district = district + '<option value="">--Seleccionar--</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            district = district + '<option value=' + data[i].CodigoDist + '>' + data[i].DescripcionDist + '</option>';
+                        }
+                        district = district + '</select>';
+                        $('#drpDistrito').html(district);
+                    }
+                });
+            });
+        });
+    </script>
 
 
 }
