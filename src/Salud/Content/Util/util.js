@@ -1,27 +1,4 @@
-﻿function mostrarMensaje(msj01) {
-    var strvalue = msj01;
-    var icono = '';
-    console.log(msj01);
-    if (strvalue != null && strvalue != "") {
-
-        switch (strvalue.split(',')[0]) {
-            case 'Correcto':
-                icono = 'info';
-                //console.log(icono);
-            default:
-                icono = 'warning';
-                //console.log(icono);
-        }
-
-        Swal.fire({
-            icon: icono,
-            title: 'Mensaje',
-            html: strvalue,
-            showCloseButton: true
-        });
-    };
-};
-
+﻿
 function mensajeRedirect(mensaje,link)
 {
     if (mensaje != "") {

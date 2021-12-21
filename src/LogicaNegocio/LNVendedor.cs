@@ -39,7 +39,7 @@ namespace LogicaNegocio
         {
             return (new ADVendedor()).Eliminar(CodigoVendedor);
         }
-        public static bool Asignar(ENCanalesVendedores oENCV)
+        public static string Asignar(ENCanalesVendedores oENCV)
         {
             return (new ADVendedor()).Asignar(oENCV);
         }

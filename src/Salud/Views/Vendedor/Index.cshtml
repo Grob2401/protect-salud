@@ -422,9 +422,17 @@
 
         $(".botoncomi").click(function () {
             txt1 = $(this).parents('tr').find("td:eq(1)").text().trim();
+            txt10 = $(this).parents('tr').find("td:eq(10)").text().trim();
             document.getElementById("Comision_CodigoVendedor").value = txt1;
-            document.getElementById("Comision_Cantidad").value = "";
 
+            if (txt10 == "Sin Asignar") {
+                document.getElementById("Comision_Cantidad").value = "";
+            }
+            else
+            {
+                document.getElementById("Comision_Cantidad").value = txt10;
+            }
+            
             $('#modalComision').modal('show');
 
         });

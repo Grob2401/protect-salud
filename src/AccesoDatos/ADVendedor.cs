@@ -230,21 +230,26 @@ namespace AccesoDatos
             }
         }
 
-        public bool Asignar(ENCanalesVendedores oENCV)
+        public string Asignar(ENCanalesVendedores oENCV)
         {
             DbCommand oCommand = null;
             try
             {
+                string mensaje = "";
+
                 oCommand = GenericDataAccess.CreateCommand(dataProviderName, connectionString, "VENTAS.USP_INS_ASIGNACION_CANALVENDEDOR");
                 GenericDataAccess.AgregarParametro(oCommand, "@argIDCanal", oENCV.CV_IDCanal, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@argFechaInicioCanalVendedor", oENCV.CV_FechaInicioCanalVendedor, TipoParametro.DT, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@argFechaFinCanalVendedor", oENCV.CV_FechaFinCanalVendedor, TipoParametro.DT, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@argCodigoVendedor", oENCV.CV_CodigoVendedor, TipoParametro.STR, Direccion.INPUT);
                 GenericDataAccess.AgregarParametro(oCommand, "@argErrorCode", 1, TipoParametro.INT, Direccion.OUTPUT);
-                if (GenericDataAccess.ExecuteNonQuery(oCommand) > 0)
-                    return true;
-                else
-                    return false;
+
+                DbDataReader oDataReader = GenericDataAccess.ExecuteReader(oCommand);
+                while (oDataReader.Read())
+                {
+                    mensaje = oDataReader["RESULTADO"].ToString();                    
+                }
+                return mensaje;
             }
             catch (Exception ex)
             {
@@ -281,11 +286,7 @@ namespace AccesoDatos
                     oENListaCanalesVendedores.Vendedor_CantComi = oDataReader["Vendedor_CantComi"].ToString();
                     oENListaCanalesVendedores.Canal_TipoComi = oDataReader["Canal_TipoComi"].ToString();
                     oENListaCanalesVendedores.Canal_CantComi = oDataReader["Canal_CantComi"].ToString();
-                    
-                        
-                        
-                        
-
+                                                                                            
                     oListaCanalesVendedores.Add(oENListaCanalesVendedores);
                 }
                 return oListaCanalesVendedores;

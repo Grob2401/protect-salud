@@ -224,12 +224,44 @@
     @Scripts.Render("~/Content/plugins/select2/js/select2.full.min.js")
 
     <script>
-        $(document).ready(function () {
-            $('.js-example-basic-single').select2();
-        });
+    $(document).ready(function () {
+        $('.js-example-basic-single').select2();
+    });
+    
     </script>
 
     <script>
+
+        function ShowMensaje(msj01) {
+            if (msj01 != "") {
+                console.log(msj01);
+                if (mensaje.includes("Excelente")) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Mensaje',
+                        html: msj01,
+                        showCloseButton: true
+                    });
+                }
+                else if (mensaje.includes("Advertencia")) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Mensaje',
+                        html: msj01,
+                        showCloseButton: true
+                    });
+                }
+                else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Mensaje',
+                        html: msj01,
+                        showCloseButton: true
+                    });
+                }
+            }
+        };
+
         $(function () {
 
             $('#dglista').DataTable({
@@ -264,6 +296,9 @@
         });
     </script>
     <script>
+
+        var mensaje = "@TempData["mensaje"]";
+        ShowMensaje(mensaje);
 
         $(document).ready(function () {
             $("#slcSociedad").change();

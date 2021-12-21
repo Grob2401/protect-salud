@@ -248,6 +248,12 @@ namespace Salud.Controllers
                 ViewData["Seleccion"] = Session["SociedadUsuario"];
             }
 
+            if (TempData["mensaje"] != null)
+            {
+                TempData["mensaje"] = TempData["mensaje"];
+            }
+
+
             var lstSociedades = LNSociedades.ObtenerTodos();
             var lstSociedades_ = new SelectList(lstSociedades.ToList(), "IdSociedad", "RazonSocial", ViewData["Seleccion"]);
             TempData["ListaSociedades"] = lstSociedades_;
@@ -313,13 +319,26 @@ namespace Salud.Controllers
         [HttpPost]
         public ActionResult Asignar(ENCanalesVendedores en)
         {
-            var valor = 0;
-            if (LNVendedor.Asignar(en))
+            string resultado = LNVendedor.Asignar(en);
+            if (resultado != "")
             {
-                valor = en.CV_IDCanal;
-                ModelState.Clear();
+                if (resultado.Contains("Error,"))
+                {
+                    TempData["mensaje"] = resultado;
+                    return RedirectToAction("Asignacion");
+                }
+                else
+                {
+                    TempData["mensaje"] = resultado;
+                    return RedirectToAction("GetVendedoresSinAsignar", new { slcSociedad = en.CV_IdSociedad.ToString() });
+                }
             }
-            return RedirectToAction("GetVendedoresSinAsignar", new { slcSociedad = en.CV_IdSociedad.ToString() });
+            else
+            {
+                TempData["mensaje"] = "Error, no se pudo realizar la asignación.";
+                return RedirectToAction("Asignacion");
+            }
+            
         }
     }
 }

@@ -432,7 +432,8 @@ namespace Salud.Controllers
 
 
                 ViewBag.CodigoVendedor = new SelectList(LNVendedores.ObtenerTodos().ToList(), "CodigoVendedor", "DescripcionVendedor");
-                ViewBag.CodigoCentroCosto = new SelectList(LNSaludCentroCostos.ObtenerTodos1("000494").ToList(), "CodigoCentroCosto", "DescripcionCentroCosto");
+                //ViewBag.CodigoCentroCosto = new SelectList(LNSaludCentroCostos.ObtenerTodos1("000494").ToList(), "CodigoCentroCosto", "DescripcionCentroCosto");
+                ViewBag.CodigoCentroCosto = new SelectList(LNSaludCentroCostos.ObtenerTodos1(idcliente).ToList(), "CodigoCentroCosto", "DescripcionCentroCosto");
                 ViewBag.CodigoSexo = new SelectList(LNSaludSexo.ObtenerTodos().ToList(), "CodigoSexo", "DescripcionSexo");
                 ViewBag.CodigoDocumentoIdentidad = new SelectList(LNTipoDocumentoIdentidad.ObtenerTodos().ToList(), "CodigoDocumentoIdentidad", "DescripcionDocumentoIdentidad");
                 ViewBag.CodigoTipoTrabajador = new SelectList(LNTipoAsegurado.ObtenerTodos().ToList(), "CodigoTipoAsegurado", "DescripcionTipoAsegurado");
